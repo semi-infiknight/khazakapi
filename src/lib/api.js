@@ -1,0 +1,27 @@
+export async function fetchSearch(params = {}) {
+  const qs = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => {
+    if (v !== undefined && v !== null && v !== "") qs.set(k, v);
+  });
+  const res = await fetch(`/api/search?${qs}`);
+  if (!res.ok) throw new Error("Search failed");
+  return res.json();
+}
+
+export async function fetchApi(id) {
+  const res = await fetch(`/api/apis/${id}`);
+  if (!res.ok) throw new Error("API not found");
+  return res.json();
+}
+
+export async function fetchCategories() {
+  const res = await fetch("/api/categories");
+  if (!res.ok) throw new Error("Categories failed");
+  return res.json();
+}
+
+export async function fetchCatalogue() {
+  const res = await fetch("/api/catalogue?limit=200");
+  if (!res.ok) throw new Error("Catalogue failed");
+  return res.json();
+}
