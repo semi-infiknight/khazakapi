@@ -16,6 +16,9 @@ export default function Header({ onMenuToggle, menuOpen }) {
           <button type="button" className="btn-metal hidden sm:inline-flex" onClick={toggle} aria-label="Toggle theme">
             {theme === "dark" ? "Light" : "Dark"}
           </button>
+          <a href="/api-docs.html" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
+            API
+          </a>
           <a href="/docs.html" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
             Docs
           </a>
@@ -40,6 +43,9 @@ export default function Header({ onMenuToggle, menuOpen }) {
           <Link to="/" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
             Directory
           </Link>
+          <a href="/api-docs.html" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
+            REST explorer
+          </a>
           <a href="/docs.html" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
             Docs
           </a>

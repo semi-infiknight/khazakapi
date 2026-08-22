@@ -61,6 +61,10 @@
       </p>
 
       <h2>REST API</h2>
+      <p>
+        <strong style="color:var(--text)">Try it live:</strong>
+        use the <a href="/api-docs.html">interactive REST explorer</a> (Swagger UI) to send requests, inspect schemas, and copy responses — the same style of testing you see in normal API docs.
+      </p>
       <table>
         <thead><tr><th>Endpoint</th><th>Returns</th></tr></thead>
         <tbody>
@@ -70,6 +74,7 @@
           <tr><td><span class="method">GET</span> <code>/api/categories</code></td><td>Categories with counts</td></tr>
           <tr><td><span class="method">GET</span> <code>/api/freshness?days=90</code></td><td>Stale / unverified entries</td></tr>
           <tr><td><span class="method">GET</span> <code>/openapi.json</code></td><td>OpenAPI 3.1 contract</td></tr>
+          <tr><td><span class="method">GET</span> <code>/api-docs</code></td><td>Interactive REST explorer (Swagger UI)</td></tr>
         </tbody>
       </table>
 
@@ -88,7 +93,7 @@
 
       <footer>
         Khazak API · open-tier data © Government of Kazakhstan &amp; respective providers
-        · <a href="/">directory</a> · <a href="/api/catalogue">/api/catalogue</a> · <a href="/mcp">/mcp</a>
+        · <a href="/">directory</a> · <a href="/api-docs.html">REST explorer</a> · <a href="/api/catalogue">/api/catalogue</a> · <a href="/mcp">/mcp</a>
       </footer>
     </div>
   </body>

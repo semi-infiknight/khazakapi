@@ -1,4 +1,5 @@
 import express from "express";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { APIS, CATALOGUE_META } from "./data/apis.js";
@@ -14,6 +15,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 8787;
 const isProd = process.env.NODE_ENV === "production";
+
+const openApiSpec = JSON.parse(fs.readFileSync(path.join(__dirname, "openapi.json"), "utf8"));
+
+function publicBaseUrl(req) {
+  if (process.env.RAILWAY_PUBLIC_DOMAIN) return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
+  const host = req.get("host");
+  return host ? `${req.protocol}://${host}` : `http://localhost:${PORT}`;
+}
 
 app.use(express.json());
 
@@ -86,23 +95,16 @@ async function checkHealth(entry) {
   }
 }
 
-app.get("/openapi.json", (_req, res) => {
+app.get("/openapi.json", (req, res) => {
   res.json({
-    openapi: "3.1.0",
-    info: {
-      title: "Khazak API",
-      version: CATALOGUE_META.version,
-      description: "Public REST API for the Khazak API Kazakhstan API directory.",
-    },
-    servers: [{ url: process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : `http://localhost:${PORT}` }],
-    paths: {
-      "/api/catalogue": { get: { summary: "Full catalogue" } },
-      "/api/search": { get: { summary: "Search with facets" } },
-      "/api/apis/{id}": { get: { summary: "Single API detail" } },
-      "/api/categories": { get: { summary: "Category list" } },
-      "/api/freshness": { get: { summary: "Stale entries" } },
-    },
+    ...openApiSpec,
+    info: { ...openApiSpec.info, version: CATALOGUE_META.version },
+    servers: [{ url: publicBaseUrl(req), description: isProd ? "Production" : "Current host" }],
   });
+});
+
+app.get("/api-docs", (_req, res) => {
+  res.redirect(301, "/api-docs.html");
 });
 
 // MCP stub — documents-compatible response
@@ -123,6 +125,9 @@ app.get("/mcp", (_req, res) => {
 app.get("/health", (_req, res) => {
   res.json({ ok: true, apis: APIS.length, updated: CATALOGUE_META.updated });
 });
+
+const publicDir = path.join(__dirname, "..", "public");
+app.use(express.static(publicDir));
 
 if (isProd) {
   const dist = path.join(__dirname, "..", "dist");

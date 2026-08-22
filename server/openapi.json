@@ -1,0 +1,449 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Khazak API",
+    "version": "2026-07-24",
+    "description": "Public REST API for the Khazak API Kazakhstan API directory. Read-only, authless, and CORS-open. Browse ~1,400 government and commercial APIs catalogued for Kazakhstan.",
+    "contact": {
+      "name": "Khazak API",
+      "url": "https://github.com/khazakapi"
+    },
+    "license": {
+      "name": "Open data",
+      "url": "https://data.egov.kz"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8787",
+      "description": "Local development"
+    }
+  ],
+  "tags": [
+    { "name": "Catalogue", "description": "Browse and search the API directory" },
+    { "name": "Meta", "description": "Health, freshness, and machine-readable contracts" }
+  ],
+  "paths": {
+    "/api/catalogue": {
+      "get": {
+        "tags": ["Catalogue"],
+        "summary": "Full catalogue",
+        "description": "Returns a paginated slice of every API in the directory. Use `/api/search` for filtered or ranked results.",
+        "operationId": "getCatalogue",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum entries per page (max 200)",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 200, "default": 200 }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of entries to skip",
+            "schema": { "type": "integer", "minimum": 0, "default": 0 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated catalogue list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CatalogueResponse" },
+                "example": {
+                  "updated": "2026-07-24T00:00:00.000Z",
+                  "version": "2026-07-24",
+                  "source": "khazakapi-local",
+                  "total": 1407,
+                  "count": 2,
+                  "apis": [
+                    {
+                      "id": "nbk-rates",
+                      "slug": "nbk-rates",
+                      "title": "NBK Official Exchange Rates",
+                      "category": "Finance",
+                      "group": "Government & open data",
+                      "country": ["KZ"],
+                      "provider": "National Bank of Kazakhstan",
+                      "source": "nationalbank.kz",
+                      "tier": "open",
+                      "auth": "none",
+                      "pricing": "free"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "get": {
+        "tags": ["Catalogue"],
+        "summary": "Search with facets",
+        "description": "Ranked, filterable search across the catalogue. Returns facet counts for the current result set.",
+        "operationId": "searchApis",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Free-text search query (tokenized, ranked by relevance)",
+            "schema": { "type": "string" },
+            "example": "exchange rates"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter by category name",
+            "schema": { "type": "string" },
+            "example": "Finance"
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Filter by country code (e.g. KZ, global)",
+            "schema": { "type": "string" },
+            "example": "KZ"
+          },
+          {
+            "name": "auth",
+            "in": "query",
+            "description": "Filter by auth scheme",
+            "schema": { "type": "string", "enum": ["none", "apiKey", "oauth", "bearer", "token"] }
+          },
+          {
+            "name": "pricing",
+            "in": "query",
+            "description": "Filter by pricing model",
+            "schema": { "type": "string", "enum": ["free", "freemium", "paid"] }
+          },
+          {
+            "name": "tier",
+            "in": "query",
+            "description": "Filter by catalogue tier",
+            "schema": { "type": "string", "enum": ["open", "commercial"] }
+          },
+          {
+            "name": "free",
+            "in": "query",
+            "description": "When `true`, only free APIs",
+            "schema": { "type": "string", "enum": ["true"] }
+          },
+          {
+            "name": "no_auth",
+            "in": "query",
+            "description": "When `true`, only APIs with no authentication",
+            "schema": { "type": "string", "enum": ["true"] }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "description": "Filter by catalogue group",
+            "schema": { "type": "string" },
+            "example": "Government & open data"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum entries per page (max 200)",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 200, "default": 200 }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of entries to skip",
+            "schema": { "type": "integer", "minimum": 0, "default": 0 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results with facets",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SearchResponse" },
+                "example": {
+                  "query": "nbk",
+                  "count": 1,
+                  "total": 1,
+                  "limit": 200,
+                  "offset": 0,
+                  "next_offset": null,
+                  "facets": {
+                    "category": { "Finance": 1 },
+                    "country": { "KZ": 1 },
+                    "auth": { "none": 1 },
+                    "pricing": { "free": 1 }
+                  },
+                  "apis": [
+                    {
+                      "id": "nbk-rates",
+                      "slug": "nbk-rates",
+                      "title": "NBK Official Exchange Rates",
+                      "category": "Finance"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/apis/{id}": {
+      "get": {
+        "tags": ["Catalogue"],
+        "summary": "Single API detail",
+        "description": "Returns one catalogue entry by `id` or `slug`, including code snippets and a live health check for keyless endpoints.",
+        "operationId": "getApiById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "API id or slug",
+            "schema": { "type": "string" },
+            "example": "nbk-rates"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API detail with snippets and optional health probe",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiDetail" }
+              }
+            }
+          },
+          "404": {
+            "description": "API not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" },
+                "example": { "error": "no API with id 'unknown-id'" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "tags": ["Catalogue"],
+        "summary": "Category list",
+        "description": "Returns all categories with entry counts, sorted by count descending.",
+        "operationId": "listCategories",
+        "responses": {
+          "200": {
+            "description": "Category list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CategoriesResponse" },
+                "example": {
+                  "count": 3,
+                  "categories": [
+                    { "category": "Finance", "count": 120, "group": "Government & open data" },
+                    { "category": "Demography", "count": 45, "group": "Government & open data" }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/freshness": {
+      "get": {
+        "tags": ["Meta"],
+        "summary": "Stale entries",
+        "description": "Returns catalogue entries marked stale or unverified, plus all commercial-tier entries.",
+        "operationId": "getFreshness",
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "description": "Stale threshold in days (informational; included in response)",
+            "schema": { "type": "integer", "minimum": 1, "default": 90 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Freshness report",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FreshnessResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["Meta"],
+        "summary": "Health check",
+        "description": "Deployment health probe used by Railway and load balancers.",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HealthResponse" },
+                "example": { "ok": true, "apis": 1407, "updated": "2026-07-24T00:00:00.000Z" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CatalogueMeta": {
+        "type": "object",
+        "properties": {
+          "updated": { "type": "string", "format": "date-time" },
+          "version": { "type": "string" },
+          "source": { "type": "string" },
+          "total": { "type": "integer" }
+        }
+      },
+      "ApiListEntry": {
+        "type": "object",
+        "description": "Public list view of a catalogue entry (endpoint URL omitted)",
+        "properties": {
+          "id": { "type": "string" },
+          "slug": { "type": "string" },
+          "title": { "type": "string" },
+          "category": { "type": "string" },
+          "group": { "type": "string" },
+          "country": { "type": "array", "items": { "type": "string" } },
+          "provider": { "type": "string" },
+          "source": { "type": "string" },
+          "sourceUrl": { "type": "string", "format": "uri" },
+          "tier": { "type": "string", "enum": ["open", "commercial"] },
+          "kind": { "type": "string" },
+          "auth": { "type": "string" },
+          "pricing": { "type": "string" },
+          "docs": { "type": "string", "format": "uri" },
+          "likes": { "type": "integer" },
+          "freshness": {
+            "type": "object",
+            "properties": {
+              "label": { "type": "string" },
+              "tone": { "type": "string", "enum": ["current", "stale"] }
+            }
+          }
+        },
+        "required": ["id", "slug", "title", "category"]
+      },
+      "ApiDetail": {
+        "allOf": [
+          { "$ref": "#/components/schemas/ApiListEntry" },
+          {
+            "type": "object",
+            "properties": {
+              "endpoint": { "type": "string", "format": "uri", "description": "Live provider endpoint (when available)" },
+              "curl": { "type": "string", "description": "Ready-to-run curl snippet" },
+              "python": { "type": "string", "description": "Python requests snippet" },
+              "js": { "type": "string", "description": "JavaScript fetch snippet" },
+              "prompt": { "type": "string", "description": "AI integration prompt" },
+              "health": { "$ref": "#/components/schemas/HealthProbe" }
+            }
+          }
+        ]
+      },
+      "HealthProbe": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": ["boolean", "null"] },
+          "status": { "type": ["integer", "null"] },
+          "ms": { "type": ["integer", "null"] },
+          "checkedAt": { "type": "string", "format": "date-time" },
+          "skipped": { "type": "boolean" }
+        }
+      },
+      "Facets": {
+        "type": "object",
+        "properties": {
+          "category": { "type": "object", "additionalProperties": { "type": "integer" } },
+          "country": { "type": "object", "additionalProperties": { "type": "integer" } },
+          "auth": { "type": "object", "additionalProperties": { "type": "integer" } },
+          "pricing": { "type": "object", "additionalProperties": { "type": "integer" } }
+        }
+      },
+      "CatalogueResponse": {
+        "allOf": [
+          { "$ref": "#/components/schemas/CatalogueMeta" },
+          {
+            "type": "object",
+            "properties": {
+              "count": { "type": "integer" },
+              "apis": { "type": "array", "items": { "$ref": "#/components/schemas/ApiListEntry" } }
+            },
+            "required": ["count", "apis"]
+          }
+        ]
+      },
+      "SearchResponse": {
+        "type": "object",
+        "properties": {
+          "query": { "type": ["string", "null"] },
+          "count": { "type": "integer" },
+          "total": { "type": "integer" },
+          "limit": { "type": "integer" },
+          "offset": { "type": "integer" },
+          "next_offset": { "type": ["integer", "null"] },
+          "facets": { "$ref": "#/components/schemas/Facets" },
+          "apis": { "type": "array", "items": { "$ref": "#/components/schemas/ApiListEntry" } }
+        },
+        "required": ["count", "total", "limit", "offset", "facets", "apis"]
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "category": { "type": "string" },
+          "count": { "type": "integer" },
+          "group": { "type": "string" }
+        },
+        "required": ["category", "count"]
+      },
+      "CategoriesResponse": {
+        "type": "object",
+        "properties": {
+          "count": { "type": "integer" },
+          "categories": { "type": "array", "items": { "$ref": "#/components/schemas/Category" } }
+        },
+        "required": ["count", "categories"]
+      },
+      "FreshnessResponse": {
+        "type": "object",
+        "properties": {
+          "version": { "type": "string" },
+          "days": { "type": "integer" },
+          "total": { "type": "integer" },
+          "stale": { "type": "integer" },
+          "apis": { "type": "array", "items": { "$ref": "#/components/schemas/ApiListEntry" } }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": "boolean" },
+          "apis": { "type": "integer" },
+          "updated": { "type": "string", "format": "date-time" }
+        },
+        "required": ["ok", "apis"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" },
+          "endpoints": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["error"]
+      }
+    }
+  }
+}

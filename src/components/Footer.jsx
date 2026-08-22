@@ -9,6 +9,9 @@ export default function Footer() {
           </p>
         </div>
         <div className="flex flex-col gap-1">
+          <a href="/api-docs.html" className="foot-link">
+            REST explorer
+          </a>
           <a href="/docs.html" className="foot-link">
             Docs
           </a>

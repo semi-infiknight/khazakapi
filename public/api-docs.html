@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/theme-init.js"></script>
+    <title>Khazak API ~ REST Explorer</title>
+    <meta name="description" content="Interactive REST API explorer for Khazak API. Try endpoints, inspect schemas, and test requests." />
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui.css" />
+    <style>
+      :root {
+        --bg: #0a0015;
+        --text: #f4eee9;
+        --accent: #c9cfd6;
+        --sans: system-ui, sans-serif;
+        --mono: ui-monospace, monospace;
+      }
+      :root[data-theme="light"] {
+        --bg: #f6f1ea;
+        --text: #1a1420;
+        --accent: #5b6470;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+      }
+      :root[data-theme="light"] .topbar { border-bottom-color: rgba(20,10,24,0.13); }
+      .brand { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.25em; color: var(--accent); }
+      .links { display: flex; gap: 16px; font-family: var(--mono); font-size: 12px; }
+      .links a { color: var(--accent); text-decoration: none; }
+      .links a:hover { text-decoration: underline; }
+      #swagger-ui { max-width: 1200px; margin: 0 auto; padding: 0 12px 60px; }
+      /* Dark theme overrides for Swagger UI */
+      :root:not([data-theme="light"]) .swagger-ui {
+        filter: invert(88%) hue-rotate(180deg);
+      }
+      :root:not([data-theme="light"]) .swagger-ui img,
+      :root:not([data-theme="light"]) .swagger-ui .download-url-wrapper input[type=text] {
+        filter: invert(100%) hue-rotate(180deg);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">KHAZAK API · REST EXPLORER</div>
+      <nav class="links">
+        <a href="/">Directory</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/openapi.json">OpenAPI</a>
+      </nav>
+    </header>
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui-standalone-preset.js"></script>
+    <script>
+      window.onload = () => {
+        window.ui = SwaggerUIBundle({
+          url: "/openapi.json",
+          dom_id: "#swagger-ui",
+          deepLinking: true,
+          presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+          layout: "StandaloneLayout",
+          defaultModelsExpandDepth: 1,
+          defaultModelExpandDepth: 2,
+          docExpansion: "list",
+          tryItOutEnabled: true,
+          persistAuthorization: true,
+          displayRequestDuration: true,
+          filter: true,
+          syntaxHighlight: { theme: "monokai" },
+        });
+      };
+    </script>
+  </body>
+</html>
