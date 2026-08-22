@@ -766,6 +766,12 @@ nav a:hover {
   color: var(--text-mute);
 }
 
+.http-mode-hint {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  color: var(--text-mute);
+}
+
 .http-segment {
   display: inline-flex;
   border: 1px solid var(--line);

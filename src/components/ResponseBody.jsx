@@ -12,6 +12,7 @@ function JsonNode({ name, value, depth = 0, defaultOpen = true, search = "" }) {
   const isArray = Array.isArray(value);
   const isObject = value && typeof value === "object" && !isArray;
   const entries = isArray ? value.map((v, i) => [String(i), v]) : isObject ? Object.entries(value) : [];
+
   const visibleEntries = useMemo(() => {
     if (!search) return entries;
     const q = search.toLowerCase();
@@ -25,7 +26,7 @@ function JsonNode({ name, value, depth = 0, defaultOpen = true, search = "" }) {
         return false;
       }
     });
-  }, [value, search, isArray, isObject]);
+  }, [entries, search]);
 
   if (!isArray && !isObject) {
     return (
@@ -82,8 +83,19 @@ function JsonNode({ name, value, depth = 0, defaultOpen = true, search = "" }) {
   );
 }
 
+export function JsonTree({ parsed, search = "" }) {
+  if (parsed == null) {
+    return <p className="http-empty-note">No JSON to explore in tree view.</p>;
+  }
+  return (
+    <div className="json-tree">
+      <JsonNode value={parsed} depth={0} name={null} search={search} />
+    </div>
+  );
+}
+
 function highlightJson(text) {
-  const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const escaped = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;");
   return escaped.replace(
     /("(?:\\.|[^"\\])*")(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g,
     (match, str, colon, keyword) => {
@@ -98,27 +110,60 @@ function highlightJson(text) {
   );
 }
 
-export default function JsonViewer({ parsed, raw, search = "", mode = "pretty" }) {
-  if (mode === "raw") {
+export function HighlightedCode({ text, language = "text" }) {
+  const content = text || "(empty body)";
+  if (language === "json") {
     return (
       <pre className="response-raw">
-        <code>{raw || "(empty body)"}</code>
+        <code dangerouslySetInnerHTML={{ __html: highlightJson(content) }} />
       </pre>
     );
   }
-
-  if (parsed == null) {
-    const pretty = raw || "(empty body)";
-    return (
-      <pre className="response-raw">
-        <code dangerouslySetInnerHTML={{ __html: highlightJson(pretty) }} />
-      </pre>
-    );
-  }
-
   return (
-    <div className="json-tree">
-      <JsonNode value={parsed} depth={0} name={null} search={search} />
-    </div>
+    <pre className="response-raw">
+      <code>{content}</code>
+    </pre>
   );
+}
+
+export function RawCode({ text }) {
+  return (
+    <pre className="response-raw">
+      <code>{text || "(empty body)"}</code>
+    </pre>
+  );
+}
+
+export default function ResponseBody({ response, bodyMode, search = "" }) {
+  const raw = response.rawBody ?? response.body ?? "";
+  const formatted = response.body ?? raw;
+  const format = response.format || "text";
+
+  if (bodyMode === "raw") {
+    return <RawCode text={raw} />;
+  }
+
+  if (bodyMode === "preview") {
+    if (format === "html") {
+      return (
+        <iframe
+          title="HTML preview"
+          className="http-html-preview"
+          sandbox=""
+          srcDoc={raw}
+        />
+      );
+    }
+    if (format === "json" && response.parsed != null) {
+      return <JsonTree parsed={response.parsed} search={search} />;
+    }
+    return <HighlightedCode text={formatted} language={format === "json" ? "json" : "text"} />;
+  }
+
+  // Pretty — Postman-style formatted view (syntax highlighted flat text)
+  if (format === "json") {
+    return <HighlightedCode text={formatted} language="json" />;
+  }
+
+  return <HighlightedCode text={formatted} language="text" />;
 }

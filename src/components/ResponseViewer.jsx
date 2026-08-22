@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import JsonViewer from "./JsonViewer.jsx";
+import ResponseBody from "./ResponseBody.jsx";
 import {
   bodyViewOptions,
   formatBytes,
   formatDuration,
   parseSetCookie,
+  responseCopyText,
   statusClass,
   statusLabel,
 } from "../lib/formatResponse.js";
@@ -116,12 +117,20 @@ export default function ResponseViewer({ response, request, loading }) {
 
   const cookies = useMemo(() => parseSetCookie(response?.headers), [response]);
   const headerCount = Object.keys(response?.headers || {}).length;
-  const viewOptions = bodyViewOptions(response?.format, response?.parsed);
+  const viewOptions = bodyViewOptions(response?.format);
+  const responseKey = response ? `${response.checkedAt}-${response.status}-${response.size}` : "empty";
 
   useEffect(() => {
     setBodyMode("pretty");
     setSearch("");
-  }, [response?.checkedAt, response?.status]);
+    setPanelTab("body");
+  }, [responseKey]);
+
+  useEffect(() => {
+    if (!viewOptions.some((opt) => opt.id === bodyMode)) {
+      setBodyMode("pretty");
+    }
+  }, [viewOptions, bodyMode]);
 
   if (loading) {
     return (
@@ -147,7 +156,7 @@ export default function ResponseViewer({ response, request, loading }) {
     );
   }
 
-  const copyText = bodyMode === "raw" ? response.rawBody || response.body || "" : response.body || "";
+  const copyText = responseCopyText(response, bodyMode);
 
   return (
     <div className="http-response">
@@ -181,54 +190,53 @@ export default function ResponseViewer({ response, request, loading }) {
           <div className="http-body-toolbar">
             <div className="http-body-toolbar-left">
               <span className="http-format-label">{response.format?.toUpperCase() || "TEXT"}</span>
-              <div className="http-segment">
+              <div className="http-segment" role="group" aria-label="Body view mode">
                 {viewOptions.map((opt) => (
                   <button
                     key={opt.id}
                     type="button"
                     className={`http-segment-btn ${bodyMode === opt.id ? "http-segment-btn-active" : ""}`}
+                    aria-pressed={bodyMode === opt.id}
                     onClick={() => setBodyMode(opt.id)}
                   >
                     {opt.label}
                   </button>
                 ))}
               </div>
+              <span className="http-mode-hint">
+                {bodyMode === "pretty" && "Formatted"}
+                {bodyMode === "raw" && "Original response"}
+                {bodyMode === "preview" &&
+                  (response.format === "html"
+                    ? "Rendered page"
+                    : response.format === "json"
+                      ? "Expandable tree"
+                      : "Preview")}
+              </span>
             </div>
             <div className="http-body-toolbar-right">
-              <input
-                type="search"
-                placeholder="Search response…"
-                className="http-search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <button type="button" className={`http-btn-ghost ${wrap ? "http-btn-ghost-active" : ""}`} onClick={() => setWrap((v) => !v)}>
+              {bodyMode === "preview" && response.format === "json" && (
+                <input
+                  type="search"
+                  placeholder="Search JSON tree…"
+                  className="http-search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              )}
+              <button
+                type="button"
+                className={`http-btn-ghost ${wrap ? "http-btn-ghost-active" : ""}`}
+                onClick={() => setWrap((v) => !v)}
+              >
                 Wrap
               </button>
               <CopyButton text={copyText} label="Copy" />
             </div>
           </div>
 
-          <div className={`http-body-view ${wrap ? "http-body-wrap" : ""}`}>
-            {bodyMode === "preview" && response.format === "html" ? (
-              <iframe
-                title="HTML preview"
-                className="http-html-preview"
-                sandbox=""
-                srcDoc={response.rawBody || response.body || ""}
-              />
-            ) : bodyMode === "preview" && response.format === "xml" ? (
-              <pre className="response-raw">
-                <code>{response.rawBody || response.body}</code>
-              </pre>
-            ) : (
-              <JsonViewer
-                parsed={response.parsed}
-                raw={response.rawBody || response.body}
-                search={search}
-                mode={bodyMode === "pretty" && response.parsed != null ? "pretty" : bodyMode === "pretty" ? "raw" : bodyMode}
-              />
-            )}
+          <div key={bodyMode} className={`http-body-view ${wrap ? "http-body-wrap" : ""}`}>
+            <ResponseBody response={response} bodyMode={bodyMode} search={search} />
           </div>
         </div>
       )}

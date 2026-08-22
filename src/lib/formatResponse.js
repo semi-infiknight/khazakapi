@@ -27,12 +27,23 @@ export function statusClass(status, ok) {
   return "http-status-info";
 }
 
-export function bodyViewOptions(format, parsed) {
-  const options = [{ id: "pretty", label: "Pretty" }];
-  options.push({ id: "raw", label: "Raw" });
-  if (format === "html") options.push({ id: "preview", label: "Preview" });
-  if (format === "xml") options.push({ id: "preview", label: "Preview" });
+export function bodyViewOptions(format) {
+  const options = [
+    { id: "pretty", label: "Pretty" },
+    { id: "raw", label: "Raw" },
+  ];
+  if (format === "html" || format === "xml" || format === "json") {
+    options.push({ id: "preview", label: "Preview" });
+  }
   return options;
+}
+
+export function responseCopyText(response, bodyMode) {
+  const raw = response?.rawBody ?? response?.body ?? "";
+  const formatted = response?.body ?? raw;
+  if (bodyMode === "raw") return raw;
+  if (bodyMode === "preview" && response?.format === "html") return raw;
+  return formatted;
 }
 
 export function parseSetCookie(headers = {}) {
@@ -52,14 +63,4 @@ export function parseSetCookie(headers = {}) {
     }
     return { name, value, attributes, raw: line };
   });
-}
-
-export function filterJsonTree(node, query) {
-  if (!query) return true;
-  const q = query.toLowerCase();
-  try {
-    return JSON.stringify(node).toLowerCase().includes(q);
-  } catch {
-    return String(node).toLowerCase().includes(q);
-  }
 }
