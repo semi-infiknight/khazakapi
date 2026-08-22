@@ -10,7 +10,10 @@ export default function Footer() {
         </div>
         <div className="flex flex-col gap-1">
           <a href="/api-docs.html" className="foot-link">
-            REST explorer
+            API reference
+          </a>
+          <a href="/postman.json" className="foot-link">
+            Postman collection
           </a>
           <a href="/docs.html" className="foot-link">
             Docs

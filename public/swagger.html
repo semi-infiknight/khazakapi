@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/theme-init.js"></script>
+    <title>Khazak API ~ Swagger UI</title>
+    <meta name="description" content="Classic Swagger UI explorer for Khazak API (legacy view)." />
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui.css" />
+    <style>
+      :root:not([data-theme="light"]) .swagger-ui { filter: invert(88%) hue-rotate(180deg); }
+      :root:not([data-theme="light"]) .swagger-ui img { filter: invert(100%) hue-rotate(180deg); }
+      .topbar { padding: 10px 16px; font-family: ui-monospace, monospace; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+      .topbar a { color: #c9cfd6; margin-right: 14px; }
+    </style>
+  </head>
+  <body>
+    <div class="topbar"><a href="/api-docs.html">← Scalar reference</a><a href="/">Directory</a></div>
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.18.2/swagger-ui-standalone-preset.js"></script>
+    <script>
+      window.onload = () => {
+        SwaggerUIBundle({
+          url: "/openapi.json",
+          dom_id: "#swagger-ui",
+          deepLinking: true,
+          presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+          layout: "StandaloneLayout",
+          tryItOutEnabled: true,
+          filter: true,
+        });
+      };
+    </script>
+  </body>
+</html>

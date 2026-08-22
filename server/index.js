@@ -11,6 +11,7 @@ import {
   searchApis,
 } from "./lib/search.js";
 import { checkHealth } from "./lib/health.js";
+import { openApiToPostman } from "./lib/postman.js";
 import { proxyRequest, resolveTryRequest } from "./lib/proxy.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -97,6 +98,16 @@ app.get("/openapi.json", (req, res) => {
     info: { ...openApiSpec.info, version: CATALOGUE_META.version },
     servers: [{ url: publicBaseUrl(req), description: isProd ? "Production" : "Current host" }],
   });
+});
+
+app.get("/postman.json", (req, res) => {
+  const spec = {
+    ...openApiSpec,
+    info: { ...openApiSpec.info, version: CATALOGUE_META.version },
+  };
+  const collection = openApiToPostman(spec, publicBaseUrl(req));
+  res.setHeader("Content-Disposition", 'attachment; filename="khazakapi.postman_collection.json"');
+  res.json(collection);
 });
 
 app.get("/api-docs", (_req, res) => {

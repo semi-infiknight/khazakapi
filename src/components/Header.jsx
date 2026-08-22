@@ -17,7 +17,7 @@ export default function Header({ onMenuToggle, menuOpen }) {
             {theme === "dark" ? "Light" : "Dark"}
           </button>
           <a href="/api-docs.html" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
-            API
+            Reference
           </a>
           <a href="/docs.html" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
             Docs
@@ -44,7 +44,7 @@ export default function Header({ onMenuToggle, menuOpen }) {
             Directory
           </Link>
           <a href="/api-docs.html" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
-            REST explorer
+            API reference
           </a>
           <a href="/docs.html" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
             Docs

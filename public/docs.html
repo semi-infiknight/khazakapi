@@ -62,9 +62,18 @@
 
       <h2>REST API</h2>
       <p>
-        <strong style="color:var(--text)">Try it live:</strong>
-        use the <a href="/api-docs.html">interactive REST explorer</a> (Swagger UI) to send requests, inspect schemas, and copy responses — the same style of testing you see in normal API docs.
+        Browse and test the Khazak API itself with a modern reference UI (Scalar — Postman-style layout, code snippets, try-it-out)
+        or import into your own tools.
       </p>
+      <table>
+        <thead><tr><th>Tool</th><th>Link</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Scalar reference</strong></td><td><a href="/api-docs.html">/api-docs</a></td><td>Default — sidebar listing, request builder, response panel, code gen</td></tr>
+          <tr><td>Postman collection</td><td><a href="/postman.json">/postman.json</a></td><td>Import into Postman or Insomnia</td></tr>
+          <tr><td>OpenAPI 3.1</td><td><a href="/openapi.json">/openapi.json</a></td><td>Redoc, Stoplight, Bruno, Hoppscotch</td></tr>
+          <tr><td>Swagger UI (classic)</td><td><a href="/swagger.html">/swagger.html</a></td><td>Legacy Swagger look</td></tr>
+        </tbody>
+      </table>
       <table>
         <thead><tr><th>Endpoint</th><th>Returns</th></tr></thead>
         <tbody>
@@ -73,13 +82,17 @@
           <tr><td><span class="method">GET</span> <code>/api/apis/:id</code></td><td>One entry + snippets, docs link, and AI prompt</td></tr>
           <tr><td><span class="method">GET</span> <code>/api/categories</code></td><td>Categories with counts</td></tr>
           <tr><td><span class="method">GET</span> <code>/api/freshness?days=90</code></td><td>Stale / unverified entries</td></tr>
-          <tr><td><span class="method">GET</span> <code>/openapi.json</code></td><td>OpenAPI 3.1 contract</td></tr>
-          <tr><td><span class="method">GET</span> <code>/api-docs</code></td><td>Interactive REST explorer (Swagger UI)</td></tr>
         </tbody>
       </table>
 
       <h3>Example ~ NBK exchange rates</h3>
       <pre><code>curl 'http://localhost:8787/api/apis/nbk-rates'</code></pre>
+
+      <h2>Catalogue APIs (1,400+ providers)</h2>
+      <p>
+        Each entry in the <a href="/">directory</a> has its own <strong>API tester</strong> on the detail page — structured parameters,
+        auth fields, response tabs — similar to Postman/Swagger per endpoint. Provider docs (Postman, Redoc, Swagger) are linked where available.
+      </p>
 
       <h2>MCP server</h2>
       <p>Remote MCP stub at <code>/mcp</code> for local development. Tools: <code>search_kz_apis</code>, <code>get_kz_api</code>, <code>list_api_categories</code>.</p>
@@ -93,7 +106,7 @@
 
       <footer>
         Khazak API · open-tier data © Government of Kazakhstan &amp; respective providers
-        · <a href="/">directory</a> · <a href="/api-docs.html">REST explorer</a> · <a href="/api/catalogue">/api/catalogue</a> · <a href="/mcp">/mcp</a>
+        · <a href="/api-docs.html">API reference</a> · <a href="/postman.json">Postman</a> · <a href="/api/catalogue">/api/catalogue</a> · <a href="/mcp">/mcp</a>
       </footer>
     </div>
   </body>
