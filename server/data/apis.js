@@ -7,6 +7,7 @@ import {
   snippets,
 } from "./helpers.js";
 import { YANDEX_APIS } from "./yandex-apis.js";
+import { YANDEX_ECOSYSTEM_APIS } from "./yandex-ecosystem-apis.js";
 
 const today = "2026-07-24";
 
@@ -38002,6 +38003,7 @@ export const APIS = [
     endpoint: "https://app.snipcart.com/api",
   },
   ...YANDEX_APIS,
+  ...YANDEX_ECOSYSTEM_APIS,
 ];
 
 // Attach generated snippets to copyable entries
@@ -38019,7 +38021,7 @@ for (const entry of APIS) {
 export const KZ_APIS = APIS.filter((entry) => (entry.country || []).includes("KZ"));
 
 export const CATALOGUE_META = {
-  updated: "2026-08-22T00:00:00.000Z",
+  updated: "2026-08-22T20:00:00.000Z",
   version: "2026-08-22",
   source: "khazakapi-local",
   total: KZ_APIS.length,

@@ -170,6 +170,64 @@ export function yandexOAuthSetup(docs, scopes = "metrika:read") {
   };
 }
 
+export function yandexCloudSetup(docs, service = "Yandex Cloud") {
+  return {
+    level: "setup",
+    label: "CLOUD IAM SETUP",
+    summary: `Create a Yandex Cloud folder, service account, and IAM credentials for ${service}.`,
+    docs,
+    docsLabel: "Docs",
+    portalUrl: "https://console.cloud.yandex.com/",
+    registerUrl: "https://console.cloud.yandex.com/",
+    sections: [
+      {
+        title: "Get credentials",
+        items: [
+          "Create a folder in the Yandex Cloud console.",
+          "Create a service account with the minimum role for this service.",
+          "Issue an IAM token or authorized key for API calls.",
+        ],
+      },
+      {
+        title: "Ship it",
+        items: [
+          "Rotate service account keys on a schedule.",
+          "Use separate folders for staging and production.",
+        ],
+      },
+    ],
+  };
+}
+
+export function yandexPaySetup(docs) {
+  return {
+    level: "setup",
+    label: "YANDEX PAY SETUP",
+    summary: "Register in the Yandex Pay console, obtain API keys, and implement Merchant API endpoints on your backend.",
+    docs,
+    docsLabel: "Docs",
+    portalUrl: "https://console.pay.yandex.ru/",
+    registerUrl: "https://console.pay.yandex.ru/",
+    sections: [
+      {
+        title: "Get started",
+        items: [
+          "Register your shop in the Yandex Pay developer console.",
+          "Copy the API key and configure Callback URL with your public backend IP.",
+          "Implement /v1/order/render, /v1/order/create, and /v1/webhook on your server.",
+        ],
+      },
+      {
+        title: "Ship it",
+        items: [
+          "Verify JWT signatures on incoming Merchant API requests.",
+          "Test in sandbox before going live with KZT checkout.",
+        ],
+      },
+    ],
+  };
+}
+
 export function snippets(endpoint) {
   const safe = endpoint.replace(/'/g, "\\'");
   return {
