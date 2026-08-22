@@ -55,7 +55,7 @@ export default function ApiDetailPage() {
   }
 
   return (
-    <div className="container-main max-w-4xl py-8 pb-16">
+    <div className="container-main max-w-5xl py-8 pb-16">
       <Link to="/" className="font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)]">
         ← back to directory
       </Link>
