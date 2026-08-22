@@ -1,10 +1,3 @@
-const FLAGS = {
-  KZ: "🇰🇿",
-  global: "🌐",
-  US: "🇺🇸",
-  EU: "🇪🇺",
-};
-
 function SidebarSection({ title, children }) {
   return (
     <div className="catalogue-sidebar-section">
@@ -34,17 +27,15 @@ function SidebarNav({ items, active, onSelect, formatLabel }) {
 }
 
 export default function CategorySidebar({ facets, total, filters, onFilterChange }) {
-  const { category, country, auth, pricing } = filters;
+  const { category, auth, pricing } = filters;
   const categories = Object.entries(facets?.category || {}).sort((a, b) => b[1] - a[1]);
-  const countries = Object.entries(facets?.country || {}).sort((a, b) => b[1] - a[1]);
   const authOptions = Object.entries(facets?.auth || {}).sort((a, b) => b[1] - a[1]);
   const pricingOptions = Object.entries(facets?.pricing || {}).sort((a, b) => b[1] - a[1]);
 
-  const hasFilters = category || country || auth || pricing;
+  const hasFilters = category || auth || pricing;
 
   const clearAll = () => {
     onFilterChange("category", "");
-    onFilterChange("country", "");
     onFilterChange("auth", "");
     onFilterChange("pricing", "");
   };
@@ -57,18 +48,9 @@ export default function CategorySidebar({ facets, total, filters, onFilterChange
           className={`catalogue-sidebar-link ${!hasFilters ? "catalogue-sidebar-link-active" : ""}`}
           onClick={clearAll}
         >
-          <span>All APIs</span>
+          <span>All KZ APIs</span>
           {total != null && <span className="catalogue-sidebar-count">{total}</span>}
         </button>
-      </SidebarSection>
-
-      <SidebarSection title="Country">
-        <SidebarNav
-          items={countries}
-          active={country}
-          onSelect={(value) => onFilterChange("country", value)}
-          formatLabel={(code) => `${FLAGS[code] || "🏳"} ${code}`}
-        />
       </SidebarSection>
 
       <SidebarSection title="Categories">

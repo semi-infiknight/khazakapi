@@ -7,7 +7,6 @@ import CategorySidebar from "../components/CategorySidebar.jsx";
 export default function HomePage() {
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
-  const [country, setCountry] = useState("");
   const [category, setCategory] = useState("");
   const [auth, setAuth] = useState("");
   const [pricing, setPricing] = useState("");
@@ -25,7 +24,6 @@ export default function HomePage() {
     setLoading(true);
     fetchSearch({
       q: debounced,
-      country,
       category,
       auth,
       pricing,
@@ -41,14 +39,13 @@ export default function HomePage() {
     return () => {
       cancelled = true;
     };
-  }, [debounced, country, category, auth, pricing]);
+  }, [debounced, category, auth, pricing]);
 
   const stats = data?.facets;
   const isSearching = Boolean(debounced.trim());
 
   const setFilter = (key, value) => {
     if (key === "category") setCategory(value);
-    if (key === "country") setCountry(value);
     if (key === "auth") setAuth(value);
     if (key === "pricing") setPricing(value);
   };
@@ -69,10 +66,10 @@ export default function HomePage() {
 
       <section className="mb-8">
         <div className="bento-label-plate mb-3">KHAZAK API · 2026</div>
-        <h1 className="hero-title">every API you need to build</h1>
+        <h1 className="hero-title">every Kazakhstan API you need</h1>
         <p className="mt-3 max-w-2xl text-[var(--text-soft)]">
-          Astana · Almaty · Shymkent · +7 — government open data, Kaspi, 2GIS, NBK KZT rates, eGov, and the APIs
-          builders in Kazakhstan actually use.
+          Astana · Almaty · Shymkent · +7 — government open data, Kaspi, 2GIS, NBK KZT rates, eGov, and local
+          providers only. No global SaaS filler.
         </p>
 
         <div className="hero-metal-card mt-6 max-w-3xl">
@@ -94,8 +91,8 @@ export default function HomePage() {
           <span className="stats-big-number">{stats?.auth?.none ?? "—"}</span>
         </div>
         <div className="stats-block flex-col items-start justify-center">
-          <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">KZ</span>
-          <span className="stats-big-number">{stats?.country?.KZ ?? "—"}</span>
+          <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">Categories</span>
+          <span className="stats-big-number">{Object.keys(stats?.category || {}).length || "—"}</span>
         </div>
       </section>
 
@@ -103,7 +100,7 @@ export default function HomePage() {
         <CategorySidebar
           facets={data?.facets}
           total={data?.total}
-          filters={{ category, country, auth, pricing }}
+          filters={{ category, auth, pricing }}
           onFilterChange={setFilter}
         />
 

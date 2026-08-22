@@ -2,7 +2,7 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { APIS, CATALOGUE_META } from "./data/apis.js";
+import { CATALOGUE_META, KZ_APIS } from "./data/apis.js";
 import {
   freshnessReport,
   listCategories,
@@ -40,7 +40,7 @@ app.use((_req, res, next) => {
 app.get("/api/catalogue", (req, res) => {
   const limit = Math.min(Number(req.query.limit) || 200, 200);
   const offset = Number(req.query.offset) || 0;
-  const apis = APIS.slice(offset, offset + limit).map(publicListEntry);
+  const apis = KZ_APIS.slice(offset, offset + limit).map(publicListEntry);
   res.json({
     ...CATALOGUE_META,
     count: apis.length,
@@ -49,20 +49,20 @@ app.get("/api/catalogue", (req, res) => {
 });
 
 app.get("/api/search", (req, res) => {
-  res.json(searchApis(APIS, req.query));
+  res.json(searchApis(KZ_APIS, req.query));
 });
 
 app.get("/api/categories", (_req, res) => {
-  res.json({ count: listCategories(APIS).length, categories: listCategories(APIS) });
+  res.json({ count: listCategories(KZ_APIS).length, categories: listCategories(KZ_APIS) });
 });
 
 app.get("/api/freshness", (req, res) => {
   const days = Number(req.query.days) || 90;
-  res.json(freshnessReport(APIS, days));
+  res.json(freshnessReport(KZ_APIS, days));
 });
 
 app.get("/api/apis/:id", async (req, res) => {
-  const entry = APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
+  const entry = KZ_APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
   if (!entry) return res.status(404).json({ error: `no API with id '${req.params.id}'` });
 
   const detail = publicDetailEntry(entry);
@@ -71,7 +71,7 @@ app.get("/api/apis/:id", async (req, res) => {
 });
 
 app.post("/api/apis/:id/try", async (req, res) => {
-  const entry = APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
+  const entry = KZ_APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
   if (!entry) return res.status(404).json({ error: `no API with id '${req.params.id}'` });
 
   const resolved = resolveTryRequest(entry, req.body || {});
@@ -144,7 +144,7 @@ app.get("/mcp", (_req, res) => {
 });
 
 app.get("/health", (_req, res) => {
-  res.json({ ok: true, apis: APIS.length, updated: CATALOGUE_META.updated });
+  res.json({ ok: true, apis: KZ_APIS.length, updated: CATALOGUE_META.updated });
 });
 
 const publicDir = path.join(__dirname, "..", "public");
@@ -166,5 +166,5 @@ app.use((_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Khazak API server on http://localhost:${PORT} (${APIS.length} APIs)`);
+  console.log(`Khazak API server on http://localhost:${PORT} (${KZ_APIS.length} KZ APIs)`);
 });

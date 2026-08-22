@@ -38014,9 +38014,11 @@ for (const entry of APIS) {
   entry.note = entry.note ?? null;
 }
 
+export const KZ_APIS = APIS.filter((entry) => (entry.country || []).includes("KZ"));
+
 export const CATALOGUE_META = {
   updated: "2026-07-24T00:00:00.000Z",
   version: "2026-07-24",
   source: "khazakapi-local",
-  total: APIS.length,
+  total: KZ_APIS.length,
 };
