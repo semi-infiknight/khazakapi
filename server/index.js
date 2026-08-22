@@ -10,6 +10,7 @@ import {
   publicListEntry,
   searchApis,
 } from "./lib/search.js";
+import { proxyRequest, resolveTryUrl } from "./lib/proxy.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -28,7 +29,7 @@ app.use(express.json());
 
 app.use((_req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
@@ -64,6 +65,21 @@ app.get("/api/apis/:id", async (req, res) => {
   const detail = publicDetailEntry(entry);
   detail.health = await checkHealth(entry);
   res.json(detail);
+});
+
+app.post("/api/apis/:id/try", async (req, res) => {
+  const entry = APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
+  if (!entry) return res.status(404).json({ error: `no API with id '${req.params.id}'` });
+
+  const resolved = resolveTryUrl(entry, req.body?.url, req.body?.apiKey);
+  if (resolved.error) return res.status(400).json({ error: resolved.error });
+
+  const result = await proxyRequest(resolved.url);
+  res.json({ url: resolved.url, ...result });
+});
+
+app.options("/api/apis/:id/try", (_req, res) => {
+  res.sendStatus(204);
 });
 
 async function checkHealth(entry) {

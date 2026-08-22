@@ -14,6 +14,17 @@ export async function fetchApi(id) {
   return res.json();
 }
 
+export async function tryApi(id, { url, apiKey } = {}) {
+  const res = await fetch(`/api/apis/${id}/try`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url, apiKey }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Request failed");
+  return data;
+}
+
 export async function fetchCategories() {
   const res = await fetch("/api/categories");
   if (!res.ok) throw new Error("Categories failed");

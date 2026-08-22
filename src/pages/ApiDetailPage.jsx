@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchApi } from "../lib/api.js";
 import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
+import ApiTryPanel from "../components/ApiTryPanel.jsx";
 
 function CopyBlock({ label, text }) {
   const [copied, setCopied] = useState(false);
@@ -105,6 +106,8 @@ export default function ApiDetailPage() {
           ))}
         </div>
       )}
+
+      <ApiTryPanel api={api} />
 
       {api.curl && <CopyBlock label="cURL" text={api.curl} />}
       {api.js && <CopyBlock label="JavaScript" text={api.js} />}

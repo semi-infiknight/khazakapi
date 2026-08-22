@@ -227,6 +227,41 @@
         }
       }
     },
+    "/api/apis/{id}/try": {
+      "post": {
+        "tags": ["Catalogue"],
+        "summary": "Try an API endpoint",
+        "description": "Proxies a live GET request to the catalogue entry's provider endpoint. Same-host URLs only. Replaces YOUR_KEY when an API key is supplied.",
+        "operationId": "tryApi",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "cpi_strata"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": { "type": "string", "format": "uri", "description": "Override URL (same host as catalogue endpoint)" },
+                  "apiKey": { "type": "string", "description": "Provider API key (replaces YOUR_KEY)" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Proxied response" },
+          "400": { "description": "Invalid URL or missing API key" },
+          "404": { "description": "API not found" }
+        }
+      }
+    },
     "/api/categories": {
       "get": {
         "tags": ["Catalogue"],
