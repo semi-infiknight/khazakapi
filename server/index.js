@@ -10,7 +10,7 @@ import {
   publicListEntry,
   searchApis,
 } from "./lib/search.js";
-import { proxyRequest, resolveTryUrl } from "./lib/proxy.js";
+import { proxyRequest, resolveTryRequest } from "./lib/proxy.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -71,11 +71,19 @@ app.post("/api/apis/:id/try", async (req, res) => {
   const entry = APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
   if (!entry) return res.status(404).json({ error: `no API with id '${req.params.id}'` });
 
-  const resolved = resolveTryUrl(entry, req.body?.url, req.body?.apiKey);
+  const resolved = resolveTryRequest(entry, req.body || {});
   if (resolved.error) return res.status(400).json({ error: resolved.error });
 
-  const result = await proxyRequest(resolved.url);
-  res.json({ url: resolved.url, ...result });
+  const response = await proxyRequest(resolved.method, resolved.url, resolved.headers);
+  res.json({
+    request: {
+      method: resolved.method,
+      url: resolved.url,
+      headers: resolved.headers,
+      curl: resolved.curl,
+    },
+    response,
+  });
 });
 
 app.options("/api/apis/:id/try", (_req, res) => {

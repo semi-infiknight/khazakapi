@@ -90,6 +90,8 @@ export default function ApiDetailPage() {
         )}
       </div>
 
+      <ApiTryPanel api={api} />
+
       {api.setup && (
         <div className="panel mt-4 p-5">
           <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]">{api.setup.label}</h2>
@@ -106,8 +108,6 @@ export default function ApiDetailPage() {
           ))}
         </div>
       )}
-
-      <ApiTryPanel api={api} />
 
       {api.curl && <CopyBlock label="cURL" text={api.curl} />}
       {api.js && <CopyBlock label="JavaScript" text={api.js} />}

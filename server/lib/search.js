@@ -1,3 +1,5 @@
+import { buildTrySpec } from "./requestSpec.js";
+
 const STOP = new Set([
   "a", "an", "the", "and", "or", "for", "to", "of", "in", "on", "at", "by", "with", "from", "is", "are",
 ]);
@@ -104,6 +106,7 @@ export function publicDetailEntry(entry) {
   if (entry.endpoint && !detail.curl) {
     Object.assign(detail, snippetsFromEndpoint(entry));
   }
+  detail.trySpec = buildTrySpec(entry);
   return detail;
 }
 

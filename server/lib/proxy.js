@@ -1,11 +1,40 @@
-const MAX_BODY = 256 * 1024;
-const TIMEOUT_MS = 8000;
+import { buildUrlFromParams, buildCurlPreview } from "./requestSpec.js";
 
-export function resolveTryUrl(entry, requestedUrl, apiKey) {
+const MAX_BODY = 256 * 1024;
+const TIMEOUT_MS = 15000;
+const MAX_HTML_PREVIEW = 4000;
+
+const ALLOWED_REQUEST_HEADERS = new Set([
+  "accept",
+  "accept-language",
+  "content-type",
+  "user-agent",
+  "x-requested-with",
+]);
+
+export function resolveTryRequest(entry, options = {}) {
+  const { url: requestedUrl, params, headers, apiKey } = options;
+
+  if (requestedUrl) {
+    return resolveTryUrl(entry, requestedUrl, apiKey, headers);
+  }
+
+  const built = buildUrlFromParams(entry, params, apiKey);
+  if (built.error) return built;
+
+  return {
+    method: "GET",
+    url: built.url,
+    headers: sanitizeHeaders(headers),
+    curl: buildCurlPreview("GET", built.url, sanitizeHeaders(headers)),
+  };
+}
+
+function resolveTryUrl(entry, requestedUrl, apiKey, headers) {
   const base = entry.endpoint;
   if (!base) return { error: "This catalogue entry has no testable endpoint." };
 
-  const url = (requestedUrl || base).trim();
+  const url = requestedUrl.trim();
   if (!url) return { error: "URL is required." };
 
   let baseParsed;
@@ -26,27 +55,48 @@ export function resolveTryUrl(entry, requestedUrl, apiKey) {
   }
 
   let finalUrl = url;
-  if (apiKey) {
-    finalUrl = finalUrl.replace(/YOUR_KEY/g, encodeURIComponent(apiKey));
-  }
+  if (apiKey) finalUrl = finalUrl.replace(/YOUR_KEY/g, encodeURIComponent(apiKey));
 
   if (finalUrl.includes("YOUR_KEY")) {
-    return { error: "Replace YOUR_KEY with your API key before sending." };
+    return { error: "Provide an API key — the request URL still contains YOUR_KEY." };
   }
 
-  return { url: finalUrl };
+  const cleanHeaders = sanitizeHeaders(headers);
+  return {
+    method: "GET",
+    url: finalUrl,
+    headers: cleanHeaders,
+    curl: buildCurlPreview("GET", finalUrl, cleanHeaders),
+  };
 }
 
-export async function proxyRequest(url) {
+function sanitizeHeaders(headers = {}) {
+  const out = { Accept: "application/json, text/plain, */*" };
+  for (const [name, value] of Object.entries(headers || {})) {
+    if (!value) continue;
+    const key = name.toLowerCase();
+    if (!ALLOWED_REQUEST_HEADERS.has(key)) continue;
+    out[name] = String(value);
+  }
+  return out;
+}
+
+export async function proxyRequest(method, url, headers = {}) {
   const start = Date.now();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
     const response = await fetch(url, {
+      method: method || "GET",
       signal: controller.signal,
-      headers: { Accept: "application/json, text/plain, */*" },
+      headers,
       redirect: "follow",
+    });
+
+    const responseHeaders = {};
+    response.headers.forEach((value, key) => {
+      responseHeaders[key] = value;
     });
 
     const contentType = response.headers.get("content-type") || "";
@@ -59,15 +109,26 @@ export async function proxyRequest(url) {
 
     let body = text;
     let parsed = null;
+    let format = "text";
+
     if (contentType.includes("json") || text.trim().startsWith("{") || text.trim().startsWith("[")) {
       try {
         parsed = JSON.parse(text);
         body = JSON.stringify(parsed, null, 2);
+        format = "json";
       } catch {
-        // keep raw text
+        format = "text";
       }
-    } else if (text.length > 4000) {
-      body = `${text.slice(0, 4000)}\n\n… (${text.length.toLocaleString()} chars total, showing first 4,000)`;
+    } else if (contentType.includes("xml") || text.trim().startsWith("<")) {
+      format = "xml";
+      if (text.length > MAX_HTML_PREVIEW) {
+        body = `${text.slice(0, MAX_HTML_PREVIEW)}\n\n… (${text.length.toLocaleString()} chars total)`;
+      }
+    } else if (contentType.includes("html") || text.trim().startsWith("<!")) {
+      format = "html";
+      body = `${text.slice(0, MAX_HTML_PREVIEW)}\n\n… (${text.length.toLocaleString()} chars total, HTML preview)`;
+    } else if (text.length > MAX_HTML_PREVIEW) {
+      body = `${text.slice(0, MAX_HTML_PREVIEW)}\n\n… (${text.length.toLocaleString()} chars total)`;
     }
 
     return {
@@ -76,8 +137,10 @@ export async function proxyRequest(url) {
       statusText: response.statusText,
       ms: Date.now() - start,
       contentType,
+      format,
       body,
       parsed,
+      headers: responseHeaders,
       truncated,
       size: buffer.byteLength,
       checkedAt: new Date().toISOString(),
@@ -91,8 +154,10 @@ export async function proxyRequest(url) {
       statusText: aborted ? "Timeout" : "Network error",
       ms: Date.now() - start,
       contentType: null,
+      format: "text",
       body: aborted ? `Request timed out after ${TIMEOUT_MS / 1000}s.` : String(err.message || err),
       parsed: null,
+      headers: {},
       truncated: false,
       size: 0,
       checkedAt: new Date().toISOString(),
