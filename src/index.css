@@ -1481,3 +1481,148 @@ nav a:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* Postman-style search results list */
+.postman-results {
+  border: 1px solid #2a3142;
+  border-radius: 10px;
+  background: #111318;
+  overflow: hidden;
+}
+
+:root[data-theme="light"] .postman-results {
+  background: #1c1f26;
+}
+
+.postman-results-empty {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.postman-results-head {
+  margin: 0;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid #2a3142;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.postman-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.postman-row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #252a36;
+  color: inherit;
+  transition: background 0.12s ease;
+}
+
+.postman-row:last-child {
+  border-bottom: 0;
+}
+
+.postman-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.postman-row-main {
+  min-width: 0;
+}
+
+.postman-row-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #4eaaff;
+}
+
+.postman-row:hover .postman-row-title {
+  color: #7bc0ff;
+}
+
+.postman-row-desc {
+  margin: 0.35rem 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #9ca3af;
+}
+
+.postman-row-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.45rem 0 0;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.postman-row-meta > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.postman-row-dot {
+  color: #4b5563;
+}
+
+.postman-verified {
+  width: 13px;
+  height: 13px;
+}
+
+.postman-row-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.postman-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.postman-stat-label {
+  color: #6b7280;
+}
+
+.postman-stat-sep {
+  color: #4b5563;
+}
+
+.postman-stat-value {
+  color: #d1d5db;
+}
+
+@media (max-width: 720px) {
+  .postman-row {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .postman-row-stats {
+    grid-column: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 0.35rem;
+  }
+}

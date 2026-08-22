@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
+import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
 import { FacetChips } from "../components/Filters.jsx";
 
@@ -41,9 +42,12 @@ export default function HomePage() {
     };
   }, [debounced, category, auth, pricing]);
 
+  const isSearching = Boolean(debounced.trim());
   const resultLabel = loading
     ? "Loading…"
     : `${data?.total?.toLocaleString() ?? 0} API${data?.total === 1 ? "" : "s"}`;
+
+  const pageTitle = isSearching ? `Search: ${debounced.trim()}` : category || "Discover APIs";
 
   return (
     <div className="hub-page">
@@ -72,8 +76,10 @@ export default function HomePage() {
         <div className="hub-main">
           <div className="hub-main-head">
             <div>
-              <h1 className="hub-main-title">{category || "Discover APIs"}</h1>
-              <p className="hub-main-subtitle">{resultLabel} · Kazakhstan open data & integrations</p>
+              <h1 className="hub-main-title">{pageTitle}</h1>
+              <p className="hub-main-subtitle">
+                {isSearching ? "Postman-style search results" : resultLabel} · Kazakhstan open data & integrations
+              </p>
             </div>
             <div className="hub-search-wrap">
               <span className="hub-search-icon" aria-hidden="true">
@@ -98,6 +104,8 @@ export default function HomePage() {
 
           {loading ? (
             <p className="hub-loading">Loading catalogue…</p>
+          ) : isSearching ? (
+            <ApiSearchList apis={data?.apis} query={debounced.trim()} total={data?.total} />
           ) : (
             <ApiGrid apis={data?.apis} />
           )}
