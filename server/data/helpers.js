@@ -109,6 +109,67 @@ export function keySetup(docs, portalUrl = DATA_EGOV_PORTAL) {
   };
 }
 
+export const YANDEX_DEV_PORTAL = "https://developer.tech.yandex.com/";
+export const YANDEX_OAUTH = "https://oauth.yandex.com/";
+
+export function yandexKeySetup(docs, product = "Maps API") {
+  return {
+    level: "setup",
+    label: "API KEY SETUP",
+    summary: `Register in the Yandex Developer Dashboard, connect ${product}, and copy your API key.`,
+    docs,
+    docsLabel: "Docs",
+    portalUrl: YANDEX_DEV_PORTAL,
+    registerUrl: YANDEX_DEV_PORTAL,
+    sections: [
+      {
+        title: "Get a key",
+        items: [
+          "Sign in at developer.tech.yandex.com and create a project.",
+          "Connect the product you need (Geocoder, Router, Static API, etc.).",
+          "Copy the API key — it activates within about 15 minutes.",
+        ],
+      },
+      {
+        title: "Ship it",
+        items: [
+          "Never expose production keys in client-side code without request signing.",
+          "Yandex Maps APIs require TLS with SNI on server-side callers.",
+        ],
+      },
+    ],
+  };
+}
+
+export function yandexOAuthSetup(docs, scopes = "metrika:read") {
+  return {
+    level: "setup",
+    label: "OAUTH SETUP",
+    summary: "Create a Yandex OAuth app, grant the required scopes, and pass the token in Authorization headers.",
+    docs,
+    docsLabel: "Docs",
+    portalUrl: YANDEX_OAUTH,
+    registerUrl: `${YANDEX_OAUTH}?dialog=create-client-entry`,
+    sections: [
+      {
+        title: "Get a token",
+        items: [
+          `Create an OAuth app at oauth.yandex.com with scopes: ${scopes}.`,
+          "Authorize and copy the OAuth token for server-side API calls.",
+          "Pass Authorization: OAuth <token> on every request.",
+        ],
+      },
+      {
+        title: "Ship it",
+        items: [
+          "Refresh or rotate tokens before expiry.",
+          "Scope tokens to the minimum counters/apps you need.",
+        ],
+      },
+    ],
+  };
+}
+
 export function snippets(endpoint) {
   const safe = endpoint.replace(/'/g, "\\'");
   return {

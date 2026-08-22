@@ -6,6 +6,7 @@ import {
   openTrust,
   snippets,
 } from "./helpers.js";
+import { YANDEX_APIS } from "./yandex-apis.js";
 
 const today = "2026-07-24";
 
@@ -37999,7 +38000,8 @@ export const APIS = [
     trust: commercialTrust("Snipcart", "https://docs.snipcart.com/v3/", "apiKey"),
     setup: keySetup("https://docs.snipcart.com/v3/", "https://docs.snipcart.com/v3/"),
     endpoint: "https://app.snipcart.com/api",
-  }
+  },
+  ...YANDEX_APIS,
 ];
 
 // Attach generated snippets to copyable entries
@@ -38017,8 +38019,8 @@ for (const entry of APIS) {
 export const KZ_APIS = APIS.filter((entry) => (entry.country || []).includes("KZ"));
 
 export const CATALOGUE_META = {
-  updated: "2026-07-24T00:00:00.000Z",
-  version: "2026-07-24",
+  updated: "2026-08-22T00:00:00.000Z",
+  version: "2026-08-22",
   source: "khazakapi-local",
   total: KZ_APIS.length,
 };
