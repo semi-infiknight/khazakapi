@@ -33,18 +33,18 @@ export function FacetChips({ label, items, active, onChange }) {
   if (!entries.length) return null;
 
   return (
-    <div className="hub-filter-group">
-      <p className="hub-filter-label">{label}</p>
-      <div className="hub-filter-chips">
+    <div className="mt-3">
+      <p className="mb-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--text-mute)]">{label}</p>
+      <div className="flex flex-wrap gap-2">
         {entries.map(([key, count]) => (
           <button
             key={key}
             type="button"
-            className={`hub-filter-chip ${active === key ? "hub-filter-chip-active" : ""}`}
+            className={`chip ${active === key ? "on" : ""}`}
             onClick={() => onChange(active === key ? "" : key)}
           >
             {key}
-            <span className="hub-filter-count">{count}</span>
+            <span className="opacity-60">{count}</span>
           </button>
         ))}
       </div>
