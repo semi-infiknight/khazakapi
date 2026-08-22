@@ -1072,7 +1072,7 @@ nav a:hover {
 /* Catalogue layout — Khazak theme */
 .catalogue-layout {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
+  grid-template-columns: 240px minmax(0, 1fr);
   gap: 1.25rem;
   align-items: start;
 }
@@ -1162,6 +1162,12 @@ nav a:hover {
   color: var(--accent);
   cursor: pointer;
   text-decoration: underline;
+}
+
+.catalogue-sidebar-scroll {
+  max-height: 16rem;
+  overflow-y: auto;
+  padding-right: 0.15rem;
 }
 
 /* Postman-style search list — Khazak theme */

@@ -3,7 +3,6 @@ import { fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
-import { CountryFilter, FacetChips } from "../components/Filters.jsx";
 
 export default function HomePage() {
   const [query, setQuery] = useState("");
@@ -46,6 +45,13 @@ export default function HomePage() {
 
   const stats = data?.facets;
   const isSearching = Boolean(debounced.trim());
+
+  const setFilter = (key, value) => {
+    if (key === "category") setCategory(value);
+    if (key === "country") setCountry(value);
+    if (key === "auth") setAuth(value);
+    if (key === "pricing") setPricing(value);
+  };
 
   return (
     <div className="container-main pb-16 pt-6">
@@ -94,7 +100,12 @@ export default function HomePage() {
       </section>
 
       <div className="catalogue-layout">
-        <CategorySidebar facets={data?.facets} active={category} onChange={setCategory} total={data?.total} />
+        <CategorySidebar
+          facets={data?.facets}
+          total={data?.total}
+          filters={{ category, country, auth, pricing }}
+          onFilterChange={setFilter}
+        />
 
         <div className="catalogue-main">
           <section className="mb-6">
@@ -111,10 +122,6 @@ export default function HomePage() {
                 ⌘K
               </span>
             </div>
-
-            <CountryFilter facets={data?.facets} active={country} onChange={setCountry} />
-            <FacetChips label="Auth" items={data?.facets?.auth} active={auth} onChange={setAuth} />
-            <FacetChips label="Pricing" items={data?.facets?.pricing} active={pricing} onChange={setPricing} />
           </section>
 
           {loading ? (

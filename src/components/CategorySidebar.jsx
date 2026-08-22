@@ -1,42 +1,99 @@
-export default function CategorySidebar({ facets, active, onChange, total }) {
+const FLAGS = {
+  KZ: "🇰🇿",
+  global: "🌐",
+  US: "🇺🇸",
+  EU: "🇪🇺",
+};
+
+function SidebarSection({ title, children }) {
+  return (
+    <div className="catalogue-sidebar-section">
+      <h2 className="catalogue-sidebar-heading">{title}</h2>
+      {children}
+    </div>
+  );
+}
+
+function SidebarNav({ items, active, onSelect, formatLabel }) {
+  if (!items.length) return null;
+  return (
+    <nav className="catalogue-sidebar-nav">
+      {items.map(([key, count]) => (
+        <button
+          key={key}
+          type="button"
+          className={`catalogue-sidebar-link ${active === key ? "catalogue-sidebar-link-active" : ""}`}
+          onClick={() => onSelect(active === key ? "" : key)}
+        >
+          <span className="catalogue-sidebar-link-text">{formatLabel ? formatLabel(key) : key}</span>
+          <span className="catalogue-sidebar-count">{count}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+export default function CategorySidebar({ facets, total, filters, onFilterChange }) {
+  const { category, country, auth, pricing } = filters;
   const categories = Object.entries(facets?.category || {}).sort((a, b) => b[1] - a[1]);
-  const visible = categories.slice(0, 14);
+  const countries = Object.entries(facets?.country || {}).sort((a, b) => b[1] - a[1]);
+  const authOptions = Object.entries(facets?.auth || {}).sort((a, b) => b[1] - a[1]);
+  const pricingOptions = Object.entries(facets?.pricing || {}).sort((a, b) => b[1] - a[1]);
+
+  const hasFilters = category || country || auth || pricing;
+
+  const clearAll = () => {
+    onFilterChange("category", "");
+    onFilterChange("country", "");
+    onFilterChange("auth", "");
+    onFilterChange("pricing", "");
+  };
 
   return (
     <aside className="panel catalogue-sidebar">
-      <div className="catalogue-sidebar-section">
-        <h2 className="catalogue-sidebar-heading">Discovery</h2>
+      <SidebarSection title="Discovery">
         <button
           type="button"
-          className={`catalogue-sidebar-link ${!active ? "catalogue-sidebar-link-active" : ""}`}
-          onClick={() => onChange("")}
+          className={`catalogue-sidebar-link ${!hasFilters ? "catalogue-sidebar-link-active" : ""}`}
+          onClick={clearAll}
         >
           <span>All APIs</span>
           {total != null && <span className="catalogue-sidebar-count">{total}</span>}
         </button>
-      </div>
+      </SidebarSection>
 
-      <div className="catalogue-sidebar-section">
-        <h2 className="catalogue-sidebar-heading">Categories</h2>
-        <nav className="catalogue-sidebar-nav" aria-label="Categories">
-          {visible.map(([name, count]) => (
-            <button
-              key={name}
-              type="button"
-              className={`catalogue-sidebar-link ${active === name ? "catalogue-sidebar-link-active" : ""}`}
-              onClick={() => onChange(active === name ? "" : name)}
-            >
-              <span className="catalogue-sidebar-link-text">{name}</span>
-              <span className="catalogue-sidebar-count">{count}</span>
-            </button>
-          ))}
-        </nav>
-        {active && (
-          <button type="button" className="catalogue-sidebar-clear" onClick={() => onChange("")}>
-            Clear category
-          </button>
-        )}
-      </div>
+      <SidebarSection title="Country">
+        <SidebarNav
+          items={countries}
+          active={country}
+          onSelect={(value) => onFilterChange("country", value)}
+          formatLabel={(code) => `${FLAGS[code] || "🏳"} ${code}`}
+        />
+      </SidebarSection>
+
+      <SidebarSection title="Categories">
+        <div className="catalogue-sidebar-scroll">
+          <SidebarNav
+            items={categories}
+            active={category}
+            onSelect={(value) => onFilterChange("category", value)}
+          />
+        </div>
+      </SidebarSection>
+
+      <SidebarSection title="Auth">
+        <SidebarNav items={authOptions} active={auth} onSelect={(value) => onFilterChange("auth", value)} />
+      </SidebarSection>
+
+      <SidebarSection title="Pricing">
+        <SidebarNav items={pricingOptions} active={pricing} onSelect={(value) => onFilterChange("pricing", value)} />
+      </SidebarSection>
+
+      {hasFilters && (
+        <button type="button" className="catalogue-sidebar-clear" onClick={clearAll}>
+          Clear all filters
+        </button>
+      )}
     </aside>
   );
 }
