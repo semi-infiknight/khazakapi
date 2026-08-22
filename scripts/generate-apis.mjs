@@ -24,7 +24,7 @@ const KZ_OVERRIDES = {
     source: "stat.gov.kz",
     sourceUrl: "https://stat.gov.kz/ru/industries/social/demography/",
     docs: "https://stat.gov.kz/api/",
-    endpoint: "https://stat.gov.kz/api/getData/?api=births&period=2024",
+    endpoint: "https://api.stat.gov.kz/getData?api=births&period=2024",
     mapping: "direct_kz",
   },
   population_district: {
@@ -33,7 +33,7 @@ const KZ_OVERRIDES = {
     source: "stat.gov.kz",
     sourceUrl: "https://stat.gov.kz/ru/industries/social/demography/",
     docs: "https://stat.gov.kz/api/",
-    endpoint: "https://stat.gov.kz/api/getData/?api=population_region&period=2024",
+    endpoint: "https://api.stat.gov.kz/getData?api=population_region&period=2024",
     note: "Regional breakdown uses KATO administrative codes (Astana, Almaty, Shymkent, oblasts).",
     mapping: "direct_kz",
   },
@@ -43,7 +43,7 @@ const KZ_OVERRIDES = {
     source: "stat.gov.kz",
     sourceUrl: "https://stat.gov.kz/ru/industries/social/demography/",
     docs: "https://stat.gov.kz/api/",
-    endpoint: "https://stat.gov.kz/api/getData/?api=population&period=2024",
+    endpoint: "https://api.stat.gov.kz/getData?api=population&period=2024",
     mapping: "direct_kz",
   },
   fuelprice: {
@@ -281,9 +281,9 @@ const TEXT_RULES = [
   [/MYR/g, "KZT"],
   [/Ringgit/gi, "tenge"],
   [/\+60/g, "+7"],
-  [/https?:\/\/(api\.)?data\.gov\.my[^\s'"`]*/gi, "https://stat.gov.kz/api/getData/?api=dataset&period=2024"],
+  [/https?:\/\/(api\.)?data\.gov\.my[^\s'"`]*/gi, "https://api.stat.gov.kz/getData?api=dataset&period=2024"],
   [/data\.gov\.my/gi, "data.egov.kz"],
-  [/api\.data\.gov\.my\/data-catalogue\/\?id=([^&'"]+)/gi, "stat.gov.kz/api/getData/?api=$1&period=2024"],
+  [/api\.data\.gov\.my\/data-catalogue\/\?id=([^&'"]+)/gi, "api.stat.gov.kz/getData?api=$1&period=2024"],
   [/data-catalogue\//gi, "datasets/view?index="],
   [/Department of Statistics Malaysia \(DOSM\)/gi, "Bureau of National Statistics"],
   [/Department of Statistics Singapore \(DOS\)/gi, "Bureau of National Statistics"],
@@ -297,7 +297,7 @@ const TEXT_RULES = [
   [/prasarana/gi, "astana-metro"],
   [/ktmb/gi, "ktz-rail"],
   [/mybas-johor/gi, "almaty-bus"],
-  [/opendosm/gi, "stat.gov.kz/api/getData"],
+  [/opendosm/gi, "api.stat.gov.kz/getData"],
   [/DOSM/g, "Bureau of National Statistics"],
   [/BNM/g, "National Bank of Kazakhstan"],
   [/JPN/g, "Bureau of National Statistics"],
@@ -410,7 +410,7 @@ function inferEndpoint(entry, override = {}) {
       return "https://wis2box.kazhydromet.kz/oapi/collections";
     }
     if (entry.group === "Government & open data" || SEA_COUNTRY.has((entry.country || [])[0])) {
-      return `https://stat.gov.kz/api/getData/?api=${slugifyStatApi(id)}&period=2024`;
+      return `https://api.stat.gov.kz/getData?api=${slugifyStatApi(id)}&period=2024`;
     }
   }
 

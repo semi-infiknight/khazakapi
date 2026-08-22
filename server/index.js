@@ -10,6 +10,7 @@ import {
   publicListEntry,
   searchApis,
 } from "./lib/search.js";
+import { checkHealth } from "./lib/health.js";
 import { proxyRequest, resolveTryRequest } from "./lib/proxy.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -89,35 +90,6 @@ app.post("/api/apis/:id/try", async (req, res) => {
 app.options("/api/apis/:id/try", (_req, res) => {
   res.sendStatus(204);
 });
-
-async function checkHealth(entry) {
-  if (!entry.endpoint || entry.auth !== "none" || entry.copyable === false) {
-    return { ok: null, status: null, ms: null, checkedAt: new Date().toISOString(), skipped: true };
-  }
-  const start = Date.now();
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 8000);
-    const response = await fetch(entry.endpoint, {
-      signal: controller.signal,
-      headers: { Accept: "*/*" },
-    });
-    clearTimeout(timer);
-    return {
-      ok: response.ok,
-      status: response.status,
-      ms: Date.now() - start,
-      checkedAt: new Date().toISOString(),
-    };
-  } catch {
-    return {
-      ok: false,
-      status: 0,
-      ms: Date.now() - start,
-      checkedAt: new Date().toISOString(),
-    };
-  }
-}
 
 app.get("/openapi.json", (req, res) => {
   res.json({

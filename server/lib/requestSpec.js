@@ -1,3 +1,5 @@
+import { normalizeEndpoint } from "./health.js";
+
 const PARAM_HINTS = {
   api: { type: "query", description: "Dataset or API identifier on the provider" },
   period: { type: "query", description: "Year or time period (e.g. 2024)" },
@@ -39,9 +41,10 @@ export function buildTrySpec(entry) {
     };
   }
 
+  const endpoint = normalizeEndpoint(entry.endpoint);
   let parsed;
   try {
-    parsed = new URL(entry.endpoint);
+    parsed = new URL(endpoint);
   } catch {
     return { available: false, reason: "Catalogue endpoint URL is invalid." };
   }
@@ -84,7 +87,7 @@ export function buildTrySpec(entry) {
 }
 
 export function buildUrlFromParams(entry, params = {}, apiKey) {
-  const base = entry.endpoint;
+  const base = normalizeEndpoint(entry.endpoint);
   if (!base) return { error: "This catalogue entry has no testable endpoint." };
 
   let baseParsed;

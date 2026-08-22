@@ -84,8 +84,25 @@ export default function ApiDetailPage() {
         )}
         <p className="mt-3 text-sm text-[var(--text-mute)]">{api.trust?.caveat}</p>
         {api.health && !api.health.skipped && (
-          <p className="mt-3 font-mono text-xs text-[var(--text-soft)]">
-            Health: {api.health.ok ? "OK" : "FAIL"} · HTTP {api.health.status} · {api.health.ms}ms
+          <p className="mt-3 font-mono text-xs">
+            <span
+              className={
+                api.health.tone === "live"
+                  ? "text-[var(--green)]"
+                  : api.health.tone === "reachable"
+                    ? "text-[var(--amber)]"
+                    : "text-[var(--red)]"
+              }
+            >
+              Health: {api.health.label || (api.health.ok ? "OK" : "FAIL")}
+            </span>
+            <span className="text-[var(--text-soft)]">
+              {" "}
+              · HTTP {api.health.status} · {api.health.ms}ms
+            </span>
+            {api.health.reason && (
+              <span className="mt-1 block text-[var(--text-mute)]">{api.health.reason}</span>
+            )}
           </p>
         )}
       </div>

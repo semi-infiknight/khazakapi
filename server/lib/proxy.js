@@ -1,4 +1,5 @@
 import { buildUrlFromParams, buildCurlPreview } from "./requestSpec.js";
+import { normalizeEndpoint } from "./health.js";
 
 const MAX_BODY = 256 * 1024;
 const TIMEOUT_MS = 15000;
@@ -31,7 +32,7 @@ export function resolveTryRequest(entry, options = {}) {
 }
 
 function resolveTryUrl(entry, requestedUrl, apiKey, headers) {
-  const base = entry.endpoint;
+  const base = normalizeEndpoint(entry.endpoint);
   if (!base) return { error: "This catalogue entry has no testable endpoint." };
 
   const url = requestedUrl.trim();
