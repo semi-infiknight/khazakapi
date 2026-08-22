@@ -12,6 +12,7 @@ import {
 } from "./lib/search.js";
 import { checkHealth } from "./lib/health.js";
 import { openApiToPostman } from "./lib/postman.js";
+import { validateDataEgovKey, DATA_EGOV_LINKS } from "./lib/egov.js";
 import { proxyRequest, resolveTryRequest } from "./lib/proxy.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -89,6 +90,19 @@ app.post("/api/apis/:id/try", async (req, res) => {
 });
 
 app.options("/api/apis/:id/try", (_req, res) => {
+  res.sendStatus(204);
+});
+
+app.post("/api/providers/data-egov/validate-key", async (req, res) => {
+  const apiKey = req.body?.apiKey;
+  const result = await validateDataEgovKey(apiKey);
+  if (result.valid) {
+    return res.json({ ...result, links: DATA_EGOV_LINKS });
+  }
+  res.status(400).json({ ...result, links: DATA_EGOV_LINKS });
+});
+
+app.options("/api/providers/data-egov/validate-key", (_req, res) => {
   res.sendStatus(204);
 });
 

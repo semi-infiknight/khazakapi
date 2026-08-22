@@ -170,7 +170,7 @@ export const APIS = [
     likes: 8,
     note: "Weekly retail fuel prices at stations nationwide — amounts in KZT.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/", today),
-    setup: keySetup("https://data.egov.kz/pages/samples", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/pages/samples", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/fuel_prices/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -197,7 +197,7 @@ export const APIS = [
     likes: 2,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/msic/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -224,7 +224,7 @@ export const APIS = [
     likes: 8,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/mcoicop/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -1061,7 +1061,7 @@ export const APIS = [
     likes: 11,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/covid_cases/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -1088,7 +1088,7 @@ export const APIS = [
     likes: 3,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/covid_cases_vaxstatus/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -1115,7 +1115,7 @@ export const APIS = [
     likes: 10,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/covid_cases_age/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -1169,7 +1169,7 @@ export const APIS = [
     likes: 3,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/vaxreg_covid/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -1601,7 +1601,7 @@ export const APIS = [
     likes: 5,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/lookup_money_banking/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -1628,7 +1628,7 @@ export const APIS = [
     likes: 6,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/lookup_federal_finance/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -2249,7 +2249,7 @@ export const APIS = [
     likes: 3,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/sitc/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -2276,7 +2276,7 @@ export const APIS = [
     likes: 10,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/sitc_sop/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -3032,7 +3032,7 @@ export const APIS = [
     likes: 2,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/blood_donations/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -3059,7 +3059,7 @@ export const APIS = [
     likes: 12,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/blood_donations_state/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -3167,7 +3167,7 @@ export const APIS = [
     likes: 3,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/organ_pledges_state/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -3194,7 +3194,7 @@ export const APIS = [
     likes: 12,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/organ_pledges/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -3221,7 +3221,7 @@ export const APIS = [
     likes: 9,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/pekab40_screenings/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -3248,7 +3248,7 @@ export const APIS = [
     likes: 3,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/pekab40_screenings_state/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -3788,7 +3788,7 @@ export const APIS = [
     likes: 6,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/nutrition_children_sex/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -3815,7 +3815,7 @@ export const APIS = [
     likes: 5,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/nutrition_children_strata/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -4679,7 +4679,7 @@ export const APIS = [
     likes: 12,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/hospital_beds/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -4706,7 +4706,7 @@ export const APIS = [
     likes: 8,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/healthcare_staff/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -4760,7 +4760,7 @@ export const APIS = [
     likes: 5,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/sanitation_access/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -4868,7 +4868,7 @@ export const APIS = [
     likes: 10,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/schools_district/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -4895,7 +4895,7 @@ export const APIS = [
     likes: 9,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/lecturers_uni/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -4922,7 +4922,7 @@ export const APIS = [
     likes: 12,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/teachers_district/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -4949,7 +4949,7 @@ export const APIS = [
     likes: 4,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/completion_school_state/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -4976,7 +4976,7 @@ export const APIS = [
     likes: 7,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/enrolment_school_district/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -5030,7 +5030,7 @@ export const APIS = [
     likes: 1,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/std_state/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -5057,7 +5057,7 @@ export const APIS = [
     likes: 8,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/mnha/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -5084,7 +5084,7 @@ export const APIS = [
     likes: 10,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/mnha_moh/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -5138,7 +5138,7 @@ export const APIS = [
     likes: 11,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/infant_immunisation/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -5705,7 +5705,7 @@ export const APIS = [
     likes: 11,
     note: null,
     trust: apiKeyTrust("data.egov.kz", "https://api.stat.gov.kz/getData?api=dataset&period=2024", today),
-    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://api.stat.gov.kz/getData?api=dataset&period=2024", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/currency_codes/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6569,7 +6569,7 @@ export const APIS = [
     likes: 11,
     note: "Cover successful tender/auction bids for SLA sale sites awarded from 2002 onwards. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_7a043a1e4dee8041cff62b2cdd152b03/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_7a043a1e4dee8041cff62b2cdd152b03/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_7a043a1e4dee8041cff62b2cdd152b03/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/7a043a1e4dee8041cff62b2cdd152b03/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6596,7 +6596,7 @@ export const APIS = [
     likes: 11,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_f74e5ee9575e98ba439bee67e8f9b097/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_f74e5ee9575e98ba439bee67e8f9b097/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_f74e5ee9575e98ba439bee67e8f9b097/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/f74e5ee9575e98ba439bee67e8f9b097/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6623,7 +6623,7 @@ export const APIS = [
     likes: 10,
     note: "Overview on the area of state land sold to public sector agencies in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_9ee0c9b7c8c084dd75aa521938d771ca/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_9ee0c9b7c8c084dd75aa521938d771ca/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_9ee0c9b7c8c084dd75aa521938d771ca/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/9ee0c9b7c8c084dd75aa521938d771ca/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6650,7 +6650,7 @@ export const APIS = [
     likes: 7,
     note: "Overview on the area of state land sold to private sector in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_8e5a428ed5f672d184297d9abb243702/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_8e5a428ed5f672d184297d9abb243702/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_8e5a428ed5f672d184297d9abb243702/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/8e5a428ed5f672d184297d9abb243702/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6677,7 +6677,7 @@ export const APIS = [
     likes: 6,
     note: "Overview of the number of caveats and instruments lodged for private properties in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_bca4d02876096ed574ca17af078c1f5a/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_bca4d02876096ed574ca17af078c1f5a/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_bca4d02876096ed574ca17af078c1f5a/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/bca4d02876096ed574ca17af078c1f5a/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6704,7 +6704,7 @@ export const APIS = [
     likes: 2,
     note: "Overview of the number of caveats and instruments lodged for HDB properties in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_88e252fe9febb6cf122a24f9193f1138/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_88e252fe9febb6cf122a24f9193f1138/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_88e252fe9febb6cf122a24f9193f1138/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/88e252fe9febb6cf122a24f9193f1138/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6731,7 +6731,7 @@ export const APIS = [
     likes: 8,
     note: "Overview of the number of title documents issued for completed private properties in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_b672ba5cd181fd699e5463e03ca5f3d3/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_b672ba5cd181fd699e5463e03ca5f3d3/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_b672ba5cd181fd699e5463e03ca5f3d3/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/b672ba5cd181fd699e5463e03ca5f3d3/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6758,7 +6758,7 @@ export const APIS = [
     likes: 10,
     note: "INLIS transaction Volume. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_7d6b025f30679012155fe2ea0d66b1a2/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_7d6b025f30679012155fe2ea0d66b1a2/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_7d6b025f30679012155fe2ea0d66b1a2/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/7d6b025f30679012155fe2ea0d66b1a2/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6785,7 +6785,7 @@ export const APIS = [
     likes: 7,
     note: "Overview of the utilisation rate of State land in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_7c84165fa3e7b2449f8927f1b97fa79b/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_7c84165fa3e7b2449f8927f1b97fa79b/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_7c84165fa3e7b2449f8927f1b97fa79b/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/7c84165fa3e7b2449f8927f1b97fa79b/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6812,7 +6812,7 @@ export const APIS = [
     likes: 2,
     note: "Overview of the occupancy rate of State properties in aggregate form, excluding non-marketable stocks. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_d7caa01b45aee232265aecd71a703be3/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_d7caa01b45aee232265aecd71a703be3/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_d7caa01b45aee232265aecd71a703be3/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/d7caa01b45aee232265aecd71a703be3/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6839,7 +6839,7 @@ export const APIS = [
     likes: 3,
     note: "Overview of the number of approved strata lots in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_b0505f2a0218d38fdeaa6217753a0b68/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_b0505f2a0218d38fdeaa6217753a0b68/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_b0505f2a0218d38fdeaa6217753a0b68/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/b0505f2a0218d38fdeaa6217753a0b68/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6866,7 +6866,7 @@ export const APIS = [
     likes: 1,
     note: "Overview of the number of approved land lots in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_ca924e80ef4a5251486a738282f20f37/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_ca924e80ef4a5251486a738282f20f37/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_ca924e80ef4a5251486a738282f20f37/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/ca924e80ef4a5251486a738282f20f37/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6893,7 +6893,7 @@ export const APIS = [
     likes: 4,
     note: "Cover successful tender/bidding results for state properties (non-residential) rental from 2004 onwards. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_2057d332317dd0d045e392fe4e9aca57/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_2057d332317dd0d045e392fe4e9aca57/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_2057d332317dd0d045e392fe4e9aca57/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/2057d332317dd0d045e392fe4e9aca57/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6920,7 +6920,7 @@ export const APIS = [
     likes: 2,
     note: "SICS Dataset 1 - Canteen Advertisements. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_84f2c4878725990c6fdefc9845ed0591/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_84f2c4878725990c6fdefc9845ed0591/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_84f2c4878725990c6fdefc9845ed0591/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/84f2c4878725990c6fdefc9845ed0591/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -6947,7 +6947,7 @@ export const APIS = [
     likes: 8,
     note: "Notes: 1. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/8b84c4ee58e3cfc0ece0d773c8ca6abc/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -7244,7 +7244,7 @@ export const APIS = [
     likes: 6,
     note: "Source: Kazakhstan DEPARTMENT OF STATISTICS Data Last Updated: 25/03/2026 Update Frequency: Annual Survey period: Supply, Use and Input-Output Tables Footnotes: This table shows the total, direct, and indirect output, val. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_cb994cab1bbcd384912ad76ddffc0045/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_cb994cab1bbcd384912ad76ddffc0045/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_cb994cab1bbcd384912ad76ddffc0045/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/cb994cab1bbcd384912ad76ddffc0045/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -7271,7 +7271,7 @@ export const APIS = [
     likes: 8,
     note: "Source: Kazakhstan DEPARTMENT OF STATISTICS Data Last Updated: 25/03/2026 Update Frequency: Annual Survey period: Supply, Use and Input-Output Tables Footnotes: This table shows the forward and backward linkages of each i. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_b0d4cbe39af6c74ee1782834ed57605f/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_b0d4cbe39af6c74ee1782834ed57605f/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_b0d4cbe39af6c74ee1782834ed57605f/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/b0d4cbe39af6c74ee1782834ed57605f/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -7487,7 +7487,7 @@ export const APIS = [
     likes: 4,
     note: "Source: Kazakhstan DEPARTMENT OF STATISTICS Data Last Updated: 04/04/2016 Update Frequency: 10 years Survey period: Census of Population 2000 Footnotes: Note: Data exclude households previously staying overseas or in inst. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_3b625a7045d282b2b42239571e8b8b4f/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_3b625a7045d282b2b42239571e8b8b4f/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_3b625a7045d282b2b42239571e8b8b4f/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/3b625a7045d282b2b42239571e8b8b4f/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -7892,7 +7892,7 @@ export const APIS = [
     likes: 2,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_16d9275596a083bdcd1b3a3ce97f6ffa/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_16d9275596a083bdcd1b3a3ce97f6ffa/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_16d9275596a083bdcd1b3a3ce97f6ffa/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/16d9275596a083bdcd1b3a3ce97f6ffa/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -7919,7 +7919,7 @@ export const APIS = [
     likes: 1,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_1aad8101cfc40f6fd550cef8389969bc/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_1aad8101cfc40f6fd550cef8389969bc/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_1aad8101cfc40f6fd550cef8389969bc/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/1aad8101cfc40f6fd550cef8389969bc/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -7946,7 +7946,7 @@ export const APIS = [
     likes: 12,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_e88ee7c099b6e70e399a3d846e41a611/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_e88ee7c099b6e70e399a3d846e41a611/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_e88ee7c099b6e70e399a3d846e41a611/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/e88ee7c099b6e70e399a3d846e41a611/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -7973,7 +7973,7 @@ export const APIS = [
     likes: 10,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_c0a089b996ff6bc6aaf500fde725464e/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_c0a089b996ff6bc6aaf500fde725464e/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_c0a089b996ff6bc6aaf500fde725464e/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/c0a089b996ff6bc6aaf500fde725464e/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8000,7 +8000,7 @@ export const APIS = [
     likes: 4,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_12f286e0ae3a84389b545888de250e4b/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_12f286e0ae3a84389b545888de250e4b/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_12f286e0ae3a84389b545888de250e4b/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/12f286e0ae3a84389b545888de250e4b/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8081,7 +8081,7 @@ export const APIS = [
     likes: 7,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_7d1568686442d85d69dc476e4926d5e1/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_7d1568686442d85d69dc476e4926d5e1/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_7d1568686442d85d69dc476e4926d5e1/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/7d1568686442d85d69dc476e4926d5e1/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8621,7 +8621,7 @@ export const APIS = [
     likes: 3,
     note: "Number of Resale Applications Registered by Flat Type, by Quarter. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_02aa4bb51bc674f3a2d0b9bb6911d934/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_02aa4bb51bc674f3a2d0b9bb6911d934/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_02aa4bb51bc674f3a2d0b9bb6911d934/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/02aa4bb51bc674f3a2d0b9bb6911d934/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8648,7 +8648,7 @@ export const APIS = [
     likes: 9,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_b51323a474ba789fb4cc3db58a3116d4/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_b51323a474ba789fb4cc3db58a3116d4/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_b51323a474ba789fb4cc3db58a3116d4/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/b51323a474ba789fb4cc3db58a3116d4/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8702,7 +8702,7 @@ export const APIS = [
     likes: 2,
     note: "Explore HDB rental statistics and market rates from 2021–2025. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_c9f57187485a850908655db0e8cfe651/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_c9f57187485a850908655db0e8cfe651/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_c9f57187485a850908655db0e8cfe651/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/c9f57187485a850908655db0e8cfe651/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8783,7 +8783,7 @@ export const APIS = [
     likes: 9,
     note: "This listing contains summary statistics (median, 25th percentile, 75th percentile, and number of rental contracts) of major non-landed private residential projects with at least 10 rental contracts signed in a quarter. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_149ac00a2734bb0a03867bbe2ec0e7b0/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_149ac00a2734bb0a03867bbe2ec0e7b0/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_149ac00a2734bb0a03867bbe2ec0e7b0/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/149ac00a2734bb0a03867bbe2ec0e7b0/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8810,7 +8810,7 @@ export const APIS = [
     likes: 10,
     note: "This file contains details of Green Mark certified buildings, including certification rating, certificate date and expiry date. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_c4bd082b48fa7611713f39e23d250c27/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_c4bd082b48fa7611713f39e23d250c27/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_c4bd082b48fa7611713f39e23d250c27/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/c4bd082b48fa7611713f39e23d250c27/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8837,7 +8837,7 @@ export const APIS = [
     likes: 3,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_8b71bc3e1386261039d7ad95efdc3328/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_8b71bc3e1386261039d7ad95efdc3328/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_8b71bc3e1386261039d7ad95efdc3328/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/8b71bc3e1386261039d7ad95efdc3328/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8864,7 +8864,7 @@ export const APIS = [
     likes: 5,
     note: "Units sold directly by developers is compiled from licensed developers’ returns based on options issued by developers. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_19c79027c2e6be3c39d637151bd2188d/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_19c79027c2e6be3c39d637151bd2188d/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_19c79027c2e6be3c39d637151bd2188d/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/19c79027c2e6be3c39d637151bd2188d/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8891,7 +8891,7 @@ export const APIS = [
     likes: 6,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_e1c5b0df62729e69c82716355ef295ba/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_e1c5b0df62729e69c82716355ef295ba/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_e1c5b0df62729e69c82716355ef295ba/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/e1c5b0df62729e69c82716355ef295ba/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8918,7 +8918,7 @@ export const APIS = [
     likes: 10,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_7c69c943d5f0d89d6a9a773d2b51f337/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_7c69c943d5f0d89d6a9a773d2b51f337/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_7c69c943d5f0d89d6a9a773d2b51f337/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/7c69c943d5f0d89d6a9a773d2b51f337/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8945,7 +8945,7 @@ export const APIS = [
     likes: 9,
     note: "Rest of Central Region comprises the area within Central Region that is outside postal districts 9, 10, 11, Downtown Core Planning Area and Sentosa. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_5785799d63a9da091f4e0b456291eeb8/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_5785799d63a9da091f4e0b456291eeb8/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_5785799d63a9da091f4e0b456291eeb8/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/5785799d63a9da091f4e0b456291eeb8/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8972,7 +8972,7 @@ export const APIS = [
     likes: 10,
     note: "Outside Central Region (OCR) refers to the planning areas which are outside the Central Region. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_1a7823f3d31e7db4b426833833762bab/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_1a7823f3d31e7db4b426833833762bab/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_1a7823f3d31e7db4b426833833762bab/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/1a7823f3d31e7db4b426833833762bab/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -8999,7 +8999,7 @@ export const APIS = [
     likes: 8,
     note: "Core Central Region comprises Postal Districts 9, 10, 11, Downtown Core Planning Area and Sentosa. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_c287c8be114bfa7d055b27ab2c87de83/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_c287c8be114bfa7d055b27ab2c87de83/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_c287c8be114bfa7d055b27ab2c87de83/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/c287c8be114bfa7d055b27ab2c87de83/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9026,7 +9026,7 @@ export const APIS = [
     likes: 7,
     note: "Completed Properties refers to sold units in completed projects which are still licensed. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_a283de8cb3b4e80a228bf5f5e0bc4449/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_a283de8cb3b4e80a228bf5f5e0bc4449/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_a283de8cb3b4e80a228bf5f5e0bc4449/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/a283de8cb3b4e80a228bf5f5e0bc4449/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9053,7 +9053,7 @@ export const APIS = [
     likes: 7,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_70824d34defde87d88faccc5d5b1c6ea/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_70824d34defde87d88faccc5d5b1c6ea/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_70824d34defde87d88faccc5d5b1c6ea/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/70824d34defde87d88faccc5d5b1c6ea/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9080,7 +9080,7 @@ export const APIS = [
     likes: 3,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_84d05d45049108f0fd2e99b66bd19cfe/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_84d05d45049108f0fd2e99b66bd19cfe/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_84d05d45049108f0fd2e99b66bd19cfe/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/84d05d45049108f0fd2e99b66bd19cfe/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9107,7 +9107,7 @@ export const APIS = [
     likes: 7,
     note: "The residential rental index covers only private residential properties. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_8e4c50283fb7052a391dfb746a05c853/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_8e4c50283fb7052a391dfb746a05c853/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_8e4c50283fb7052a391dfb746a05c853/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/8e4c50283fb7052a391dfb746a05c853/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9134,7 +9134,7 @@ export const APIS = [
     likes: 6,
     note: "The rental indices for commercial properties (i.e. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_862c74b13138382b9f0c50c68d436b95/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_862c74b13138382b9f0c50c68d436b95/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_862c74b13138382b9f0c50c68d436b95/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/862c74b13138382b9f0c50c68d436b95/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9161,7 +9161,7 @@ export const APIS = [
     likes: 8,
     note: "The residential statistics were compiled from information in caveats lodged at the option stage with the Kazakhstan Land Registry, supplemented with Stamp Duty data from the Inland Revenue Authority of Kazakhstan, as well . Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_97f8a2e995022d311c6c68cfda6d034c/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_97f8a2e995022d311c6c68cfda6d034c/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_97f8a2e995022d311c6c68cfda6d034c/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/97f8a2e995022d311c6c68cfda6d034c/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9188,7 +9188,7 @@ export const APIS = [
     likes: 9,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_f65e490a8ad430f60a9a3d9df2bff2a0/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_f65e490a8ad430f60a9a3d9df2bff2a0/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_f65e490a8ad430f60a9a3d9df2bff2a0/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/f65e490a8ad430f60a9a3d9df2bff2a0/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9215,7 +9215,7 @@ export const APIS = [
     likes: 8,
     note: "The commercial statistics were compiled from information in caveats lodged at the option stage with the Kazakhstan Land Registry. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_f333bf427c827efb484cf57a73ff700a/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_f333bf427c827efb484cf57a73ff700a/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_f333bf427c827efb484cf57a73ff700a/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/f333bf427c827efb484cf57a73ff700a/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9242,7 +9242,7 @@ export const APIS = [
     likes: 3,
     note: "Records of video games classified from 2023 to 2025. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_fb51c5304f64d01f5839ee7208f853ea/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_fb51c5304f64d01f5839ee7208f853ea/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_fb51c5304f64d01f5839ee7208f853ea/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/fb51c5304f64d01f5839ee7208f853ea/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9323,7 +9323,7 @@ export const APIS = [
     likes: 9,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_23000a00c52996c55106084ed0339566/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_23000a00c52996c55106084ed0339566/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_23000a00c52996c55106084ed0339566/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/23000a00c52996c55106084ed0339566/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9350,7 +9350,7 @@ export const APIS = [
     likes: 2,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_14f63e595975691e7c24a27ae4c07c79/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_14f63e595975691e7c24a27ae4c07c79/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_14f63e595975691e7c24a27ae4c07c79/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/14f63e595975691e7c24a27ae4c07c79/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9377,7 +9377,7 @@ export const APIS = [
     likes: 2,
     note: "List general information such as address, contact details, nearest public transportation of primary, secondary and pre-university schools. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_688b934f82c1059ed0a6993d2a829089/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_688b934f82c1059ed0a6993d2a829089/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_688b934f82c1059ed0a6993d2a829089/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/688b934f82c1059ed0a6993d2a829089/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9404,7 +9404,7 @@ export const APIS = [
     likes: 5,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_f1d144e423570c9d84dbc5102c2e664d/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_f1d144e423570c9d84dbc5102c2e664d/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_f1d144e423570c9d84dbc5102c2e664d/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/f1d144e423570c9d84dbc5102c2e664d/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9431,7 +9431,7 @@ export const APIS = [
     likes: 12,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_b0697d22a7837a4eddf72efb66a36fc2/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_b0697d22a7837a4eddf72efb66a36fc2/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_b0697d22a7837a4eddf72efb66a36fc2/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/b0697d22a7837a4eddf72efb66a36fc2/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9458,7 +9458,7 @@ export const APIS = [
     likes: 6,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_9aba12b5527843afb0b2e8e4ed6ac6bd/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_9aba12b5527843afb0b2e8e4ed6ac6bd/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_9aba12b5527843afb0b2e8e4ed6ac6bd/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/9aba12b5527843afb0b2e8e4ed6ac6bd/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9485,7 +9485,7 @@ export const APIS = [
     likes: 8,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_4eb4afea3120e24369bcd20669a1a1cd/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_4eb4afea3120e24369bcd20669a1a1cd/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_4eb4afea3120e24369bcd20669a1a1cd/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/4eb4afea3120e24369bcd20669a1a1cd/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9620,7 +9620,7 @@ export const APIS = [
     likes: 4,
     note: "This is a listing containing information on Management Corporations, their addresses and their Managing Agents. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_1f9391a2f1476cdaf4f05a8d3a05c257/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_1f9391a2f1476cdaf4f05a8d3a05c257/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_1f9391a2f1476cdaf4f05a8d3a05c257/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/1f9391a2f1476cdaf4f05a8d3a05c257/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -9647,7 +9647,7 @@ export const APIS = [
     likes: 9,
     note: "Please approach SingPost (www.singpost.com/contact-us/service-enquiry) if you require the postal code information. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_17f5382f26140b1fdae0ba2ef6239d2f/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_17f5382f26140b1fdae0ba2ef6239d2f/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_17f5382f26140b1fdae0ba2ef6239d2f/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/17f5382f26140b1fdae0ba2ef6239d2f/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -10376,7 +10376,7 @@ export const APIS = [
     likes: 12,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_9973d2c119ed4dd1560aebf8f0829b86/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_9973d2c119ed4dd1560aebf8f0829b86/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_9973d2c119ed4dd1560aebf8f0829b86/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/9973d2c119ed4dd1560aebf8f0829b86/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -10403,7 +10403,7 @@ export const APIS = [
     likes: 5,
     note: "The Graduate Employment Survey (GES) is jointly conducted by NTU, NUS, SMU, SIT (from 2014), SUTD (from 2015) and SUSS (from 2018) annually to survey the employment conditions of graduates about six months after their fi. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_3c55210de27fcccda2ed0c63fdd2b352/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_3c55210de27fcccda2ed0c63fdd2b352/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_3c55210de27fcccda2ed0c63fdd2b352/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/3c55210de27fcccda2ed0c63fdd2b352/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -10835,7 +10835,7 @@ export const APIS = [
     likes: 4,
     note: "Breakdown of Tier 2 non-elderly Vulnerable Adult abuse cases by sex and type of abuse overseen by MSF Protective Service. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_35d0a8fba77b2e411629f7fed906328a/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_35d0a8fba77b2e411629f7fed906328a/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_35d0a8fba77b2e411629f7fed906328a/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/35d0a8fba77b2e411629f7fed906328a/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -10943,7 +10943,7 @@ export const APIS = [
     likes: 4,
     note: "Breakdown of Tier 2 elderly Vulnerable Adult abuse cases by sex and type of abuse overseen by MSF Protective Service. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_ba4f530a537ff032df6ea3a10ff417cc/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_ba4f530a537ff032df6ea3a10ff417cc/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_ba4f530a537ff032df6ea3a10ff417cc/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/ba4f530a537ff032df6ea3a10ff417cc/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -10970,7 +10970,7 @@ export const APIS = [
     likes: 8,
     note: "Incidence rates of new Tier 2 elderly Vulnerable Adult abuse cases (per 1,000 vulnerable elderly). Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_3a6a142859398cd6b14f8a071b8f4cf3/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_3a6a142859398cd6b14f8a071b8f4cf3/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_3a6a142859398cd6b14f8a071b8f4cf3/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/3a6a142859398cd6b14f8a071b8f4cf3/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -10997,7 +10997,7 @@ export const APIS = [
     likes: 6,
     note: "Breakdown of new child abuse cases investigated by MSF Protective Service by sex and type of abuse. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_0e83a60152fd6e5a3a763a27ff41a71f/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_0e83a60152fd6e5a3a763a27ff41a71f/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_0e83a60152fd6e5a3a763a27ff41a71f/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/0e83a60152fd6e5a3a763a27ff41a71f/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11078,7 +11078,7 @@ export const APIS = [
     likes: 1,
     note: "Incidence rates of new Tier 2 child abuse cases investigated by MSF Protective Service (per 1,000 children). Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_bdd470184d51452b63ffecab6e1d98a9/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_bdd470184d51452b63ffecab6e1d98a9/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_bdd470184d51452b63ffecab6e1d98a9/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/bdd470184d51452b63ffecab6e1d98a9/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11132,7 +11132,7 @@ export const APIS = [
     likes: 2,
     note: "No. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_1318486490fc19960ca536deeb07d26e/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_1318486490fc19960ca536deeb07d26e/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_1318486490fc19960ca536deeb07d26e/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/1318486490fc19960ca536deeb07d26e/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11159,7 +11159,7 @@ export const APIS = [
     likes: 9,
     note: "No. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_ff8736f1378011003c0f8a35f9ff9c1e/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_ff8736f1378011003c0f8a35f9ff9c1e/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_ff8736f1378011003c0f8a35f9ff9c1e/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/ff8736f1378011003c0f8a35f9ff9c1e/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11240,7 +11240,7 @@ export const APIS = [
     likes: 1,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_c2b211174c4e0f546b4d8e92c6aaf365/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_c2b211174c4e0f546b4d8e92c6aaf365/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_c2b211174c4e0f546b4d8e92c6aaf365/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/c2b211174c4e0f546b4d8e92c6aaf365/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11267,7 +11267,7 @@ export const APIS = [
     likes: 2,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_c47771d51ac7d86ac300835b27848ff0/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_c47771d51ac7d86ac300835b27848ff0/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_c47771d51ac7d86ac300835b27848ff0/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/c47771d51ac7d86ac300835b27848ff0/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11294,7 +11294,7 @@ export const APIS = [
     likes: 7,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_38ec7e5cd735d597ab85765d2ef1a39b/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_38ec7e5cd735d597ab85765d2ef1a39b/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_38ec7e5cd735d597ab85765d2ef1a39b/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/38ec7e5cd735d597ab85765d2ef1a39b/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11321,7 +11321,7 @@ export const APIS = [
     likes: 6,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_a223380e5856cf06f7eac223e5902230/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_a223380e5856cf06f7eac223e5902230/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_a223380e5856cf06f7eac223e5902230/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/a223380e5856cf06f7eac223e5902230/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11375,7 +11375,7 @@ export const APIS = [
     likes: 11,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_4b69ac0ff084e96f03197ad346248918/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_4b69ac0ff084e96f03197ad346248918/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_4b69ac0ff084e96f03197ad346248918/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/4b69ac0ff084e96f03197ad346248918/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11402,7 +11402,7 @@ export const APIS = [
     likes: 6,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_07561cf169a8608fd97c5a6eb112ba60/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_07561cf169a8608fd97c5a6eb112ba60/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_07561cf169a8608fd97c5a6eb112ba60/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/07561cf169a8608fd97c5a6eb112ba60/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11429,7 +11429,7 @@ export const APIS = [
     likes: 1,
     note: "Flats are considered sold only when keys are issued to the applicants. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_67966e5fd5dce14cf9fa5f0bc5164faf/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_67966e5fd5dce14cf9fa5f0bc5164faf/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_67966e5fd5dce14cf9fa5f0bc5164faf/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/67966e5fd5dce14cf9fa5f0bc5164faf/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11456,7 +11456,7 @@ export const APIS = [
     likes: 5,
     note: "From 2012, Community Centres/Clubs was renamed as Community Centres (void decks) to better refer to the community centres that are built by HDB which are located in HDB void decks. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_5f446ba7edac1ef0e606195606a41a6a/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_5f446ba7edac1ef0e606195606a41a6a/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_5f446ba7edac1ef0e606195606a41a6a/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/5f446ba7edac1ef0e606195606a41a6a/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11483,7 +11483,7 @@ export const APIS = [
     likes: 3,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_9bbcd0c9b0351c7f41c9bfdcdc746668/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_9bbcd0c9b0351c7f41c9bfdcdc746668/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_9bbcd0c9b0351c7f41c9bfdcdc746668/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/9bbcd0c9b0351c7f41c9bfdcdc746668/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11510,7 +11510,7 @@ export const APIS = [
     likes: 9,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_007b79018e47094e8cd62bf6f6d9ed8e/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_007b79018e47094e8cd62bf6f6d9ed8e/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_007b79018e47094e8cd62bf6f6d9ed8e/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/007b79018e47094e8cd62bf6f6d9ed8e/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11537,7 +11537,7 @@ export const APIS = [
     likes: 8,
     note: "Data refers to dwelling units constructed by HDB and dwelling units constructed by private developers under the Design, Build and Sell Scheme (DBSS). Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_caa8f8f91cb000f4b2c4a52fd22d516c/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_caa8f8f91cb000f4b2c4a52fd22d516c/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_caa8f8f91cb000f4b2c4a52fd22d516c/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/caa8f8f91cb000f4b2c4a52fd22d516c/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11564,7 +11564,7 @@ export const APIS = [
     likes: 8,
     note: "Listing of Registered Contractors. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_dcda79be4aded5f9e769b8e23ff69b47/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_dcda79be4aded5f9e769b8e23ff69b47/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_dcda79be4aded5f9e769b8e23ff69b47/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/dcda79be4aded5f9e769b8e23ff69b47/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11591,7 +11591,7 @@ export const APIS = [
     likes: 4,
     note: "Listing of Licensed Builders. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_19573c579879be15623f2e1e3854926d/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_19573c579879be15623f2e1e3854926d/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_19573c579879be15623f2e1e3854926d/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/19573c579879be15623f2e1e3854926d/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11618,7 +11618,7 @@ export const APIS = [
     likes: 11,
     note: "Listing of Public Sector Panels of Consultants. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_a347a40f7b073e56227a29eb3c9387ff/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_a347a40f7b073e56227a29eb3c9387ff/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_a347a40f7b073e56227a29eb3c9387ff/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/a347a40f7b073e56227a29eb3c9387ff/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11645,7 +11645,7 @@ export const APIS = [
     likes: 12,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_82ad188aa90781534e972334c201fd7d/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_82ad188aa90781534e972334c201fd7d/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_82ad188aa90781534e972334c201fd7d/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/82ad188aa90781534e972334c201fd7d/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11672,7 +11672,7 @@ export const APIS = [
     likes: 11,
     note: "(1) Mixed Level schools comprise Primary & Secondary schools (P1-S4/5) and Secondary & Junior College schools (S1-JC2 or S3-JC2). Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_190a5d7d5a612705bf13bb4cc37fc34e/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_190a5d7d5a612705bf13bb4cc37fc34e/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_190a5d7d5a612705bf13bb4cc37fc34e/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/190a5d7d5a612705bf13bb4cc37fc34e/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11699,7 +11699,7 @@ export const APIS = [
     likes: 10,
     note: "(1) Mixed Level schools comprise Primary & Secondary schools (P1-S4/5) and Secondary & Junior College schools (S1-JC2 or S3-JC2). Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_ba2e1015fb724a04877e289fcaf7c415/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_ba2e1015fb724a04877e289fcaf7c415/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_ba2e1015fb724a04877e289fcaf7c415/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/ba2e1015fb724a04877e289fcaf7c415/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11726,7 +11726,7 @@ export const APIS = [
     likes: 2,
     note: "(1) Mixed Level schools comprise Primary & Secondary schools (P1-S4/5) and Secondary & Junior College schools (S1-JC2 or S3-JC2). Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_041568b8e59c3cba17a178a68d4dcb7c/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_041568b8e59c3cba17a178a68d4dcb7c/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_041568b8e59c3cba17a178a68d4dcb7c/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/041568b8e59c3cba17a178a68d4dcb7c/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11753,7 +11753,7 @@ export const APIS = [
     likes: 10,
     note: "(1) Mixed Level schools comprise Primary & Secondary schools (P1-S4/5) and Secondary & Junior College schools (S1-JC2 or S3-JC2). Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_217c93afee788f476404c42fe4de0249/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_217c93afee788f476404c42fe4de0249/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_217c93afee788f476404c42fe4de0249/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/217c93afee788f476404c42fe4de0249/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11780,7 +11780,7 @@ export const APIS = [
     likes: 7,
     note: "(1) Pre-University includes Junior Colleges, Centralised Institute and Pre-U centres. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_ee8c56dc61e074a695f6dab0da546dfe/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_ee8c56dc61e074a695f6dab0da546dfe/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_ee8c56dc61e074a695f6dab0da546dfe/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/ee8c56dc61e074a695f6dab0da546dfe/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11807,7 +11807,7 @@ export const APIS = [
     likes: 2,
     note: "(1) Since 2008, Autonomous schools have been grouped under Government and Government-Aided schools. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_485ba9d40c6270a9ac1baf20e80d3e98/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_485ba9d40c6270a9ac1baf20e80d3e98/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_485ba9d40c6270a9ac1baf20e80d3e98/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/485ba9d40c6270a9ac1baf20e80d3e98/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11834,7 +11834,7 @@ export const APIS = [
     likes: 9,
     note: "(1) Class size is the average number of students per class, calculated by dividing the number of students enrolled by the number of classes in that level. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_bb5f828263a942a9af869eccf9b0068d/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_bb5f828263a942a9af869eccf9b0068d/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_bb5f828263a942a9af869eccf9b0068d/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/bb5f828263a942a9af869eccf9b0068d/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -11861,7 +11861,7 @@ export const APIS = [
     likes: 4,
     note: "(1) As cohorts progress over the years, the numbers across courses may fluctuate as students have opportunities to transfer laterally across courses. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_c60f4952deb240f91b4c966544271197/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_c60f4952deb240f91b4c966544271197/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_c60f4952deb240f91b4c966544271197/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/c60f4952deb240f91b4c966544271197/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -12023,7 +12023,7 @@ export const APIS = [
     likes: 8,
     note: "Overview of the estimated gross floor area breakdown by residential, commercial, industrial, social/civic insittution and vacant properties manged by SLA in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_e89cd21c636e5b7588b73cec0090de00/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_e89cd21c636e5b7588b73cec0090de00/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_e89cd21c636e5b7588b73cec0090de00/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/e89cd21c636e5b7588b73cec0090de00/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -12050,7 +12050,7 @@ export const APIS = [
     likes: 4,
     note: "Overview of the number of electronic searches for Document Imaging and Processing System (DIPS) and Kazakhstan Titles Automated Registration System (STARS) in aggregate form. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_0c31f4f020f352c9c0c2b120d352b456/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_0c31f4f020f352c9c0c2b120d352b456/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_0c31f4f020f352c9c0c2b120d352b456/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/0c31f4f020f352c9c0c2b120d352b456/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -12455,7 +12455,7 @@ export const APIS = [
     likes: 5,
     note: "Records of arts events classified from 2022 to 2024. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_0357d70f583189708514ca1d35772cc0/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_0357d70f583189708514ca1d35772cc0/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_0357d70f583189708514ca1d35772cc0/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/0357d70f583189708514ca1d35772cc0/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -12779,7 +12779,7 @@ export const APIS = [
     likes: 7,
     note: "Contains the data collected for this survey. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_05fffefe9045d234eb140d7db0acdeb9/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_05fffefe9045d234eb140d7db0acdeb9/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_05fffefe9045d234eb140d7db0acdeb9/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/05fffefe9045d234eb140d7db0acdeb9/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -12806,7 +12806,7 @@ export const APIS = [
     likes: 1,
     note: "Number of foster families as of 31 December of the specified year. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_504d6c0e34ce4f56159ad643d89730ae/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_504d6c0e34ce4f56159ad643d89730ae/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_504d6c0e34ce4f56159ad643d89730ae/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/504d6c0e34ce4f56159ad643d89730ae/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -12833,7 +12833,7 @@ export const APIS = [
     likes: 11,
     note: "Table of all children in out-of-home care as of 31 December of the specified year, regardless of the year the child’s case was opened. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_b85f15701092578c2aa0ae8cd263b210/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_b85f15701092578c2aa0ae8cd263b210/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_b85f15701092578c2aa0ae8cd263b210/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/b85f15701092578c2aa0ae8cd263b210/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -12860,7 +12860,7 @@ export const APIS = [
     likes: 8,
     note: "Take-up Rate of Government Paid Maternity, Paternity and Childcare leave. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_dd1328b6dfb51e11dd38c27bdf9b01da/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_dd1328b6dfb51e11dd38c27bdf9b01da/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_dd1328b6dfb51e11dd38c27bdf9b01da/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/dd1328b6dfb51e11dd38c27bdf9b01da/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -12968,7 +12968,7 @@ export const APIS = [
     likes: 11,
     note: "Snapshot of the number of pawnbroking licensees per year. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_dc5ff5746a3fc254d3b44be97b8aadee/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_dc5ff5746a3fc254d3b44be97b8aadee/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_dc5ff5746a3fc254d3b44be97b8aadee/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/dc5ff5746a3fc254d3b44be97b8aadee/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -13076,7 +13076,7 @@ export const APIS = [
     likes: 12,
     note: "Total value of pawnbroking loans granted per year. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_50062b19eb6a2137964646f39c3b9b8f/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_50062b19eb6a2137964646f39c3b9b8f/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_50062b19eb6a2137964646f39c3b9b8f/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/50062b19eb6a2137964646f39c3b9b8f/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -13103,7 +13103,7 @@ export const APIS = [
     likes: 3,
     note: "Total amount/value of outstanding pawnbroking loans per year. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_23973ebf68e41a63aa4da7be0c156210/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_23973ebf68e41a63aa4da7be0c156210/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_23973ebf68e41a63aa4da7be0c156210/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/23973ebf68e41a63aa4da7be0c156210/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -13184,7 +13184,7 @@ export const APIS = [
     likes: 9,
     note: "Performing Arts refer to folk, traditional, classical and contemporary forms of dance, music (pop/rock concerts included) and theatre. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_fe963befd0a503e6de3883d50e3f4597/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_fe963befd0a503e6de3883d50e3f4597/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_fe963befd0a503e6de3883d50e3f4597/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/fe963befd0a503e6de3883d50e3f4597/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -13238,7 +13238,7 @@ export const APIS = [
     likes: 7,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_fd59b378382d9120f872ee08c7b26380/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_fd59b378382d9120f872ee08c7b26380/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_fd59b378382d9120f872ee08c7b26380/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/fd59b378382d9120f872ee08c7b26380/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -13265,7 +13265,7 @@ export const APIS = [
     likes: 8,
     note: "Kazakhstan open government dataset. Keyless JSON via data.egov.kz datastore. KZ-first.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/d_fcc02bc884c54a09e8665443bff2f4c2/view", today),
-    setup: keySetup("https://data.egov.kz/datasets/d_fcc02bc884c54a09e8665443bff2f4c2/view", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/datasets/d_fcc02bc884c54a09e8665443bff2f4c2/view", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/fcc02bc884c54a09e8665443bff2f4c2/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {
@@ -16505,7 +16505,7 @@ export const APIS = [
     likes: 4,
     note: "Official administrative and postcode codes via KATO — Astana, Almaty, Shymkent and all regions.",
     trust: apiKeyTrust("data.egov.kz", "https://data.egov.kz/datasets/view?index=kato", today),
-    setup: keySetup("https://data.egov.kz/pages/samples", "https://data.egov.kz/pages/developerCabinet"),
+    setup: keySetup("https://data.egov.kz/pages/samples", "https://data.egov.kz/profile/apikeylist"),
     endpoint: "https://data.egov.kz/api/v4/kato/v1?apiKey=YOUR_KEY&source={\"size\":10}",
   },
   {

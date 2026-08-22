@@ -36,3 +36,14 @@ export async function fetchCatalogue() {
   if (!res.ok) throw new Error("Catalogue failed");
   return res.json();
 }
+
+export async function validateDataEgovKey(apiKey) {
+  const res = await fetch("/api/providers/data-egov/validate-key", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ apiKey }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Validation failed");
+  return data;
+}

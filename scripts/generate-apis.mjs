@@ -468,7 +468,7 @@ function buildSetupExpr(entry, override, endpoint) {
   }
   const portal =
     auth === "apiKey" && adaptText(override.source ?? entry.source ?? "").includes("egov")
-      ? "https://data.egov.kz/pages/developerCabinet"
+      ? "https://data.egov.kz/profile/apikeylist"
       : docs;
   return `keySetup(${jsStr(docs)}, ${jsStr(portal)})`;
 }

@@ -77,20 +77,25 @@ export function copySetup(endpoint, docs, sourceLabel) {
   };
 }
 
-export function keySetup(docs, portalUrl) {
+export const DATA_EGOV_PORTAL = "https://data.egov.kz/profile/apikeylist";
+export const DATA_EGOV_REGISTER = "https://idp.egov.kz/idp/register.jsp";
+
+export function keySetup(docs, portalUrl = DATA_EGOV_PORTAL) {
   return {
     level: "setup",
     label: "API KEY SETUP",
-    summary: "Register for a free API key, then pass it on every request.",
+    summary: "Register for a free API key on the Open Data portal, then pass it on every request.",
     docs,
     docsLabel: "Docs",
+    portalUrl,
+    registerUrl: DATA_EGOV_REGISTER,
     sections: [
       {
         title: "Get a key",
         items: [
-          "Register at " + portalUrl,
-          "Accept the portal terms of use.",
-          "Pass the key as a query parameter or header per the docs.",
+          "Register at " + DATA_EGOV_REGISTER + " (or sign in on data.egov.kz).",
+          "Open Developer Cabinet at " + portalUrl + " and copy your API key.",
+          "Use Khazak's key setup to validate and save the key in your browser for all ~140 datasets.",
         ],
       },
       {

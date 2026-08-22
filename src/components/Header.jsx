@@ -16,6 +16,9 @@ export default function Header({ onMenuToggle, menuOpen }) {
           <button type="button" className="btn-metal hidden sm:inline-flex" onClick={toggle} aria-label="Toggle theme">
             {theme === "dark" ? "Light" : "Dark"}
           </button>
+          <Link to="/setup/data-egov-key" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
+            data.egov key
+          </Link>
           <a href="/api-docs.html" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
             Reference
           </a>
@@ -42,6 +45,9 @@ export default function Header({ onMenuToggle, menuOpen }) {
         >
           <Link to="/" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
             Directory
+          </Link>
+          <Link to="/setup/data-egov-key" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
+            data.egov key setup
           </Link>
           <a href="/api-docs.html" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
             API reference

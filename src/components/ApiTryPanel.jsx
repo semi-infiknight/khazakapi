@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { tryApi } from "../lib/api.js";
+import { getProviderKey, isDataEgovApi } from "../lib/providerKeys.js";
 
 function Section({ title, children, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -119,11 +120,18 @@ export default function ApiTryPanel({ api }) {
   useEffect(() => {
     setParams(spec?.defaults?.params || {});
     setHeaders(spec?.defaults?.headers || { Accept: "application/json, text/plain, */*" });
-    setApiKey("");
+    setApiKey(isDataEgovApi(api) ? getProviderKey("data.egov.kz") : "");
     setResult(null);
     setError(null);
     setResponseTab("body");
-  }, [api.id, spec]);
+  }, [api.id, spec, api]);
+
+  useEffect(() => {
+    if (!isDataEgovApi(api)) return;
+    const syncKey = () => setApiKey(getProviderKey("data.egov.kz"));
+    window.addEventListener("khazak:provider-key", syncKey);
+    return () => window.removeEventListener("khazak:provider-key", syncKey);
+  }, [api]);
 
   const showKeyField = useMemo(() => {
     if (!api.endpoint) return false;
@@ -227,7 +235,17 @@ export default function ApiTryPanel({ api }) {
             {spec.auth.placement && <span className="text-[var(--text-mute)]"> · {spec.auth.placement}</span>}
           </p>
           {showKeyField ? (
-            <label className="block">
+            <div className="space-y-2">
+              {isDataEgovApi(api) && !apiKey && (
+                <p className="text-xs text-[var(--amber)]">
+                  No saved data.egov.kz key —{" "}
+                  <a href="/setup/data-egov-key" className="text-[var(--accent)] underline">
+                    set up your free key
+                  </a>{" "}
+                  once to unlock all portal datasets here.
+                </p>
+              )}
+              <label className="block">
               <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--text-mute)]">
                 {spec.auth.type === "bearer" ? "Bearer token" : "API key"}
               </span>
@@ -239,7 +257,8 @@ export default function ApiTryPanel({ api }) {
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
               />
-            </label>
+              </label>
+            </div>
           ) : (
             <p className="text-[var(--text-mute)]">No credentials required for this endpoint.</p>
           )}

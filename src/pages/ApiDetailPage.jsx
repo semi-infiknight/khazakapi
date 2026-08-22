@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { fetchApi } from "../lib/api.js";
 import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTryPanel from "../components/ApiTryPanel.jsx";
+import EgovKeySetup from "../components/EgovKeySetup.jsx";
+import { isDataEgovApi } from "../lib/providerKeys.js";
 
 function CopyBlock({ label, text }) {
   const [copied, setCopied] = useState(false);
@@ -106,6 +108,8 @@ export default function ApiDetailPage() {
           </p>
         )}
       </div>
+
+      {isDataEgovApi(api) && <EgovKeySetup compact />}
 
       <ApiTryPanel api={api} />
 
