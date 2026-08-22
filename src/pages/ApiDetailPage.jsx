@@ -3,30 +3,9 @@ import { useEffect, useState } from "react";
 import { fetchApi } from "../lib/api.js";
 import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTryPanel from "../components/ApiTryPanel.jsx";
+import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import EgovKeySetup from "../components/EgovKeySetup.jsx";
 import { isDataEgovApi } from "../lib/providerKeys.js";
-
-function CopyBlock({ label, text }) {
-  const [copied, setCopied] = useState(false);
-
-  const copy = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
-
-  return (
-    <div className="mt-4">
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]">{label}</h3>
-        <button type="button" className="btn-metal text-xs" onClick={copy}>
-          {copied ? "Copied" : "Copy"}
-        </button>
-      </div>
-      <pre className="code-block whitespace-pre-wrap">{text}</pre>
-    </div>
-  );
-}
 
 export default function ApiDetailPage() {
   const { id } = useParams();
@@ -74,6 +53,8 @@ export default function ApiDetailPage() {
       </p>
 
       {api.note && <p className="mt-4 text-sm text-[var(--amber)]">{api.note}</p>}
+
+      <CodeSnippetsPanel api={api} />
 
       <div className="panel mt-6 p-5">
         <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]">Trust</h2>
@@ -129,11 +110,6 @@ export default function ApiDetailPage() {
           ))}
         </div>
       )}
-
-      {api.curl && <CopyBlock label="cURL" text={api.curl} />}
-      {api.js && <CopyBlock label="JavaScript" text={api.js} />}
-      {api.python && <CopyBlock label="Python" text={api.python} />}
-      {api.prompt && <CopyBlock label="AI prompt" text={api.prompt} />}
 
       {api.docs && (
         <a href={api.docs} target="_blank" rel="noopener noreferrer" className="btn-metal mt-6 inline-flex">
