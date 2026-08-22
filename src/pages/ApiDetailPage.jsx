@@ -94,23 +94,6 @@ export default function ApiDetailPage() {
 
       <ApiTryPanel api={api} />
 
-      {api.setup && (
-        <div className="panel mt-4 p-5">
-          <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]">{api.setup.label}</h2>
-          <p className="mt-2 text-sm text-[var(--text-soft)]">{api.setup.summary}</p>
-          {(api.setup.sections || []).map((section) => (
-            <div key={section.title} className="mt-4">
-              <h3 className="text-sm font-semibold">{section.title}</h3>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-[var(--text-soft)]">
-                {section.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
-
       {api.docs && (
         <a href={api.docs} target="_blank" rel="noopener noreferrer" className="btn-metal mt-6 inline-flex">
           Provider docs ↗
