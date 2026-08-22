@@ -63,7 +63,46 @@ export function logoHue(id = "") {
   return Math.abs(hash) % 360;
 }
 
-export function updatedLabel(freshness) {
-  if (!freshness?.label) return "Catalogue entry";
-  return freshness.label.replace(/^CURRENT\s·\s*/i, "Updated ");
+function relativeUpdated(isoDate) {
+  const then = new Date(isoDate);
+  if (Number.isNaN(then.getTime())) return null;
+
+  const days = Math.floor((Date.now() - then.getTime()) / 86400000);
+  if (days < 1) return "Updated today";
+  if (days === 1) return "Updated yesterday";
+  if (days < 30) return `Updated ${days} days ago`;
+
+  const months = Math.floor(days / 30);
+  if (months < 12) return `Updated ${months} month${months === 1 ? "" : "s"} ago`;
+
+  const years = Math.floor(months / 12);
+  return `Updated ${years} year${years === 1 ? "" : "s"} ago`;
+}
+
+export function updatedLabel(freshness, lastChecked) {
+  const relative = lastChecked ? relativeUpdated(lastChecked) : null;
+  if (relative) return relative;
+
+  if (!freshness?.label) return "In catalogue";
+  const label = freshness.label;
+  if (/^CURRENT/i.test(label)) {
+    const year = label.match(/\d{4}/)?.[0];
+    return year ? `Updated ${year}` : "Updated recently";
+  }
+  if (freshness.tone === "stale") return "May need review";
+  return label.replace(/^CURRENT\s·\s*/i, "Updated ");
+}
+
+export function cardMetricScore(api) {
+  if (api.tier === "open" && api.copyable) return "9.8";
+  if (api.tier === "open") return "9.2";
+  if (api.tier === "commercial") return "8.5";
+  return "9.0";
+}
+
+export function cardMetricLatency(api) {
+  if (api.auth === "none") return "Keyless";
+  if (api.auth === "apiKey") return "API key";
+  if (api.frequency) return api.frequency.replace(/_/g, " ").toLowerCase();
+  return api.auth;
 }
