@@ -73,10 +73,10 @@ export function searchApis(apis, query = {}) {
     results = results
       .map((entry) => ({ entry, score: scoreEntry(entry, tokens) }))
       .filter(({ score }) => score > 0)
-      .sort((a, b) => b.score - a.score || (b.entry.likes || 0) - (a.entry.likes || 0))
+      .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
       .map(({ entry }) => entry);
   } else {
-    results = [...results].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+    results = [...results].sort((a, b) => a.title.localeCompare(b.title));
   }
 
   const total = results.length;

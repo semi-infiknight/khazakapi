@@ -13,7 +13,6 @@ export default function HomePage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bannerDismissed, setBannerDismissed] = useState(false);
-  const [, bump] = useState(0);
 
   useEffect(() => {
     const t = setTimeout(() => setDebounced(query), 250);
@@ -116,7 +115,7 @@ export default function HomePage() {
       {loading ? (
         <p className="font-mono text-sm text-[var(--text-soft)]">Loading catalogue…</p>
       ) : (
-        <ApiGrid apis={data?.apis} onLikeChange={() => bump((n) => n + 1)} />
+        <ApiGrid apis={data?.apis} />
       )}
     </div>
   );

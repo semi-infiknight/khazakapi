@@ -199,10 +199,6 @@ a {
   border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
 }
 
-.card .heart:hover {
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-}
-
 .search-input {
   width: 100%;
   border: 1px solid var(--line);
