@@ -99,7 +99,8 @@ export default function HomePage() {
       <div className="catalogue-layout">
         <CategorySidebar
           facets={data?.facets}
-          total={data?.total}
+          total={data?.catalogueTotal ?? data?.total}
+          filteredTotal={data?.total}
           filters={{ category, auth, pricing }}
           onFilterChange={setFilter}
         />

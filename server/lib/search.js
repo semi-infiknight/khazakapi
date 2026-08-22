@@ -52,6 +52,42 @@ function matchesFilters(entry, filters) {
   return true;
 }
 
+const FACET_KEYS = ["category", "country", "auth", "pricing", "tier", "group"];
+
+function activeFilters(query = {}) {
+  const filters = {};
+  for (const key of FACET_KEYS) {
+    if (query[key]) filters[key] = query[key];
+  }
+  if (query.free === "true") filters.free = "true";
+  if (query.no_auth === "true") filters.no_auth = "true";
+  return filters;
+}
+
+function filterPool(apis, filters, { excludeKey, tokens = [] } = {}) {
+  const scoped = { ...filters };
+  if (excludeKey) delete scoped[excludeKey];
+
+  let pool = apis.filter((entry) => matchesFilters(entry, scoped));
+  if (tokens.length) {
+    pool = pool.filter((entry) => scoreEntry(entry, tokens) > 0);
+  }
+  return pool;
+}
+
+/** Facet counts per dimension, ignoring that dimension's active filter so options stay visible. */
+export function buildDisjunctiveFacets(apis, query = {}) {
+  const tokens = tokenize(query.q);
+  const filters = activeFilters(query);
+
+  return {
+    category: buildFacets(filterPool(apis, filters, { excludeKey: "category", tokens })).category,
+    country: buildFacets(filterPool(apis, filters, { excludeKey: "country", tokens })).country,
+    auth: buildFacets(filterPool(apis, filters, { excludeKey: "auth", tokens })).auth,
+    pricing: buildFacets(filterPool(apis, filters, { excludeKey: "pricing", tokens })).pricing,
+  };
+}
+
 export function buildFacets(apis) {
   const facets = { category: {}, country: {}, auth: {}, pricing: {} };
   for (const a of apis) {
@@ -67,12 +103,12 @@ export function buildFacets(apis) {
 
 export function searchApis(apis, query = {}) {
   const tokens = tokenize(query.q);
-  let results = apis.filter((entry) => matchesFilters(entry, query));
+  const filters = activeFilters(query);
+  let results = filterPool(apis, filters, { tokens });
 
   if (tokens.length) {
     results = results
       .map((entry) => ({ entry, score: scoreEntry(entry, tokens) }))
-      .filter(({ score }) => score > 0)
       .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
       .map(({ entry }) => entry);
   } else {
@@ -80,6 +116,7 @@ export function searchApis(apis, query = {}) {
   }
 
   const total = results.length;
+  const catalogueTotal = filterPool(apis, {}, { tokens }).length;
   const limit = Math.min(Number(query.limit) || 200, 200);
   const offset = Number(query.offset) || 0;
   const page = results.slice(offset, offset + limit);
@@ -88,10 +125,11 @@ export function searchApis(apis, query = {}) {
     query: query.q || null,
     count: page.length,
     total,
+    catalogueTotal,
     limit,
     offset,
     next_offset: offset + limit < total ? offset + limit : null,
-    facets: buildFacets(results),
+    facets: buildDisjunctiveFacets(apis, query),
     apis: page.map(publicListEntry),
   };
 }

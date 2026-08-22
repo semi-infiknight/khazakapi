@@ -26,7 +26,7 @@ function SidebarNav({ items, active, onSelect, formatLabel }) {
   );
 }
 
-export default function CategorySidebar({ facets, total, filters, onFilterChange }) {
+export default function CategorySidebar({ facets, total, filteredTotal, filters, onFilterChange }) {
   const { category, auth, pricing } = filters;
   const categories = Object.entries(facets?.category || {}).sort((a, b) => b[1] - a[1]);
   const authOptions = Object.entries(facets?.auth || {}).sort((a, b) => b[1] - a[1]);
@@ -51,6 +51,9 @@ export default function CategorySidebar({ facets, total, filters, onFilterChange
           <span>All KZ APIs</span>
           {total != null && <span className="catalogue-sidebar-count">{total}</span>}
         </button>
+        {hasFilters && filteredTotal != null && (
+          <p className="catalogue-sidebar-hint">{filteredTotal} matching current filters</p>
+        )}
       </SidebarSection>
 
       <SidebarSection title="Categories">
