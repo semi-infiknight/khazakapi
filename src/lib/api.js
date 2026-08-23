@@ -37,6 +37,18 @@ export async function fetchCatalogue() {
   return res.json();
 }
 
+export async function fetchServices() {
+  const res = await fetch("/api/services");
+  if (!res.ok) throw new Error("Services failed");
+  return res.json();
+}
+
+export async function fetchService(slug) {
+  const res = await fetch(`/api/services/${encodeURIComponent(slug)}`);
+  if (!res.ok) throw new Error("Service not found");
+  return res.json();
+}
+
 export async function validateDataEgovKey(apiKey) {
   const res = await fetch("/api/providers/data-egov/validate-key", {
     method: "POST",

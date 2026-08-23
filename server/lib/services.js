@@ -1,0 +1,242 @@
+function slugify(text = "") {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 64);
+}
+
+const YANDEX_FAMILIES = [
+  { test: (id) => id.startsWith("yandex-cloud-"), slug: "yandex-cloud", name: "Yandex Cloud" },
+  { test: (id) => id.startsWith("yandex-metrica") || id === "yandex-appmetrica", slug: "yandex-metrica", name: "Yandex Metrica" },
+  { test: (id) => id.startsWith("yandex-pay"), slug: "yandex-pay", name: "Yandex Pay" },
+  { test: (id) => id.startsWith("yandex-direct"), slug: "yandex-direct", name: "Yandex Direct" },
+  { test: (id) => id.startsWith("yandex-market"), slug: "yandex-market", name: "Yandex Market" },
+  {
+    test: (id) =>
+      id.startsWith("yandex-go") ||
+      id.startsWith("yandex-delivery") ||
+      id.startsWith("yandex-eda") ||
+      id.startsWith("yandex-lavka") ||
+      id.startsWith("yandex-routing"),
+    slug: "yandex-go",
+    name: "Yandex Go & Delivery",
+  },
+  {
+    test: (id) =>
+      id.startsWith("yandex-geocoder") ||
+      id.startsWith("yandex-geosuggest") ||
+      id.startsWith("yandex-static") ||
+      id.startsWith("yandex-maps") ||
+      id.startsWith("yandex-tiles") ||
+      id.startsWith("yandex-org") ||
+      id.startsWith("yandex-mapkit") ||
+      id.startsWith("yandex-navikit") ||
+      id.startsWith("yandex-locator") ||
+      id.startsWith("yandex-router") ||
+      id.startsWith("yandex-distance"),
+    slug: "yandex-maps",
+    name: "Yandex Maps & Location",
+  },
+  {
+    test: (id) =>
+      id.startsWith("yandex-disk") ||
+      id.startsWith("yandex-connect") ||
+      id.startsWith("yandex-calendar") ||
+      id.startsWith("yandex-tracker") ||
+      id.startsWith("yandex-forms") ||
+      id.startsWith("yandex-mail"),
+    slug: "yandex-360",
+    name: "Yandex 360 & Productivity",
+  },
+  {
+    test: (id) =>
+      id.startsWith("yandex-webmaster") ||
+      id.startsWith("yandex-site") ||
+      id.startsWith("yandex-xml") ||
+      id.startsWith("yandex-turbo") ||
+      id.startsWith("yandex-structured") ||
+      id.startsWith("yandex-browser") ||
+      id.startsWith("yandex-safe") ||
+      id.startsWith("yandex-partner") ||
+      id.startsWith("yandex-mobile-ads"),
+    slug: "yandex-search-ads",
+    name: "Yandex Search & Ads",
+  },
+  {
+    test: (id) =>
+      id.startsWith("yandex-speechkit") ||
+      id.startsWith("yandex-translate") ||
+      id.startsWith("yandex-vision") ||
+      id.startsWith("yandex-gpt") ||
+      id.startsWith("yandex-alice") ||
+      id.startsWith("yandex-toloka") ||
+      id.startsWith("yandex-clickhouse") ||
+      id.startsWith("yandex-catboost"),
+    slug: "yandex-ai",
+    name: "Yandex AI & ML",
+  },
+  { test: (id) => id.startsWith("yandex-id"), slug: "yandex-id", name: "Yandex ID" },
+  { test: (id) => id.startsWith("yandex-"), slug: "yandex-platform", name: "Yandex Platform" },
+];
+
+export function resolveService(api) {
+  const id = api.id || api.slug || "";
+
+  for (const family of YANDEX_FAMILIES) {
+    if (family.test(id)) {
+      return {
+        slug: family.slug,
+        name: family.name,
+        provider: "Yandex",
+        brand: "Yandex",
+      };
+    }
+  }
+
+  if (api.source === "data.egov.kz" || id.startsWith("d_") || api.endpoint?.includes("data.egov.kz")) {
+    return {
+      slug: "data-egov-kz",
+      name: "data.egov.kz Open Data",
+      provider: "eGov",
+      brand: "data.egov.kz",
+    };
+  }
+
+  if (api.provider === "Bureau of National Statistics") {
+    return {
+      slug: "stat-gov-kz",
+      name: "stat.gov.kz · Bureau of National Statistics",
+      provider: api.provider,
+      brand: "stat.gov.kz",
+    };
+  }
+
+  if (api.provider === "eGov" && api.source !== "data.egov.kz") {
+    return {
+      slug: "egov-kz",
+      name: "eGov Kazakhstan",
+      provider: "eGov",
+      brand: "eGov",
+    };
+  }
+
+  if (api.provider === "Kazhydromet") {
+    return { slug: "kazhydromet", name: "Kazhydromet", provider: api.provider, brand: "Kazhydromet" };
+  }
+
+  if (api.provider === "NBK" || api.source?.includes("nationalbank")) {
+    return { slug: "nbk", name: "National Bank of Kazakhstan", provider: "NBK", brand: "NBK" };
+  }
+
+  const slug = slugify(api.provider || api.source || id);
+  return {
+    slug: slug || "other",
+    name: api.provider || api.source || "Other",
+    provider: api.provider || api.source || "Other",
+    brand: api.provider || api.source || "API",
+  };
+}
+
+export function endpointLabel(api) {
+  const title = api.title || api.id;
+  const parts = title.split("~");
+  let head = parts[0].trim();
+  head = head.replace(/^Yandex\s+/i, "").trim();
+  if (parts[1]) return `${head} · ${parts[1].trim()}`;
+  return head;
+}
+
+export function endpointMethod(api) {
+  if (api.trySpec?.method) return api.trySpec.method;
+  return "GET";
+}
+
+function publicEndpoint(api) {
+  return {
+    id: api.id,
+    slug: api.slug || api.id,
+    title: api.title,
+    label: endpointLabel(api),
+    method: endpointMethod(api),
+    category: api.category,
+    auth: api.auth,
+    copyable: api.copyable,
+  };
+}
+
+export function buildServiceIndex(apis) {
+  const map = new Map();
+
+  for (const api of apis) {
+    const service = resolveService(api);
+    if (!map.has(service.slug)) {
+      map.set(service.slug, {
+        slug: service.slug,
+        name: service.name,
+        provider: service.provider,
+        brand: service.brand,
+        count: 0,
+        categories: new Set(),
+      });
+    }
+    const row = map.get(service.slug);
+    row.count += 1;
+    row.categories.add(api.category);
+  }
+
+  return [...map.values()]
+    .map((s) => ({
+      slug: s.slug,
+      name: s.name,
+      provider: s.provider,
+      brand: s.brand,
+      count: s.count,
+      categoryCount: s.categories.size,
+    }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+}
+
+export function buildServiceTree(apis, serviceSlug) {
+  const members = apis.filter((api) => resolveService(api).slug === serviceSlug);
+  if (!members.length) return null;
+
+  const meta = resolveService(members[0]);
+  const groupsMap = new Map();
+
+  for (const api of members) {
+    const groupName = api.category || "General";
+    if (!groupsMap.has(groupName)) {
+      groupsMap.set(groupName, { name: groupName, count: 0, endpoints: [] });
+    }
+    const group = groupsMap.get(groupName);
+    group.count += 1;
+    group.endpoints.push(publicEndpoint(api));
+  }
+
+  const groups = [...groupsMap.values()]
+    .map((g) => ({
+      ...g,
+      endpoints: g.endpoints.sort((a, b) => a.label.localeCompare(b.label)),
+    }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+  return {
+    slug: meta.slug,
+    name: meta.name,
+    provider: meta.provider,
+    brand: meta.brand,
+    count: members.length,
+    groupCount: groups.length,
+    groups,
+  };
+}
+
+export function findServiceForApi(apis, apiId) {
+  const api = apis.find((a) => a.id === apiId || a.slug === apiId);
+  if (!api) return null;
+  const service = resolveService(api);
+  const tree = buildServiceTree(apis, service.slug);
+  if (!tree || tree.count < 2) return null;
+  return { service: tree, apiId: api.id };
+}

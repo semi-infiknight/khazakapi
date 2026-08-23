@@ -14,6 +14,7 @@ import { checkHealth } from "./lib/health.js";
 import { openApiToPostman } from "./lib/postman.js";
 import { validateDataEgovKey, DATA_EGOV_LINKS } from "./lib/egov.js";
 import { proxyRequest, resolveTryRequest } from "./lib/proxy.js";
+import { buildServiceIndex, buildServiceTree, findServiceForApi, resolveService } from "./lib/services.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -54,6 +55,26 @@ app.get("/api/search", (req, res) => {
 
 app.get("/api/categories", (_req, res) => {
   res.json({ count: listCategories(KZ_APIS).length, categories: listCategories(KZ_APIS) });
+});
+
+app.get("/api/services", (_req, res) => {
+  res.json({ count: buildServiceIndex(KZ_APIS).length, services: buildServiceIndex(KZ_APIS) });
+});
+
+app.get("/api/services/:slug", (req, res) => {
+  const tree = buildServiceTree(KZ_APIS, req.params.slug);
+  if (!tree) return res.status(404).json({ error: `no service '${req.params.slug}'` });
+  res.json(tree);
+});
+
+app.get("/api/services/:slug/endpoints/:id", (req, res) => {
+  const tree = buildServiceTree(KZ_APIS, req.params.slug);
+  if (!tree) return res.status(404).json({ error: `no service '${req.params.slug}'` });
+  const entry = KZ_APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
+  if (!entry || resolveService(entry).slug !== req.params.slug) {
+    return res.status(404).json({ error: `endpoint not in service '${req.params.slug}'` });
+  }
+  res.json({ service: tree, endpoint: publicListEntry(entry) });
 });
 
 app.get("/api/freshness", (req, res) => {

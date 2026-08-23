@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { fetchSearch } from "../lib/api.js";
+import { fetchSearch, fetchServices } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
+import ServiceBrowseStrip from "../components/ServiceBrowseStrip.jsx";
 
 export default function HomePage() {
   const [query, setQuery] = useState("");
@@ -11,6 +12,7 @@ export default function HomePage() {
   const [auth, setAuth] = useState("");
   const [pricing, setPricing] = useState("");
   const [data, setData] = useState(null);
+  const [services, setServices] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bannerDismissed, setBannerDismissed] = useState(false);
 
@@ -18,6 +20,12 @@ export default function HomePage() {
     const t = setTimeout(() => setDebounced(query), 250);
     return () => clearTimeout(t);
   }, [query]);
+
+  useEffect(() => {
+    fetchServices()
+      .then((res) => setServices(res.services))
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -95,6 +103,8 @@ export default function HomePage() {
           <span className="stats-big-number">{Object.keys(stats?.category || {}).length || "—"}</span>
         </div>
       </section>
+
+      {!isSearching && services && <ServiceBrowseStrip services={services} />}
 
       <div className="catalogue-layout">
         <CategorySidebar

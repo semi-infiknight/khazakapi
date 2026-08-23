@@ -33,9 +33,12 @@ export default function ApiCard({ api }) {
   const badge = categoryStyle(api.category);
   const verified = api.tier === "open" && api.copyable;
   const description = apiDescription(api);
+  const href = api.serviceHub
+    ? `/services/${api.serviceSlug}/${api.slug || api.id}`
+    : `/apis/${api.slug || api.id}`;
 
   return (
-    <Link to={`/apis/${api.slug || api.id}`} className="card api-card block">
+    <Link to={href} className="card api-card block">
       <div className="api-card-top">
         <span
           className="api-card-category"
@@ -57,7 +60,7 @@ export default function ApiCard({ api }) {
       </div>
 
       <div className="api-card-meta">
-        <span>By {api.provider}</span>
+        <span>{api.serviceHub ? api.serviceName || api.provider : `By ${api.provider}`}</span>
         <span>{updatedLabel(api.freshness, api.trust?.lastChecked)}</span>
       </div>
 

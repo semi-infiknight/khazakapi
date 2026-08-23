@@ -8,6 +8,7 @@ import {
 } from "./helpers.js";
 import { YANDEX_APIS } from "./yandex-apis.js";
 import { YANDEX_ECOSYSTEM_APIS } from "./yandex-ecosystem-apis.js";
+import { resolveService } from "../lib/services.js";
 
 const today = "2026-07-24";
 const DATA_EGOV_KEY_URL = "https://data.egov.kz/profile/apikeylist";
@@ -38050,6 +38051,18 @@ for (const entry of APIS) {
 }
 
 export const KZ_APIS = APIS.filter((entry) => (entry.country || []).includes("KZ"));
+
+const serviceCounts = new Map();
+for (const entry of KZ_APIS) {
+  const { slug } = resolveService(entry);
+  serviceCounts.set(slug, (serviceCounts.get(slug) || 0) + 1);
+}
+for (const entry of KZ_APIS) {
+  const service = resolveService(entry);
+  entry.serviceSlug = service.slug;
+  entry.serviceName = service.name;
+  entry.serviceHub = serviceCounts.get(service.slug) > 1;
+}
 
 export const CATALOGUE_META = {
   updated: "2026-08-22T20:00:00.000Z",

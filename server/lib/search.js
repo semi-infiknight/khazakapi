@@ -136,7 +136,12 @@ export function searchApis(apis, query = {}) {
 
 export function publicListEntry(entry) {
   const { endpoint, ...rest } = entry;
-  return rest;
+  return {
+    ...rest,
+    serviceSlug: entry.serviceSlug,
+    serviceName: entry.serviceName,
+    serviceHub: entry.serviceHub,
+  };
 }
 
 export function publicDetailEntry(entry) {

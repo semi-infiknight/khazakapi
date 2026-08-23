@@ -24,9 +24,12 @@ function ApiSearchRow({ api }) {
   const verified = api.tier === "open" && api.copyable;
   const description = apiDescription(api);
   const authLabel = api.auth === "none" ? "No auth" : api.auth === "apiKey" ? "API key" : api.auth;
+  const href = api.serviceHub
+    ? `/services/${api.serviceSlug}/${api.slug || api.id}`
+    : `/apis/${api.slug || api.id}`;
 
   return (
-    <Link to={`/apis/${api.slug || api.id}`} className="catalogue-search-row">
+    <Link to={href} className="catalogue-search-row">
       <div className="catalogue-search-row-main">
         <h3 className="catalogue-search-title">
           {api.title}
@@ -34,7 +37,7 @@ function ApiSearchRow({ api }) {
         </h3>
         {description && <p className="catalogue-search-desc">{description}</p>}
         <p className="catalogue-search-meta">
-          <span>By {api.provider}</span>
+          <span>{api.serviceHub ? api.serviceName || api.provider : `By ${api.provider}`}</span>
           <span aria-hidden="true">·</span>
           <span>{api.category}</span>
           <span aria-hidden="true">·</span>
