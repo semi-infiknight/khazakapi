@@ -5,7 +5,6 @@ import {
   cardMetricLatency,
   cardMetricScore,
   categoryLabel,
-  categoryStyle,
   updatedLabel,
 } from "../lib/categoryStyle.js";
 
@@ -30,7 +29,6 @@ function VerifiedIcon() {
 }
 
 export default function ApiCard({ api }) {
-  const badge = categoryStyle(api.category);
   const verified = api.tier === "open" && api.copyable;
   const description = apiDescription(api);
   const href = api.serviceHub
@@ -40,12 +38,7 @@ export default function ApiCard({ api }) {
   return (
     <Link to={href} className="card api-card block">
       <div className="api-card-top">
-        <span
-          className="api-card-category"
-          style={{ backgroundColor: badge.bg, color: badge.text }}
-        >
-          {categoryLabel(api.category)}
-        </span>
+        <span className="api-card-category">{categoryLabel(api.category)}</span>
       </div>
 
       <div className="api-card-body">
