@@ -10,6 +10,36 @@ import { YANDEX_APIS } from "./yandex-apis.js";
 import { YANDEX_ECOSYSTEM_APIS } from "./yandex-ecosystem-apis.js";
 
 const today = "2026-07-24";
+const DATA_EGOV_KEY_URL = "https://data.egov.kz/profile/apikeylist";
+const EGOV_AUTH_DETAILS = {
+  scheme: "apiKey",
+  type: "query",
+  query: "apiKey",
+  credential: "API key",
+};
+
+function fixBrokenStatGovDatasetEndpoints(entry) {
+  const match = entry.endpoint?.match(/api\.stat\.gov\.kz\/getData\?api=dataset_([^&]+)/);
+  if (!match) return;
+
+  const datasetId = entry.id?.startsWith("d_") ? entry.id.slice(2) : match[1];
+  const docs = entry.docs || entry.sourceUrl || `https://data.egov.kz/datasets/d_${datasetId}/view`;
+
+  entry.endpoint = `https://data.egov.kz/api/v4/${datasetId}/v1?apiKey=YOUR_KEY&source={"size":10}`;
+  entry.baseUrl = entry.baseUrl || `https://data.egov.kz/api/v4/${datasetId}/v1`;
+  entry.source = "data.egov.kz";
+  entry.auth = "apiKey";
+  entry.authDetails = EGOV_AUTH_DETAILS;
+  entry.copyable = true;
+  entry.setup = keySetup(docs, DATA_EGOV_KEY_URL);
+  entry.trust = apiKeyTrust("data.egov.kz", entry.sourceUrl || docs, today);
+  if (entry.note) {
+    entry.note = entry.note
+      .replace(/Keyless JSON via data\.egov\.kz datastore\.?\s*/gi, "JSON via data.egov.kz (API key required). ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+}
 
 /** @type {import('../types.js').CatalogueEntry[]} */
 export const APIS = [
@@ -38008,6 +38038,7 @@ export const APIS = [
 
 // Attach generated snippets to copyable entries
 for (const entry of APIS) {
+  fixBrokenStatGovDatasetEndpoints(entry);
   if (entry.endpoint && entry.copyable !== false && entry.tier === "open" && entry.auth === "none") {
     Object.assign(entry, snippets(entry.endpoint));
     entry.copyable = true;

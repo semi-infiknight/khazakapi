@@ -132,6 +132,12 @@ export async function proxyRequest(method, url, headers = {}) {
       body = `${text.slice(0, MAX_HTML_PREVIEW)}\n\n… (${text.length.toLocaleString()} chars total)`;
     }
 
+    let warning = null;
+    if (format === "html" || (contentType.includes("html") && !parsed)) {
+      warning =
+        "This response is an HTML page, not JSON data. The endpoint may be wrong or the provider now requires an API key — check the docs link on this page.";
+    }
+
     return {
       ok: response.ok,
       status: response.status,
@@ -146,6 +152,7 @@ export async function proxyRequest(method, url, headers = {}) {
       truncated,
       size: buffer.byteLength,
       checkedAt: new Date().toISOString(),
+      warning,
     };
   } catch (err) {
     clearTimeout(timer);

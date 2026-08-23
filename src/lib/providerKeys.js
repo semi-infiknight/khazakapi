@@ -59,5 +59,11 @@ export function providerInfo(providerId) {
 
 export function isDataEgovApi(api) {
   if (!api) return false;
-  return api.source === "data.egov.kz" || api.trust?.source === "data.egov.kz";
+  return (
+    api.source === "data.egov.kz" ||
+    api.trust?.source === "data.egov.kz" ||
+    api.endpoint?.includes("data.egov.kz") ||
+    api.sourceUrl?.includes("data.egov.kz") ||
+    api.docs?.includes("data.egov.kz")
+  );
 }

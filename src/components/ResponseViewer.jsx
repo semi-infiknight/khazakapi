@@ -174,6 +174,10 @@ export default function ResponseViewer({ response, request, loading }) {
         </div>
       </div>
 
+      {response.warning && (
+        <div className="banner-warn mb-0 mt-3 text-sm">{response.warning}</div>
+      )}
+
       <TabBar
         active={panelTab}
         onChange={setPanelTab}
