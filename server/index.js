@@ -206,23 +206,27 @@ app.get("/api/mcp", (req, res) => {
   res.json(mcpManifest(req));
 });
 
-function wantsMcpJson(req) {
-  if (req.query.json === "1" || req.query.format === "json") return true;
-  const accept = String(req.get("accept") || "");
-  if (accept.includes("text/html")) return false;
-  return true;
-}
-
 function sendSpa(res) {
   const distHtml = path.join(__dirname, "..", "dist", "index.html");
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.setHeader("Cache-Control", "no-store");
   return res.sendFile(distHtml);
 }
 
-// /mcp — setup page in the browser; JSON for MCP connectors
+// GET /mcp is always the setup page. JSON lives at GET /api/mcp.
 app.get("/mcp", (req, res) => {
-  if (wantsMcpJson(req)) return res.json(mcpManifest(req));
+  if (req.query.json === "1" || req.query.format === "json") {
+    return res.json(mcpManifest(req));
+  }
   if (isProd) return sendSpa(res);
   res.redirect(302, "http://localhost:5173/mcp");
+});
+
+app.post("/mcp", (_req, res) => {
+  res.status(501).json({
+    error: "MCP streamable HTTP is not fully implemented yet",
+    hint: "Use GET /api/mcp for the tool manifest, or the REST catalogue at /api/search",
+  });
 });
 
 app.get("/health", (_req, res) => {
