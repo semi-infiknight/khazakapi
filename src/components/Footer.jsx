@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="container-main border-t border-[var(--line)] py-8 pb-16">
@@ -21,8 +23,8 @@ export default function Footer() {
           <a href="/api/catalogue" className="foot-link">
             /api/catalogue
           </a>
-          <Link to="/setup/mcp" className="foot-link">
-            MCP server setup
+          <Link to="/mcp" className="foot-link">
+            MCP server
           </Link>
           <a href="/api/mcp" className="foot-link">
             /api/mcp

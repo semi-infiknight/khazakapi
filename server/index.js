@@ -206,16 +206,23 @@ app.get("/api/mcp", (req, res) => {
   res.json(mcpManifest(req));
 });
 
-// MCP endpoint — JSON for connectors; browsers go to the setup UI
+function wantsMcpJson(req) {
+  if (req.query.json === "1" || req.query.format === "json") return true;
+  const accept = String(req.get("accept") || "");
+  if (accept.includes("text/html")) return false;
+  return true;
+}
+
+function sendSpa(res) {
+  const distHtml = path.join(__dirname, "..", "dist", "index.html");
+  return res.sendFile(distHtml);
+}
+
+// /mcp — setup page in the browser; JSON for MCP connectors
 app.get("/mcp", (req, res) => {
-  const accept = req.get("accept") || "";
-  if (req.query.json === "1" || req.query.format === "json") {
-    return res.json(mcpManifest(req));
-  }
-  if (accept.includes("text/html")) {
-    return res.redirect(302, "/setup/mcp");
-  }
-  res.json(mcpManifest(req));
+  if (wantsMcpJson(req)) return res.json(mcpManifest(req));
+  if (isProd) return sendSpa(res);
+  res.redirect(302, "http://localhost:5173/mcp");
 });
 
 app.get("/health", (_req, res) => {

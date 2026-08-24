@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchCatalog, fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
@@ -86,6 +87,12 @@ export default function HomePage() {
         <div className="hero-metal-card mt-6 max-w-3xl">
           <div className="hero-metal-line">🇰🇿 KZ-first · KZT · +7 · data.egov.kz</div>
         </div>
+        <p className="mt-4 text-sm text-[var(--text-soft)]">
+          Use it from Claude, Cursor, or ChatGPT —{" "}
+          <Link to="/mcp" className="font-mono text-[var(--accent)] underline">
+            MCP server setup
+          </Link>
+        </p>
       </section>
 
       <section className="stats-metal-strip mb-8 grid grid-cols-2 lg:grid-cols-4">
