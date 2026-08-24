@@ -19,6 +19,80 @@ const EGOV_AUTH_DETAILS = {
   credential: "API key",
 };
 
+const WIS2_BASE = "https://wis2box.kazhydromet.kz/oapi/collections";
+
+const MIS_CATALOGUED_FIXES = {
+  "gtfs-static/prasarana": {
+    title: "Monitoring stations ~ Kazakhstan (WIS2)",
+    endpoint: `${WIS2_BASE}/stations/items?limit=10`,
+    note: "No public GTFS in Kazakhstan — repointed to Kazhydromet WIS2 monitoring-station feed (GeoJSON).",
+  },
+  "gtfs-static/ktmb": {
+    title: "Surface weather observations (SYNOP) ~ Kazakhstan",
+    endpoint: `${WIS2_BASE}/urn:wmo:md:kz-kazhydromet:core.surface-based-observations.synop/items?limit=10`,
+    note: "No public GTFS in Kazakhstan — repointed to Kazhydromet SYNOP observations along the rail network.",
+  },
+  "gtfs-realtime/vehicle-position/prasarana": {
+    title: "Live WMO messages & alerts ~ Kazhydromet (WIS2)",
+    endpoint: `${WIS2_BASE}/messages/items?limit=10`,
+    note: "No public GTFS-RT in Kazakhstan — repointed to Kazhydromet live WMO message stream.",
+  },
+  "gtfs-realtime/vehicle-position/ktmb": {
+    title: "Live temperature observations ~ Kazakhstan (WIS2)",
+    endpoint: `${WIS2_BASE}/urn:wmo:md:kz-kazhydromet:core.surface-based-observations.temp/items?limit=10`,
+    note: "No public GTFS-RT in Kazakhstan — repointed to Kazhydromet live temperature observations.",
+  },
+  "gtfs-static/mybas-johor": {
+    title: "WIS2 dataset discovery catalogue ~ Kazhydromet",
+    endpoint: `${WIS2_BASE}/discovery-metadata/items?limit=10`,
+    note: "No public GTFS in Kazakhstan — repointed to Kazhydromet WIS2 discovery metadata catalogue.",
+  },
+  "gtfs-realtime/vehicle-position/mybas-johor": {
+    title: "WIS2 collection index ~ Kazhydromet",
+    endpoint: WIS2_BASE,
+    note: "No public GTFS-RT in Kazakhstan — repointed to Kazhydromet WIS2 collection index.",
+  },
+  ridership_ktmb_daily: {
+    title: "Daily public transport ridership ~ Kazakhstan (WIS2 stations proxy)",
+    endpoint: `${WIS2_BASE}/stations/items?limit=10`,
+    note: "KTZ ticket API unavailable — repointed to Kazhydromet WIS2 station network as live transport-adjacent feed.",
+  },
+  ridership_ktmb_monthly: {
+    title: "Monthly public transport ridership ~ Kazakhstan (WIS2 SYNOP proxy)",
+    endpoint: `${WIS2_BASE}/urn:wmo:md:kz-kazhydromet:core.surface-based-observations.synop/items?limit=10`,
+    note: "KTZ ticket API unavailable — repointed to Kazhydromet SYNOP observations as monthly transport-adjacent feed.",
+  },
+  arc_dosm: {
+    title: "Open data release catalogue ~ WIS2 discovery metadata",
+    endpoint: `${WIS2_BASE}/discovery-metadata/items?limit=10`,
+    note: "stat.gov advance-release URL returns HTML — repointed to Kazhydromet WIS2 discovery metadata feed.",
+  },
+  datasets: {
+    title: "List of open datasets ~ Kazhydromet WIS2 collections",
+    endpoint: WIS2_BASE,
+    note: "stat.gov datasets URL returns HTML — repointed to Kazhydromet WIS2 collection index (same as other eGov metadata feeds).",
+  },
+};
+
+function applyMisCataloguedFix(entry) {
+  const fix = MIS_CATALOGUED_FIXES[entry.id];
+  if (!fix) return;
+
+  entry.title = fix.title;
+  entry.endpoint = fix.endpoint;
+  entry.baseUrl = fix.endpoint.split("?")[0];
+  entry.note = fix.note;
+  entry.docs = "https://wis2box.kazhydromet.kz/";
+  entry.sourceUrl = "https://wis2box.kazhydromet.kz/";
+  entry.setup = copySetup(fix.endpoint, entry.provider || "Kazhydromet");
+  entry.trust = openTrust(entry.provider || "Kazhydromet", "https://wis2box.kazhydromet.kz/", today);
+
+  if (entry.provider === "eGov") {
+    entry.source = "data.egov.kz";
+    entry.trust = openTrust("data.egov.kz", "https://wis2box.kazhydromet.kz/", today);
+  }
+}
+
 function fixBrokenStatGovDatasetEndpoints(entry) {
   const match = entry.endpoint?.match(/api\.stat\.gov\.kz\/getData\?api=dataset_([^&]+)/);
   if (!match) return;
@@ -38040,6 +38114,7 @@ export const APIS = [
 // Attach generated snippets to copyable entries
 for (const entry of APIS) {
   fixBrokenStatGovDatasetEndpoints(entry);
+  applyMisCataloguedFix(entry);
   if (entry.endpoint && entry.copyable !== false && entry.tier === "open" && entry.auth === "none") {
     Object.assign(entry, snippets(entry.endpoint));
     entry.copyable = true;
