@@ -4,12 +4,10 @@ import { fetchCatalog, fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
-import CatalogBrowseStrip from "../components/CatalogBrowseStrip.jsx";
 
 export default function HomePage() {
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
-  const [category, setCategory] = useState("");
   const [auth, setAuth] = useState("");
   const [pricing, setPricing] = useState("");
   const [tier, setTier] = useState("");
@@ -34,7 +32,6 @@ export default function HomePage() {
     setLoading(true);
     fetchSearch({
       q: debounced,
-      category,
       auth,
       pricing,
       tier,
@@ -50,13 +47,12 @@ export default function HomePage() {
     return () => {
       cancelled = true;
     };
-  }, [debounced, category, auth, pricing, tier]);
+  }, [debounced, auth, pricing, tier]);
 
   const stats = data?.facets;
   const isSearching = Boolean(debounced.trim());
 
   const setFilter = (key, value) => {
-    if (key === "category") setCategory(value);
     if (key === "auth") setAuth(value);
     if (key === "pricing") setPricing(value);
     if (key === "tier") setTier(value);
@@ -113,15 +109,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {!isSearching && catalog && <CatalogBrowseStrip categories={catalog} />}
-
       <div className="catalogue-layout">
         <CategorySidebar
           facets={data?.facets}
           total={data?.catalogueTotal ?? data?.total}
           filteredTotal={data?.total}
-          filters={{ category, auth, pricing, tier }}
+          filters={{ auth, pricing, tier }}
           onFilterChange={setFilter}
+          catalogCategories={catalog}
         />
 
         <div className="catalogue-main">

@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { categoryLabel } from "../lib/categoryStyle.js";
+
 function SidebarSection({ title, children }) {
   return (
     <div className="catalogue-sidebar-section">
@@ -37,9 +40,8 @@ const TIER_LABELS = {
   commercial: "Commercial only",
 };
 
-export default function CategorySidebar({ facets, total, filteredTotal, filters, onFilterChange }) {
-  const { category, auth, pricing, tier } = filters;
-  const categories = Object.entries(facets?.category || {}).sort((a, b) => b[1] - a[1]);
+export default function CategorySidebar({ facets, total, filteredTotal, filters, onFilterChange, catalogCategories }) {
+  const { auth, pricing, tier } = filters;
   const authOptions = Object.entries(facets?.auth || {}).sort((a, b) => b[1] - a[1]);
   const pricingOptions = Object.entries(facets?.pricing || {})
     .filter(([key]) => key === "paid" || key === "freemium")
@@ -48,10 +50,9 @@ export default function CategorySidebar({ facets, total, filteredTotal, filters,
     .filter(([key]) => key === "commercial")
     .sort((a, b) => b[1] - a[1]);
 
-  const hasFilters = category || auth || pricing || tier;
+  const hasFilters = auth || pricing || tier;
 
   const clearAll = () => {
-    onFilterChange("category", "");
     onFilterChange("auth", "");
     onFilterChange("pricing", "");
     onFilterChange("tier", "");
@@ -73,6 +74,20 @@ export default function CategorySidebar({ facets, total, filteredTotal, filters,
         )}
       </SidebarSection>
 
+      <SidebarSection title="Browse by category">
+        <p className="catalogue-sidebar-hint mb-2">Category → company → API type → endpoint</p>
+        <div className="catalogue-sidebar-scroll">
+          <nav className="catalogue-sidebar-nav">
+            {(catalogCategories || []).map((cat) => (
+              <Link key={cat.slug} to={`/browse/${cat.slug}`} className="catalogue-sidebar-link">
+                <span className="catalogue-sidebar-link-text">{categoryLabel(cat.name)}</span>
+                <span className="catalogue-sidebar-count">{cat.count}</span>
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </SidebarSection>
+
       <SidebarSection title="Commercial & pricing">
         <p className="catalogue-sidebar-hint mb-2">
           Provider billing — test any of these here once you have an API key.
@@ -89,16 +104,6 @@ export default function CategorySidebar({ facets, total, filteredTotal, filters,
           onSelect={(value) => onFilterChange("pricing", value)}
           formatLabel={(key) => PRICING_LABELS[key] || key}
         />
-      </SidebarSection>
-
-      <SidebarSection title="Categories">
-        <div className="catalogue-sidebar-scroll">
-          <SidebarNav
-            items={categories}
-            active={category}
-            onSelect={(value) => onFilterChange("category", value)}
-          />
-        </div>
       </SidebarSection>
 
       <SidebarSection title="Auth">
