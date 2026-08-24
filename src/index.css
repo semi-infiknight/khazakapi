@@ -1898,10 +1898,19 @@ body.hf-mcp-on #fluid-background {
 .hf-copy {
   display: flex;
   align-items: center;
+  width: 100%;
   height: 44px;
   padding: 0 6px 0 14px;
+  border: none;
   border-radius: 12px;
   background: #0c0c0c;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hf-copy-ok {
+  outline: 1px solid rgba(125, 255, 168, 0.35);
 }
 
 .hf-copy-url {
@@ -1918,22 +1927,24 @@ body.hf-mcp-on #fluid-background {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
+  min-width: 36px;
   height: 36px;
   border: none;
   border-radius: 10px;
   background: transparent;
   color: #fff;
-  cursor: pointer;
+  pointer-events: none;
 }
 
 .hf-copy-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: transparent;
 }
 
 .hf-copy-done {
-  font-size: 13px;
+  font-size: 11px;
+  font-weight: 600;
   color: #7dffa8;
+  padding-right: 6px;
 }
 
 .hf-ghost {

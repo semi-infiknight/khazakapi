@@ -56,26 +56,46 @@ function CopyField({ value }) {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
+    let ok = false;
     try {
-      await navigator.clipboard.writeText(value);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        ok = true;
+      }
+    } catch {
+      ok = false;
+    }
+    if (!ok) {
+      const area = document.createElement("textarea");
+      area.value = value;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.top = "0";
+      area.style.left = "0";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.focus();
+      area.select();
+      try {
+        ok = document.execCommand("copy");
+      } catch {
+        ok = false;
+      }
+      document.body.removeChild(area);
+    }
+    if (ok) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
-    } catch {
-      /* ignore */
     }
   };
 
   return (
-    <div className="hf-copy">
+    <button type="button" className={`hf-copy ${copied ? "hf-copy-ok" : ""}`} onClick={copy} aria-label={copied ? "Copied" : "Copy URL"}>
       <code className="hf-copy-url">{value}</code>
-      <button type="button" className="hf-copy-btn" onClick={copy} aria-label={copied ? "Copied" : "Copy URL"}>
-        {copied ? (
-          <span className="hf-copy-done">✓</span>
-        ) : (
-          <IconCopy />
-        )}
-      </button>
-    </div>
+      <span className="hf-copy-btn" aria-hidden="true">
+        {copied ? <span className="hf-copy-done">Copied</span> : <IconCopy />}
+      </span>
+    </button>
   );
 }
 
