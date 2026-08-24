@@ -1,4 +1,6 @@
-/** Providers that belong in the Kazakhstan catalogue. */
+import { isCommercialCatalogueEntry, isLegitimateKzCommercial } from "./kzCommercial.js";
+
+/** Providers that belong in the Kazakhstan catalogue (non-commercial open data & gov). */
 const KZ_PROVIDERS = new Set([
   "2GIS",
   "Air Astana",
@@ -9,11 +11,7 @@ const KZ_PROVIDERS = new Set([
   "Bureau of National Statistics",
   "eGov",
   "ForteBank",
-  "Freedom Pay",
-  "Freedom Pay (GoTo Financial)",
   "Freedom Pay KZ",
-  "Halyk Bank",
-  "Halyk Bank ePay",
   "Halyk ePay",
   "Kaspi.kz",
   "Kazhydromet",
@@ -36,12 +34,16 @@ const KZ_PROVIDERS = new Set([
 ]);
 
 /**
- * Kazakhstan catalogue = allowlisted providers, data.egov dataset ids, and Yandex APIs.
- * Everything else tagged country: ["KZ"] during the Malaysia→KZ rebrand is excluded.
+ * Kazakhstan catalogue = allowlisted providers, data.egov dataset ids, kz-* / yandex-* modules.
+ * Commercial entries must come from curated kz-* or yandex-* ids (blocks Malaysia→KZ rebrand junk).
  */
 export function isKzCatalogueEntry(entry) {
   const countries = entry.country || [];
   if (!countries.includes("KZ")) return false;
+
+  if (isCommercialCatalogueEntry(entry)) {
+    return isLegitimateKzCommercial(entry);
+  }
 
   if (entry.id?.startsWith("d_")) return true;
   if (entry.id?.startsWith("kz-")) return true;

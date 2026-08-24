@@ -181,6 +181,10 @@ export function resolveService(api) {
     return { slug: "telecom-kz", name: "Telecom & SMS (KZ)", provider: api.provider, brand: api.provider };
   }
 
+  if (id.startsWith("kz-aladhan-") || api.provider === "Aladhan") {
+    return { slug: "aladhan", name: "Aladhan", provider: "Aladhan", brand: "Aladhan" };
+  }
+
   const slug = slugify(api.provider || api.source || id);
   return {
     slug: slug || "other",

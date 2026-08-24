@@ -1,4 +1,4 @@
-import { commercialTrust, keySetup } from "./helpers.js";
+import { commercialTrust, keySetup, openTrust, copySetup } from "./helpers.js";
 
 const DGIS_DOCS = "https://dev.2gis.ru/kz/api/catalog";
 const DGIS_PLATFORM = "https://platform.2gis.ru/";
@@ -423,4 +423,37 @@ export const KZ_COMMERCIAL_APIS = [
     authDetails: { scheme: "oauth2", type: "bearer", credential: "Partner OAuth token" },
     pricing: "paid",
   }),
+
+  // —— Religious & community ——
+  {
+    id: "kz-aladhan-prayer",
+    slug: "kz-aladhan-prayer",
+    title: "Aladhan Prayer Times ~ Kazakhstan cities",
+    category: "Government services",
+    group: "Build",
+    country: ["KZ"],
+    provider: "Aladhan",
+    source: "Aladhan API",
+    sourceUrl: "https://aladhan.com/prayer-times-api",
+    tier: "open",
+    kind: "open",
+    auth: "none",
+    authDetails: { scheme: "none", type: "none", credential: null },
+    copyable: true,
+    pricing: "free",
+    docs: "https://aladhan.com/prayer-times-api",
+    baseUrl: "https://api.aladhan.com/v1",
+    frequency: null,
+    coverage: "KZ",
+    freshness: { label: "CURRENT · 2026", tone: "current" },
+    likes: 0,
+    note: "Free prayer times for Almaty, Astana, Shymkent and other KZ cities via the global Aladhan API.",
+    trust: openTrust("Aladhan API", "https://aladhan.com/prayer-times-api", "2026-07-24"),
+    setup: copySetup(
+      "https://api.aladhan.com/v1/timingsByCity?city=Almaty&country=Kazakhstan&method=2",
+      "https://aladhan.com/prayer-times-api",
+      "Aladhan API",
+    ),
+    endpoint: "https://api.aladhan.com/v1/timingsByCity?city=Almaty&country=Kazakhstan&method=2",
+  },
 ];
