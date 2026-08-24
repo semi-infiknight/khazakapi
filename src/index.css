@@ -1861,14 +1861,16 @@ body.hf-mcp-on #fluid-background {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
   border-radius: 999px;
-  background: #0d0d0d;
-  color: #f2f2f2;
-  font-size: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 18px;
+  line-height: 1;
+  margin-bottom: 14px;
 }
 
 .hf-col-title {
@@ -2131,15 +2133,10 @@ body.hf-mcp-on #fluid-background {
   }
 
   .hf-num {
-    width: auto;
-    height: auto;
-    background: none;
-    border-radius: 0;
-    justify-content: flex-start;
-    font-size: 13px;
-    font-weight: 500;
-    color: #fff;
+    width: 24px;
+    height: 24px;
     margin-bottom: 12px;
+    font-size: 14px;
   }
 
   .hf-col-title {
