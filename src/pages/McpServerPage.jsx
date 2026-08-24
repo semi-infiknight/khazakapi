@@ -158,7 +158,6 @@ export default function McpServerPage() {
 
         <div className="hf-panel">
           <section className="hf-col">
-            <span className="hf-num">1</span>
             <h2 className="hf-col-title">
               Copy the <KzBadge /> <strong>Khazak connector URL</strong>
             </h2>
@@ -169,7 +168,6 @@ export default function McpServerPage() {
           </section>
 
           <section className="hf-col">
-            <span className="hf-num">2</span>
             <h2 className="hf-col-title">
               <strong>{config.step2Title}</strong>
             </h2>
@@ -184,7 +182,6 @@ export default function McpServerPage() {
           </section>
 
           <section className="hf-col">
-            <span className="hf-num">3</span>
             <h2 className="hf-col-title">
               <strong>{config.step3Title}</strong>
             </h2>

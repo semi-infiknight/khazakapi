@@ -1857,7 +1857,7 @@ body.hf-mcp-on #fluid-background {
   border-right: none;
 }
 
-.hf-num {
+/* .hf-num {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1871,7 +1871,7 @@ body.hf-mcp-on #fluid-background {
   font-weight: 600;
   line-height: 1;
   margin-bottom: 14px;
-}
+} */
 
 .hf-col-title {
   margin: 0;
@@ -2130,13 +2130,6 @@ body.hf-mcp-on #fluid-background {
 
   .hf-col:last-child {
     border-bottom: none;
-  }
-
-  .hf-num {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 12px;
-    font-size: 14px;
   }
 
   .hf-col-title {
