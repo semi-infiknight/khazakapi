@@ -1710,6 +1710,7 @@ nav a:hover {
 
 body.hf-mcp-on {
   background: #000;
+  overflow-x: hidden;
 }
 
 body.hf-mcp-on #fluid-background {
@@ -1719,6 +1720,9 @@ body.hf-mcp-on #fluid-background {
 .app-shell-mcp {
   background: #000;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .app-shell-mcp main {
@@ -1733,11 +1737,18 @@ body.hf-mcp-on #fluid-background {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   padding: 48px 24px 64px;
 }
 
 .hf-mcp-frame {
   width: min(1120px, 100%);
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .hf-mcp-bar {
@@ -1753,6 +1764,8 @@ body.hf-mcp-on #fluid-background {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .hf-tab {
@@ -1824,6 +1837,9 @@ body.hf-mcp-on #fluid-background {
   background: #141414;
   border-radius: 22px;
   min-height: 292px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow: hidden;
 }
 
@@ -1832,6 +1848,8 @@ body.hf-mcp-on #fluid-background {
   flex-direction: column;
   padding: 28px 28px 24px;
   min-height: 292px;
+  min-width: 0;
+  max-width: 100%;
   border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -1860,6 +1878,8 @@ body.hf-mcp-on #fluid-background {
   line-height: 1.35;
   letter-spacing: -0.03em;
   color: #f5f5f5;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .hf-col-title strong {
@@ -1872,11 +1892,15 @@ body.hf-mcp-on #fluid-background {
   font-size: 14px;
   line-height: 1.45;
   max-width: 30ch;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .hf-col-action {
   margin-top: auto;
   padding-top: 28px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .hf-badge {
@@ -1899,6 +1923,8 @@ body.hf-mcp-on #fluid-background {
   display: flex;
   align-items: center;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   height: 44px;
   padding: 0 6px 0 14px;
   border: none;
@@ -1906,6 +1932,7 @@ body.hf-mcp-on #fluid-background {
   background: #0c0c0c;
   text-align: left;
   cursor: pointer;
+  box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -1915,6 +1942,7 @@ body.hf-mcp-on #fluid-background {
 
 .hf-copy-url {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1952,6 +1980,7 @@ body.hf-mcp-on #fluid-background {
   align-items: center;
   gap: 8px;
   height: 44px;
+  max-width: 100%;
   padding: 0 16px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 12px;
@@ -1959,6 +1988,8 @@ body.hf-mcp-on #fluid-background {
   font-size: 14px;
   font-weight: 500;
   background: transparent;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .hf-ghost:hover {
@@ -1970,6 +2001,7 @@ body.hf-mcp-on #fluid-background {
   align-items: center;
   gap: 8px;
   height: 44px;
+  max-width: 100%;
   padding: 0 18px;
   border-radius: 999px;
   background: #e27b62;
@@ -1977,6 +2009,8 @@ body.hf-mcp-on #fluid-background {
   font-size: 14.5px;
   font-weight: 650;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .hf-start:hover {
@@ -1996,6 +2030,9 @@ body.hf-mcp-on #fluid-background {
   margin-top: 22px;
   color: #8b8b8b;
   font-size: 13px;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .hf-foot-cli {
@@ -2046,6 +2083,8 @@ body.hf-mcp-on #fluid-background {
     align-items: stretch;
     gap: 10px;
     margin-bottom: 12px;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .hf-mcp-tabs {
@@ -2059,6 +2098,8 @@ body.hf-mcp-on #fluid-background {
     background: #141414;
     color: #f3f3f3;
     font-size: 13px;
+    max-width: 100%;
+    flex-shrink: 0;
   }
 
   .hf-tab-on {
@@ -2106,13 +2147,14 @@ body.hf-mcp-on #fluid-background {
   }
 
   .hf-col-copy {
-    max-width: none;
+    max-width: 100%;
     font-size: 13.5px;
     color: #9a9a9a;
   }
 
   .hf-col-action {
     padding-top: 16px;
+    width: 100%;
   }
 
   .hf-copy {
@@ -2129,7 +2171,10 @@ body.hf-mcp-on #fluid-background {
   .hf-ghost,
   .hf-start {
     width: 100%;
+    max-width: 100%;
     justify-content: center;
+    white-space: normal;
+    text-align: center;
   }
 
   .hf-foot {
