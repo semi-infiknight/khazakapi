@@ -38209,8 +38209,8 @@ for (const entry of KZ_APIS) {
 }
 
 export const CATALOGUE_META = {
-  updated: "2026-08-24T03:25:00.000Z",
-  version: "2026-08-24b",
+  updated: "2026-08-24T04:00:00.000Z",
+  version: "2026-08-24c",
   source: "khazakapi-local",
   total: KZ_APIS.length,
 };
