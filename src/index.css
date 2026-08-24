@@ -1761,7 +1761,7 @@ body.hf-mcp-on #fluid-background {
   gap: 7px;
   height: 36px;
   padding: 0 14px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 999px;
   background: transparent;
   color: #9a9a9a;
@@ -1777,6 +1777,7 @@ body.hf-mcp-on #fluid-background {
 
 .hf-tab-on {
   background: #fff;
+  border-color: #fff;
   color: #111;
 }
 
@@ -2024,29 +2025,112 @@ body.hf-mcp-on #fluid-background {
 }
 
 @media (max-width: 960px) {
+  .hf-mcp {
+    align-items: flex-start;
+    padding: 16px 16px calc(28px + env(safe-area-inset-bottom));
+  }
+
   .hf-mcp-bar {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .hf-mcp-tabs {
+    gap: 8px;
+  }
+
+  .hf-tab {
+    height: 34px;
+    padding: 0 12px;
+    border-color: #2a2a2a;
+    background: #141414;
+    color: #f3f3f3;
+    font-size: 13px;
+  }
+
+  .hf-tab-on {
+    background: #fff;
+    border-color: #fff;
+    color: #111;
+  }
+
+  .hf-mode {
+    justify-content: flex-start;
+    padding-left: 2px;
   }
 
   .hf-panel {
     grid-template-columns: 1fr;
     min-height: 0;
+    border-radius: 24px;
   }
 
   .hf-col {
     min-height: 0;
+    padding: 22px 20px 20px;
     border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .hf-col:last-child {
     border-bottom: none;
   }
 
+  .hf-num {
+    width: auto;
+    height: auto;
+    background: none;
+    border-radius: 0;
+    justify-content: flex-start;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .hf-col-title {
+    font-size: 17px;
+  }
+
+  .hf-col-copy {
+    max-width: none;
+    font-size: 13.5px;
+    color: #9a9a9a;
+  }
+
+  .hf-col-action {
+    padding-top: 16px;
+  }
+
+  .hf-copy {
+    height: 42px;
+    border-radius: 999px;
+    padding: 0 6px 0 16px;
+    background: #0a0a0a;
+  }
+
+  .hf-copy-url {
+    font-size: 12px;
+  }
+
+  .hf-ghost,
+  .hf-start {
+    width: 100%;
+    justify-content: center;
+  }
+
   .hf-foot {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    margin-top: 18px;
+    font-size: 12.5px;
+    text-align: center;
+  }
+
+  .hf-back {
+    margin-top: 20px;
   }
 }
 
