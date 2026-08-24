@@ -93,6 +93,38 @@ function applyMisCataloguedFix(entry) {
   }
 }
 
+function fixBrokenStatGovLegacyGetDataEndpoints(entry) {
+  const match = entry.endpoint?.match(/api\.stat\.gov\.kz\/getData\?api=([^&]+)&period=/);
+  if (!match) return;
+
+  const apiName = match[1];
+  if (apiName.startsWith("dataset")) return;
+
+  const docs = entry.docs || entry.sourceUrl || "https://data.egov.kz/pages/samples";
+
+  entry.endpoint = `https://data.egov.kz/api/v4/${apiName}/v1?apiKey=YOUR_KEY&source={"size":10}`;
+  entry.baseUrl = `https://data.egov.kz/api/v4/${apiName}/v1`;
+  entry.source = "data.egov.kz";
+  entry.auth = "apiKey";
+  entry.authDetails = EGOV_AUTH_DETAILS;
+  entry.copyable = true;
+  entry.setup = keySetup(docs, DATA_EGOV_KEY_URL);
+  entry.trust = apiKeyTrust("data.egov.kz", entry.sourceUrl || docs, today);
+  entry.docs = entry.docs?.includes("data.egov.kz") ? entry.docs : "https://data.egov.kz/pages/samples";
+
+  const legacyNote =
+    "Legacy stat.gov.kz getData URL returns an HTML portal page, not JSON — repointed to data.egov.kz v4 (free API key required).";
+  if (entry.note) {
+    entry.note = entry.note
+      .replace(/Keyless JSON via data\.egov\.kz datastore\.?\s*/gi, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    entry.note = entry.note ? `${entry.note} ${legacyNote}` : legacyNote;
+  } else {
+    entry.note = legacyNote;
+  }
+}
+
 function fixBrokenStatGovDatasetEndpoints(entry) {
   const match = entry.endpoint?.match(/api\.stat\.gov\.kz\/getData\?api=dataset_([^&]+)/);
   if (!match) return;
@@ -38114,6 +38146,7 @@ export const APIS = [
 // Attach generated snippets to copyable entries
 for (const entry of APIS) {
   fixBrokenStatGovDatasetEndpoints(entry);
+  fixBrokenStatGovLegacyGetDataEndpoints(entry);
   applyMisCataloguedFix(entry);
   if (entry.endpoint && entry.copyable !== false && entry.tier === "open" && entry.auth === "none") {
     Object.assign(entry, snippets(entry.endpoint));
