@@ -129,8 +129,76 @@ export function resolveService(api) {
     return { slug: "nbk", name: "National Bank of Kazakhstan", provider: "NBK", brand: "NBK" };
   }
 
-  if (api.provider === "2GIS" || id.startsWith("kz-2gis-")) {
+  if (id.startsWith("kz-2gis-") || api.provider === "2GIS") {
     return { slug: "2gis", name: "2GIS", provider: "2GIS", brand: "2GIS" };
+  }
+
+  if (id.startsWith("kz-npck-") || api.provider === "NPCK") {
+    return { slug: "npck", name: "NPCK · Open Banking", provider: "NPCK", brand: "NPCK" };
+  }
+
+  if (id.startsWith("kz-sigex-") || id.startsWith("kz-egov-mobile-") || api.provider === "SIGEX") {
+    return { slug: "sigex-egov", name: "SIGEX & eGov Identity", provider: api.provider, brand: "SIGEX" };
+  }
+
+  if (id.startsWith("kz-esf-") || api.provider === "KGD") {
+    return { slug: "esf-kgd", name: "IS ESF · Tax & E-invoicing", provider: "KGD", brand: "KGD" };
+  }
+
+  if (id.startsWith("kz-wolt-") || api.provider === "Wolt") {
+    return { slug: "wolt-kz", name: "Wolt", provider: "Wolt", brand: "Wolt" };
+  }
+
+  if (id.startsWith("kz-glovo-") || api.provider === "Glovo") {
+    return { slug: "glovo-kz", name: "Glovo", provider: "Glovo", brand: "Glovo" };
+  }
+
+  if (
+    id.startsWith("kz-chocofood-") ||
+    id.startsWith("kz-arbuz-") ||
+    api.provider === "Chocofamily"
+  ) {
+    return { slug: "chocofamily", name: "Chocofamily", provider: "Chocofamily", brand: "Chocofamily" };
+  }
+
+  if (id.startsWith("kz-wildberries-") || api.provider === "Wildberries") {
+    return { slug: "wildberries-kz", name: "Wildberries", provider: "Wildberries", brand: "Wildberries" };
+  }
+
+  if (id.startsWith("kz-ozon-") || api.provider === "Ozon") {
+    return { slug: "ozon-kz", name: "Ozon", provider: "Ozon", brand: "Ozon" };
+  }
+
+  if (id.startsWith("kz-cdek-") || api.provider === "CDEK") {
+    return { slug: "cdek-kz", name: "CDEK", provider: "CDEK", brand: "CDEK" };
+  }
+
+  if (
+    id.startsWith("kz-paybot-") ||
+    id.startsWith("kz-apipay-") ||
+    id.startsWith("kz-asiapay-") ||
+    id.startsWith("kz-qiwi-") ||
+    api.provider === "PayBot.kz" ||
+    api.provider === "ApiPay.kz" ||
+    api.provider === "AsiaPay" ||
+    api.provider === "Qiwi Kazakhstan"
+  ) {
+    return { slug: "payment-aggregators-kz", name: "Payment Aggregators (KZ)", provider: api.provider, brand: api.provider };
+  }
+
+  if (id.startsWith("kz-ps-cloud-") || id.startsWith("kz-beeline-cloud") || api.provider === "PS Cloud") {
+    return { slug: "cloud-kz", name: "Cloud & Infrastructure (KZ)", provider: api.provider, brand: api.provider };
+  }
+
+  if (
+    id.startsWith("kz-eurasian-") ||
+    id.startsWith("kz-rbk-") ||
+    id.startsWith("kz-homebank-") ||
+    api.provider === "Eurasian Bank" ||
+    api.provider === "Bank RBK" ||
+    (api.provider === "Halyk Bank" && api.tier === "commercial")
+  ) {
+    return { slug: "banks-kz", name: "Banks & Acquiring (KZ)", provider: api.provider, brand: api.provider };
   }
 
   if (id.startsWith("kz-freedompay-") || api.provider === "Freedom Pay KZ") {
@@ -173,17 +241,41 @@ export function resolveService(api) {
     return { slug: "kazpost", name: "Kazpost", provider: "Kazpost", brand: "Kazpost" };
   }
 
-  if (id.startsWith("kz-ttn-") || id.startsWith("kz-air-astana-") || api.provider === "Tickets.kz" || api.provider === "Air Astana") {
-    return { slug: "travel-kz", name: "Travel & Airlines (KZ)", provider: api.provider, brand: "Tickets.kz" };
+  if (
+    id.startsWith("kz-ttn-") ||
+    id.startsWith("kz-air-astana-") ||
+    id.startsWith("kz-flyarystan-") ||
+    id.startsWith("kz-scat-") ||
+    id.startsWith("kz-aviata-") ||
+    id.startsWith("kz-ktz-") ||
+    id.startsWith("kz-indriver-") ||
+    api.provider === "Tickets.kz" ||
+    api.provider === "Air Astana" ||
+    api.provider === "FlyArystan" ||
+    api.provider === "SCAT Airlines" ||
+    api.provider === "Aviata.kz" ||
+    api.provider === "KTZ" ||
+    api.provider === "inDriver"
+  ) {
+    return { slug: "travel-kz", name: "Travel & Mobility (KZ)", provider: api.provider, brand: api.provider };
   }
 
-  if (id.startsWith("kz-kcell-") || id.startsWith("kz-beeline-") || api.provider === "Kcell" || api.provider === "Beeline Kazakhstan") {
+  if (
+    id.startsWith("kz-kcell-") ||
+    id.startsWith("kz-beeline-") ||
+    id.startsWith("kz-tele2-") ||
+    api.provider === "Kcell" ||
+    api.provider === "Beeline Kazakhstan" ||
+    api.provider === "Tele2 Kazakhstan"
+  ) {
     return { slug: "telecom-kz", name: "Telecom & SMS (KZ)", provider: api.provider, brand: api.provider };
   }
 
   if (id.startsWith("kz-aladhan-") || api.provider === "Aladhan") {
     return { slug: "aladhan", name: "Aladhan", provider: "Aladhan", brand: "Aladhan" };
   }
+
+  // kz-indriver handled in travel-kz group above
 
   const slug = slugify(api.provider || api.source || id);
   return {
