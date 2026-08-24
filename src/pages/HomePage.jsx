@@ -16,7 +16,7 @@ export default function HomePage() {
   const [data, setData] = useState(null);
   const [catalog, setCatalog] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [bannerDismissed, setBannerDismissed] = useState(false);
+  // const [bannerDismissed, setBannerDismissed] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setDebounced(query), 250);
@@ -64,7 +64,7 @@ export default function HomePage() {
 
   return (
     <div className="container-main pb-16 pt-6">
-      {!bannerDismissed && (
+      {/* {!bannerDismissed && (
         <div className="banner-warn mb-4 flex items-start justify-between gap-3">
           <span>
             ⚠ data.egov.kz requires an API key for most datasets — entries marked Copy-paste use keyless endpoints
@@ -74,7 +74,7 @@ export default function HomePage() {
             ✕
           </button>
         </div>
-      )}
+      )} */}
 
       <section className="mb-8">
         <div className="bento-label-plate mb-3">KHAZAK API · 2026</div>
