@@ -85,11 +85,12 @@ export function buildDisjunctiveFacets(apis, query = {}) {
     country: buildFacets(filterPool(apis, filters, { excludeKey: "country", tokens })).country,
     auth: buildFacets(filterPool(apis, filters, { excludeKey: "auth", tokens })).auth,
     pricing: buildFacets(filterPool(apis, filters, { excludeKey: "pricing", tokens })).pricing,
+    tier: buildFacets(filterPool(apis, filters, { excludeKey: "tier", tokens })).tier,
   };
 }
 
 export function buildFacets(apis) {
-  const facets = { category: {}, country: {}, auth: {}, pricing: {} };
+  const facets = { category: {}, country: {}, auth: {}, pricing: {}, tier: {} };
   for (const a of apis) {
     facets.category[a.category] = (facets.category[a.category] || 0) + 1;
     for (const c of a.country || []) {
@@ -97,6 +98,7 @@ export function buildFacets(apis) {
     }
     facets.auth[a.auth] = (facets.auth[a.auth] || 0) + 1;
     facets.pricing[a.pricing] = (facets.pricing[a.pricing] || 0) + 1;
+    facets.tier[a.tier] = (facets.tier[a.tier] || 0) + 1;
   }
   return facets;
 }

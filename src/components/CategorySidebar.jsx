@@ -26,18 +26,35 @@ function SidebarNav({ items, active, onSelect, formatLabel }) {
   );
 }
 
+const PRICING_LABELS = {
+  free: "Free (open data & free tiers)",
+  freemium: "Freemium",
+  paid: "Paid",
+};
+
+const TIER_LABELS = {
+  open: "Open / government",
+  commercial: "Commercial only",
+};
+
 export default function CategorySidebar({ facets, total, filteredTotal, filters, onFilterChange }) {
-  const { category, auth, pricing } = filters;
+  const { category, auth, pricing, tier } = filters;
   const categories = Object.entries(facets?.category || {}).sort((a, b) => b[1] - a[1]);
   const authOptions = Object.entries(facets?.auth || {}).sort((a, b) => b[1] - a[1]);
-  const pricingOptions = Object.entries(facets?.pricing || {}).sort((a, b) => b[1] - a[1]);
+  const pricingOptions = Object.entries(facets?.pricing || {})
+    .filter(([key]) => key === "paid" || key === "freemium")
+    .sort((a, b) => b[1] - a[1]);
+  const tierOptions = Object.entries(facets?.tier || {})
+    .filter(([key]) => key === "commercial")
+    .sort((a, b) => b[1] - a[1]);
 
-  const hasFilters = category || auth || pricing;
+  const hasFilters = category || auth || pricing || tier;
 
   const clearAll = () => {
     onFilterChange("category", "");
     onFilterChange("auth", "");
     onFilterChange("pricing", "");
+    onFilterChange("tier", "");
   };
 
   return (
@@ -56,6 +73,24 @@ export default function CategorySidebar({ facets, total, filteredTotal, filters,
         )}
       </SidebarSection>
 
+      <SidebarSection title="Commercial & pricing">
+        <p className="catalogue-sidebar-hint mb-2">
+          Provider billing — test any of these here once you have an API key.
+        </p>
+        <SidebarNav
+          items={tierOptions}
+          active={tier}
+          onSelect={(value) => onFilterChange("tier", value)}
+          formatLabel={(key) => TIER_LABELS[key] || key}
+        />
+        <SidebarNav
+          items={pricingOptions}
+          active={pricing}
+          onSelect={(value) => onFilterChange("pricing", value)}
+          formatLabel={(key) => PRICING_LABELS[key] || key}
+        />
+      </SidebarSection>
+
       <SidebarSection title="Categories">
         <div className="catalogue-sidebar-scroll">
           <SidebarNav
@@ -68,10 +103,6 @@ export default function CategorySidebar({ facets, total, filteredTotal, filters,
 
       <SidebarSection title="Auth">
         <SidebarNav items={authOptions} active={auth} onSelect={(value) => onFilterChange("auth", value)} />
-      </SidebarSection>
-
-      <SidebarSection title="Pricing">
-        <SidebarNav items={pricingOptions} active={pricing} onSelect={(value) => onFilterChange("pricing", value)} />
       </SidebarSection>
 
       {hasFilters && (

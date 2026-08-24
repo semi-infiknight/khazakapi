@@ -11,6 +11,7 @@ export default function HomePage() {
   const [category, setCategory] = useState("");
   const [auth, setAuth] = useState("");
   const [pricing, setPricing] = useState("");
+  const [tier, setTier] = useState("");
   const [data, setData] = useState(null);
   const [catalog, setCatalog] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ export default function HomePage() {
       category,
       auth,
       pricing,
+      tier,
       limit: 200,
     })
       .then((res) => {
@@ -47,7 +49,7 @@ export default function HomePage() {
     return () => {
       cancelled = true;
     };
-  }, [debounced, category, auth, pricing]);
+  }, [debounced, category, auth, pricing, tier]);
 
   const stats = data?.facets;
   const isSearching = Boolean(debounced.trim());
@@ -56,6 +58,7 @@ export default function HomePage() {
     if (key === "category") setCategory(value);
     if (key === "auth") setAuth(value);
     if (key === "pricing") setPricing(value);
+    if (key === "tier") setTier(value);
   };
 
   return (
@@ -111,7 +114,7 @@ export default function HomePage() {
           facets={data?.facets}
           total={data?.catalogueTotal ?? data?.total}
           filteredTotal={data?.total}
-          filters={{ category, auth, pricing }}
+          filters={{ category, auth, pricing, tier }}
           onFilterChange={setFilter}
         />
 
