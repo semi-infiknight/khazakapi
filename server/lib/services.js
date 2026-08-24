@@ -129,6 +129,58 @@ export function resolveService(api) {
     return { slug: "nbk", name: "National Bank of Kazakhstan", provider: "NBK", brand: "NBK" };
   }
 
+  if (api.provider === "2GIS" || id.startsWith("kz-2gis-")) {
+    return { slug: "2gis", name: "2GIS", provider: "2GIS", brand: "2GIS" };
+  }
+
+  if (id.startsWith("kz-freedompay-") || api.provider === "Freedom Pay KZ") {
+    return { slug: "freedompay-kz", name: "Freedom Pay KZ", provider: "Freedom Pay KZ", brand: "Freedom Pay" };
+  }
+
+  if (
+    id.startsWith("kz-halyk-epay-") ||
+    api.provider === "Halyk ePay" ||
+    api.provider === "Halyk Bank ePay"
+  ) {
+    return { slug: "halyk-epay", name: "Halyk ePay", provider: "Halyk ePay", brand: "Halyk Bank" };
+  }
+
+  if (id.startsWith("kz-bereke-") || api.provider === "Bereke Bank") {
+    return { slug: "bereke-bank", name: "Bereke Bank", provider: "Bereke Bank", brand: "Bereke Bank" };
+  }
+
+  if (id.startsWith("kz-fortebank-") || api.provider === "ForteBank") {
+    return { slug: "fortebank", name: "ForteBank", provider: "ForteBank", brand: "ForteBank" };
+  }
+
+  if (id.startsWith("kz-woop") || api.provider === "Wooppay" || api.provider === "Woopkassa") {
+    return { slug: "wooppay", name: "Wooppay & Woopkassa", provider: "Wooppay", brand: "Wooppay" };
+  }
+
+  if (id.startsWith("kz-paybox-") || api.provider === "Paybox") {
+    return { slug: "paybox", name: "Paybox", provider: "Paybox", brand: "Paybox" };
+  }
+
+  if (id.startsWith("kz-alatau-") || api.provider === "Alatau City Bank") {
+    return { slug: "alatau-city-bank", name: "Alatau City Bank", provider: "Alatau City Bank", brand: "Alatau City Bank" };
+  }
+
+  if (id.startsWith("kz-kaspi-") || (api.provider === "Kaspi.kz" && api.tier === "commercial")) {
+    return { slug: "kaspi-kz", name: "Kaspi.kz", provider: "Kaspi.kz", brand: "Kaspi" };
+  }
+
+  if (id.startsWith("kz-kazpost-") || (api.provider === "Kazpost" && api.tier === "commercial")) {
+    return { slug: "kazpost", name: "Kazpost", provider: "Kazpost", brand: "Kazpost" };
+  }
+
+  if (id.startsWith("kz-ttn-") || id.startsWith("kz-air-astana-") || api.provider === "Tickets.kz" || api.provider === "Air Astana") {
+    return { slug: "travel-kz", name: "Travel & Airlines (KZ)", provider: api.provider, brand: "Tickets.kz" };
+  }
+
+  if (id.startsWith("kz-kcell-") || id.startsWith("kz-beeline-") || api.provider === "Kcell" || api.provider === "Beeline Kazakhstan") {
+    return { slug: "telecom-kz", name: "Telecom & SMS (KZ)", provider: api.provider, brand: api.provider };
+  }
+
   const slug = slugify(api.provider || api.source || id);
   return {
     slug: slug || "other",

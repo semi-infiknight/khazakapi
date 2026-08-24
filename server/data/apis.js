@@ -8,6 +8,7 @@ import {
 } from "./helpers.js";
 import { YANDEX_APIS } from "./yandex-apis.js";
 import { YANDEX_ECOSYSTEM_APIS } from "./yandex-ecosystem-apis.js";
+import { KZ_COMMERCIAL_APIS } from "./kz-commercial-apis.js";
 import { resolveService } from "../lib/services.js";
 import { filterKzCatalogue } from "../lib/kzFilter.js";
 
@@ -74,6 +75,27 @@ const MIS_CATALOGUED_FIXES = {
     note: "stat.gov datasets URL returns HTML — repointed to Kazhydromet WIS2 collection index (same as other eGov metadata feeds).",
   },
 };
+
+function fixMislabeled2gisEntry(entry) {
+  if (entry.id !== "onemap-sg") return;
+
+  entry.title = "2GIS Maps ~ Kazakhstan geocoding, routing & POI";
+  entry.provider = "2GIS";
+  entry.source = "2GIS";
+  entry.sourceUrl = "https://platform.2gis.ru/";
+  entry.tier = "commercial";
+  entry.kind = "commercial";
+  entry.auth = "apiKey";
+  entry.authDetails = { scheme: "apiKey", type: "query", query: "key", credential: "API key" };
+  entry.docs = "https://dev.2gis.ru/kz/api/catalog";
+  entry.baseUrl = "https://catalog.api.2gis.com";
+  entry.endpoint =
+    "https://catalog.api.2gis.com/3.0/items?q=кафе&city_id=4504222397630173&page_size=10&key=YOUR_KEY";
+  entry.note =
+    "Mislabeled OneMap SG entry — repointed to 2GIS Kazakhstan. See also kz-2gis-* catalogue entries.";
+  entry.trust = commercialTrust("2GIS", "https://platform.2gis.ru/", "apiKey");
+  entry.setup = keySetup("https://dev.2gis.ru/kz/api/catalog", "https://platform.2gis.ru/");
+}
 
 function applyMisCataloguedFix(entry) {
   const fix = MIS_CATALOGUED_FIXES[entry.id];
@@ -38142,6 +38164,7 @@ export const APIS = [
   },
   ...YANDEX_APIS,
   ...YANDEX_ECOSYSTEM_APIS,
+  ...KZ_COMMERCIAL_APIS,
 ];
 
 // Attach generated snippets to copyable entries
@@ -38149,6 +38172,7 @@ for (const entry of APIS) {
   fixBrokenStatGovDatasetEndpoints(entry);
   fixBrokenStatGovLegacyGetDataEndpoints(entry);
   applyMisCataloguedFix(entry);
+  fixMislabeled2gisEntry(entry);
   if (entry.endpoint && entry.copyable !== false && entry.tier === "open" && entry.auth === "none") {
     Object.assign(entry, snippets(entry.endpoint));
     entry.copyable = true;
@@ -38174,8 +38198,8 @@ for (const entry of KZ_APIS) {
 }
 
 export const CATALOGUE_META = {
-  updated: "2026-08-22T20:00:00.000Z",
-  version: "2026-08-22",
+  updated: "2026-08-24T03:10:00.000Z",
+  version: "2026-08-24",
   source: "khazakapi-local",
   total: KZ_APIS.length,
 };
