@@ -77,7 +77,6 @@ export default function HomePage() {
       )} */}
 
       <section className="mb-8">
-        <div className="bento-label-plate mb-3">KHAZAK API · 2026</div>
         <h1 className="hero-title">every Kazakhstan API you need</h1>
         <p className="mt-3 max-w-2xl text-[var(--text-soft)]">
           Astana · Almaty · Shymkent · +7 — government open data, Kaspi, 2GIS, NBK KZT rates, eGov, and local
