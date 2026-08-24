@@ -37,6 +37,24 @@ export async function fetchCatalogue() {
   return res.json();
 }
 
+export async function fetchCatalog() {
+  const res = await fetch("/api/catalog");
+  if (!res.ok) throw new Error("Catalog failed");
+  return res.json();
+}
+
+export async function fetchCategory(slug) {
+  const res = await fetch(`/api/catalog/${encodeURIComponent(slug)}`);
+  if (!res.ok) throw new Error("Category not found");
+  return res.json();
+}
+
+export async function fetchCompanyHub(categorySlug, companySlug) {
+  const res = await fetch(`/api/catalog/${encodeURIComponent(categorySlug)}/${encodeURIComponent(companySlug)}`);
+  if (!res.ok) throw new Error("Company hub not found");
+  return res.json();
+}
+
 export async function fetchServices() {
   const res = await fetch("/api/services");
   if (!res.ok) throw new Error("Services failed");

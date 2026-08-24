@@ -33,8 +33,12 @@ export default function ApiDetailPage() {
     return <div className="container-main py-10 font-mono text-sm text-[var(--text-soft)]">Loading…</div>;
   }
 
-  if (api.serviceHub && api.serviceSlug) {
-    return <Navigate to={`/services/${api.serviceSlug}/${api.slug || api.id}`} replace />;
+  if (api.hubPath) {
+    return <Navigate to={api.hubPath} replace />;
+  }
+
+  if (api.companyHub && api.categorySlug && api.companySlug) {
+    return <Navigate to={`/browse/${api.categorySlug}/${api.companySlug}/${api.slug || api.id}`} replace />;
   }
 
   return (

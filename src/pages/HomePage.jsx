@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { fetchSearch, fetchServices } from "../lib/api.js";
+import { fetchCatalog, fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
-import ServiceBrowseStrip from "../components/ServiceBrowseStrip.jsx";
+import CatalogBrowseStrip from "../components/CatalogBrowseStrip.jsx";
 
 export default function HomePage() {
   const [query, setQuery] = useState("");
@@ -12,7 +12,7 @@ export default function HomePage() {
   const [auth, setAuth] = useState("");
   const [pricing, setPricing] = useState("");
   const [data, setData] = useState(null);
-  const [services, setServices] = useState(null);
+  const [catalog, setCatalog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bannerDismissed, setBannerDismissed] = useState(false);
 
@@ -22,8 +22,8 @@ export default function HomePage() {
   }, [query]);
 
   useEffect(() => {
-    fetchServices()
-      .then((res) => setServices(res.services))
+    fetchCatalog()
+      .then((res) => setCatalog(res.categories))
       .catch(console.error);
   }, []);
 
@@ -104,7 +104,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {!isSearching && services && <ServiceBrowseStrip services={services} />}
+      {!isSearching && catalog && <CatalogBrowseStrip categories={catalog} />}
 
       <div className="catalogue-layout">
         <CategorySidebar

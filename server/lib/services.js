@@ -6,6 +6,10 @@ function slugify(text = "") {
     .slice(0, 64);
 }
 
+export function categorySlug(category = "General") {
+  return slugify(category) || "general";
+}
+
 const YANDEX_FAMILIES = [
   { test: (id) => id.startsWith("yandex-cloud-"), slug: "yandex-cloud", name: "Yandex Cloud" },
   { test: (id) => id.startsWith("yandex-metrica") || id === "yandex-appmetrica", slug: "yandex-metrica", name: "Yandex Metrica" },
@@ -80,7 +84,64 @@ const YANDEX_FAMILIES = [
   { test: (id) => id.startsWith("yandex-"), slug: "yandex-platform", name: "Yandex Platform" },
 ];
 
-export function resolveService(api) {
+const PROVIDER_PREFIXES = [
+  "Yandex",
+  "2GIS",
+  "Kaspi.kz",
+  "Kaspi",
+  "NPCK",
+  "Wolt",
+  "Glovo",
+  "Wildberries",
+  "Ozon",
+  "CDEK",
+  "SIGEX",
+  "eGov",
+  "Halyk",
+  "Freedom Pay",
+  "ForteBank",
+  "Bereke Bank",
+  "Paybox",
+  "Wooppay",
+  "Air Astana",
+  "FlyArystan",
+  "SCAT Airlines",
+  "Aviata.kz",
+  "Kcell",
+  "Beeline",
+  "Tele2",
+];
+
+function stripProviderPrefix(text = "") {
+  let head = text.trim();
+  for (const prefix of PROVIDER_PREFIXES) {
+    const re = new RegExp(`^${prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s+`, "i");
+    if (re.test(head)) {
+      head = head.replace(re, "").trim();
+      break;
+    }
+  }
+  return head;
+}
+
+function titleCase(text = "") {
+  return text
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function companyFromProvider(provider = "Other") {
+  return {
+    slug: slugify(provider) || "other",
+    name: provider,
+    provider,
+    brand: provider,
+  };
+}
+
+export function resolveCompany(api) {
   const id = api.id || api.slug || "";
 
   for (const family of YANDEX_FAMILIES) {
@@ -137,8 +198,12 @@ export function resolveService(api) {
     return { slug: "npck", name: "NPCK · Open Banking", provider: "NPCK", brand: "NPCK" };
   }
 
-  if (id.startsWith("kz-sigex-") || id.startsWith("kz-egov-mobile-") || api.provider === "SIGEX") {
-    return { slug: "sigex-egov", name: "SIGEX & eGov Identity", provider: api.provider, brand: "SIGEX" };
+  if (id.startsWith("kz-sigex-") || api.provider === "SIGEX") {
+    return { slug: "sigex", name: "SIGEX", provider: "SIGEX", brand: "SIGEX" };
+  }
+
+  if (id.startsWith("kz-egov-mobile-")) {
+    return { slug: "egov-mobile-id", name: "eGov Mobile ID", provider: "eGov", brand: "eGov" };
   }
 
   if (id.startsWith("kz-esf-") || api.provider === "KGD") {
@@ -146,70 +211,70 @@ export function resolveService(api) {
   }
 
   if (id.startsWith("kz-wolt-") || api.provider === "Wolt") {
-    return { slug: "wolt-kz", name: "Wolt", provider: "Wolt", brand: "Wolt" };
+    return { slug: "wolt", name: "Wolt", provider: "Wolt", brand: "Wolt" };
   }
 
   if (id.startsWith("kz-glovo-") || api.provider === "Glovo") {
-    return { slug: "glovo-kz", name: "Glovo", provider: "Glovo", brand: "Glovo" };
+    return { slug: "glovo", name: "Glovo", provider: "Glovo", brand: "Glovo" };
   }
 
-  if (
-    id.startsWith("kz-chocofood-") ||
-    id.startsWith("kz-arbuz-") ||
-    api.provider === "Chocofamily"
-  ) {
+  if (id.startsWith("kz-chocofood-") || id.startsWith("kz-arbuz-") || api.provider === "Chocofamily") {
     return { slug: "chocofamily", name: "Chocofamily", provider: "Chocofamily", brand: "Chocofamily" };
   }
 
   if (id.startsWith("kz-wildberries-") || api.provider === "Wildberries") {
-    return { slug: "wildberries-kz", name: "Wildberries", provider: "Wildberries", brand: "Wildberries" };
+    return { slug: "wildberries", name: "Wildberries", provider: "Wildberries", brand: "Wildberries" };
   }
 
   if (id.startsWith("kz-ozon-") || api.provider === "Ozon") {
-    return { slug: "ozon-kz", name: "Ozon", provider: "Ozon", brand: "Ozon" };
+    return { slug: "ozon", name: "Ozon", provider: "Ozon", brand: "Ozon" };
   }
 
   if (id.startsWith("kz-cdek-") || api.provider === "CDEK") {
-    return { slug: "cdek-kz", name: "CDEK", provider: "CDEK", brand: "CDEK" };
+    return { slug: "cdek", name: "CDEK", provider: "CDEK", brand: "CDEK" };
   }
 
-  if (
-    id.startsWith("kz-paybot-") ||
-    id.startsWith("kz-apipay-") ||
-    id.startsWith("kz-asiapay-") ||
-    id.startsWith("kz-qiwi-") ||
-    api.provider === "PayBot.kz" ||
-    api.provider === "ApiPay.kz" ||
-    api.provider === "AsiaPay" ||
-    api.provider === "Qiwi Kazakhstan"
-  ) {
-    return { slug: "payment-aggregators-kz", name: "Payment Aggregators (KZ)", provider: api.provider, brand: api.provider };
+  if (id.startsWith("kz-paybot-") || api.provider === "PayBot.kz") {
+    return companyFromProvider("PayBot.kz");
   }
 
-  if (id.startsWith("kz-ps-cloud-") || id.startsWith("kz-beeline-cloud") || api.provider === "PS Cloud") {
-    return { slug: "cloud-kz", name: "Cloud & Infrastructure (KZ)", provider: api.provider, brand: api.provider };
+  if (id.startsWith("kz-apipay-") || api.provider === "ApiPay.kz") {
+    return companyFromProvider("ApiPay.kz");
   }
 
-  if (
-    id.startsWith("kz-eurasian-") ||
-    id.startsWith("kz-rbk-") ||
-    id.startsWith("kz-homebank-") ||
-    api.provider === "Eurasian Bank" ||
-    api.provider === "Bank RBK" ||
-    (api.provider === "Halyk Bank" && api.tier === "commercial")
-  ) {
-    return { slug: "banks-kz", name: "Banks & Acquiring (KZ)", provider: api.provider, brand: api.provider };
+  if (id.startsWith("kz-asiapay-") || api.provider === "AsiaPay") {
+    return companyFromProvider("AsiaPay");
+  }
+
+  if (id.startsWith("kz-qiwi-") || api.provider === "Qiwi Kazakhstan") {
+    return companyFromProvider("Qiwi Kazakhstan");
+  }
+
+  if (id.startsWith("kz-ps-cloud-") || api.provider === "PS Cloud") {
+    return companyFromProvider("PS Cloud");
+  }
+
+  if (id.startsWith("kz-beeline-cloud")) {
+    return companyFromProvider("Beeline Cloud");
+  }
+
+  if (id.startsWith("kz-eurasian-") || api.provider === "Eurasian Bank") {
+    return companyFromProvider("Eurasian Bank");
+  }
+
+  if (id.startsWith("kz-rbk-") || api.provider === "Bank RBK") {
+    return companyFromProvider("Bank RBK");
+  }
+
+  if (id.startsWith("kz-homebank-") || (api.provider === "Halyk Bank" && api.tier === "commercial")) {
+    return companyFromProvider("Halyk Bank");
   }
 
   if (id.startsWith("kz-freedompay-") || api.provider === "Freedom Pay KZ") {
     return { slug: "freedompay-kz", name: "Freedom Pay KZ", provider: "Freedom Pay KZ", brand: "Freedom Pay" };
   }
 
-  if (
-    id.startsWith("kz-halyk-epay-") ||
-    api.provider === "Halyk ePay" ||
-    api.provider === "Halyk Bank ePay"
-  ) {
+  if (id.startsWith("kz-halyk-epay-") || api.provider === "Halyk ePay" || api.provider === "Halyk Bank ePay") {
     return { slug: "halyk-epay", name: "Halyk ePay", provider: "Halyk ePay", brand: "Halyk Bank" };
   }
 
@@ -241,41 +306,49 @@ export function resolveService(api) {
     return { slug: "kazpost", name: "Kazpost", provider: "Kazpost", brand: "Kazpost" };
   }
 
-  if (
-    id.startsWith("kz-ttn-") ||
-    id.startsWith("kz-air-astana-") ||
-    id.startsWith("kz-flyarystan-") ||
-    id.startsWith("kz-scat-") ||
-    id.startsWith("kz-aviata-") ||
-    id.startsWith("kz-ktz-") ||
-    id.startsWith("kz-indriver-") ||
-    api.provider === "Tickets.kz" ||
-    api.provider === "Air Astana" ||
-    api.provider === "FlyArystan" ||
-    api.provider === "SCAT Airlines" ||
-    api.provider === "Aviata.kz" ||
-    api.provider === "KTZ" ||
-    api.provider === "inDriver"
-  ) {
-    return { slug: "travel-kz", name: "Travel & Mobility (KZ)", provider: api.provider, brand: api.provider };
+  if (id.startsWith("kz-air-astana-") || api.provider === "Air Astana") {
+    return companyFromProvider("Air Astana");
   }
 
-  if (
-    id.startsWith("kz-kcell-") ||
-    id.startsWith("kz-beeline-") ||
-    id.startsWith("kz-tele2-") ||
-    api.provider === "Kcell" ||
-    api.provider === "Beeline Kazakhstan" ||
-    api.provider === "Tele2 Kazakhstan"
-  ) {
-    return { slug: "telecom-kz", name: "Telecom & SMS (KZ)", provider: api.provider, brand: api.provider };
+  if (id.startsWith("kz-flyarystan-") || api.provider === "FlyArystan") {
+    return companyFromProvider("FlyArystan");
+  }
+
+  if (id.startsWith("kz-scat-") || api.provider === "SCAT Airlines") {
+    return companyFromProvider("SCAT Airlines");
+  }
+
+  if (id.startsWith("kz-aviata-") || api.provider === "Aviata.kz") {
+    return companyFromProvider("Aviata.kz");
+  }
+
+  if (id.startsWith("kz-ktz-") || api.provider === "KTZ") {
+    return companyFromProvider("KTZ");
+  }
+
+  if (id.startsWith("kz-indriver-") || api.provider === "inDriver") {
+    return companyFromProvider("inDriver");
+  }
+
+  if (id.startsWith("kz-ttn-") || api.provider === "Tickets.kz") {
+    return companyFromProvider("Tickets.kz");
+  }
+
+  if (id.startsWith("kz-kcell-") || api.provider === "Kcell") {
+    return companyFromProvider("Kcell");
+  }
+
+  if (id.startsWith("kz-beeline-") || api.provider === "Beeline Kazakhstan") {
+    return companyFromProvider("Beeline Kazakhstan");
+  }
+
+  if (id.startsWith("kz-tele2-") || api.provider === "Tele2 Kazakhstan") {
+    return companyFromProvider("Tele2 Kazakhstan");
   }
 
   if (id.startsWith("kz-aladhan-") || api.provider === "Aladhan") {
     return { slug: "aladhan", name: "Aladhan", provider: "Aladhan", brand: "Aladhan" };
   }
-
-  // kz-indriver handled in travel-kz group above
 
   const slug = slugify(api.provider || api.source || id);
   return {
@@ -284,6 +357,88 @@ export function resolveService(api) {
     provider: api.provider || api.source || "Other",
     brand: api.provider || api.source || "API",
   };
+}
+
+/** @deprecated use resolveCompany */
+export const resolveService = resolveCompany;
+
+export function resolveApiType(api) {
+  const title = api.title || api.id || "";
+  const parts = title.split("~");
+
+  if (parts.length >= 2) {
+    const name = stripProviderPrefix(parts[0]);
+    return { slug: slugify(name) || "general", name: name || "General" };
+  }
+
+  const id = api.id || "";
+  if (id.startsWith("kz-")) {
+    const rest = id.replace(/^kz-/, "");
+    const segments = rest.split("-");
+    const knownRoots = new Set([
+      "2gis",
+      "npck",
+      "sigex",
+      "egov",
+      "esf",
+      "wolt",
+      "glovo",
+      "wildberries",
+      "ozon",
+      "cdek",
+      "paybot",
+      "apipay",
+      "asiapay",
+      "qiwi",
+      "ps",
+      "beeline",
+      "eurasian",
+      "rbk",
+      "homebank",
+      "freedompay",
+      "halyk",
+      "bereke",
+      "fortebank",
+      "woop",
+      "paybox",
+      "alatau",
+      "kaspi",
+      "kazpost",
+      "air",
+      "flyarystan",
+      "scat",
+      "aviata",
+      "ktz",
+      "indriver",
+      "ttn",
+      "kcell",
+      "tele2",
+      "chocofood",
+      "arbuz",
+      "aladhan",
+    ]);
+    let start = 0;
+    if (segments[0] === "ps" && segments[1] === "cloud") start = 2;
+    else if (segments[0] === "air" && segments[1] === "astana") start = 2;
+    else if (segments[0] === "egov" && segments[1] === "mobile") start = 2;
+    else if (knownRoots.has(segments[0])) start = 1;
+    const product = segments.slice(start).join(" ");
+    const name = product ? titleCase(product) : stripProviderPrefix(parts[0]) || "General";
+    return { slug: slugify(name) || "general", name };
+  }
+
+  if (id.startsWith("yandex-")) {
+    const fromTitle = stripProviderPrefix(parts[0]);
+    if (fromTitle && fromTitle !== title.trim()) {
+      return { slug: slugify(fromTitle) || "general", name: fromTitle };
+    }
+    const product = id.replace(/^yandex-/, "").replace(/-/g, " ");
+    const name = titleCase(product);
+    return { slug: slugify(name) || "general", name };
+  }
+
+  const head = stripProviderPrefix(parts[0]) || "General";
+  return { slug: slugify(head) || "general", name: head };
 }
 
 export function endpointLabel(api) {
@@ -308,27 +463,164 @@ function publicEndpoint(api) {
     label: endpointLabel(api),
     method: endpointMethod(api),
     category: api.category,
+    apiType: api.apiType,
     auth: api.auth,
     copyable: api.copyable,
   };
 }
 
+function hubKey(category, companySlug) {
+  return `${categorySlug(category)}::${companySlug}`;
+}
+
+export function buildCatalogIndex(apis) {
+  const categories = new Map();
+
+  for (const api of apis) {
+    const category = api.category || "General";
+    const catSlug = categorySlug(category);
+    const company = resolveCompany(api);
+    const apiType = resolveApiType(api);
+
+    if (!categories.has(catSlug)) {
+      categories.set(catSlug, {
+        slug: catSlug,
+        name: category,
+        count: 0,
+        companies: new Map(),
+        typeCount: new Set(),
+      });
+    }
+
+    const row = categories.get(catSlug);
+    row.count += 1;
+    row.typeCount.add(apiType.slug);
+
+    if (!row.companies.has(company.slug)) {
+      row.companies.set(company.slug, {
+        slug: company.slug,
+        name: company.name,
+        provider: company.provider,
+        brand: company.brand,
+        count: 0,
+        typeCount: new Set(),
+      });
+    }
+
+    const companyRow = row.companies.get(company.slug);
+    companyRow.count += 1;
+    companyRow.typeCount.add(apiType.slug);
+  }
+
+  return [...categories.values()]
+    .map((cat) => ({
+      slug: cat.slug,
+      name: cat.name,
+      count: cat.count,
+      companyCount: cat.companies.size,
+      typeCount: cat.typeCount.size,
+      companies: [...cat.companies.values()]
+        .map((company) => ({
+          slug: company.slug,
+          name: company.name,
+          provider: company.provider,
+          brand: company.brand,
+          count: company.count,
+          typeCount: company.typeCount.size,
+        }))
+        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name)),
+    }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+}
+
+export function buildCategoryCompanies(apis, catSlug) {
+  const index = buildCatalogIndex(apis);
+  return index.find((c) => c.slug === catSlug) || null;
+}
+
+export function buildCompanyHub(apis, catSlug, companySlug) {
+  const members = apis.filter((api) => {
+    const category = api.category || "General";
+    return categorySlug(category) === catSlug && resolveCompany(api).slug === companySlug;
+  });
+
+  if (!members.length) return null;
+
+  const categoryName = members[0].category || "General";
+  const company = resolveCompany(members[0]);
+  const groupsMap = new Map();
+
+  for (const api of members) {
+    const apiType = resolveApiType(api);
+    if (!groupsMap.has(apiType.slug)) {
+      groupsMap.set(apiType.slug, { slug: apiType.slug, name: apiType.name, count: 0, endpoints: [] });
+    }
+    const group = groupsMap.get(apiType.slug);
+    group.count += 1;
+    group.endpoints.push(publicEndpoint(api));
+  }
+
+  const groups = [...groupsMap.values()]
+    .map((g) => ({
+      ...g,
+      endpoints: g.endpoints.sort((a, b) => a.label.localeCompare(b.label)),
+    }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+  return {
+    category: {
+      slug: catSlug,
+      name: categoryName,
+    },
+    company: {
+      slug: company.slug,
+      name: company.name,
+      provider: company.provider,
+      brand: company.brand,
+    },
+    count: members.length,
+    groupCount: groups.length,
+    groups,
+  };
+}
+
+export function buildHubCounts(apis) {
+  const counts = new Map();
+  for (const api of apis) {
+    const company = resolveCompany(api);
+    const key = hubKey(api.category, company.slug);
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return counts;
+}
+
+export function findHubForApi(apis, apiId) {
+  const api = apis.find((a) => a.id === apiId || a.slug === apiId);
+  if (!api) return null;
+  const company = resolveCompany(api);
+  const catSlug = categorySlug(api.category);
+  const hub = buildCompanyHub(apis, catSlug, company.slug);
+  if (!hub || hub.count < 2) return null;
+  return { hub, apiId: api.id };
+}
+
+/** Legacy service index — grouped by company only (all categories merged). */
 export function buildServiceIndex(apis) {
   const map = new Map();
 
   for (const api of apis) {
-    const service = resolveService(api);
-    if (!map.has(service.slug)) {
-      map.set(service.slug, {
-        slug: service.slug,
-        name: service.name,
-        provider: service.provider,
-        brand: service.brand,
+    const company = resolveCompany(api);
+    if (!map.has(company.slug)) {
+      map.set(company.slug, {
+        slug: company.slug,
+        name: company.name,
+        provider: company.provider,
+        brand: company.brand,
         count: 0,
         categories: new Set(),
       });
     }
-    const row = map.get(service.slug);
+    const row = map.get(company.slug);
     row.count += 1;
     row.categories.add(api.category);
   }
@@ -345,46 +637,17 @@ export function buildServiceIndex(apis) {
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 }
 
+/** Legacy service tree — first category slice for a company slug. */
 export function buildServiceTree(apis, serviceSlug) {
-  const members = apis.filter((api) => resolveService(api).slug === serviceSlug);
+  const members = apis.filter((api) => resolveCompany(api).slug === serviceSlug);
   if (!members.length) return null;
 
-  const meta = resolveService(members[0]);
-  const groupsMap = new Map();
-
-  for (const api of members) {
-    const groupName = api.category || "General";
-    if (!groupsMap.has(groupName)) {
-      groupsMap.set(groupName, { name: groupName, count: 0, endpoints: [] });
-    }
-    const group = groupsMap.get(groupName);
-    group.count += 1;
-    group.endpoints.push(publicEndpoint(api));
-  }
-
-  const groups = [...groupsMap.values()]
-    .map((g) => ({
-      ...g,
-      endpoints: g.endpoints.sort((a, b) => a.label.localeCompare(b.label)),
-    }))
-    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
-
-  return {
-    slug: meta.slug,
-    name: meta.name,
-    provider: meta.provider,
-    brand: meta.brand,
-    count: members.length,
-    groupCount: groups.length,
-    groups,
-  };
+  const categories = [...new Set(members.map((a) => categorySlug(a.category)))];
+  return buildCompanyHub(apis, categories[0], serviceSlug);
 }
 
 export function findServiceForApi(apis, apiId) {
-  const api = apis.find((a) => a.id === apiId || a.slug === apiId);
-  if (!api) return null;
-  const service = resolveService(api);
-  const tree = buildServiceTree(apis, service.slug);
-  if (!tree || tree.count < 2) return null;
-  return { service: tree, apiId: api.id };
+  const match = findHubForApi(apis, apiId);
+  if (!match) return null;
+  return { service: match.hub, apiId: match.apiId };
 }

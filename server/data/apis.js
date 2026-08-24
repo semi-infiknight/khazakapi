@@ -9,7 +9,7 @@ import {
 import { YANDEX_APIS } from "./yandex-apis.js";
 import { YANDEX_ECOSYSTEM_APIS } from "./yandex-ecosystem-apis.js";
 import { KZ_COMMERCIAL_APIS } from "./kz-commercial-apis.js";
-import { resolveService } from "../lib/services.js";
+import { buildHubCounts, categorySlug, resolveApiType, resolveCompany } from "../lib/services.js";
 import { filterKzCatalogue } from "../lib/kzFilter.js";
 
 const today = "2026-07-24";
@@ -38185,16 +38185,27 @@ for (const entry of APIS) {
 
 export const KZ_APIS = filterKzCatalogue(APIS);
 
-const serviceCounts = new Map();
+const hubCounts = buildHubCounts(KZ_APIS);
 for (const entry of KZ_APIS) {
-  const { slug } = resolveService(entry);
-  serviceCounts.set(slug, (serviceCounts.get(slug) || 0) + 1);
-}
-for (const entry of KZ_APIS) {
-  const service = resolveService(entry);
-  entry.serviceSlug = service.slug;
-  entry.serviceName = service.name;
-  entry.serviceHub = serviceCounts.get(service.slug) > 1;
+  const company = resolveCompany(entry);
+  const apiType = resolveApiType(entry);
+  const catSlug = categorySlug(entry.category);
+  const hubKey = `${catSlug}::${company.slug}`;
+
+  entry.categorySlug = catSlug;
+  entry.companySlug = company.slug;
+  entry.companyName = company.name;
+  entry.apiType = apiType.name;
+  entry.apiTypeSlug = apiType.slug;
+  entry.companyHub = hubCounts.get(hubKey) > 1;
+  entry.hubPath = entry.companyHub
+    ? `/browse/${catSlug}/${company.slug}/${entry.slug || entry.id}`
+    : null;
+
+  // Legacy fields kept for redirects
+  entry.serviceSlug = company.slug;
+  entry.serviceName = company.name;
+  entry.serviceHub = entry.companyHub;
 }
 
 export const CATALOGUE_META = {

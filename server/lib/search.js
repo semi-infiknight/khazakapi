@@ -138,6 +138,13 @@ export function publicListEntry(entry) {
   const { endpoint, ...rest } = entry;
   return {
     ...rest,
+    categorySlug: entry.categorySlug,
+    companySlug: entry.companySlug,
+    companyName: entry.companyName,
+    apiType: entry.apiType,
+    apiTypeSlug: entry.apiTypeSlug,
+    companyHub: entry.companyHub,
+    hubPath: entry.hubPath,
     serviceSlug: entry.serviceSlug,
     serviceName: entry.serviceName,
     serviceHub: entry.serviceHub,

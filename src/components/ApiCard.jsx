@@ -31,9 +31,9 @@ function VerifiedIcon() {
 export default function ApiCard({ api }) {
   const verified = api.tier === "open" && api.copyable;
   const description = apiDescription(api);
-  const href = api.serviceHub
-    ? `/services/${api.serviceSlug}/${api.slug || api.id}`
-    : `/apis/${api.slug || api.id}`;
+  const href = api.hubPath || (api.companyHub && api.categorySlug && api.companySlug
+    ? `/browse/${api.categorySlug}/${api.companySlug}/${api.slug || api.id}`
+    : `/apis/${api.slug || api.id}`);
 
   return (
     <Link to={href} className="card api-card block">
@@ -53,7 +53,7 @@ export default function ApiCard({ api }) {
       </div>
 
       <div className="api-card-meta">
-        <span>{api.serviceHub ? api.serviceName || api.provider : `By ${api.provider}`}</span>
+        <span>{api.companyHub ? api.companyName || api.provider : `By ${api.provider}`}</span>
         <span>{updatedLabel(api.freshness, api.trust?.lastChecked)}</span>
       </div>
 

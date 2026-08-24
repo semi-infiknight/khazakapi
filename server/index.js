@@ -14,7 +14,15 @@ import { checkHealth } from "./lib/health.js";
 import { openApiToPostman } from "./lib/postman.js";
 import { validateDataEgovKey, DATA_EGOV_LINKS } from "./lib/egov.js";
 import { proxyRequest, resolveTryRequest } from "./lib/proxy.js";
-import { buildServiceIndex, buildServiceTree, findServiceForApi, resolveService } from "./lib/services.js";
+import {
+  buildCatalogIndex,
+  buildCategoryCompanies,
+  buildCompanyHub,
+  buildServiceIndex,
+  buildServiceTree,
+  categorySlug,
+  resolveCompany,
+} from "./lib/services.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -57,6 +65,36 @@ app.get("/api/categories", (_req, res) => {
   res.json({ count: listCategories(KZ_APIS).length, categories: listCategories(KZ_APIS) });
 });
 
+app.get("/api/catalog", (_req, res) => {
+  res.json({ count: buildCatalogIndex(KZ_APIS).length, categories: buildCatalogIndex(KZ_APIS) });
+});
+
+app.get("/api/catalog/:categorySlug", (req, res) => {
+  const category = buildCategoryCompanies(KZ_APIS, req.params.categorySlug);
+  if (!category) return res.status(404).json({ error: `no category '${req.params.categorySlug}'` });
+  res.json(category);
+});
+
+app.get("/api/catalog/:categorySlug/:companySlug", (req, res) => {
+  const hub = buildCompanyHub(KZ_APIS, req.params.categorySlug, req.params.companySlug);
+  if (!hub) {
+    return res.status(404).json({ error: `no company '${req.params.companySlug}' in '${req.params.categorySlug}'` });
+  }
+  res.json(hub);
+});
+
+app.get("/api/catalog/:categorySlug/:companySlug/endpoints/:id", (req, res) => {
+  const hub = buildCompanyHub(KZ_APIS, req.params.categorySlug, req.params.companySlug);
+  if (!hub) {
+    return res.status(404).json({ error: `no company '${req.params.companySlug}' in '${req.params.categorySlug}'` });
+  }
+  const entry = KZ_APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
+  if (!entry || resolveCompany(entry).slug !== req.params.companySlug || categorySlug(entry.category) !== req.params.categorySlug) {
+    return res.status(404).json({ error: `endpoint not in hub '${req.params.categorySlug}/${req.params.companySlug}'` });
+  }
+  res.json({ hub, endpoint: publicListEntry(entry) });
+});
+
 app.get("/api/services", (_req, res) => {
   res.json({ count: buildServiceIndex(KZ_APIS).length, services: buildServiceIndex(KZ_APIS) });
 });
@@ -71,7 +109,7 @@ app.get("/api/services/:slug/endpoints/:id", (req, res) => {
   const tree = buildServiceTree(KZ_APIS, req.params.slug);
   if (!tree) return res.status(404).json({ error: `no service '${req.params.slug}'` });
   const entry = KZ_APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
-  if (!entry || resolveService(entry).slug !== req.params.slug) {
+  if (!entry || resolveCompany(entry).slug !== req.params.slug) {
     return res.status(404).json({ error: `endpoint not in service '${req.params.slug}'` });
   }
   res.json({ service: tree, endpoint: publicListEntry(entry) });
