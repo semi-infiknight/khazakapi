@@ -1,6 +1,56 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { MCP_TOOLS, PLATFORMS, mcpConnectorUrl } from "../data/mcpSetup.js";
+import { PLATFORMS, mcpConnectorUrl } from "../data/mcpSetup.jsx";
+
+function IconCopy() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M10.5 5.5V4A1.5 1.5 0 0 0 9 2.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  );
+}
+
+function IconLink() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M6.5 3.5H3.5A1.5 1.5 0 0 0 2 5v7.5A1.5 1.5 0 0 0 3.5 14H11a1.5 1.5 0 0 0 1.5-1.5V9.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M9.5 2.5H13.5V6.5M13.5 2.5L7 9" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconClip() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M8.8 4.2 4.35 8.65a2.4 2.4 0 1 0 3.4 3.4l5.2-5.2a1.7 1.7 0 1 0-2.4-2.4l-5.15 5.15" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconCode() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M6 4.5 2.5 8 6 11.5M10 4.5 13.5 8 10 11.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconGithub() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.58c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+    </svg>
+  );
+}
+
+function KzBadge() {
+  return (
+    <span className="hf-badge" aria-hidden="true">
+      KZ
+    </span>
+  );
+}
 
 function CopyField({ value }) {
   const [copied, setCopied] = useState(false);
@@ -9,31 +59,23 @@ function CopyField({ value }) {
     try {
       await navigator.clipboard.writeText(value);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 1800);
     } catch {
       /* ignore */
     }
   };
 
   return (
-    <div className="mcp-copy-field">
-      <code className="mcp-copy-value">{value}</code>
-      <button type="button" className="mcp-copy-btn" onClick={copy} aria-label="Copy to clipboard">
-        {copied ? "✓" : "⧉"}
+    <div className="hf-copy">
+      <code className="hf-copy-url">{value}</code>
+      <button type="button" className="hf-copy-btn" onClick={copy} aria-label={copied ? "Copied" : "Copy URL"}>
+        {copied ? (
+          <span className="hf-copy-done">✓</span>
+        ) : (
+          <IconCopy />
+        )}
       </button>
     </div>
-  );
-}
-
-function StepCard({ number, title, children }) {
-  return (
-    <article className="mcp-step-card">
-      <div className="mcp-step-head">
-        <span className="mcp-step-num">{number}</span>
-        <h2 className="mcp-step-title">{title}</h2>
-      </div>
-      <div className="mcp-step-body">{children}</div>
-    </article>
   );
 }
 
@@ -41,137 +83,126 @@ export default function McpServerPage() {
   const [platformId, setPlatformId] = useState("claude");
   const [mode, setMode] = useState("mcp");
 
+  useEffect(() => {
+    document.body.classList.add("hf-mcp-on");
+    return () => document.body.classList.remove("hf-mcp-on");
+  }, []);
+
   const connectorUrl = useMemo(() => mcpConnectorUrl(window.location.origin), []);
   const platform = PLATFORMS.find((p) => p.id === platformId) || PLATFORMS[0];
   const config = platform[mode];
 
   return (
-    <div className="mcp-page container-main pb-20 pt-8">
-      <div className="mcp-page-top">
-        <div>
-          <Link to="/" className="font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)]">
-            ← back to directory
-          </Link>
-          <h1 className="mcp-page-title">MCP server</h1>
-          <p className="mcp-page-lede">
-            Connect Khazak API to your AI assistant — search 688 Kazakhstan APIs, fetch entries, and list categories
-            from Claude, Cursor, ChatGPT, and more.
-          </p>
-        </div>
+    <div className="hf-mcp">
+      <div className="hf-mcp-frame">
+        <div className="hf-mcp-bar">
+          <div className="hf-mcp-tabs" role="tablist" aria-label="AI platform">
+            {PLATFORMS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                role="tab"
+                aria-selected={platformId === p.id}
+                className={`hf-tab ${platformId === p.id ? "hf-tab-on" : ""}`}
+                onClick={() => setPlatformId(p.id)}
+              >
+                <span className="hf-tab-icon" aria-hidden="true">
+                  {p.icon}
+                </span>
+                {p.label}
+              </button>
+            ))}
+          </div>
 
-        <div className="mcp-mode-toggle" role="tablist" aria-label="Setup mode">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === "mcp"}
-            className={`mcp-mode-btn ${mode === "mcp" ? "mcp-mode-btn-active" : ""}`}
-            onClick={() => setMode("mcp")}
-          >
-            <span aria-hidden="true">🔗</span> MCP
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === "cli"}
-            className={`mcp-mode-btn ${mode === "cli" ? "mcp-mode-btn-active" : ""}`}
-            onClick={() => setMode("cli")}
-          >
-            <span aria-hidden="true">&lt;/&gt;</span> CLI
-          </button>
-        </div>
-      </div>
-
-      <div className="mcp-platform-tabs" role="tablist" aria-label="AI platform">
-        {PLATFORMS.map((p) => (
-          <button
-            key={p.id}
-            type="button"
-            role="tab"
-            aria-selected={platformId === p.id}
-            className={`mcp-platform-tab ${platformId === p.id ? "mcp-platform-tab-active" : ""}`}
-            onClick={() => setPlatformId(p.id)}
-          >
-            {p.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="mcp-steps-grid">
-        <StepCard number="1" title={mode === "mcp" ? "Copy the Khazak API connector URL" : "Copy the connector URL or CLI snippet"}>
-          <p className="mcp-step-desc">
-            {mode === "mcp"
-              ? "You'll paste this URL into your assistant's MCP connector settings in the next step."
-              : "Use the URL in config files or the snippet below for CLI-based MCP setup."}
-          </p>
-          <CopyField value={connectorUrl} />
-          {mode === "cli" && config.step2Snippet && (
-            <div className="mt-4">
-              <p className="mcp-step-desc mb-2">CLI config snippet</p>
-              <CopyField value={config.step2Snippet(connectorUrl)} />
-            </div>
-          )}
-        </StepCard>
-
-        <StepCard number="2" title={config.step2Title}>
-          <p className="mcp-step-desc">{config.step2Body}</p>
-          {config.step2Action && (
-            <a
-              href={config.step2Action.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mcp-link-btn"
+          <div className="hf-mode" role="tablist" aria-label="Setup mode">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === "mcp"}
+              className={`hf-mode-btn ${mode === "mcp" ? "hf-mode-on" : ""}`}
+              onClick={() => setMode("mcp")}
             >
-              {config.step2Action.label} ↗
-            </a>
-          )}
-        </StepCard>
+              <IconClip /> MCP
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === "cli"}
+              className={`hf-mode-btn ${mode === "cli" ? "hf-mode-on" : ""}`}
+              onClick={() => setMode("cli")}
+            >
+              <IconCode /> CLI
+            </button>
+          </div>
+        </div>
 
-        <StepCard number="3" title="Connect, sign in and start">
-          <p className="mcp-step-desc">{config.step3Body}</p>
-          {config.cta && (
-            <a href={config.cta.href} target="_blank" rel="noopener noreferrer" className="mcp-cta-btn">
-              {config.cta.label}
-            </a>
-          )}
-        </StepCard>
+        <div className="hf-panel">
+          <section className="hf-col">
+            <span className="hf-num">1</span>
+            <h2 className="hf-col-title">
+              Copy the <KzBadge /> <strong>Khazak connector URL</strong>
+            </h2>
+            <p className="hf-col-copy">You’ll paste this URL into {platform.label} in the next step</p>
+            <div className="hf-col-action">
+              <CopyField value={mode === "cli" && config.command ? config.command(connectorUrl) : connectorUrl} />
+            </div>
+          </section>
+
+          <section className="hf-col">
+            <span className="hf-num">2</span>
+            <h2 className="hf-col-title">
+              <strong>{config.step2Title}</strong>
+            </h2>
+            <p className="hf-col-copy">{config.step2Body}</p>
+            <div className="hf-col-action">
+              {config.step2Href && (
+                <a href={config.step2Href} target="_blank" rel="noopener noreferrer" className="hf-ghost">
+                  <IconLink /> {config.step2Cta}
+                </a>
+              )}
+            </div>
+          </section>
+
+          <section className="hf-col">
+            <span className="hf-num">3</span>
+            <h2 className="hf-col-title">
+              <strong>{config.step3Title}</strong>
+            </h2>
+            <p className="hf-col-copy">{config.step3Body}</p>
+            <div className="hf-col-action">
+              {config.startHref && (
+                <a href={config.startHref} target="_blank" rel="noopener noreferrer" className="hf-start">
+                  <span className="hf-start-icon" aria-hidden="true">
+                    {platform.icon}
+                  </span>
+                  {config.startCta}
+                </a>
+              )}
+            </div>
+          </section>
+        </div>
+
+        <div className="hf-foot">
+          <p>
+            If you are using Claude Code or Codex, it’s better to use the{" "}
+            <button type="button" className="hf-foot-cli" onClick={() => setMode("cli")}>
+              CLI <IconLink />
+            </button>
+          </p>
+          <a
+            href="https://github.com/semi-infiknight/khazakapi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hf-git"
+          >
+            <IconGithub /> GitHub
+          </a>
+        </div>
+
+        <Link to="/" className="hf-back">
+          ← Khazak directory
+        </Link>
       </div>
-
-      <section className="mcp-tools panel mt-8 p-5">
-        <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]">Available tools</h2>
-        <ul className="mcp-tools-list mt-3">
-          {MCP_TOOLS.map((tool) => (
-            <li key={tool.name} className="mcp-tools-item">
-              <code className="mcp-tools-name">{tool.name}</code>
-              <span className="mcp-tools-desc">{tool.description}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-4 text-sm text-[var(--text-soft)]">
-          Endpoint metadata:{" "}
-          <a href="/api/mcp" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] underline">
-            GET /api/mcp
-          </a>{" "}
-          · Connector URL for MCP clients:{" "}
-          <code className="text-[var(--text-soft)]">{connectorUrl}</code>
-        </p>
-      </section>
-
-      <footer className="mcp-page-foot">
-        <p className="text-sm text-[var(--text-mute)]">
-          Using Claude Code, Cursor CLI, or Codex?{" "}
-          <button type="button" className="mcp-inline-link" onClick={() => setMode("cli")}>
-            Switch to CLI setup
-          </button>
-        </p>
-        <a
-          href="https://github.com/semi-infiknight/khazakapi"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mcp-github-link"
-        >
-          GitHub ↗
-        </a>
-      </footer>
     </div>
   );
 }
