@@ -64,8 +64,8 @@ export default function Header({ onMenuToggle, menuOpen }) {
           <a href="/api/catalogue" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
             REST catalogue
           </a>
-          <a href="/mcp" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
-            MCP endpoint JSON
+          <a href="/api/mcp" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
+            MCP JSON (/api/mcp)
           </a>
           <button type="button" className="block w-full px-2 py-3 text-left font-mono text-sm sm:hidden" onClick={toggle}>
             Theme: {theme === "dark" ? "Light" : "Dark"}

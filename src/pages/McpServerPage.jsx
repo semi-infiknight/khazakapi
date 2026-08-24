@@ -148,13 +148,11 @@ export default function McpServerPage() {
         </ul>
         <p className="mt-4 text-sm text-[var(--text-soft)]">
           Endpoint metadata:{" "}
-          <a href="/mcp" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] underline">
-            GET /mcp
+          <a href="/api/mcp" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] underline">
+            GET /api/mcp
           </a>{" "}
-          · REST fallback:{" "}
-          <a href="/api/search?q=NBK" className="text-[var(--accent)] underline">
-            /api/search
-          </a>
+          · Connector URL for MCP clients:{" "}
+          <code className="text-[var(--text-soft)]">{connectorUrl}</code>
         </p>
       </section>
 

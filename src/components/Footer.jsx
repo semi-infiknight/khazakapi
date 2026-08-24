@@ -24,8 +24,8 @@ export default function Footer() {
           <Link to="/setup/mcp" className="foot-link">
             MCP server setup
           </Link>
-          <a href="/mcp" className="foot-link">
-            /mcp
+          <a href="/api/mcp" className="foot-link">
+            /api/mcp
           </a>
         </div>
       </div>

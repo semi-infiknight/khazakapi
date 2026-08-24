@@ -187,19 +187,35 @@ app.get("/api-docs", (_req, res) => {
   res.redirect(301, "/api-docs.html");
 });
 
-// MCP stub — documents-compatible response
-app.get("/mcp", (_req, res) => {
-  res.json({
+function mcpManifest(req) {
+  const base = publicBaseUrl(req).replace(/\/$/, "");
+  return {
     name: "khazak-api",
     version: "1.0.0",
-    description: "Remote MCP server for Kazakhstan APIs (Streamable HTTP stub for local dev).",
+    description: "Remote MCP server for Kazakhstan APIs (Streamable HTTP).",
     tools: [
       { name: "search_kz_apis", description: "Search Khazak API catalogue" },
       { name: "get_kz_api", description: "Get one API by id" },
       { name: "list_api_categories", description: "List categories with counts" },
     ],
-    url: "/mcp",
-  });
+    url: `${base}/mcp`,
+  };
+}
+
+app.get("/api/mcp", (req, res) => {
+  res.json(mcpManifest(req));
+});
+
+// MCP endpoint — JSON for connectors; browsers go to the setup UI
+app.get("/mcp", (req, res) => {
+  const accept = req.get("accept") || "";
+  if (req.query.json === "1" || req.query.format === "json") {
+    return res.json(mcpManifest(req));
+  }
+  if (accept.includes("text/html")) {
+    return res.redirect(302, "/setup/mcp");
+  }
+  res.json(mcpManifest(req));
 });
 
 app.get("/health", (_req, res) => {
