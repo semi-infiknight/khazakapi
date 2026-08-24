@@ -1,0 +1,16 @@
+---
+description: Git workflow — commit and push directly to main
+alwaysApply: true
+---
+
+# Push directly to main
+
+When implementing changes for this repository:
+
+1. **Work on `main`** — do not create feature branches unless the user explicitly asks for one.
+2. **Commit on `main`** with clear, descriptive commit messages.
+3. **Push to `origin main`** after each logical chunk of work (`git push origin main`).
+4. Do not open draft PRs or wait for PR approval unless the user explicitly requests a PR workflow.
+5. If currently on another branch, merge or checkout `main` first, then commit and push there.
+
+Retry push on transient network errors (up to 4 times with exponential backoff).

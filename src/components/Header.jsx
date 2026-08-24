@@ -16,6 +16,9 @@ export default function Header({ onMenuToggle, menuOpen }) {
           <button type="button" className="btn-metal hidden sm:inline-flex" onClick={toggle} aria-label="Toggle theme">
             {theme === "dark" ? "Light" : "Dark"}
           </button>
+          <Link to="/setup/mcp" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
+            MCP server
+          </Link>
           <Link to="/setup/data-egov-key" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
             data.egov key
           </Link>
@@ -46,6 +49,9 @@ export default function Header({ onMenuToggle, menuOpen }) {
           <Link to="/" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
             Directory
           </Link>
+          <Link to="/setup/mcp" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
+            MCP server setup
+          </Link>
           <Link to="/setup/data-egov-key" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
             data.egov key setup
           </Link>
@@ -59,7 +65,7 @@ export default function Header({ onMenuToggle, menuOpen }) {
             REST catalogue
           </a>
           <a href="/mcp" className="block px-2 py-3 font-mono text-sm" onClick={onMenuToggle}>
-            MCP server
+            MCP endpoint JSON
           </a>
           <button type="button" className="block w-full px-2 py-3 text-left font-mono text-sm sm:hidden" onClick={toggle}>
             Theme: {theme === "dark" ? "Light" : "Dark"}
