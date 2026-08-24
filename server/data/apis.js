@@ -9,6 +9,7 @@ import {
 import { YANDEX_APIS } from "./yandex-apis.js";
 import { YANDEX_ECOSYSTEM_APIS } from "./yandex-ecosystem-apis.js";
 import { resolveService } from "../lib/services.js";
+import { filterKzCatalogue } from "../lib/kzFilter.js";
 
 const today = "2026-07-24";
 const DATA_EGOV_KEY_URL = "https://data.egov.kz/profile/apikeylist";
@@ -38158,7 +38159,7 @@ for (const entry of APIS) {
   entry.note = entry.note ?? null;
 }
 
-export const KZ_APIS = APIS.filter((entry) => (entry.country || []).includes("KZ"));
+export const KZ_APIS = filterKzCatalogue(APIS);
 
 const serviceCounts = new Map();
 for (const entry of KZ_APIS) {

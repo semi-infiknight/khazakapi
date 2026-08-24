@@ -41,7 +41,7 @@ function matchesFilters(entry, filters) {
   if (filters.auth && entry.auth !== filters.auth) return false;
   if (filters.country) {
     const countries = entry.country || [];
-    if (!countries.includes(filters.country) && !(filters.country === "KZ" && countries.includes("global"))) {
+    if (!countries.includes(filters.country)) {
       if (filters.country !== "global" || !countries.includes("global")) return false;
     }
     if (filters.country === "global" && !countries.includes("global")) return false;
