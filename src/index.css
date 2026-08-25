@@ -104,20 +104,26 @@ a {
 
 .hero-banner {
   position: relative;
-  width: 100%;
-  aspect-ratio: 400 / 267;
-  max-height: min(320px, 52vw);
-  min-height: 180px;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  height: clamp(320px, 62vh, 640px);
+  overflow: hidden;
+  margin-bottom: 2rem;
 }
 
 .hero-banner-art {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-38%);
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 132vw;
+  min-width: 720px;
+  max-width: none;
+  height: auto;
   object-fit: contain;
-  object-position: right center;
+  object-position: center bottom;
   pointer-events: none;
   user-select: none;
 }
@@ -125,10 +131,10 @@ a {
 .hero-banner-title {
   position: absolute;
   z-index: 1;
-  left: 0;
-  top: 50%;
+  left: max(1rem, calc(50% - 36rem));
+  top: 42%;
   transform: translateY(-50%);
-  max-width: min(13ch, 48%);
+  max-width: min(13ch, 42vw);
   margin: 0;
 }
 
@@ -535,12 +541,19 @@ nav a:hover {
   }
 
   .hero-banner {
-    max-height: none;
-    min-height: 160px;
+    height: clamp(260px, 52vh, 420px);
+  }
+
+  .hero-banner-art {
+    width: 155vw;
+    min-width: 0;
+    transform: translateX(-40%);
   }
 
   .hero-banner-title {
-    max-width: min(13ch, 54%);
+    left: max(0.75rem, calc(50% - 50vw + 1rem));
+    top: 38%;
+    max-width: min(13ch, 52vw);
     font-size: 2rem;
   }
 }
