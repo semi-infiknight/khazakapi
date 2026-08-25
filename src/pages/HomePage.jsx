@@ -1,10 +1,8 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchCatalog, fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
-import KhanShatyrHero from "../components/KhanShatyrHero.jsx";
 
 export default function HomePage() {
   const [query, setQuery] = useState("");
@@ -73,23 +71,10 @@ export default function HomePage() {
         </div>
       )} */}
 
-      <KhanShatyrHero>
-        <h1 className="hero-title">every Kazakhstan API you need</h1>
-        <p className="mt-3 max-w-2xl text-[var(--text-soft)]">
-          Astana · Almaty · Shymkent · +7 — government open data, Kaspi, 2GIS, NBK KZT rates, eGov, and local
-          providers only. No global SaaS filler.
-        </p>
-
-        <div className="hero-metal-card mt-6 max-w-3xl">
-          <div className="hero-metal-line">🇰🇿 KZ-first · KZT · +7 · data.egov.kz</div>
-        </div>
-        <p className="mt-4 text-sm text-[var(--text-soft)]">
-          Use it from Claude, Cursor, or ChatGPT —{" "}
-          <Link to="/mcp" className="font-mono text-[var(--accent)] underline">
-            MCP server setup
-          </Link>
-        </p>
-      </KhanShatyrHero>
+      <section className="hero-banner mb-8" aria-label="Khazak API">
+        <img src="/khan-shatyr.svg" alt="" className="hero-banner-art" decoding="async" />
+        <h1 className="hero-title hero-banner-title">every Kazakhstan API you need</h1>
+      </section>
 
       <section className="stats-metal-strip mb-8 grid grid-cols-2 lg:grid-cols-4">
         <div className="stats-block flex-col items-start justify-center">
