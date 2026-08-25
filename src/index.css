@@ -109,9 +109,9 @@ a {
 .hero-banner {
   position: relative;
   width: 100%;
-  aspect-ratio: 400 / 210;
-  min-height: clamp(220px, 52vw, 280px);
-  max-height: min(58vw, 620px);
+  aspect-ratio: 400 / 318;
+  min-height: clamp(280px, 62vw, 360px);
+  max-height: min(72vw, 720px);
   overflow: hidden;
   margin-bottom: 0;
 }
@@ -124,14 +124,14 @@ a {
 
 .hero-banner-art {
   position: absolute;
-  left: 0;
+  left: 50%;
   bottom: 0;
   display: block;
   width: 100%;
   height: auto;
   max-height: none;
-  object-fit: contain;
-  object-position: left bottom;
+  transform: translateX(-46%) scale(1.58);
+  transform-origin: 50% 100%;
   pointer-events: none;
   user-select: none;
   /* Trim SVG base — stats strip is the ground */
@@ -144,15 +144,15 @@ a {
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  max-width: min(13ch, 44%);
+  max-width: min(13ch, 38%);
   margin: 0;
-  padding-right: 0.5rem;
+  padding-right: 0.25rem;
 }
 
 .hero-stats-anchor {
   position: relative;
   z-index: 3;
-  margin-top: 0;
+  margin-top: -1px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
@@ -560,17 +560,18 @@ nav a:hover {
   }
 
   .hero-banner {
-    aspect-ratio: 400 / 205;
-    min-height: 200px;
+    aspect-ratio: 400 / 290;
+    min-height: 240px;
     max-height: none;
   }
 
   .hero-banner-art {
+    transform: translateX(-44%) scale(1.72);
     clip-path: inset(0 0 23% 0);
   }
 
   .hero-banner-title {
-    max-width: min(13ch, 52%);
+    max-width: min(13ch, 48%);
     font-size: 2rem;
   }
 }
