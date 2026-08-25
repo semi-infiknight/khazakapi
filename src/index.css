@@ -152,14 +152,6 @@ a {
   animation-direction: reverse;
 }
 
-.ks-streak-estimated {
-  opacity: 0.72;
-}
-
-.ks-streak-head.ks-streak-estimated {
-  opacity: 0.88;
-}
-
 @keyframes ks-streak-flow {
   from {
     stroke-dashoffset: 250;
