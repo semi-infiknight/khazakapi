@@ -4,6 +4,7 @@ import { fetchCatalog, fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
+import KhanShatyrHero from "../components/KhanShatyrHero.jsx";
 
 export default function HomePage() {
   const [query, setQuery] = useState("");
@@ -72,7 +73,7 @@ export default function HomePage() {
         </div>
       )} */}
 
-      <section className="mb-8">
+      <KhanShatyrHero>
         <h1 className="hero-title">every Kazakhstan API you need</h1>
         <p className="mt-3 max-w-2xl text-[var(--text-soft)]">
           Astana · Almaty · Shymkent · +7 — government open data, Kaspi, 2GIS, NBK KZT rates, eGov, and local
@@ -88,7 +89,7 @@ export default function HomePage() {
             MCP server setup
           </Link>
         </p>
-      </section>
+      </KhanShatyrHero>
 
       <section className="stats-metal-strip mb-8 grid grid-cols-2 lg:grid-cols-4">
         <div className="stats-block flex-col items-start justify-center">
