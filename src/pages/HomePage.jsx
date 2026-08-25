@@ -71,12 +71,15 @@ export default function HomePage() {
         </div>
       )} */}
 
-      <section className="hero-banner mb-8" aria-label="Khazak API">
-        <img src="/khan-shatyr.svg" alt="" className="hero-banner-art" decoding="async" />
-        <h1 className="hero-title hero-banner-title">every Kazakhstan API you need</h1>
-      </section>
+      <div className="hero-stack mb-8">
+        <section className="hero-banner" aria-label="Khazak API">
+          <div className="hero-banner-art-wrap">
+            <img src="/khan-shatyr.svg" alt="" className="hero-banner-art" decoding="async" />
+          </div>
+          <h1 className="hero-title hero-banner-title">every Kazakhstan API you need</h1>
+        </section>
 
-      <section className="stats-metal-strip mb-8 grid grid-cols-2 lg:grid-cols-4">
+        <section className="stats-metal-strip hero-stats-anchor grid grid-cols-2 lg:grid-cols-4">
         <div className="stats-block flex-col items-start justify-center">
           <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">APIs</span>
           <span className="stats-big-number">{data?.total ?? "—"}</span>
@@ -93,7 +96,8 @@ export default function HomePage() {
           <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">Categories</span>
           <span className="stats-big-number">{Object.keys(stats?.category || {}).length || "—"}</span>
         </div>
-      </section>
+        </section>
+      </div>
 
       <div className="catalogue-layout">
         <CategorySidebar

@@ -102,40 +102,57 @@ a {
   font-weight: 700;
 }
 
+.hero-stack {
+  width: 100%;
+}
+
 .hero-banner {
   position: relative;
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  height: clamp(320px, 62vh, 640px);
+  width: 100%;
+  height: clamp(240px, 36vw, 400px);
   overflow: hidden;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
+}
+
+.hero-banner-art-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
 }
 
 .hero-banner-art {
   position: absolute;
   left: 50%;
   bottom: 0;
-  transform: translateX(-38%);
+  transform: translateX(-36%);
   display: block;
-  width: 132vw;
-  min-width: 720px;
+  width: 112%;
   max-width: none;
   height: auto;
   object-fit: contain;
   object-position: center bottom;
   pointer-events: none;
   user-select: none;
+  /* Hide the SVG's built-in base — stats board becomes the ground */
+  clip-path: inset(0 0 23% 0);
 }
 
 .hero-banner-title {
   position: absolute;
-  z-index: 1;
-  left: max(1rem, calc(50% - 36rem));
-  top: 42%;
+  z-index: 2;
+  left: 0;
+  top: 44%;
   transform: translateY(-50%);
-  max-width: min(13ch, 42vw);
+  max-width: min(13ch, 46%);
   margin: 0;
+}
+
+.hero-stats-anchor {
+  position: relative;
+  z-index: 3;
+  margin-top: -2px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .hero-metal-card,
@@ -541,19 +558,18 @@ nav a:hover {
   }
 
   .hero-banner {
-    height: clamp(260px, 52vh, 420px);
+    height: clamp(200px, 48vw, 300px);
   }
 
   .hero-banner-art {
-    width: 155vw;
-    min-width: 0;
-    transform: translateX(-40%);
+    width: 118%;
+    transform: translateX(-38%);
+    clip-path: inset(0 0 25% 0);
   }
 
   .hero-banner-title {
-    left: max(0.75rem, calc(50% - 50vw + 1rem));
-    top: 38%;
-    max-width: min(13ch, 52vw);
+    top: 40%;
+    max-width: min(13ch, 54vw);
     font-size: 2rem;
   }
 }
