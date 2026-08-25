@@ -111,29 +111,21 @@ a {
 }
 
 .hero-banner-art,
-.ks-art-stack {
+.ks-art-inline {
   position: absolute;
   inset: 0;
   pointer-events: none;
   user-select: none;
 }
 
-.ks-art-base {
-  position: absolute;
-  inset: 0;
+.ks-art-inline .ks-inline-svg {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: right center;
 }
 
-.ks-art-overlay {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+.ks-art-inline .ks-data-layer {
+  pointer-events: none;
 }
 
 .ks-grid-radial {

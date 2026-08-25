@@ -112,3 +112,62 @@ export function buildStreakRoutes(radials) {
 export const GRID_RADIALS = buildRadials();
 export const GRID_RINGS = buildRings();
 export const STREAK_ROUTES = buildStreakRoutes(GRID_RADIALS);
+
+const SVG_EXTRA_DEFS = `
+<filter id="ks-streak-glow" x="-80%" y="-80%" width="260%" height="260%">
+  <feGaussianBlur stdDeviation="1.4" result="blur" />
+  <feMerge>
+    <feMergeNode in="blur" />
+    <feMergeNode in="SourceGraphic" />
+  </feMerge>
+</filter>`;
+
+/** SVG markup for grid + streak paths — injected inside the Khan Shatyr vector */
+export function buildSvgDataLayer(reducedMotion = false) {
+  const grid = [
+    ...GRID_RADIALS.map(
+      (line) =>
+        `<path d="${line.d}" class="ks-grid-radial" style="--ks-radial-i:${line.t}" fill="none" />`,
+    ),
+    ...GRID_RINGS.map(
+      (line) =>
+        `<path d="${line.d}" class="ks-grid-ring" style="--ks-ring-i:${line.ringIdx}" fill="none" />`,
+    ),
+  ].join("\n    ");
+
+  if (reducedMotion) {
+    return `<g class="ks-data-layer" aria-hidden="true">\n    ${grid}\n  </g>`;
+  }
+
+  const streaks = STREAK_ROUTES.map((route) => {
+    const style = `--ks-streak-dur:${route.duration}s;--ks-streak-delay:${route.delay}s`;
+    return `<g class="ks-streak">
+      <path d="${route.d}" class="ks-streak-track" stroke="${route.color}" stroke-width="${route.width}" stroke-linecap="round" fill="none" style="${style}" />
+      <path d="${route.d}" class="ks-streak-head" stroke="#F7F2F7" stroke-width="${route.width + 1.2}" stroke-linecap="round" fill="none" style="${style}" />
+    </g>`;
+  }).join("\n    ");
+
+  return `<g class="ks-data-layer" aria-hidden="true">
+    ${grid}
+    <g class="ks-streaks" filter="url(#ks-streak-glow)">
+    ${streaks}
+    </g>
+    <g class="ks-apex-pulse">
+      <circle cx="${APEX.x}" cy="${APEX.y}" r="3.5" class="ks-apex-core" />
+      <circle cx="${APEX.x}" cy="${APEX.y}" r="8" class="ks-apex-ring" fill="none" />
+    </g>
+  </g>`;
+}
+
+/** Merge animation paths into the Khan Shatyr SVG source */
+export function buildInlineKhanShatyrSvg(svgRaw, reducedMotion = false) {
+  const dataLayer = buildSvgDataLayer(reducedMotion);
+
+  return svgRaw
+    .replace(
+      "<svg ",
+      '<svg class="ks-inline-svg" preserveAspectRatio="xMaxYMid meet" ',
+    )
+    .replace("<defs>", `<defs>${SVG_EXTRA_DEFS}`)
+    .replace("</g>\n<defs>", `  ${dataLayer}\n</g>\n<defs>`);
+}
