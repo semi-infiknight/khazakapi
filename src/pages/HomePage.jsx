@@ -3,6 +3,7 @@ import { fetchCatalog, fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
+import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
 
 export default function HomePage() {
   const [query, setQuery] = useState("");
@@ -72,7 +73,7 @@ export default function HomePage() {
       )} */}
 
       <section className="hero-banner mb-8" aria-label="Khazak API">
-        <img src="/khan-shatyr.svg" alt="" className="hero-banner-art" decoding="async" />
+        <KhanShatyrAnimated className="hero-banner-art" />
         <h1 className="hero-title hero-banner-title">every Kazakhstan API you need</h1>
       </section>
 
