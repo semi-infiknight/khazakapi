@@ -1401,21 +1401,24 @@ nav a:hover {
 
 .catalogue-mobile-bar {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 50%;
+  bottom: calc(0.7rem + env(safe-area-inset-bottom, 0px));
   z-index: 60;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
+  grid-template-columns: repeat(3, minmax(4.4rem, 1fr));
+  width: min(22rem, calc(100vw - 1.25rem));
+  transform: translateX(-50%);
+  gap: 0.15rem;
   margin: 0;
-  padding: 0;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  border-bottom: none;
+  padding: 0.3rem;
+  border: 1px solid rgba(194, 201, 211, 0.16);
+  border-radius: 1.2rem;
+  background: linear-gradient(155deg, rgba(31, 34, 45, 0.98), rgba(10, 12, 20, 0.98));
   box-shadow:
-    inset 0 1.5px rgba(255, 255, 255, 0.9),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.24),
-    0 -8px 24px rgba(0, 0, 0, 0.22);
+    inset 0 1px rgba(255, 255, 255, 0.1),
+    0 10px 30px rgba(0, 0, 0, 0.42);
+  color: #d8dce7;
+  text-shadow: none;
 }
 
 .catalogue-mobile-bar-btn {
@@ -1424,38 +1427,51 @@ nav a:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.15rem;
-  min-height: 3.5rem;
-  padding: 0.45rem 0.5rem calc(0.45rem + env(safe-area-inset-bottom, 0px));
+  gap: 0.25rem;
+  min-height: 3.45rem;
+  padding: 0.35rem 0.4rem;
   border: 0;
-  border-right: 1px solid rgba(16, 19, 24, 0.12);
+  border-radius: 0.95rem;
   background: transparent;
   font-family: var(--font-mono);
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.04em;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--text-soft);
+  color: #8f96a8;
   cursor: pointer;
+  transition: color var(--dur-1) var(--ease-out), background var(--dur-1) var(--ease-out);
 }
 
-.catalogue-mobile-bar-btn:last-child {
-  border-right: 0;
+.catalogue-mobile-bar-btn:hover,
+.catalogue-mobile-bar-btn:focus-visible {
+  color: #f2f4f8;
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .catalogue-mobile-bar-btn-active {
-  color: var(--text);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: #fff;
+  background: rgba(156, 136, 250, 0.18);
 }
 
 .catalogue-mobile-bar-icon {
-  font-size: 1.1rem;
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.07);
   line-height: 1;
+}
+
+.catalogue-mobile-bar-btn-active .catalogue-mobile-bar-icon {
+  background: linear-gradient(135deg, #7d57f9, #b960e8);
+  box-shadow: 0 0 13px rgba(156, 136, 250, 0.42);
 }
 
 .catalogue-mobile-bar-badge {
   position: absolute;
-  top: 0.35rem;
-  right: calc(50% - 1.75rem);
+  top: 0.15rem;
+  right: calc(50% - 1.5rem);
   min-width: 1.1rem;
   height: 1.1rem;
   padding: 0 0.25rem;
@@ -1491,7 +1507,7 @@ nav a:hover {
   display: flex;
   max-height: min(78vh, 640px);
   flex-direction: column;
-  margin: 0 0.5rem calc(3.65rem + env(safe-area-inset-bottom, 0px));
+  margin: 0 0.5rem calc(4.8rem + env(safe-area-inset-bottom, 0px));
   padding: 0;
   overflow: hidden;
   border-radius: var(--radius-lg);
@@ -1689,7 +1705,7 @@ body.catalogue-mobile-sheet-open {
   }
 
   .container-main--catalogue {
-    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(6.25rem + env(safe-area-inset-bottom, 0px));
   }
 
   .catalogue-sidebar {

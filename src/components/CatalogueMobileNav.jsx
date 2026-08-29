@@ -1,6 +1,47 @@
 import { useEffect } from "react";
 import CategorySidebar from "./CategorySidebar.jsx";
 
+function DockIcon({ name }) {
+  const common = {
+    width: 18,
+    height: 18,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true,
+  };
+
+  if (name === "apis") {
+    return (
+      <svg {...common}>
+        <rect x="4" y="4" width="16" height="16" rx="4" />
+        <path d="M8 10h8M8 14h5" />
+      </svg>
+    );
+  }
+
+  if (name === "search") {
+    return (
+      <svg {...common}>
+        <circle cx="10.5" cy="10.5" r="5.5" />
+        <path d="m15 15 4 4" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...common}>
+      <path d="M5 7h14M5 12h14M5 17h14" />
+      <circle cx="8" cy="7" r="1" fill="currentColor" />
+      <circle cx="15" cy="12" r="1" fill="currentColor" />
+      <circle cx="10" cy="17" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
 export default function CatalogueMobileNav({
   openPanel,
   onPanelChange,
@@ -28,6 +69,11 @@ export default function CatalogueMobileNav({
       document.body.classList.remove("catalogue-mobile-sheet-open");
     };
   }, [openPanel, onPanelChange]);
+
+  const showApis = () => {
+    onPanelChange(null);
+    document.querySelector(".catalogue-main")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <div className="catalogue-mobile-nav" aria-hidden={false}>
@@ -84,14 +130,20 @@ export default function CatalogueMobileNav({
       )}
 
       <nav className="catalogue-mobile-bar stats-metal-strip" aria-label="Catalogue">
+        <button type="button" className="catalogue-mobile-bar-btn" onClick={showApis}>
+          <span className="catalogue-mobile-bar-icon">
+            <DockIcon name="apis" />
+          </span>
+          <span>APIs</span>
+        </button>
         <button
           type="button"
           className={`catalogue-mobile-bar-btn ${openPanel === "search" ? "catalogue-mobile-bar-btn-active" : ""}`}
           aria-expanded={openPanel === "search"}
           onClick={() => onPanelChange(openPanel === "search" ? null : "search")}
         >
-          <span className="catalogue-mobile-bar-icon" aria-hidden="true">
-            ⌕
+          <span className="catalogue-mobile-bar-icon">
+            <DockIcon name="search" />
           </span>
           <span>Search</span>
         </button>
@@ -101,10 +153,10 @@ export default function CatalogueMobileNav({
           aria-expanded={openPanel === "filters"}
           onClick={() => onPanelChange(openPanel === "filters" ? null : "filters")}
         >
-          <span className="catalogue-mobile-bar-icon" aria-hidden="true">
-            ☰
+          <span className="catalogue-mobile-bar-icon">
+            <DockIcon name="browse" />
           </span>
-          <span>Categories</span>
+          <span>Browse</span>
           {activeFilterCount > 0 && (
             <span className="catalogue-mobile-bar-badge">{activeFilterCount}</span>
           )}
