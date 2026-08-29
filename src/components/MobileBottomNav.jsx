@@ -90,12 +90,14 @@ export default function MobileBottomNav() {
     const syncBrowserChrome = () => {
       if (!viewport.height) {
         document.documentElement.style.setProperty("--browser-ui-offset", "0px");
+        document.documentElement.style.setProperty("--viewport-offset-top", "0px");
         return;
       }
 
       const chrome = Math.max(0, window.innerHeight - viewport.offsetTop - viewport.height);
       const capped = Math.min(chrome, 120);
       document.documentElement.style.setProperty("--browser-ui-offset", `${capped}px`);
+      document.documentElement.style.setProperty("--viewport-offset-top", `${viewport.offsetTop}px`);
     };
 
     syncBrowserChrome();
@@ -108,6 +110,7 @@ export default function MobileBottomNav() {
       viewport.removeEventListener("scroll", syncBrowserChrome);
       window.removeEventListener("orientationchange", syncBrowserChrome);
       document.documentElement.style.removeProperty("--browser-ui-offset");
+      document.documentElement.style.removeProperty("--viewport-offset-top");
     };
   }, []);
 

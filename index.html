@@ -30,7 +30,7 @@
     />
     <style>
       #fluid-background {
-        background: #16161a;
+        background: #0a0015;
       }
       @media (prefers-reduced-motion: reduce) {
         #fluid-background {
@@ -54,7 +54,7 @@
     <div
       id="fluid-background"
       aria-hidden="true"
-      style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;overflow:hidden;z-index:0;opacity:var(--fluid-opacity, .45)"
+      style="position:fixed;inset:0;width:100vw;height:100dvh;min-height:-webkit-fill-available;pointer-events:none;overflow:hidden;z-index:0;opacity:var(--fluid-opacity, .45)"
     ></div>
     <div id="root"></div>
     <script src="/fluid-init.js"></script>
