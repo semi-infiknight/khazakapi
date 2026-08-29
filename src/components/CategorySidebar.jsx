@@ -40,7 +40,15 @@ const TIER_LABELS = {
   commercial: "Commercial only",
 };
 
-export default function CategorySidebar({ facets, total, filteredTotal, filters, onFilterChange, catalogCategories }) {
+export default function CategorySidebar({
+  facets,
+  total,
+  filteredTotal,
+  filters,
+  onFilterChange,
+  catalogCategories,
+  className = "",
+}) {
   const { auth, pricing, tier } = filters;
   const authOptions = Object.entries(facets?.auth || {}).sort((a, b) => b[1] - a[1]);
   const pricingOptions = Object.entries(facets?.pricing || {})
@@ -59,7 +67,7 @@ export default function CategorySidebar({ facets, total, filteredTotal, filters,
   };
 
   return (
-    <aside className="panel catalogue-sidebar">
+    <aside className={`panel catalogue-sidebar ${className}`.trim()}>
       <SidebarSection title="Discovery">
         <button
           type="button"

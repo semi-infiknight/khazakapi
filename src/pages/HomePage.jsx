@@ -3,6 +3,7 @@ import { fetchCatalog, fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
+import CatalogueMobileNav from "../components/CatalogueMobileNav.jsx";
 import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
 
 export default function HomePage() {
@@ -11,6 +12,7 @@ export default function HomePage() {
   const [auth, setAuth] = useState("");
   const [pricing, setPricing] = useState("");
   const [tier, setTier] = useState("");
+  const [mobilePanel, setMobilePanel] = useState(null);
   const [data, setData] = useState(null);
   const [catalog, setCatalog] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="container-main pb-16 pt-6">
+    <div className="container-main container-main--catalogue pb-16 pt-6">
       {/* {!bannerDismissed && (
         <div className="banner-warn mb-4 flex items-start justify-between gap-3">
           <span>
@@ -98,6 +100,7 @@ export default function HomePage() {
 
       <div className="catalogue-layout">
         <CategorySidebar
+          className="catalogue-sidebar-desktop"
           facets={data?.facets}
           total={data?.catalogueTotal ?? data?.total}
           filteredTotal={data?.total}
@@ -107,7 +110,7 @@ export default function HomePage() {
         />
 
         <div className="catalogue-main">
-          <section className="mb-6">
+          <section className="catalogue-search-desktop mb-6">
             <div className="relative">
               <input
                 className="search-input"
@@ -132,6 +135,19 @@ export default function HomePage() {
           )}
         </div>
       </div>
+
+      <CatalogueMobileNav
+        openPanel={mobilePanel}
+        onPanelChange={setMobilePanel}
+        query={query}
+        onQueryChange={setQuery}
+        facets={data?.facets}
+        total={data?.catalogueTotal ?? data?.total}
+        filteredTotal={data?.total}
+        filters={{ auth, pricing, tier }}
+        onFilterChange={setFilter}
+        catalogCategories={catalog}
+      />
     </div>
   );
 }
