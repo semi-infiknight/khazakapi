@@ -11,6 +11,8 @@ import {
   searchApis,
 } from "./lib/search.js";
 import { suggestApis, suggestExamples } from "./lib/suggest.js";
+import { warmLocalLlm } from "./lib/localLlm.js";
+import { warmQueryEmbedder } from "./lib/queryEmbedder.js";
 import { checkHealth } from "./lib/health.js";
 import { openApiToPostman } from "./lib/postman.js";
 import { validateDataEgovKey, DATA_EGOV_LINKS } from "./lib/egov.js";
@@ -279,4 +281,6 @@ app.use((_req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Khazak API server on http://localhost:${PORT} (${KZ_APIS.length} KZ APIs)`);
+  warmQueryEmbedder();
+  warmLocalLlm();
 });

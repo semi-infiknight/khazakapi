@@ -1,5 +1,6 @@
 import { publicListEntry, tokenize } from "./search.js";
 import { createVectorIndex } from "./vectorIndex.js";
+import { generateSuggestSummary } from "./localLlm.js";
 
 /**
  * Product-intent recipes: label semantic hits into stack layers when they fit.
@@ -313,17 +314,32 @@ function buildSummary(query, intents, { fit, bestScore }) {
   return `Here are the closest Kazakhstan APIs for “${query}”, grouped by how they plug into a product.`;
 }
 
-function noFitSuggestions(query) {
+function noFitSuggestions(query, bestScore = 0) {
   return {
     query,
     fit: false,
-    bestScore: 0,
+    bestScore,
     summary: `We don’t have a good API fit for “${query}” in this catalogue. KhazakAPI focuses on Kazakhstan payments, maps, delivery, banking, travel, weather, telecom, and government open data.`,
     reason: "no_semantic_fit",
     examples: EXAMPLE_PROMPTS,
     intents: [],
     apis: [],
     total: 0,
+  };
+}
+
+async function withLlmSummary(result, templateSummary) {
+  const llm = await generateSuggestSummary({
+    query: result.query,
+    fit: result.fit !== false,
+    intentBlocks: result.intents || [],
+    bestScore: result.bestScore,
+  });
+
+  return {
+    ...result,
+    summary: llm?.text || templateSummary || result.summary,
+    summarySource: llm?.source || "template",
   };
 }
 
@@ -348,11 +364,8 @@ export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
   const { hits, bestScore, fit } = await index.search(text, { limit, minScore: noFit });
 
   if (!fit || !hits.length) {
-    return {
-      ...noFitSuggestions(text),
-      bestScore,
-      mode,
-    };
+    const base = { ...noFitSuggestions(text, bestScore), mode };
+    return withLlmSummary(base, buildSummary(text, [], { fit: false, bestScore }));
   }
 
   // Drop marginal hits far below the best score so weak neighbours don't pollute the stack.
@@ -360,11 +373,8 @@ export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
   const strongHits = hits.filter((h) => h.score >= cutoff).slice(0, limit);
 
   if (!strongHits.length) {
-    return {
-      ...noFitSuggestions(text),
-      bestScore,
-      mode,
-    };
+    const base = { ...noFitSuggestions(text, bestScore), mode };
+    return withLlmSummary(base, buildSummary(text, [], { fit: false, bestScore }));
   }
 
   const hay = normalize(text);
@@ -403,18 +413,21 @@ export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
 
   const intentBlocks = [...layers.values()].sort((a, b) => b.score - a.score);
   const merged = intentBlocks.flatMap((block) => block.apis);
+  const templateSummary = buildSummary(text, intentBlocks, { fit: true, bestScore });
 
-  return {
-    query: text,
-    fit: true,
-    bestScore,
-    mode,
-    summary: buildSummary(text, intentBlocks, { fit: true, bestScore }),
-    examples: EXAMPLE_PROMPTS,
-    intents: intentBlocks,
-    apis: merged,
-    total: merged.length,
-  };
+  return withLlmSummary(
+    {
+      query: text,
+      fit: true,
+      bestScore,
+      mode,
+      examples: EXAMPLE_PROMPTS,
+      intents: intentBlocks,
+      apis: merged,
+      total: merged.length,
+    },
+    templateSummary,
+  );
 }
 
 export function suggestExamples() {

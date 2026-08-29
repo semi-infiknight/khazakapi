@@ -146,7 +146,9 @@ export function IntentResults({ suggestion }) {
       <div className="panel intent-prompt intent-prompt--empty">
         <header className="intent-prompt-head">
           <span className="intent-prompt-role">assistant</span>
-          <span className="intent-prompt-meta">no fit</span>
+          <span className="intent-prompt-meta">
+            no fit{suggestion.summarySource === "llm" ? " · ai" : ""}
+          </span>
         </header>
         <p className="intent-prompt-body">
           {suggestion.summary ||
@@ -173,6 +175,7 @@ export function IntentResults({ suggestion }) {
           {suggestion.total} API{suggestion.total === 1 ? "" : "s"} · {suggestion.intents.length} layer
           {suggestion.intents.length === 1 ? "" : "s"}
           {suggestion.bestScore != null ? ` · score ${Number(suggestion.bestScore).toFixed(2)}` : ""}
+          {suggestion.summarySource === "llm" ? " · ai" : ""}
         </span>
       </header>
 
