@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CategorySidebar from "./CategorySidebar.jsx";
 
 function DockIcon({ name }) {
   const common = {
-    width: 18,
-    height: 18,
+    width: 20,
+    height: 20,
     viewBox: "0 0 24 24",
     fill: "none",
     stroke: "currentColor",
@@ -13,15 +13,6 @@ function DockIcon({ name }) {
     strokeLinejoin: "round",
     "aria-hidden": true,
   };
-
-  if (name === "apis") {
-    return (
-      <svg {...common}>
-        <rect x="4" y="4" width="16" height="16" rx="4" />
-        <path d="M8 10h8M8 14h5" />
-      </svg>
-    );
-  }
 
   if (name === "search") {
     return (
@@ -56,6 +47,8 @@ export default function CatalogueMobileNav({
 }) {
   const { auth, pricing, tier } = filters;
   const activeFilterCount = [auth, pricing, tier].filter(Boolean).length;
+  const [renderedPanel, setRenderedPanel] = useState(null);
+  const [sheetVisible, setSheetVisible] = useState(false);
 
   useEffect(() => {
     document.body.classList.add("catalogue-mobile-nav-active");
@@ -65,7 +58,43 @@ export default function CatalogueMobileNav({
   }, []);
 
   useEffect(() => {
-    if (!openPanel) return undefined;
+    const viewport = window.visualViewport;
+    if (!viewport) return undefined;
+
+    const syncBrowserChrome = () => {
+      const chrome = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop);
+      document.documentElement.style.setProperty("--browser-ui-offset", `${chrome}px`);
+    };
+
+    syncBrowserChrome();
+    viewport.addEventListener("resize", syncBrowserChrome);
+    viewport.addEventListener("scroll", syncBrowserChrome);
+    window.addEventListener("orientationchange", syncBrowserChrome);
+
+    return () => {
+      viewport.removeEventListener("resize", syncBrowserChrome);
+      viewport.removeEventListener("scroll", syncBrowserChrome);
+      window.removeEventListener("orientationchange", syncBrowserChrome);
+      document.documentElement.style.removeProperty("--browser-ui-offset");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (openPanel) {
+      setRenderedPanel(openPanel);
+      const frame = requestAnimationFrame(() => {
+        requestAnimationFrame(() => setSheetVisible(true));
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+
+    setSheetVisible(false);
+    const timer = window.setTimeout(() => setRenderedPanel(null), 320);
+    return () => window.clearTimeout(timer);
+  }, [openPanel]);
+
+  useEffect(() => {
+    if (!renderedPanel) return undefined;
     const onKey = (e) => {
       if (e.key === "Escape") onPanelChange(null);
     };
@@ -75,17 +104,19 @@ export default function CatalogueMobileNav({
       document.removeEventListener("keydown", onKey);
       document.body.classList.remove("catalogue-mobile-sheet-open");
     };
-  }, [openPanel, onPanelChange]);
+  }, [renderedPanel, onPanelChange]);
 
-  const showApis = () => {
-    onPanelChange(null);
-    document.querySelector(".catalogue-main")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const togglePanel = (panel) => {
+    onPanelChange(openPanel === panel ? null : panel);
   };
 
   return (
     <div className="catalogue-mobile-nav" aria-hidden={false}>
-      {openPanel && (
-        <div className="catalogue-mobile-sheet" role="presentation">
+      {renderedPanel && (
+        <div
+          className={`catalogue-mobile-sheet ${sheetVisible ? "catalogue-mobile-sheet-visible" : "catalogue-mobile-sheet-closing"}`}
+          role="presentation"
+        >
           <button
             type="button"
             className="catalogue-mobile-backdrop"
@@ -96,11 +127,11 @@ export default function CatalogueMobileNav({
             className="catalogue-mobile-panel panel"
             role="dialog"
             aria-modal="true"
-            aria-label={openPanel === "search" ? "Search APIs" : "Browse and filter APIs"}
+            aria-label={renderedPanel === "search" ? "Search APIs" : "Browse and filter APIs"}
           >
             <div className="catalogue-mobile-panel-head">
               <h2 className="catalogue-mobile-panel-title">
-                {openPanel === "search" ? "Search" : "Browse & filter"}
+                {renderedPanel === "search" ? "Search" : "Browse & filter"}
               </h2>
               <button type="button" className="catalogue-mobile-close" onClick={() => onPanelChange(null)}>
                 Done
@@ -108,7 +139,7 @@ export default function CatalogueMobileNav({
             </div>
 
             <div className="catalogue-mobile-panel-body">
-              {openPanel === "search" ? (
+              {renderedPanel === "search" ? (
                 <div className="relative">
                   <input
                     className="search-input"
@@ -117,7 +148,7 @@ export default function CatalogueMobileNav({
                     value={query}
                     onChange={(e) => onQueryChange(e.target.value)}
                     aria-label="Search APIs"
-                    autoFocus
+                    autoFocus={sheetVisible}
                   />
                 </div>
               ) : (
@@ -137,33 +168,27 @@ export default function CatalogueMobileNav({
       )}
 
       <nav className="catalogue-mobile-bar" aria-label="Catalogue">
-        <button type="button" className="catalogue-mobile-bar-btn" onClick={showApis}>
-          <span className="catalogue-mobile-bar-icon">
-            <DockIcon name="apis" />
-          </span>
-          <span>APIs</span>
-        </button>
         <button
           type="button"
           className={`catalogue-mobile-bar-btn ${openPanel === "search" ? "catalogue-mobile-bar-btn-active" : ""}`}
           aria-expanded={openPanel === "search"}
-          onClick={() => onPanelChange(openPanel === "search" ? null : "search")}
+          aria-label="Search APIs"
+          onClick={() => togglePanel("search")}
         >
           <span className="catalogue-mobile-bar-icon">
             <DockIcon name="search" />
           </span>
-          <span>Search</span>
         </button>
         <button
           type="button"
           className={`catalogue-mobile-bar-btn ${openPanel === "filters" ? "catalogue-mobile-bar-btn-active" : ""}`}
           aria-expanded={openPanel === "filters"}
-          onClick={() => onPanelChange(openPanel === "filters" ? null : "filters")}
+          aria-label="Browse categories and filters"
+          onClick={() => togglePanel("filters")}
         >
           <span className="catalogue-mobile-bar-icon">
             <DockIcon name="browse" />
           </span>
-          <span>Browse</span>
           {activeFilterCount > 0 && (
             <span className="catalogue-mobile-bar-badge">{activeFilterCount}</span>
           )}
