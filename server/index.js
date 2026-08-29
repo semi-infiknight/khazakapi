@@ -266,8 +266,17 @@ app.use(express.static(publicDir));
 
 if (isProd) {
   const dist = path.join(__dirname, "..", "dist");
-  app.use(express.static(dist));
+  app.use(
+    express.static(dist, {
+      setHeaders(res, filePath) {
+        if (filePath.endsWith("index.html")) {
+          res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        }
+      },
+    }),
+  );
   app.get("*", (_req, res) => {
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     res.sendFile(path.join(dist, "index.html"));
   });
 }
