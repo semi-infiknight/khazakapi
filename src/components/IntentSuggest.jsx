@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import ApiLogo from "./ApiLogo.jsx";
+import { useEffect, useId, useRef, useState } from "react";
+import ApiCard from "./ApiCard.jsx";
 
 const EXAMPLES = [
   "Food delivery app for Almaty with Kaspi pay and courier ETAs",
@@ -8,48 +8,140 @@ const EXAMPLES = [
   "Travel planner with flights, trains, and hotel maps in Astana",
 ];
 
-function PlugInCard({ api }) {
-  const href = api.plugIn?.href || api.hubPath || `/apis/${api.slug || api.id}`;
-  const steps = api.plugIn?.steps || [];
+function shortApiLabel(title = "") {
+  const base = title.split("~")[0].trim();
+  return base.length > 26 ? `${base.slice(0, 24)}…` : base || "API";
+}
 
+function mermaidSafeId(value) {
+  const id = String(value || "n")
+    .replace(/[^a-zA-Z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+  return id || "n";
+}
+
+function escapeMermaidLabel(text) {
+  return String(text || "")
+    .replace(/"/g, "'")
+    .replace(/[\[\]]/g, "")
+    .replace(/\n/g, " ");
+}
+
+/** Build a left-to-right stack flowchart from matched intents. */
+export function buildStackMermaid(suggestion) {
+  const intents = suggestion?.intents || [];
+  if (!intents.length) return "";
+
+  const lines = [
+    "flowchart LR",
+    '  App["Your product"]',
+    "  classDef app fill:#1a1030,stroke:#9c88fa,color:#f4f0ff,stroke-width:1.5px",
+    "  classDef layer fill:#12101c,stroke:#5b4d8a,color:#e8e4f5,stroke-width:1px",
+    "  classDef api fill:#0d1520,stroke:#3d5a80,color:#dce8f5,stroke-width:1px",
+    "  class App app",
+  ];
+
+  intents.forEach((block, index) => {
+    const layerId = `L_${mermaidSafeId(block.id)}`;
+    const layerLabel = escapeMermaidLabel(block.label);
+    lines.push(`  ${layerId}["${layerLabel}"]`);
+    lines.push(`  class ${layerId} layer`);
+    lines.push(`  App --> ${layerId}`);
+
+    block.apis.slice(0, 4).forEach((api) => {
+      const apiId = `A_${mermaidSafeId(api.id)}_${index}`;
+      const apiLabel = escapeMermaidLabel(shortApiLabel(api.title));
+      lines.push(`  ${apiId}["${apiLabel}"]`);
+      lines.push(`  class ${apiId} api`);
+      lines.push(`  ${layerId} --> ${apiId}`);
+    });
+  });
+
+  return lines.join("\n");
+}
+
+function MermaidDiagram({ chart }) {
+  const hostRef = useRef(null);
+  const reactId = useId().replace(/:/g, "");
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setFailed(false);
+
+    async function renderChart() {
+      if (!chart || !hostRef.current) return;
+      try {
+        const mermaid = (await import("mermaid")).default;
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: "strict",
+          theme: "dark",
+          flowchart: {
+            curve: "basis",
+            padding: 12,
+            nodeSpacing: 28,
+            rankSpacing: 40,
+            htmlLabels: false,
+          },
+          themeVariables: {
+            darkMode: true,
+            background: "transparent",
+            primaryColor: "#1a1030",
+            primaryTextColor: "#f4f0ff",
+            primaryBorderColor: "#9c88fa",
+            lineColor: "#7a7199",
+            secondaryColor: "#12101c",
+            tertiaryColor: "#0d1520",
+            fontFamily: "JetBrains Mono, ui-monospace, monospace",
+            fontSize: "13px",
+          },
+        });
+
+        const id = `stack-${reactId}-${Date.now()}`;
+        const { svg } = await mermaid.render(id, chart);
+        if (!cancelled && hostRef.current) {
+          hostRef.current.innerHTML = svg;
+        }
+      } catch (err) {
+        console.error(err);
+        if (!cancelled) setFailed(true);
+      }
+    }
+
+    renderChart();
+    return () => {
+      cancelled = true;
+    };
+  }, [chart, reactId]);
+
+  if (!chart) return null;
+
+  if (failed) {
+    return (
+      <pre className="intent-prompt-mermaid-fallback">
+        <code>{chart}</code>
+      </pre>
+    );
+  }
+
+  return <div ref={hostRef} className="intent-prompt-mermaid" aria-label="Suggested API stack diagram" />;
+}
+
+function explainApi(api) {
+  if (api.plugIn?.auth) return api.plugIn.auth;
+  if (api.auth === "none") return "No authentication required — call it directly from your backend.";
+  if (api.auth === "apiKey") return `Get an API key from ${api.provider}, keep it server-side, then call this endpoint.`;
+  if (api.auth === "oauth") return `Complete OAuth with ${api.provider}, then call with a bearer token.`;
+  return `Wire this into your flow via ${api.provider}.`;
+}
+
+function PromptApiBlock({ api }) {
   return (
-    <article className="intent-api-card">
-      <div className="intent-api-card-top">
-        <ApiLogo api={api} size={40} />
-        <div className="intent-api-card-copy">
-          <h4 className="intent-api-title">
-            <Link to={href}>{api.title}</Link>
-          </h4>
-          <p className="intent-api-role">{api.role || api.category}</p>
-        </div>
-      </div>
-
-      {api.plugIn?.where && (
-        <p className="intent-api-where">
-          <span className="intent-api-where-label">Where it plugs in</span>
-          {api.plugIn.where}
-        </p>
-      )}
-
-      {steps.length > 0 && (
-        <ol className="intent-api-steps">
-          {steps.map((step) => (
-            <li key={step}>{step}</li>
-          ))}
-        </ol>
-      )}
-
-      <div className="intent-api-actions">
-        <Link to={href} className="btn-metal intent-api-cta">
-          Open & try
-        </Link>
-        {api.plugIn?.docs && (
-          <a href={api.plugIn.docs} target="_blank" rel="noopener noreferrer" className="intent-api-docs">
-            Docs ↗
-          </a>
-        )}
-      </div>
-    </article>
+    <div className="intent-prompt-api">
+      <ApiCard api={api} />
+      <p className="intent-prompt-api-note">{explainApi(api)}</p>
+    </div>
   );
 }
 
@@ -127,37 +219,50 @@ export function IntentResults({ suggestion }) {
   if (!suggestion?.intents?.length && !suggestion?.apis?.length) {
     if (!suggestion?.query) return null;
     return (
-      <div className="panel intent-results intent-results--empty">
-        <p className="font-mono text-sm text-[var(--text-soft)]">
+      <div className="panel intent-prompt intent-prompt--empty">
+        <p className="intent-prompt-body">
           No APIs matched &ldquo;{suggestion.query}&rdquo;. Try naming payments, maps, delivery, or government data.
         </p>
       </div>
     );
   }
 
+  const chart = buildStackMermaid(suggestion);
+
   return (
-    <div className="intent-results">
-      <div className="intent-results-summary panel">
-        <p className="intent-results-summary-text">{suggestion.summary}</p>
-        <p className="intent-results-summary-meta">
-          {suggestion.total} API{suggestion.total === 1 ? "" : "s"} · {suggestion.intents.length} stack layer
+    <article className="panel intent-prompt" aria-label="Suggested API stack">
+      <header className="intent-prompt-head">
+        <span className="intent-prompt-role">assistant</span>
+        <span className="intent-prompt-meta">
+          {suggestion.total} API{suggestion.total === 1 ? "" : "s"} · {suggestion.intents.length} layer
           {suggestion.intents.length === 1 ? "" : "s"}
+        </span>
+      </header>
+
+      <p className="intent-prompt-body">{suggestion.summary}</p>
+
+      {suggestion.query && (
+        <p className="intent-prompt-quote">
+          Prompt: <span>&ldquo;{suggestion.query}&rdquo;</span>
         </p>
-      </div>
+      )}
+
+      <section className="intent-prompt-diagram" aria-label="Architecture diagram">
+        <h3 className="intent-prompt-section-label">Stack diagram</h3>
+        <MermaidDiagram chart={chart} />
+      </section>
 
       {suggestion.intents.map((block) => (
-        <section key={block.id} className="intent-layer">
-          <header className="intent-layer-head">
-            <h3 className="intent-layer-title">{block.label}</h3>
-            <p className="intent-layer-where">{block.where}</p>
-          </header>
-          <div className="intent-layer-grid">
+        <section key={block.id} className="intent-prompt-layer">
+          <h3 className="intent-prompt-layer-title">{block.label}</h3>
+          <p className="intent-prompt-layer-where">{block.where}</p>
+          <div className="intent-prompt-api-grid">
             {block.apis.map((api) => (
-              <PlugInCard key={`${block.id}-${api.id}`} api={api} />
+              <PromptApiBlock key={`${block.id}-${api.id}`} api={api} />
             ))}
           </div>
         </section>
       ))}
-    </div>
+    </article>
   );
 }

@@ -553,150 +553,140 @@ a {
   min-height: 7rem;
 }
 
-.intent-results {
+.intent-results,
+.intent-prompt {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
-.intent-results-summary {
-  padding: 1rem 1.15rem;
+.intent-prompt {
+  padding: 1.15rem 1.2rem 1.4rem;
+  border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 88%, #140c22), var(--surface));
 }
 
-.intent-results-summary-text {
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.45;
-}
-
-.intent-results-summary-meta {
-  margin: 0.45rem 0 0;
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  color: var(--text-mute);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.intent-layer-head {
-  margin-bottom: 0.75rem;
-}
-
-.intent-layer-title {
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 700;
-}
-
-.intent-layer-where {
-  margin: 0.3rem 0 0;
-  color: var(--text-soft);
-  font-size: 0.9rem;
-}
-
-.intent-layer-grid {
-  display: grid;
-  gap: 0.85rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-}
-
-.intent-api-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 1rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-}
-
-.intent-api-card-top {
-  display: flex;
-  gap: 0.75rem;
-  align-items: flex-start;
-}
-
-.intent-api-card-copy {
-  min-width: 0;
-}
-
-.intent-api-title {
-  margin: 0;
-  font-size: 0.98rem;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.intent-api-title a:hover {
-  color: var(--accent);
-}
-
-.intent-api-role {
-  margin: 0.25rem 0 0;
-  font-family: var(--font-mono);
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-mute);
-}
-
-.intent-api-where {
-  margin: 0;
-  padding: 0.65rem 0.75rem;
-  border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--code-bg) 80%, transparent);
-  color: var(--text-soft);
-  font-size: 0.86rem;
-  line-height: 1.4;
-}
-
-.intent-api-where-label {
-  display: block;
-  margin-bottom: 0.2rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.intent-api-steps {
-  margin: 0;
-  padding-left: 1.15rem;
-  color: var(--text-soft);
-  font-size: 0.86rem;
-  line-height: 1.45;
-}
-
-.intent-api-steps li + li {
-  margin-top: 0.35rem;
-}
-
-.intent-api-actions {
+.intent-prompt-head {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
   align-items: center;
-  margin-top: auto;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
-.intent-api-cta {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.2rem;
-  padding: 0.45rem 0.85rem;
+.intent-prompt-role {
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  font-weight: 700;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
-.intent-api-docs {
+.intent-prompt-meta {
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--text-mute);
 }
 
-.intent-api-docs:hover {
-  color: var(--accent);
+.intent-prompt-body {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.intent-prompt-quote {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-mute);
+  line-height: 1.45;
+}
+
+.intent-prompt-quote span {
+  color: var(--text-soft);
+}
+
+.intent-prompt-section-label,
+.intent-prompt-layer-title {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.intent-prompt-layer-title {
+  color: var(--text);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+
+.intent-prompt-layer-where {
+  margin: 0 0 0.85rem;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.intent-prompt-diagram {
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--code-bg) 85%, #000);
+  overflow-x: auto;
+}
+
+.intent-prompt-mermaid {
+  min-height: 8rem;
+}
+
+.intent-prompt-mermaid svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.intent-prompt-mermaid-fallback {
+  margin: 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-soft);
+  white-space: pre;
+}
+
+.intent-prompt-layer + .intent-prompt-layer {
+  padding-top: 0.35rem;
+  border-top: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+}
+
+.intent-prompt-api-grid {
+  display: grid;
+  gap: 1rem 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.intent-prompt-api {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+}
+
+.intent-prompt-api .api-card {
+  height: 100%;
+}
+
+.intent-prompt-api-note {
+  margin: 0;
+  padding: 0 0.15rem;
+  color: var(--text-soft);
+  font-size: 0.84rem;
+  line-height: 1.45;
 }
 
 @media (max-width: 860px) {
