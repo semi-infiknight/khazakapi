@@ -463,78 +463,42 @@ a {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
-.intent-suggest {
-  position: relative;
-  padding: 1.25rem 1.35rem 1.35rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
-  border-radius: var(--radius-lg);
-  background:
-    radial-gradient(ellipse 80% 90% at 100% 0%, rgba(156, 136, 250, 0.12), transparent 55%),
-    linear-gradient(180deg, color-mix(in srgb, var(--surface) 92%, #1a1030), var(--surface));
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+.search-intent-form {
+  display: grid;
+  gap: 0.75rem;
 }
 
-.intent-suggest-eyebrow {
-  margin: 0 0 0.35rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.intent-suggest-title {
-  margin: 0;
-  font-size: clamp(1.35rem, 3.2vw, 1.85rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-}
-
-.intent-suggest-sub {
-  margin: 0.45rem 0 0;
-  max-width: 46ch;
-  color: var(--text-soft);
-  font-size: 0.95rem;
-  line-height: 1.45;
-}
-
-.intent-suggest-form {
-  margin-top: 1rem;
-}
-
-.intent-suggest-input {
+.search-intent-input {
   display: block;
   width: 100%;
-  min-height: 6.5rem;
+  min-height: 5.5rem;
   resize: vertical;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--code-bg) 88%, #000);
+  background: var(--surface);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: 0.98rem;
   line-height: 1.45;
-  padding: 0.9rem 1rem;
+  padding: 0.85rem 1rem;
   outline: none;
 }
 
-.intent-suggest-input:focus {
+.search-intent-input:focus {
   border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
-.intent-suggest-actions {
+.search-intent-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
   align-items: center;
-  margin-top: 0.75rem;
 }
 
-.intent-suggest-submit {
-  min-height: 2.6rem;
-  padding: 0.65rem 1.15rem;
+.search-intent-submit {
+  min-height: 2.5rem;
+  padding: 0.55rem 1rem;
   font-family: var(--font-mono);
   font-size: var(--fs-sm);
   font-weight: 700;
@@ -542,12 +506,12 @@ a {
   cursor: pointer;
 }
 
-.intent-suggest-submit:disabled {
+.search-intent-submit:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
-.intent-suggest-clear {
+.search-intent-clear {
   border: 0;
   background: transparent;
   color: var(--text-mute);
@@ -556,15 +520,14 @@ a {
   cursor: pointer;
 }
 
-.intent-suggest-clear:hover {
+.search-intent-clear:hover {
   color: var(--text);
 }
 
-.intent-suggest-examples {
+.search-intent-examples {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.9rem;
 }
 
 .intent-chip {
@@ -586,11 +549,8 @@ a {
   border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
 }
 
-.intent-suggest-error {
-  margin: 0.75rem 0 0;
-  color: var(--red);
-  font-family: var(--font-mono);
-  font-size: var(--fs-sm);
+.search-intent-form--compact .search-intent-input {
+  min-height: 7rem;
 }
 
 .intent-results {
@@ -740,12 +700,7 @@ a {
 }
 
 @media (max-width: 860px) {
-  .intent-suggest {
-    padding: 1.1rem 1rem 1.15rem;
-  }
-
-  .intent-suggest-input {
-    min-height: 5.5rem;
+  .search-intent-input {
     font-size: 0.95rem;
   }
 

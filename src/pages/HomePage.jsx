@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchCatalog, fetchSearch, fetchSuggest } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
-import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
-import IntentSuggest, { IntentResults } from "../components/IntentSuggest.jsx";
+import { IntentResults, SearchIntentForm } from "../components/IntentSuggest.jsx";
 import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
@@ -12,10 +11,10 @@ export default function HomePage() {
   const { setCatalogue } = useCatalogueNav();
   const location = useLocation();
   const navigate = useNavigate();
-  const [intent, setIntent] = useState("");
-  const [suggestion, setSuggestion] = useState(null);
+  const searchRef = useRef(null);
   const [query, setQuery] = useState("");
-  const [debounced, setDebounced] = useState("");
+  const [suggestion, setSuggestion] = useState(null);
+  const [suggesting, setSuggesting] = useState(false);
   const [category, setCategory] = useState("");
   const [auth, setAuth] = useState("");
   const [pricing, setPricing] = useState("");
@@ -23,11 +22,6 @@ export default function HomePage() {
   const [data, setData] = useState(null);
   const [catalog, setCatalog] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const t = setTimeout(() => setDebounced(query), 250);
-    return () => clearTimeout(t);
-  }, [query]);
 
   useEffect(() => {
     fetchCatalog()
@@ -39,6 +33,7 @@ export default function HomePage() {
     if (!location.state?.category) return;
     setCategory(location.state.category);
     setSuggestion(null);
+    setQuery("");
     navigate(location.pathname, { replace: true, state: null });
   }, [location.state?.category, location.pathname, navigate]);
 
@@ -46,7 +41,7 @@ export default function HomePage() {
     let cancelled = false;
     setLoading(true);
     fetchSearch({
-      q: suggestion ? "" : debounced,
+      q: "",
       category,
       auth,
       pricing,
@@ -63,10 +58,9 @@ export default function HomePage() {
     return () => {
       cancelled = true;
     };
-  }, [debounced, category, auth, pricing, tier, suggestion]);
+  }, [category, auth, pricing, tier]);
 
   const stats = data?.facets;
-  const isSearching = Boolean(debounced.trim()) && !suggestion;
   const showingSuggest = Boolean(suggestion);
 
   const setFilter = (key, value) => {
@@ -74,31 +68,43 @@ export default function HomePage() {
     if (key === "auth") setAuth(value);
     if (key === "pricing") setPricing(value);
     if (key === "tier") setTier(value);
-    if (value) setSuggestion(null);
+    if (value) {
+      setSuggestion(null);
+      setQuery("");
+    }
   };
 
-  const runIntentFromDock = async (text) => {
-    const q = (text ?? intent ?? query).trim();
+  const runSuggest = async (text = query) => {
+    const q = String(text || "").trim();
     if (!q) return;
-    setIntent(q);
     setQuery(q);
+    setSuggesting(true);
     try {
       const res = await fetchSuggest(q);
       setSuggestion(res);
-      document.getElementById("intent-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      requestAnimationFrame(() => {
+        document.getElementById("intent-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     } catch (err) {
       console.error(err);
+    } finally {
+      setSuggesting(false);
     }
+  };
+
+  const clearSuggest = () => {
+    setSuggestion(null);
+    setQuery("");
   };
 
   useEffect(() => {
     setCatalogue({
-      query: intent || query,
-      onQueryChange: (value) => {
-        setIntent(value);
-        setQuery(value);
-      },
-      onIntentSubmit: () => runIntentFromDock(intent || query),
+      query,
+      onQueryChange: setQuery,
+      onIntentSubmit: (text) => runSuggest(text ?? query),
+      suggesting,
+      suggestionActive: showingSuggest,
+      onClearSuggest: clearSuggest,
       facets: data?.facets,
       total: data?.catalogueTotal ?? data?.total,
       filteredTotal: data?.total,
@@ -107,7 +113,7 @@ export default function HomePage() {
       catalogCategories: catalog,
     });
     return () => setCatalogue(null);
-  }, [intent, query, category, auth, pricing, tier, data, catalog, setCatalogue]);
+  }, [query, suggesting, showingSuggest, category, auth, pricing, tier, data, catalog, setCatalogue]);
 
   return (
     <div className="container-main container-main--catalogue pt-6">
@@ -115,26 +121,6 @@ export default function HomePage() {
         <KhanShatyrAnimated className="hero-banner-art" />
         <h1 className="hero-title hero-banner-title">every Kazakhstan API you need</h1>
       </section>
-
-      <IntentSuggest
-        className="mb-8"
-        value={intent}
-        onChange={setIntent}
-        active={showingSuggest}
-        onResults={(res) => {
-          setSuggestion(res);
-          setQuery("");
-          setDebounced("");
-          requestAnimationFrame(() => {
-            document.getElementById("intent-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
-          });
-        }}
-        onClear={() => {
-          setSuggestion(null);
-          setIntent("");
-          setQuery("");
-        }}
-      />
 
       <section className="stats-metal-strip mb-8 grid grid-cols-2 lg:grid-cols-4">
         <div className="stats-block flex-col items-start justify-center">
@@ -155,49 +141,41 @@ export default function HomePage() {
         </div>
       </section>
 
-      {showingSuggest ? (
-        <div id="intent-results" className="mb-10">
-          <IntentResults suggestion={suggestion} />
-        </div>
-      ) : (
-        <div className="catalogue-layout">
-          <CategorySidebar
-            className="catalogue-sidebar-desktop"
-            facets={data?.facets}
-            total={data?.catalogueTotal ?? data?.total}
-            filteredTotal={data?.total}
-            filters={{ category, auth, pricing, tier }}
-            onFilterChange={setFilter}
-            catalogCategories={catalog}
-          />
+      <div className="catalogue-layout">
+        <CategorySidebar
+          className="catalogue-sidebar-desktop"
+          facets={data?.facets}
+          total={data?.catalogueTotal ?? data?.total}
+          filteredTotal={showingSuggest ? suggestion?.total : data?.total}
+          filters={{ category, auth, pricing, tier }}
+          onFilterChange={setFilter}
+          catalogCategories={catalog}
+        />
 
-          <div className="catalogue-main">
-            <section className="catalogue-search-desktop mb-6">
-              <div className="relative">
-                <input
-                  className="search-input"
-                  type="search"
-                  placeholder="Or browse by name — weather, KATO, Kaspi, 2GIS…"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  aria-label="Browse APIs by name"
-                />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-mono text-xs text-[var(--text-mute)]">
-                  ⌘K
-                </span>
-              </div>
-            </section>
+        <div className="catalogue-main">
+          <section className="catalogue-search-desktop mb-6">
+            <SearchIntentForm
+              inputRef={searchRef}
+              value={query}
+              onChange={setQuery}
+              onSubmit={runSuggest}
+              onClear={clearSuggest}
+              loading={suggesting}
+              active={showingSuggest}
+            />
+          </section>
 
-            {loading ? (
-              <p className="font-mono text-sm text-[var(--text-soft)]">Loading catalogue…</p>
-            ) : isSearching ? (
-              <ApiSearchList apis={data?.apis} query={debounced.trim()} total={data?.total} />
-            ) : (
-              <ApiGrid apis={data?.apis} />
-            )}
-          </div>
+          {showingSuggest ? (
+            <div id="intent-results">
+              <IntentResults suggestion={suggestion} />
+            </div>
+          ) : loading ? (
+            <p className="font-mono text-sm text-[var(--text-soft)]">Loading catalogue…</p>
+          ) : (
+            <ApiGrid apis={data?.apis} />
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
