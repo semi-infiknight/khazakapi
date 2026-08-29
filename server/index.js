@@ -10,6 +10,7 @@ import {
   publicListEntry,
   searchApis,
 } from "./lib/search.js";
+import { suggestApis, suggestExamples } from "./lib/suggest.js";
 import { checkHealth } from "./lib/health.js";
 import { openApiToPostman } from "./lib/postman.js";
 import { validateDataEgovKey, DATA_EGOV_LINKS } from "./lib/egov.js";
@@ -59,6 +60,21 @@ app.get("/api/catalogue", (req, res) => {
 
 app.get("/api/search", (req, res) => {
   res.json(searchApis(KZ_APIS, req.query));
+});
+
+app.get("/api/suggest", (req, res) => {
+  const limit = Math.min(Number(req.query.limit) || 24, 48);
+  res.json(suggestApis(KZ_APIS, req.query.q || "", { limit }));
+});
+
+app.post("/api/suggest", (req, res) => {
+  const q = req.body?.q || req.body?.query || "";
+  const limit = Math.min(Number(req.body?.limit) || 24, 48);
+  res.json(suggestApis(KZ_APIS, q, { limit }));
+});
+
+app.get("/api/suggest/examples", (_req, res) => {
+  res.json({ examples: suggestExamples() });
 });
 
 app.get("/api/categories", (_req, res) => {
@@ -247,7 +263,7 @@ if (isProd) {
 app.use((_req, res) => {
   res.status(404).json({
     error: "not found",
-    endpoints: ["/api/catalogue", "/api/search", "/api/categories", "/api/apis/:id", "/api/freshness"],
+    endpoints: ["/api/catalogue", "/api/search", "/api/suggest", "/api/categories", "/api/apis/:id", "/api/freshness"],
   });
 });
 

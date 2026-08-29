@@ -8,6 +8,16 @@ export async function fetchSearch(params = {}) {
   return res.json();
 }
 
+export async function fetchSuggest(query, { limit = 24 } = {}) {
+  const res = await fetch("/api/suggest", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ q: query, limit }),
+  });
+  if (!res.ok) throw new Error("Suggest failed");
+  return res.json();
+}
+
 export async function fetchApi(id) {
   const res = await fetch(`/api/apis/${id}`);
   if (!res.ok) throw new Error("API not found");

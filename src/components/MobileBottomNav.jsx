@@ -280,11 +280,18 @@ export default function MobileBottomNav() {
                 ref={searchInputRef}
                 className="catalogue-mobile-search-input"
                 type="search"
-                placeholder="Search APIs — weather, KATO, Kaspi, 2GIS…"
+                placeholder="Describe what you're building…"
                 value={catalogue?.query || ""}
                 onChange={(e) => catalogue?.onQueryChange(e.target.value)}
-                aria-label="Search APIs"
-                enterKeyHint="search"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    catalogue?.onIntentSubmit?.();
+                    setSearchExpanded(false);
+                  }
+                }}
+                aria-label="Describe what you are building"
+                enterKeyHint="go"
               />
               <button
                 type="button"
