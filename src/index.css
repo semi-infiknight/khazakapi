@@ -355,13 +355,10 @@ a {
 }
 
 .api-card-logo--image {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.96);
-  padding: 0.35rem;
-}
-
-.api-card-logo--remote {
-  background: #fff;
+  border-color: transparent;
+  background: transparent;
+  padding: 0;
+  border-radius: 0.65rem;
 }
 
 .api-card-logo--image img {
@@ -369,6 +366,7 @@ a {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  border-radius: 0.65rem;
 }
 
 .api-card-copy {

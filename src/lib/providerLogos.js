@@ -1,5 +1,5 @@
 const LOCAL_LOGOS = {
-  "2gis": "/logos/2gis.svg",
+  "2gis": "/logos/2gis.png",
   "air-astana": "/logos/air-astana.svg",
   "aviata-kz": "/logos/aviata-kz.svg",
   "bank-rbk": "/logos/bank-rbk.svg",
@@ -154,7 +154,7 @@ export function resolveProviderLogo(api) {
 
 export function providerBrandColor(slug) {
   const colors = {
-    "2gis": { bg: "#1dc866", text: "#ffffff" },
+    "2gis": { bg: "#1db93d", text: "#ffffff" },
     "data-egov-kz": { bg: "#0b4f9c", text: "#ffffff" },
     "egov-kz": { bg: "#0b4f9c", text: "#ffffff" },
     "kaspi-kz": { bg: "#f03b2d", text: "#ffffff" },

@@ -13,7 +13,7 @@ export default function ApiLogo({ api, size = 44 }) {
   if (logo && !failed) {
     return (
       <div
-        className={`api-card-logo api-card-logo--image ${logo.kind === "remote" ? "api-card-logo--remote" : ""}`}
+        className="api-card-logo api-card-logo--image"
         style={{ width: size, height: size }}
       >
         <img
