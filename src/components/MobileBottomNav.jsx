@@ -64,7 +64,9 @@ export default function MobileBottomNav() {
   const [sheetVisible, setSheetVisible] = useState(false);
 
   const activeFilterCount = catalogue
-    ? [catalogue.filters.auth, catalogue.filters.pricing, catalogue.filters.tier].filter(Boolean).length
+    ? [catalogue.filters.category, catalogue.filters.auth, catalogue.filters.pricing, catalogue.filters.tier].filter(
+        Boolean,
+      ).length
     : 0;
 
   useEffect(() => {
@@ -226,7 +228,10 @@ export default function MobileBottomNav() {
                   total={catalogue.total}
                   filteredTotal={catalogue.filteredTotal}
                   filters={catalogue.filters}
-                  onFilterChange={catalogue.onFilterChange}
+                  onFilterChange={(key, value) => {
+                    catalogue.onFilterChange(key, value);
+                    if (key === "category") closePanel();
+                  }}
                   catalogCategories={catalogue.catalogCategories}
                 />
               ) : (

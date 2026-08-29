@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { categoryLabel } from "../lib/categoryStyle.js";
 
 function SidebarSection({ title, children }) {
@@ -49,7 +48,7 @@ export default function CategorySidebar({
   catalogCategories,
   className = "",
 }) {
-  const { auth, pricing, tier } = filters;
+  const { category, auth, pricing, tier } = filters;
   const authOptions = Object.entries(facets?.auth || {}).sort((a, b) => b[1] - a[1]);
   const pricingOptions = Object.entries(facets?.pricing || {})
     .filter(([key]) => key === "paid" || key === "freemium")
@@ -58,9 +57,10 @@ export default function CategorySidebar({
     .filter(([key]) => key === "commercial")
     .sort((a, b) => b[1] - a[1]);
 
-  const hasFilters = auth || pricing || tier;
+  const hasFilters = category || auth || pricing || tier;
 
   const clearAll = () => {
+    onFilterChange("category", "");
     onFilterChange("auth", "");
     onFilterChange("pricing", "");
     onFilterChange("tier", "");
@@ -82,15 +82,20 @@ export default function CategorySidebar({
         )}
       </SidebarSection>
 
-      <SidebarSection title="Browse by category">
-        <p className="catalogue-sidebar-hint mb-2">Category → company → API type → endpoint</p>
+      <SidebarSection title="Filter by category">
+        <p className="catalogue-sidebar-hint mb-2">Narrow the catalogue without leaving this page</p>
         <div className="catalogue-sidebar-scroll">
           <nav className="catalogue-sidebar-nav">
             {(catalogCategories || []).map((cat) => (
-              <Link key={cat.slug} to={`/browse/${cat.slug}`} className="catalogue-sidebar-link">
+              <button
+                key={cat.slug}
+                type="button"
+                className={`catalogue-sidebar-link ${category === cat.name ? "catalogue-sidebar-link-active" : ""}`}
+                onClick={() => onFilterChange("category", category === cat.name ? "" : cat.name)}
+              >
                 <span className="catalogue-sidebar-link-text">{categoryLabel(cat.name)}</span>
                 <span className="catalogue-sidebar-count">{cat.count}</span>
-              </Link>
+              </button>
             ))}
           </nav>
         </div>

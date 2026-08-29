@@ -71,7 +71,7 @@ export default function CompanyEndpointNav({ hub, endpointQuery = "" }) {
         <Link to="/" className="service-nav-back">
           ← Catalogue
         </Link>
-        <Link to={`/browse/${hub.category.slug}`} className="service-nav-back mt-1 inline-block">
+        <Link to="/" state={{ category: hub.category.name }} className="service-nav-back mt-1 inline-block">
           ← {categoryLabel(hub.category.name)}
         </Link>
         <h1 className="service-nav-title">{hub.company.name}</h1>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchCatalog, fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
@@ -8,8 +9,11 @@ import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 export default function HomePage() {
   const { setCatalogue } = useCatalogueNav();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
+  const [category, setCategory] = useState("");
   const [auth, setAuth] = useState("");
   const [pricing, setPricing] = useState("");
   const [tier, setTier] = useState("");
@@ -29,10 +33,17 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    if (!location.state?.category) return;
+    setCategory(location.state.category);
+    navigate(location.pathname, { replace: true, state: null });
+  }, [location.state?.category, location.pathname, navigate]);
+
+  useEffect(() => {
     let cancelled = false;
     setLoading(true);
     fetchSearch({
       q: debounced,
+      category,
       auth,
       pricing,
       tier,
@@ -48,12 +59,13 @@ export default function HomePage() {
     return () => {
       cancelled = true;
     };
-  }, [debounced, auth, pricing, tier]);
+  }, [debounced, category, auth, pricing, tier]);
 
   const stats = data?.facets;
   const isSearching = Boolean(debounced.trim());
 
   const setFilter = (key, value) => {
+    if (key === "category") setCategory(value);
     if (key === "auth") setAuth(value);
     if (key === "pricing") setPricing(value);
     if (key === "tier") setTier(value);
@@ -66,12 +78,12 @@ export default function HomePage() {
       facets: data?.facets,
       total: data?.catalogueTotal ?? data?.total,
       filteredTotal: data?.total,
-      filters: { auth, pricing, tier },
+      filters: { category, auth, pricing, tier },
       onFilterChange: setFilter,
       catalogCategories: catalog,
     });
     return () => setCatalogue(null);
-  }, [query, auth, pricing, tier, data, catalog, setCatalogue]);
+  }, [query, category, auth, pricing, tier, data, catalog, setCatalogue]);
 
   return (
     <div className="container-main container-main--catalogue pt-6">
@@ -105,7 +117,7 @@ export default function HomePage() {
           facets={data?.facets}
           total={data?.catalogueTotal ?? data?.total}
           filteredTotal={data?.total}
-          filters={{ auth, pricing, tier }}
+          filters={{ category, auth, pricing, tier }}
           onFilterChange={setFilter}
           catalogCategories={catalog}
         />
