@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import CategorySidebar from "./CategorySidebar.jsx";
@@ -35,6 +35,14 @@ function DockIcon({ name }) {
     );
   }
 
+  if (name === "close") {
+    return (
+      <svg {...common}>
+        <path d="m7 7 10 10M17 7 7 17" />
+      </svg>
+    );
+  }
+
   return (
     <svg {...common}>
       <rect x="5" y="5" width="5.5" height="5.5" rx="1.2" />
@@ -49,7 +57,9 @@ export default function MobileBottomNav() {
   const { catalogue } = useCatalogueNav();
   const location = useLocation();
   const navigate = useNavigate();
+  const searchInputRef = useRef(null);
   const [openPanel, setOpenPanel] = useState(null);
+  const [searchExpanded, setSearchExpanded] = useState(false);
   const [renderedPanel, setRenderedPanel] = useState(null);
   const [sheetVisible, setSheetVisible] = useState(false);
 
@@ -63,6 +73,15 @@ export default function MobileBottomNav() {
       document.body.classList.remove("catalogue-mobile-nav-active");
     };
   }, []);
+
+  useEffect(() => {
+    if (searchExpanded) {
+      document.body.classList.add("catalogue-mobile-search-open");
+    } else {
+      document.body.classList.remove("catalogue-mobile-search-open");
+    }
+    return () => document.body.classList.remove("catalogue-mobile-search-open");
+  }, [searchExpanded]);
 
   useEffect(() => {
     const viewport = window.visualViewport;
@@ -95,7 +114,11 @@ export default function MobileBottomNav() {
   useEffect(() => {
     const requested = location.state?.openPanel;
     if (!requested || location.pathname !== "/") return;
-    setOpenPanel(requested);
+    if (requested === "search") {
+      setSearchExpanded(true);
+    } else {
+      setOpenPanel(requested);
+    }
     navigate(location.pathname, { replace: true, state: null });
   }, [location.pathname, location.state, navigate]);
 
@@ -126,9 +149,36 @@ export default function MobileBottomNav() {
     };
   }, [renderedPanel]);
 
+  useEffect(() => {
+    if (!searchExpanded) return undefined;
+    const frame = requestAnimationFrame(() => {
+      searchInputRef.current?.focus();
+    });
+    const onKey = (e) => {
+      if (e.key === "Escape") setSearchExpanded(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [searchExpanded]);
+
   const closePanel = () => setOpenPanel(null);
 
+  const openSearch = () => {
+    setOpenPanel(null);
+    if (catalogue) {
+      setSearchExpanded(true);
+      return;
+    }
+    navigate("/", { state: { openPanel: "search" } });
+  };
+
+  const closeSearch = () => setSearchExpanded(false);
+
   const openCataloguePanel = (panel) => {
+    setSearchExpanded(false);
     if (catalogue) {
       setOpenPanel(openPanel === panel ? null : panel);
       return;
@@ -136,19 +186,13 @@ export default function MobileBottomNav() {
     navigate("/", { state: { openPanel: panel } });
   };
 
-  const panelTitle =
-    renderedPanel === "search"
-      ? "Search"
-      : renderedPanel === "filters"
-        ? "Browse & filter"
-        : "Menu";
+  const openMenu = () => {
+    setSearchExpanded(false);
+    setOpenPanel(openPanel === "menu" ? null : "menu");
+  };
 
-  const panelLabel =
-    renderedPanel === "search"
-      ? "Search APIs"
-      : renderedPanel === "filters"
-        ? "Browse and filter APIs"
-        : "Site navigation";
+  const panelTitle = renderedPanel === "filters" ? "Browse & filter" : "Menu";
+  const panelLabel = renderedPanel === "filters" ? "Browse and filter APIs" : "Site navigation";
 
   const nav = (
     <div className="catalogue-mobile-nav" aria-hidden={false}>
@@ -172,19 +216,7 @@ export default function MobileBottomNav() {
             </div>
 
             <div className="catalogue-mobile-panel-body">
-              {renderedPanel === "search" && catalogue ? (
-                <div className="relative">
-                  <input
-                    className="search-input"
-                    type="search"
-                    placeholder="Search APIs — weather, KATO, Kaspi, 2GIS, NBK rates…"
-                    value={catalogue.query}
-                    onChange={(e) => catalogue.onQueryChange(e.target.value)}
-                    aria-label="Search APIs"
-                    autoFocus={sheetVisible}
-                  />
-                </div>
-              ) : renderedPanel === "filters" && catalogue ? (
+              {renderedPanel === "filters" && catalogue ? (
                 <CategorySidebar
                   className="catalogue-sidebar catalogue-sidebar--sheet"
                   facets={catalogue.facets}
@@ -202,35 +234,69 @@ export default function MobileBottomNav() {
         </div>
       )}
 
-      <nav className="catalogue-mobile-bar" aria-label="Mobile navigation">
+      <nav
+        className={`catalogue-mobile-bar ${searchExpanded ? "catalogue-mobile-bar--search-open" : ""}`}
+        aria-label="Mobile navigation"
+      >
         <button
           type="button"
-          className={`catalogue-mobile-bar-btn ${openPanel === "menu" ? "catalogue-mobile-bar-btn-active" : ""}`}
+          className={`catalogue-mobile-bar-btn catalogue-mobile-bar-btn-side ${openPanel === "menu" ? "catalogue-mobile-bar-btn-active" : ""}`}
           aria-expanded={openPanel === "menu"}
           aria-label="Open site menu"
-          onClick={() => setOpenPanel(openPanel === "menu" ? null : "menu")}
+          onClick={openMenu}
+          tabIndex={searchExpanded ? -1 : 0}
         >
           <span className="catalogue-mobile-bar-icon">
             <DockIcon name="menu" />
           </span>
         </button>
+
+        <div className={`catalogue-mobile-search-slot ${searchExpanded ? "catalogue-mobile-search-slot--open" : ""}`}>
+          {!searchExpanded ? (
+            <button
+              type="button"
+              className="catalogue-mobile-bar-btn catalogue-mobile-search-trigger"
+              aria-label="Search APIs"
+              onClick={openSearch}
+            >
+              <span className="catalogue-mobile-bar-icon">
+                <DockIcon name="search" />
+              </span>
+            </button>
+          ) : (
+            <label className="catalogue-mobile-search-field">
+              <span className="catalogue-mobile-search-field-icon">
+                <DockIcon name="search" />
+              </span>
+              <input
+                ref={searchInputRef}
+                className="catalogue-mobile-search-input"
+                type="search"
+                placeholder="Search APIs — weather, KATO, Kaspi, 2GIS…"
+                value={catalogue?.query || ""}
+                onChange={(e) => catalogue?.onQueryChange(e.target.value)}
+                aria-label="Search APIs"
+                enterKeyHint="search"
+              />
+              <button
+                type="button"
+                className="catalogue-mobile-search-close"
+                aria-label="Close search"
+                onClick={closeSearch}
+              >
+                <DockIcon name="close" />
+              </button>
+            </label>
+          )}
+        </div>
+
         <button
           type="button"
-          className={`catalogue-mobile-bar-btn ${openPanel === "search" ? "catalogue-mobile-bar-btn-active" : ""}`}
-          aria-expanded={openPanel === "search"}
-          aria-label="Search APIs"
-          onClick={() => openCataloguePanel("search")}
-        >
-          <span className="catalogue-mobile-bar-icon">
-            <DockIcon name="search" />
-          </span>
-        </button>
-        <button
-          type="button"
-          className={`catalogue-mobile-bar-btn ${openPanel === "filters" ? "catalogue-mobile-bar-btn-active" : ""}`}
+          className={`catalogue-mobile-bar-btn catalogue-mobile-bar-btn-side ${openPanel === "filters" ? "catalogue-mobile-bar-btn-active" : ""}`}
           aria-expanded={openPanel === "filters"}
           aria-label="Browse categories and filters"
           onClick={() => openCataloguePanel("filters")}
+          tabIndex={searchExpanded ? -1 : 0}
         >
           <span className="catalogue-mobile-bar-icon">
             <DockIcon name="browse" />
