@@ -1,7 +1,16 @@
 /**
- * In-memory TF–IDF vector index for catalogue semantic search.
- * No external embedding API required — works offline at suggest time.
+ * Semantic vector index: precomputed catalogue embeddings + local query embedder.
+ * Falls back to TF–IDF when embeddings file or model is unavailable.
  */
+
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { apiDocumentText } from "./catalogText.js";
+import { embedQuery, warmQueryEmbedder } from "./queryEmbedder.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const EMBEDDINGS_PATH = path.join(__dirname, "../data/api-embeddings.json");
 
 const STOP = new Set([
   "a", "an", "the", "and", "or", "for", "to", "of", "in", "on", "at", "by", "with", "from", "is", "are",
@@ -9,40 +18,6 @@ const STOP = new Set([
   "application", "applications", "api", "apis", "kz", "kazakhstan", "using", "use", "need", "needs",
   "want", "build", "building", "make", "making", "get", "got", "into", "via",
 ]);
-
-const CATEGORY_HINTS = {
-  Payments: "checkout payments wallet billing invoice pay card acquiring merchant",
-  "Maps & location": "maps address geocode location nearby places poi autocomplete coordinates",
-  "Travel & mobility": "taxi ride routing eta courier fleet navigation mobility transit",
-  "Food & delivery": "food delivery restaurant grocery courier last mile order",
-  "Logistics & delivery": "parcel shipping logistics courier tracking tariff delivery",
-  "E-commerce": "marketplace shop store seller catalog product inventory ecommerce",
-  "Banking & finance": "bank banking finance fintech fx exchange rates currency iban",
-  Banking: "bank banking finance rates accounts",
-  Finance: "finance rates currency markets",
-  "Financial Markets": "markets exchange rates securities finance",
-  "Government data": "government open data statistics dataset egov public",
-  "Government services": "government egov services identity documents",
-  "Auth & identity": "login signup auth oauth identity signature verify kyc",
-  AI: "ai llm chatbot assistant nlp machine learning gpt",
-  Communications: "sms otp telecom analytics ads marketing metrica",
-  "Environment & climate": "weather forecast climate temperature environment",
-  Environment: "weather climate environment ecology",
-  Health: "health hospital clinic medical pharmacy",
-  Healthcare: "healthcare hospital medical clinic",
-  "Housing & property": "housing property apartment real estate rent cadastral",
-  Property: "property real estate housing",
-  Transport: "transport trains buses flights tickets railways",
-  Transportation: "transportation trains buses flights",
-  "Cloud & infrastructure": "cloud hosting storage infrastructure server",
-  "E-invoicing & tax": "tax invoice esf einvoice vat kgd",
-  Education: "education school university students",
-  Demography: "population demography census society",
-  "Population & society": "population society demographics households",
-  Prices: "prices inflation consumer goods",
-  Realtime: "realtime live streaming websocket",
-  "Data & enrichment": "enrichment validation lookup data quality",
-};
 
 function tokenize(text = "") {
   return String(text)
@@ -52,31 +27,48 @@ function tokenize(text = "") {
     .filter((t) => t.length > 1 && !STOP.has(t));
 }
 
-function apiDocumentText(api) {
-  const hints = CATEGORY_HINTS[api.category] || "";
-  return [
-    api.title || "",
-    api.category || "",
-    api.provider || "",
-    api.companyName || "",
-    api.source || "",
-    api.note || "",
-    api.apiType || "",
-    api.group || "",
-    hints,
-  ].join(" ");
-}
-
 function buildTf(tokens) {
   const tf = new Map();
   for (const t of tokens) tf.set(t, (tf.get(t) || 0) + 1);
-  // length-normalize
   const len = Math.sqrt([...tf.values()].reduce((s, v) => s + v * v, 0)) || 1;
   for (const [k, v] of tf) tf.set(k, v / len);
   return tf;
 }
 
-export function createVectorIndex(apis) {
+function cosineFloat(a, b) {
+  if (!a?.length || !b?.length || a.length !== b.length) return 0;
+  let score = 0;
+  for (let i = 0; i < a.length; i++) score += a[i] * b[i];
+  return score;
+}
+
+function cosineSparse(a, b) {
+  if (!a.size || !b.size) return 0;
+  let score = 0;
+  const [small, large] = a.size <= b.size ? [a, b] : [b, a];
+  for (const [t, v] of small) {
+    const u = large.get(t);
+    if (u) score += v * u;
+  }
+  return score;
+}
+
+function loadEmbeddingStore() {
+  try {
+    if (!fs.existsSync(EMBEDDINGS_PATH)) return null;
+    const raw = JSON.parse(fs.readFileSync(EMBEDDINGS_PATH, "utf8"));
+    if (!raw?.ids?.length || !raw?.vectors?.length) return null;
+    return {
+      model: raw.model,
+      dimensions: raw.dimensions,
+      byId: new Map(raw.ids.map((id, i) => [id, Float32Array.from(raw.vectors[i])])),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function createTfidfFallback(apis) {
   const docs = apis.map((api) => {
     const tokens = tokenize(apiDocumentText(api));
     return { api, tokens, tf: buildTf(tokens) };
@@ -96,10 +88,7 @@ export function createVectorIndex(apis) {
 
   const vectors = docs.map((doc) => {
     const vec = new Map();
-    for (const [t, tf] of doc.tf) {
-      vec.set(t, tf * (idf.get(t) || 0));
-    }
-    // re-normalize after idf
+    for (const [t, tf] of doc.tf) vec.set(t, tf * (idf.get(t) || 0));
     const norm = Math.sqrt([...vec.values()].reduce((s, v) => s + v * v, 0)) || 1;
     for (const [t, v] of vec) vec.set(t, v / norm);
     return { api: doc.api, vec };
@@ -119,35 +108,68 @@ export function createVectorIndex(apis) {
     return vec;
   }
 
-  function cosine(a, b) {
-    if (!a.size || !b.size) return 0;
-    let score = 0;
-    // iterate smaller
-    const [small, large] = a.size <= b.size ? [a, b] : [b, a];
-    for (const [t, v] of small) {
-      const u = large.get(t);
-      if (u) score += v * u;
-    }
-    return score;
+  return {
+    mode: "tfidf",
+    minScore: 0.18,
+    vectors,
+    encode,
+    cosine: cosineSparse,
+  };
+}
+
+function createSemanticIndex(apis, store) {
+  const vectors = apis
+    .map((api) => {
+      const id = String(api.id || api.slug || api.title || "");
+      const vec = store.byId.get(id);
+      return vec ? { api, vec } : null;
+    })
+    .filter(Boolean);
+
+  if (vectors.length < apis.length * 0.9) {
+    console.warn(
+      `[vectorIndex] Embedding coverage ${vectors.length}/${apis.length} — rebuild with npm run embed:build`,
+    );
   }
 
-  function search(query, { limit = 24, minScore = 0.18 } = {}) {
-    const qv = encode(query);
-    if (!qv.size) return { hits: [], bestScore: 0, fit: false };
+  warmQueryEmbedder();
 
-    const scored = vectors
-      .map(({ api, vec }) => ({ api, score: cosine(qv, vec) }))
-      .filter((row) => row.score >= minScore)
-      .sort((a, b) => b.score - a.score || a.api.title.localeCompare(b.api.title))
-      .slice(0, limit);
+  return {
+    mode: "semantic",
+    minScore: 0.32,
+    vectors,
+    async encode(query) {
+      return embedQuery(query);
+    },
+    cosine: cosineFloat,
+  };
+}
 
-    const bestScore = scored[0]?.score || 0;
+export function createVectorIndex(apis) {
+  const store = loadEmbeddingStore();
+  const index = store ? createSemanticIndex(apis, store) : createTfidfFallback(apis);
+
+  async function search(query, { limit = 24, minScore } = {}) {
+    const floor = minScore ?? index.minScore;
+    const qv = await index.encode(query);
+    if (!qv || (qv instanceof Map && !qv.size) || (qv instanceof Float32Array && !qv.length)) {
+      return { hits: [], bestScore: 0, fit: false, mode: index.mode };
+    }
+
+    const allScored = index.vectors
+      .map(({ api, vec }) => ({ api, score: index.cosine(qv, vec) }))
+      .sort((a, b) => b.score - a.score || a.api.title.localeCompare(b.api.title));
+
+    const bestScore = allScored[0]?.score || 0;
+    const scored = allScored.filter((row) => row.score >= floor).slice(0, limit);
+
     return {
       hits: scored,
       bestScore,
-      fit: scored.length > 0 && bestScore >= minScore,
+      fit: scored.length > 0 && bestScore >= floor,
+      mode: index.mode,
     };
   }
 
-  return { search, size: vectors.length };
+  return { search, size: index.vectors.length, mode: index.mode };
 }

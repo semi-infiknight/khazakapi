@@ -62,15 +62,25 @@ app.get("/api/search", (req, res) => {
   res.json(searchApis(KZ_APIS, req.query));
 });
 
-app.get("/api/suggest", (req, res) => {
-  const limit = Math.min(Number(req.query.limit) || 24, 48);
-  res.json(suggestApis(KZ_APIS, req.query.q || "", { limit }));
+app.get("/api/suggest", async (req, res) => {
+  try {
+    const limit = Math.min(Number(req.query.limit) || 24, 48);
+    res.json(await suggestApis(KZ_APIS, req.query.q || "", { limit }));
+  } catch (err) {
+    console.error("[suggest]", err);
+    res.status(500).json({ error: "Suggest failed", message: err.message });
+  }
 });
 
-app.post("/api/suggest", (req, res) => {
-  const q = req.body?.q || req.body?.query || "";
-  const limit = Math.min(Number(req.body?.limit) || 24, 48);
-  res.json(suggestApis(KZ_APIS, q, { limit }));
+app.post("/api/suggest", async (req, res) => {
+  try {
+    const q = req.body?.q || req.body?.query || "";
+    const limit = Math.min(Number(req.body?.limit) || 24, 48);
+    res.json(await suggestApis(KZ_APIS, q, { limit }));
+  } catch (err) {
+    console.error("[suggest]", err);
+    res.status(500).json({ error: "Suggest failed", message: err.message });
+  }
 });
 
 app.get("/api/suggest/examples", (_req, res) => {

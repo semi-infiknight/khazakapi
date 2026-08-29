@@ -207,10 +207,11 @@ const EXAMPLE_PROMPTS = [
   "Gov dashboard using open data, population, and weather",
 ];
 
-/** Minimum cosine similarity to treat a hit as a real fit. */
-const MIN_SCORE = 0.2;
-/** Absolute floor — below this we declare no catalogue fit. */
-const NO_FIT_SCORE = 0.18;
+/** Score floors by index mode (semantic MiniLM vs TF–IDF fallback). */
+const THRESHOLDS = {
+  semantic: { min: 0.38, noFit: 0.32 },
+  tfidf: { min: 0.2, noFit: 0.18 },
+};
 
 let cachedIndex = null;
 let cachedApiCount = 0;
@@ -326,7 +327,7 @@ function noFitSuggestions(query) {
   };
 }
 
-export function suggestApis(apis, query = "", { limit = 24 } = {}) {
+export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
   const text = String(query || "").trim();
   if (!text) {
     return {
@@ -342,23 +343,27 @@ export function suggestApis(apis, query = "", { limit = 24 } = {}) {
   }
 
   const index = getIndex(apis);
-  const { hits, bestScore, fit } = index.search(text, { limit, minScore: NO_FIT_SCORE });
+  const mode = index.mode || "tfidf";
+  const { noFit, min } = THRESHOLDS[mode] || THRESHOLDS.tfidf;
+  const { hits, bestScore, fit } = await index.search(text, { limit, minScore: noFit });
 
   if (!fit || !hits.length) {
     return {
       ...noFitSuggestions(text),
       bestScore,
+      mode,
     };
   }
 
   // Drop marginal hits far below the best score so weak neighbours don't pollute the stack.
-  const cutoff = Math.max(MIN_SCORE, bestScore * 0.72);
+  const cutoff = Math.max(min, bestScore * 0.72);
   const strongHits = hits.filter((h) => h.score >= cutoff).slice(0, limit);
 
   if (!strongHits.length) {
     return {
       ...noFitSuggestions(text),
       bestScore,
+      mode,
     };
   }
 
@@ -403,6 +408,7 @@ export function suggestApis(apis, query = "", { limit = 24 } = {}) {
     query: text,
     fit: true,
     bestScore,
+    mode,
     summary: buildSummary(text, intentBlocks, { fit: true, bestScore }),
     examples: EXAMPLE_PROMPTS,
     intents: intentBlocks,

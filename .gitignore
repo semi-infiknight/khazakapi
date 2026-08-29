@@ -6,6 +6,7 @@ dist/
 .env.*
 !.env.example
 .railway/
+.cache/
 *.pem
 credentials.json
 auth.json
