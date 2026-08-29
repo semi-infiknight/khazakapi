@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="data.egov.kz">
-  <rect width="64" height="64" rx="16" fill="#0b4f9c"/>
-  <path fill="#7ec8ff" d="M32 14c-8.8 0-16 7.2-16 16s7.2 16 16 16 16-7.2 16-16-7.2-16-16-16zm0 6.5c5.2 0 9.5 4.3 9.5 9.5S37.2 39.5 32 39.5 22.5 35.2 22.5 30 26.8 20.5 32 20.5z"/>
-  <path fill="#fff" d="M24 44h16v4H24z"/>
-</svg>
