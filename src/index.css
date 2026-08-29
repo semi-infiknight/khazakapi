@@ -1449,7 +1449,7 @@ nav a:hover {
   z-index: 61;
   pointer-events: auto;
   display: grid;
-  grid-template-columns: repeat(2, 3.25rem);
+  grid-template-columns: repeat(3, 3.25rem);
   width: fit-content;
   max-width: calc(100vw - 1.25rem);
   margin-inline: auto;
@@ -1649,6 +1649,36 @@ body.catalogue-mobile-sheet-open {
   overflow: hidden;
 }
 
+.site-nav-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.site-nav-panel-link {
+  display: block;
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+}
+
+.site-nav-panel-link:hover,
+.site-nav-panel-link:focus-visible {
+  background: var(--surface-alt);
+  color: var(--text);
+}
+
+.site-nav-panel-link-btn {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
 /* Postman-style search list — Khazak theme */
 .catalogue-search-panel {
   overflow: hidden;
@@ -1766,6 +1796,10 @@ body.catalogue-mobile-sheet-open {
 }
 
 @media (max-width: 860px) {
+  .site-header {
+    display: none;
+  }
+
   html {
     scroll-padding-bottom: calc(
       var(--catalogue-dock-offset) + env(safe-area-inset-bottom, 0px) + var(--browser-ui-offset, 0px)
@@ -1796,6 +1830,12 @@ body.catalogue-mobile-sheet-open {
   }
 
   body.catalogue-mobile-nav-active footer.container-main {
+    padding-bottom: calc(
+      var(--catalogue-dock-offset) + env(safe-area-inset-bottom, 0px) + var(--browser-ui-offset, 0px)
+    );
+  }
+
+  body.catalogue-mobile-nav-active main {
     padding-bottom: calc(
       var(--catalogue-dock-offset) + env(safe-area-inset-bottom, 0px) + var(--browser-ui-offset, 0px)
     );

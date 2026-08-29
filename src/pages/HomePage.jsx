@@ -3,20 +3,19 @@ import { fetchCatalog, fetchSearch } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import ApiSearchList from "../components/ApiSearchList.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
-import CatalogueMobileNav from "../components/CatalogueMobileNav.jsx";
 import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
+import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 export default function HomePage() {
+  const { setCatalogue } = useCatalogueNav();
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
   const [auth, setAuth] = useState("");
   const [pricing, setPricing] = useState("");
   const [tier, setTier] = useState("");
-  const [mobilePanel, setMobilePanel] = useState(null);
   const [data, setData] = useState(null);
   const [catalog, setCatalog] = useState(null);
   const [loading, setLoading] = useState(true);
-  // const [bannerDismissed, setBannerDismissed] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setDebounced(query), 250);
@@ -60,21 +59,22 @@ export default function HomePage() {
     if (key === "tier") setTier(value);
   };
 
-  return (
-    <>
-    <div className="container-main container-main--catalogue pt-6">
-      {/* {!bannerDismissed && (
-        <div className="banner-warn mb-4 flex items-start justify-between gap-3">
-          <span>
-            ⚠ data.egov.kz requires an API key for most datasets — entries marked Copy-paste use keyless endpoints
-            (NBK RSS, Kazhydromet WIS2). Counts reflect the local Kazakhstan catalogue.
-          </span>
-          <button type="button" className="font-mono text-xs opacity-70" onClick={() => setBannerDismissed(true)}>
-            ✕
-          </button>
-        </div>
-      )} */}
+  useEffect(() => {
+    setCatalogue({
+      query,
+      onQueryChange: setQuery,
+      facets: data?.facets,
+      total: data?.catalogueTotal ?? data?.total,
+      filteredTotal: data?.total,
+      filters: { auth, pricing, tier },
+      onFilterChange: setFilter,
+      catalogCategories: catalog,
+    });
+    return () => setCatalogue(null);
+  }, [query, auth, pricing, tier, data, catalog, setCatalogue]);
 
+  return (
+    <div className="container-main container-main--catalogue pt-6">
       <section className="hero-banner mb-8" aria-label="Khazak API">
         <KhanShatyrAnimated className="hero-banner-art" />
         <h1 className="hero-title hero-banner-title">every Kazakhstan API you need</h1>
@@ -137,19 +137,5 @@ export default function HomePage() {
         </div>
       </div>
     </div>
-
-    <CatalogueMobileNav
-      openPanel={mobilePanel}
-      onPanelChange={setMobilePanel}
-      query={query}
-      onQueryChange={setQuery}
-      facets={data?.facets}
-      total={data?.catalogueTotal ?? data?.total}
-      filteredTotal={data?.total}
-      filters={{ auth, pricing, tier }}
-      onFilterChange={setFilter}
-      catalogCategories={catalog}
-    />
-    </>
   );
 }

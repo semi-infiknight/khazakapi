@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CategorySidebar from "./CategorySidebar.jsx";
+import SiteNavPanel from "./SiteNavPanel.jsx";
+import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 function DockIcon({ name }) {
   const common = {
@@ -15,6 +18,14 @@ function DockIcon({ name }) {
     "aria-hidden": true,
   };
 
+  if (name === "menu") {
+    return (
+      <svg {...common}>
+        <path d="M5 7h14M5 12h14M5 17h14" />
+      </svg>
+    );
+  }
+
   if (name === "search") {
     return (
       <svg {...common}>
@@ -26,30 +37,25 @@ function DockIcon({ name }) {
 
   return (
     <svg {...common}>
-      <path d="M5 7h14M5 12h14M5 17h14" />
-      <circle cx="8" cy="7" r="1" fill="currentColor" />
-      <circle cx="15" cy="12" r="1" fill="currentColor" />
-      <circle cx="10" cy="17" r="1" fill="currentColor" />
+      <rect x="5" y="5" width="5.5" height="5.5" rx="1.2" />
+      <rect x="13.5" y="5" width="5.5" height="5.5" rx="1.2" />
+      <rect x="5" y="13.5" width="5.5" height="5.5" rx="1.2" />
+      <rect x="13.5" y="13.5" width="5.5" height="5.5" rx="1.2" />
     </svg>
   );
 }
 
-export default function CatalogueMobileNav({
-  openPanel,
-  onPanelChange,
-  query,
-  onQueryChange,
-  facets,
-  total,
-  filteredTotal,
-  filters,
-  onFilterChange,
-  catalogCategories,
-}) {
-  const { auth, pricing, tier } = filters;
-  const activeFilterCount = [auth, pricing, tier].filter(Boolean).length;
+export default function MobileBottomNav() {
+  const { catalogue } = useCatalogueNav();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [openPanel, setOpenPanel] = useState(null);
   const [renderedPanel, setRenderedPanel] = useState(null);
   const [sheetVisible, setSheetVisible] = useState(false);
+
+  const activeFilterCount = catalogue
+    ? [catalogue.filters.auth, catalogue.filters.pricing, catalogue.filters.tier].filter(Boolean).length
+    : 0;
 
   useEffect(() => {
     document.body.classList.add("catalogue-mobile-nav-active");
@@ -87,6 +93,13 @@ export default function CatalogueMobileNav({
   }, []);
 
   useEffect(() => {
+    const requested = location.state?.openPanel;
+    if (!requested || location.pathname !== "/") return;
+    setOpenPanel(requested);
+    navigate(location.pathname, { replace: true, state: null });
+  }, [location.pathname, location.state, navigate]);
+
+  useEffect(() => {
     if (openPanel) {
       setRenderedPanel(openPanel);
       const frame = requestAnimationFrame(() => {
@@ -103,7 +116,7 @@ export default function CatalogueMobileNav({
   useEffect(() => {
     if (!renderedPanel) return undefined;
     const onKey = (e) => {
-      if (e.key === "Escape") onPanelChange(null);
+      if (e.key === "Escape") setOpenPanel(null);
     };
     document.addEventListener("keydown", onKey);
     document.body.classList.add("catalogue-mobile-sheet-open");
@@ -111,11 +124,31 @@ export default function CatalogueMobileNav({
       document.removeEventListener("keydown", onKey);
       document.body.classList.remove("catalogue-mobile-sheet-open");
     };
-  }, [renderedPanel, onPanelChange]);
+  }, [renderedPanel]);
 
-  const togglePanel = (panel) => {
-    onPanelChange(openPanel === panel ? null : panel);
+  const closePanel = () => setOpenPanel(null);
+
+  const openCataloguePanel = (panel) => {
+    if (catalogue) {
+      setOpenPanel(openPanel === panel ? null : panel);
+      return;
+    }
+    navigate("/", { state: { openPanel: panel } });
   };
+
+  const panelTitle =
+    renderedPanel === "search"
+      ? "Search"
+      : renderedPanel === "filters"
+        ? "Browse & filter"
+        : "Menu";
+
+  const panelLabel =
+    renderedPanel === "search"
+      ? "Search APIs"
+      : renderedPanel === "filters"
+        ? "Browse and filter APIs"
+        : "Site navigation";
 
   const nav = (
     <div className="catalogue-mobile-nav" aria-hidden={false}>
@@ -124,63 +157,69 @@ export default function CatalogueMobileNav({
           className={`catalogue-mobile-sheet ${sheetVisible ? "catalogue-mobile-sheet-visible" : "catalogue-mobile-sheet-closing"}`}
           role="presentation"
         >
-          <button
-            type="button"
-            className="catalogue-mobile-backdrop"
-            aria-label="Close panel"
-            onClick={() => onPanelChange(null)}
-          />
+          <button type="button" className="catalogue-mobile-backdrop" aria-label="Close panel" onClick={closePanel} />
           <div
             className="catalogue-mobile-panel panel"
             role="dialog"
             aria-modal="true"
-            aria-label={renderedPanel === "search" ? "Search APIs" : "Browse and filter APIs"}
+            aria-label={panelLabel}
           >
             <div className="catalogue-mobile-panel-head">
-              <h2 className="catalogue-mobile-panel-title">
-                {renderedPanel === "search" ? "Search" : "Browse & filter"}
-              </h2>
-              <button type="button" className="catalogue-mobile-close" onClick={() => onPanelChange(null)}>
+              <h2 className="catalogue-mobile-panel-title">{panelTitle}</h2>
+              <button type="button" className="catalogue-mobile-close" onClick={closePanel}>
                 Done
               </button>
             </div>
 
             <div className="catalogue-mobile-panel-body">
-              {renderedPanel === "search" ? (
+              {renderedPanel === "search" && catalogue ? (
                 <div className="relative">
                   <input
                     className="search-input"
                     type="search"
                     placeholder="Search APIs — weather, KATO, Kaspi, 2GIS, NBK rates…"
-                    value={query}
-                    onChange={(e) => onQueryChange(e.target.value)}
+                    value={catalogue.query}
+                    onChange={(e) => catalogue.onQueryChange(e.target.value)}
                     aria-label="Search APIs"
                     autoFocus={sheetVisible}
                   />
                 </div>
-              ) : (
+              ) : renderedPanel === "filters" && catalogue ? (
                 <CategorySidebar
                   className="catalogue-sidebar catalogue-sidebar--sheet"
-                  facets={facets}
-                  total={total}
-                  filteredTotal={filteredTotal}
-                  filters={filters}
-                  onFilterChange={onFilterChange}
-                  catalogCategories={catalogCategories}
+                  facets={catalogue.facets}
+                  total={catalogue.total}
+                  filteredTotal={catalogue.filteredTotal}
+                  filters={catalogue.filters}
+                  onFilterChange={catalogue.onFilterChange}
+                  catalogCategories={catalogue.catalogCategories}
                 />
+              ) : (
+                <SiteNavPanel onNavigate={closePanel} />
               )}
             </div>
           </div>
         </div>
       )}
 
-      <nav className="catalogue-mobile-bar" aria-label="Catalogue">
+      <nav className="catalogue-mobile-bar" aria-label="Mobile navigation">
+        <button
+          type="button"
+          className={`catalogue-mobile-bar-btn ${openPanel === "menu" ? "catalogue-mobile-bar-btn-active" : ""}`}
+          aria-expanded={openPanel === "menu"}
+          aria-label="Open site menu"
+          onClick={() => setOpenPanel(openPanel === "menu" ? null : "menu")}
+        >
+          <span className="catalogue-mobile-bar-icon">
+            <DockIcon name="menu" />
+          </span>
+        </button>
         <button
           type="button"
           className={`catalogue-mobile-bar-btn ${openPanel === "search" ? "catalogue-mobile-bar-btn-active" : ""}`}
           aria-expanded={openPanel === "search"}
           aria-label="Search APIs"
-          onClick={() => togglePanel("search")}
+          onClick={() => openCataloguePanel("search")}
         >
           <span className="catalogue-mobile-bar-icon">
             <DockIcon name="search" />
@@ -191,7 +230,7 @@ export default function CatalogueMobileNav({
           className={`catalogue-mobile-bar-btn ${openPanel === "filters" ? "catalogue-mobile-bar-btn-active" : ""}`}
           aria-expanded={openPanel === "filters"}
           aria-label="Browse categories and filters"
-          onClick={() => togglePanel("filters")}
+          onClick={() => openCataloguePanel("filters")}
         >
           <span className="catalogue-mobile-bar-icon">
             <DockIcon name="browse" />

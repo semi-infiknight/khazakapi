@@ -1,10 +1,10 @@
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
-import { useState } from "react";
+import MobileBottomNav from "./MobileBottomNav.jsx";
+import { CatalogueNavProvider } from "../context/CatalogueNavContext.jsx";
 import { useLocation } from "react-router-dom";
 
 export default function Layout({ children }) {
-  const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const chromeLess = pathname === "/mcp" || pathname === "/setup/mcp";
 
@@ -13,10 +13,13 @@ export default function Layout({ children }) {
   }
 
   return (
-    <div className="app-shell">
-      <Header menuOpen={menuOpen} onMenuToggle={() => setMenuOpen((v) => !v)} />
-      <main>{children}</main>
-      <Footer />
-    </div>
+    <CatalogueNavProvider>
+      <div className="app-shell">
+        <Header />
+        <main>{children}</main>
+        <Footer />
+        <MobileBottomNav />
+      </div>
+    </CatalogueNavProvider>
   );
 }
