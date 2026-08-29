@@ -61,6 +61,7 @@ export default function HomePage() {
   };
 
   return (
+    <>
     <div className="container-main container-main--catalogue pt-6">
       {/* {!bannerDismissed && (
         <div className="banner-warn mb-4 flex items-start justify-between gap-3">
@@ -135,19 +136,20 @@ export default function HomePage() {
           )}
         </div>
       </div>
-
-      <CatalogueMobileNav
-        openPanel={mobilePanel}
-        onPanelChange={setMobilePanel}
-        query={query}
-        onQueryChange={setQuery}
-        facets={data?.facets}
-        total={data?.catalogueTotal ?? data?.total}
-        filteredTotal={data?.total}
-        filters={{ auth, pricing, tier }}
-        onFilterChange={setFilter}
-        catalogCategories={catalog}
-      />
     </div>
+
+    <CatalogueMobileNav
+      openPanel={mobilePanel}
+      onPanelChange={setMobilePanel}
+      query={query}
+      onQueryChange={setQuery}
+      facets={data?.facets}
+      total={data?.catalogueTotal ?? data?.total}
+      filteredTotal={data?.total}
+      filters={{ auth, pricing, tier }}
+      onFilterChange={setFilter}
+      catalogCategories={catalog}
+    />
+    </>
   );
 }

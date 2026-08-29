@@ -1415,16 +1415,21 @@ nav a:hover {
 /* Mobile catalogue bottom bar + slide-up panels */
 .catalogue-mobile-nav {
   display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
 }
 
 .catalogue-mobile-bar {
   position: fixed;
-  left: max(0.625rem, env(safe-area-inset-left, 0px));
-  right: max(0.625rem, env(safe-area-inset-right, 0px));
+  left: 0;
+  right: 0;
   bottom: calc(
     var(--catalogue-dock-gap) + env(safe-area-inset-bottom, 0px) + var(--browser-ui-offset, 0px)
   );
-  z-index: 60;
+  z-index: 61;
+  pointer-events: auto;
   display: grid;
   grid-template-columns: repeat(2, 3.25rem);
   width: fit-content;
@@ -1762,6 +1767,10 @@ body.catalogue-mobile-sheet-open {
     display: block;
   }
 
+  .catalogue-mobile-sheet {
+    pointer-events: auto;
+  }
+
   .container-main--catalogue {
     padding-bottom: calc(
       var(--catalogue-dock-offset) + env(safe-area-inset-bottom, 0px) + var(--browser-ui-offset, 0px)
@@ -1772,11 +1781,6 @@ body.catalogue-mobile-sheet-open {
     padding-bottom: calc(
       var(--catalogue-dock-offset) + env(safe-area-inset-bottom, 0px) + var(--browser-ui-offset, 0px)
     );
-  }
-
-  .card,
-  .api-card {
-    background-attachment: fixed, fixed, fixed;
   }
 
   .catalogue-sidebar {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import CategorySidebar from "./CategorySidebar.jsx";
 
 function DockIcon({ name }) {
@@ -62,8 +63,14 @@ export default function CatalogueMobileNav({
     if (!viewport) return undefined;
 
     const syncBrowserChrome = () => {
-      const chrome = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop);
-      document.documentElement.style.setProperty("--browser-ui-offset", `${chrome}px`);
+      if (!viewport.height) {
+        document.documentElement.style.setProperty("--browser-ui-offset", "0px");
+        return;
+      }
+
+      const chrome = Math.max(0, window.innerHeight - viewport.offsetTop - viewport.height);
+      const capped = Math.min(chrome, 120);
+      document.documentElement.style.setProperty("--browser-ui-offset", `${capped}px`);
     };
 
     syncBrowserChrome();
@@ -110,7 +117,7 @@ export default function CatalogueMobileNav({
     onPanelChange(openPanel === panel ? null : panel);
   };
 
-  return (
+  const nav = (
     <div className="catalogue-mobile-nav" aria-hidden={false}>
       {renderedPanel && (
         <div
@@ -196,4 +203,6 @@ export default function CatalogueMobileNav({
       </nav>
     </div>
   );
+
+  return createPortal(nav, document.body);
 }
