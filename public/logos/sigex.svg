@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SIGEX">
+  <rect width="64" height="64" rx="16" fill="#2f855a"/>
+  <path fill="#fff" d="M20 42l12-20 12 20H20zm6.5-6h11l-5.5-9.2L26.5 36z"/>
+  <path fill="#b7f7d0" d="M32 18l2 3h-4l2-3z"/>
+</svg>
