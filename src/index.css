@@ -609,75 +609,19 @@ nav a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 860px) {
-  .container-main--catalogue {
-    padding-top: 1rem;
-  }
-
-  .hero-banner {
-    aspect-ratio: 4 / 5;
-    max-height: none;
-    min-height: 17.5rem;
-    margin-bottom: 1.75rem;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: calc(var(--radius-lg) + 4px);
-    box-shadow:
-      inset 0 1px rgba(255, 255, 255, 0.06),
-      0 16px 42px rgba(0, 0, 0, 0.38);
-    background:
-      radial-gradient(ellipse 90% 70% at 72% 18%, rgba(156, 136, 250, 0.16), transparent 58%),
-      linear-gradient(180deg, rgba(19, 10, 26, 0.2), rgba(10, 0, 21, 0.88));
-  }
-
-  .hero-banner::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background:
-      linear-gradient(180deg, rgba(10, 0, 21, 0.08) 0%, transparent 34%),
-      linear-gradient(0deg, rgba(10, 0, 21, 0.94) 0%, rgba(10, 0, 21, 0.72) 34%, transparent 68%);
-  }
-
-  .hero-banner-art {
-    inset: 0;
-    transform: scale(1.06);
-    transform-origin: 62% 42%;
-  }
-
-  .hero-banner-title {
-    position: absolute;
-    z-index: 2;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: auto;
-    transform: none;
-    max-width: none;
-    margin: 0;
-    padding: 0.35rem 1rem 1.05rem;
-    font-size: clamp(1.85rem, 8.2vw, 2.35rem);
-    line-height: 0.98;
-    letter-spacing: -0.02em;
-    text-wrap: balance;
-  }
-}
-
 @media (max-width: 640px) {
   .hero-title {
     font-size: 2rem;
   }
 
   .hero-banner {
-    aspect-ratio: 5 / 6;
-    min-height: 16rem;
+    max-height: none;
+    min-height: 160px;
   }
 
   .hero-banner-title {
-    font-size: clamp(1.7rem, 7.4vw, 2rem);
-    padding-inline: 0.85rem;
+    max-width: min(13ch, 54%);
+    font-size: 2rem;
   }
 }
 
