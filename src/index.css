@@ -38,13 +38,23 @@
   --dur-0: 80ms;
   --dur-1: 140ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --card-bg: repeating-linear-gradient(
+  --card-bg-mesh: repeating-linear-gradient(
       105deg,
       rgba(255, 255, 255, 0.026) 0 1px,
       transparent 1px 8px
-    ),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 24%, rgba(201, 207, 214, 0.045) 52%, transparent 74%),
-    linear-gradient(180deg, #0b0710 0%, #040207 58%, #0a050d 100%);
+    );
+  --card-bg-shine: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.04),
+      transparent 24%,
+      rgba(201, 207, 214, 0.045) 52%,
+      transparent 74%
+    );
+  --card-bg-base: linear-gradient(180deg, #0b0710 0%, #040207 58%, #0a050d 100%);
+  --card-bg: var(--card-bg-mesh), var(--card-bg-shine), var(--card-bg-base);
+  --catalogue-dock-height: 4.15rem;
+  --catalogue-dock-gap: 0.7rem;
+  --catalogue-dock-offset: calc(var(--catalogue-dock-height) + var(--catalogue-dock-gap) + 0.85rem);
 }
 
 :root[data-theme="light"] {
@@ -266,6 +276,11 @@ a {
 
 .card:hover {
   border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.card,
+.api-card {
+  background-attachment: scroll, scroll, scroll;
 }
 
 .api-card {
@@ -1401,24 +1416,30 @@ nav a:hover {
 
 .catalogue-mobile-bar {
   position: fixed;
-  left: 50%;
-  bottom: calc(0.7rem + env(safe-area-inset-bottom, 0px));
+  left: max(0.625rem, env(safe-area-inset-left, 0px));
+  right: max(0.625rem, env(safe-area-inset-right, 0px));
+  bottom: calc(var(--catalogue-dock-gap) + env(safe-area-inset-bottom, 0px));
   z-index: 60;
   display: grid;
   grid-template-columns: repeat(3, minmax(4.4rem, 1fr));
-  width: min(22rem, calc(100vw - 1.25rem));
-  transform: translateX(-50%);
+  width: auto;
+  max-width: 22rem;
+  margin-inline: auto;
   gap: 0.15rem;
-  margin: 0;
   padding: 0.3rem;
   border: 1px solid rgba(194, 201, 211, 0.16);
   border-radius: 1.2rem;
   background: linear-gradient(155deg, rgba(31, 34, 45, 0.98), rgba(10, 12, 20, 0.98));
+  background-size: auto;
+  background-position: center;
   box-shadow:
     inset 0 1px rgba(255, 255, 255, 0.1),
     0 10px 30px rgba(0, 0, 0, 0.42);
   color: #d8dce7;
   text-shadow: none;
+  transform: none;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .catalogue-mobile-bar-btn {
@@ -1507,7 +1528,7 @@ nav a:hover {
   display: flex;
   max-height: min(78vh, 640px);
   flex-direction: column;
-  margin: 0 0.5rem calc(4.8rem + env(safe-area-inset-bottom, 0px));
+  margin: 0 0.5rem calc(var(--catalogue-dock-offset) + env(safe-area-inset-bottom, 0px));
   padding: 0;
   overflow: hidden;
   border-radius: var(--radius-lg);
@@ -1691,6 +1712,10 @@ body.catalogue-mobile-sheet-open {
 }
 
 @media (max-width: 860px) {
+  html {
+    scroll-padding-bottom: calc(var(--catalogue-dock-offset) + env(safe-area-inset-bottom, 0px));
+  }
+
   .catalogue-layout {
     grid-template-columns: 1fr;
   }
@@ -1705,7 +1730,16 @@ body.catalogue-mobile-sheet-open {
   }
 
   .container-main--catalogue {
-    padding-bottom: calc(6.25rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--catalogue-dock-offset) + env(safe-area-inset-bottom, 0px));
+  }
+
+  body.catalogue-mobile-nav-active footer.container-main {
+    padding-bottom: calc(var(--catalogue-dock-offset) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .card,
+  .api-card {
+    background-attachment: fixed, fixed, fixed;
   }
 
   .catalogue-sidebar {

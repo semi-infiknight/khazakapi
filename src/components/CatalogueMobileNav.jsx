@@ -58,6 +58,13 @@ export default function CatalogueMobileNav({
   const activeFilterCount = [auth, pricing, tier].filter(Boolean).length;
 
   useEffect(() => {
+    document.body.classList.add("catalogue-mobile-nav-active");
+    return () => {
+      document.body.classList.remove("catalogue-mobile-nav-active");
+    };
+  }, []);
+
+  useEffect(() => {
     if (!openPanel) return undefined;
     const onKey = (e) => {
       if (e.key === "Escape") onPanelChange(null);
@@ -129,7 +136,7 @@ export default function CatalogueMobileNav({
         </div>
       )}
 
-      <nav className="catalogue-mobile-bar stats-metal-strip" aria-label="Catalogue">
+      <nav className="catalogue-mobile-bar" aria-label="Catalogue">
         <button type="button" className="catalogue-mobile-bar-btn" onClick={showApis}>
           <span className="catalogue-mobile-bar-icon">
             <DockIcon name="apis" />

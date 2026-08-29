@@ -61,7 +61,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="container-main container-main--catalogue pb-16 pt-6">
+    <div className="container-main container-main--catalogue pt-6">
       {/* {!bannerDismissed && (
         <div className="banner-warn mb-4 flex items-start justify-between gap-3">
           <span>
