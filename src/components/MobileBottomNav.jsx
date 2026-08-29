@@ -272,7 +272,13 @@ export default function MobileBottomNav() {
               </span>
             </button>
           ) : (
-            <label className="catalogue-mobile-search-field">
+            <form
+              className="catalogue-mobile-search-field"
+              onSubmit={(e) => {
+                e.preventDefault();
+                catalogue?.onIntentSubmit?.();
+              }}
+            >
               <span className="catalogue-mobile-search-field-icon">
                 <DockIcon name="search" />
               </span>
@@ -283,9 +289,17 @@ export default function MobileBottomNav() {
                 placeholder="Describe what you're building…"
                 value={catalogue?.query || ""}
                 onChange={(e) => catalogue?.onQueryChange(e.target.value)}
-                aria-label="Search APIs"
-                enterKeyHint="search"
+                aria-label="Describe your product"
+                enterKeyHint="go"
               />
+              <button
+                type="submit"
+                className="catalogue-mobile-search-go"
+                aria-label="Analyze integration chain"
+                disabled={!catalogue?.query?.trim() || catalogue?.intentSubmitting}
+              >
+                {catalogue?.intentSubmitting ? "…" : "↵"}
+              </button>
               <button
                 type="button"
                 className="catalogue-mobile-search-close"
@@ -294,7 +308,7 @@ export default function MobileBottomNav() {
               >
                 <DockIcon name="close" />
               </button>
-            </label>
+            </form>
           )}
         </div>
 

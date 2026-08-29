@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchCatalog, fetchSearch, fetchSuggest } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
-import { IntentResults } from "../components/IntentSuggest.jsx";
+import { IntegrationChain, IntegrationChainLoading } from "../components/IntentSuggest.jsx";
 import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
@@ -12,7 +12,7 @@ export default function HomePage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const [debounced, setDebounced] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
   const [suggestion, setSuggestion] = useState(null);
   const [suggesting, setSuggesting] = useState(false);
   const [category, setCategory] = useState("");
@@ -24,30 +24,30 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => setDebounced(query), 350);
-    return () => clearTimeout(t);
-  }, [query]);
-
-  useEffect(() => {
     fetchCatalog()
       .then((res) => setCatalog(res.categories))
       .catch(console.error);
   }, []);
 
+  const clearIntent = useCallback(() => {
+    setSubmittedQuery("");
+    setSuggestion(null);
+    setSuggesting(false);
+  }, []);
+
   useEffect(() => {
     if (!location.state?.category) return;
     setCategory(location.state.category);
-    setSuggestion(null);
+    clearIntent();
     setQuery("");
-    setDebounced("");
     navigate(location.pathname, { replace: true, state: null });
-  }, [location.state?.category, location.pathname, navigate]);
+  }, [location.state?.category, location.pathname, navigate, clearIntent]);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     fetchSearch({
-      q: "",
+      q: submittedQuery ? "" : query,
       category,
       auth,
       pricing,
@@ -64,37 +64,35 @@ export default function HomePage() {
     return () => {
       cancelled = true;
     };
-  }, [category, auth, pricing, tier]);
+  }, [query, category, auth, pricing, tier, submittedQuery]);
 
-  // Typing in search automatically runs intent suggest — no extra button.
-  useEffect(() => {
-    const q = debounced.trim();
+  const submitIntent = useCallback(() => {
+    const q = query.trim();
     if (!q) {
-      setSuggestion(null);
-      setSuggesting(false);
-      return undefined;
+      clearIntent();
+      return;
     }
 
-    let cancelled = false;
+    if (q === submittedQuery && suggestion && !suggesting) return;
+
+    setSubmittedQuery(q);
     setSuggesting(true);
+    setSuggestion(null);
+
     fetchSuggest(q)
       .then((res) => {
-        if (!cancelled) setSuggestion(res);
+        setSuggestion(res);
+        requestAnimationFrame(() => {
+          document.getElementById("intent-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
       })
-      .catch((err) => {
-        if (!cancelled) console.error(err);
-      })
-      .finally(() => {
-        if (!cancelled) setSuggesting(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [debounced]);
+      .catch(console.error)
+      .finally(() => setSuggesting(false));
+  }, [query, submittedQuery, suggestion, suggesting, clearIntent]);
 
   const stats = data?.facets;
-  const showingSuggest = Boolean(debounced.trim());
+  const showingIntent = Boolean(submittedQuery.trim());
+  const draftChanged = showingIntent && query.trim() !== submittedQuery.trim();
 
   const setFilter = (key, value) => {
     if (key === "category") setCategory(value);
@@ -102,9 +100,8 @@ export default function HomePage() {
     if (key === "pricing") setPricing(value);
     if (key === "tier") setTier(value);
     if (value) {
-      setSuggestion(null);
+      clearIntent();
       setQuery("");
-      setDebounced("");
     }
   };
 
@@ -112,15 +109,31 @@ export default function HomePage() {
     setCatalogue({
       query,
       onQueryChange: setQuery,
+      onIntentSubmit: submitIntent,
+      intentSubmitting: suggesting,
+      intentActive: showingIntent,
       facets: data?.facets,
       total: data?.catalogueTotal ?? data?.total,
-      filteredTotal: showingSuggest ? suggestion?.total : data?.total,
+      filteredTotal: showingIntent ? suggestion?.total : data?.total,
       filters: { category, auth, pricing, tier },
       onFilterChange: setFilter,
       catalogCategories: catalog,
     });
     return () => setCatalogue(null);
-  }, [query, category, auth, pricing, tier, data, catalog, suggestion, showingSuggest, setCatalogue]);
+  }, [
+    query,
+    category,
+    auth,
+    pricing,
+    tier,
+    data,
+    catalog,
+    suggestion,
+    showingIntent,
+    suggesting,
+    submitIntent,
+    setCatalogue,
+  ]);
 
   return (
     <div className="container-main container-main--catalogue pt-6">
@@ -153,7 +166,7 @@ export default function HomePage() {
           className="catalogue-sidebar-desktop"
           facets={data?.facets}
           total={data?.catalogueTotal ?? data?.total}
-          filteredTotal={showingSuggest ? suggestion?.total : data?.total}
+          filteredTotal={showingIntent ? suggestion?.total : data?.total}
           filters={{ category, auth, pricing, tier }}
           onFilterChange={setFilter}
           catalogCategories={catalog}
@@ -161,27 +174,45 @@ export default function HomePage() {
 
         <div className="catalogue-main">
           <section className="catalogue-search-desktop mb-6">
-            <div className="relative">
-              <input
-                className="search-input"
-                type="search"
-                placeholder="Describe what you're building — or search Kaspi, 2GIS, weather…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                aria-label="Search APIs"
-              />
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-mono text-xs text-[var(--text-mute)]">
-                {suggesting ? "…" : "⌘K"}
-              </span>
-            </div>
+            <form
+              className="catalogue-intent-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                submitIntent();
+              }}
+            >
+              <div className="relative">
+                <input
+                  className="search-input"
+                  type="search"
+                  placeholder="Describe what you're building — press Enter to get an integration chain"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  aria-label="Describe your product"
+                />
+                <button
+                  type="submit"
+                  className="catalogue-intent-submit"
+                  disabled={!query.trim() || suggesting}
+                  aria-label="Analyze integration chain"
+                >
+                  {suggesting ? "…" : "↵"}
+                </button>
+              </div>
+              <p className="catalogue-intent-hint">
+                {draftChanged
+                  ? "Press Enter to refresh the integration chain"
+                  : "Describe your app, then press Enter — we won't analyze until you submit"}
+              </p>
+            </form>
           </section>
 
-          {showingSuggest ? (
+          {showingIntent ? (
             <div id="intent-results">
-              {suggesting && !suggestion ? (
-                <p className="font-mono text-sm text-[var(--text-soft)]">Finding APIs…</p>
+              {suggesting ? (
+                <IntegrationChainLoading query={submittedQuery} />
               ) : (
-                <IntentResults suggestion={suggestion} />
+                <IntegrationChain suggestion={suggestion} />
               )}
             </div>
           ) : loading ? (
