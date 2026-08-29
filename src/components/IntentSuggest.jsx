@@ -1,13 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import ApiCard from "./ApiCard.jsx";
 
-const EXAMPLES = [
-  "Food delivery app for Almaty with Kaspi pay and courier ETAs",
-  "Fintech wallet that shows NBK rates and accepts FreedomPay",
-  "Marketplace for local sellers with maps and address autocomplete",
-  "Travel planner with flights, trains, and hotel maps in Astana",
-];
-
 function shortApiLabel(title = "") {
   const base = title.split("~")[0].trim();
   return base.length > 26 ? `${base.slice(0, 24)}…` : base || "API";
@@ -142,76 +135,6 @@ function PromptApiBlock({ api }) {
       <ApiCard api={api} />
       <p className="intent-prompt-api-note">{explainApi(api)}</p>
     </div>
-  );
-}
-
-/** Compact composer for the search bar / search sheet — not a standalone page section. */
-export function SearchIntentForm({
-  value,
-  onChange,
-  onSubmit,
-  onClear,
-  loading = false,
-  active = false,
-  inputRef,
-  compact = false,
-}) {
-  return (
-    <form
-      className={`search-intent-form ${compact ? "search-intent-form--compact" : ""}`}
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit?.(value);
-      }}
-    >
-      <textarea
-        ref={inputRef}
-        className="search-intent-input"
-        rows={compact ? 4 : 3}
-        value={value}
-        onChange={(e) => onChange?.(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            onSubmit?.(value);
-          }
-        }}
-        placeholder="Describe what you're building — e.g. food delivery with Kaspi pay and maps…"
-        aria-label="Describe what you're building"
-      />
-      <div className="search-intent-actions">
-        <button type="submit" className="btn-metal search-intent-submit" disabled={loading || !value.trim()}>
-          {loading ? "Finding APIs…" : "Suggest APIs"}
-        </button>
-        {active && (
-          <button
-            type="button"
-            className="search-intent-clear"
-            onClick={() => {
-              onChange?.("");
-              onClear?.();
-            }}
-          >
-            Clear
-          </button>
-        )}
-      </div>
-      <div className="search-intent-examples" aria-label="Example product ideas">
-        {EXAMPLES.map((example) => (
-          <button
-            key={example}
-            type="button"
-            className="intent-chip"
-            onClick={() => {
-              onChange?.(example);
-              onSubmit?.(example);
-            }}
-          >
-            {example}
-          </button>
-        ))}
-      </div>
-    </form>
   );
 }
 
