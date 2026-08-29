@@ -139,12 +139,25 @@ function PromptApiBlock({ api }) {
 }
 
 export function IntentResults({ suggestion }) {
-  if (!suggestion?.intents?.length && !suggestion?.apis?.length) {
-    if (!suggestion?.query) return null;
+  if (!suggestion?.query) return null;
+
+  if (suggestion.fit === false || (!suggestion?.intents?.length && !suggestion?.apis?.length)) {
     return (
       <div className="panel intent-prompt intent-prompt--empty">
+        <header className="intent-prompt-head">
+          <span className="intent-prompt-role">assistant</span>
+          <span className="intent-prompt-meta">no fit</span>
+        </header>
         <p className="intent-prompt-body">
-          No APIs matched &ldquo;{suggestion.query}&rdquo;. Try naming payments, maps, delivery, or government data.
+          {suggestion.summary ||
+            `We don’t have a good API fit for “${suggestion.query}” in the Kazakhstan catalogue.`}
+        </p>
+        <p className="intent-prompt-quote">
+          Prompt: <span>&ldquo;{suggestion.query}&rdquo;</span>
+        </p>
+        <p className="intent-prompt-nofit-hint">
+          This directory covers KZ payments, maps, delivery, banking, travel, weather, telecom, and government open
+          data — not every product idea worldwide.
         </p>
       </div>
     );
@@ -159,6 +172,7 @@ export function IntentResults({ suggestion }) {
         <span className="intent-prompt-meta">
           {suggestion.total} API{suggestion.total === 1 ? "" : "s"} · {suggestion.intents.length} layer
           {suggestion.intents.length === 1 ? "" : "s"}
+          {suggestion.bestScore != null ? ` · score ${Number(suggestion.bestScore).toFixed(2)}` : ""}
         </span>
       </header>
 

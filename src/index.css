@@ -599,6 +599,13 @@ a {
   line-height: 1.45;
 }
 
+.intent-prompt-nofit-hint {
+  margin: 0;
+  color: var(--text-mute);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
 .chip {
   display: inline-flex;
   align-items: center;

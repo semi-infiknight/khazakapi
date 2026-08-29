@@ -1,8 +1,8 @@
-import { publicListEntry, searchApis, tokenize } from "./search.js";
+import { publicListEntry, tokenize } from "./search.js";
+import { createVectorIndex } from "./vectorIndex.js";
 
 /**
- * Product-intent recipes: map “what I’m building” language → API roles + catalogue matches.
- * Scores are additive; higher = stronger match for that use-case.
+ * Product-intent recipes: label semantic hits into stack layers when they fit.
  */
 const INTENTS = [
   {
@@ -207,6 +207,22 @@ const EXAMPLE_PROMPTS = [
   "Gov dashboard using open data, population, and weather",
 ];
 
+/** Minimum cosine similarity to treat a hit as a real fit. */
+const MIN_SCORE = 0.2;
+/** Absolute floor — below this we declare no catalogue fit. */
+const NO_FIT_SCORE = 0.18;
+
+let cachedIndex = null;
+let cachedApiCount = 0;
+
+function getIndex(apis) {
+  if (!cachedIndex || cachedApiCount !== apis.length) {
+    cachedIndex = createVectorIndex(apis);
+    cachedApiCount = apis.length;
+  }
+  return cachedIndex;
+}
+
 function normalize(text = "") {
   return text.toLowerCase().replace(/ё/g, "е");
 }
@@ -226,27 +242,14 @@ function scoreIntent(intent, hay, tokens) {
   return score;
 }
 
-function scoreApiForIntent(api, intent, tokens) {
-  let score = 0;
-  const category = api.category || "";
-  const provider = normalize(`${api.provider || ""} ${api.companyName || ""} ${api.source || ""}`);
-  const title = normalize(api.title || "");
-  const note = normalize(api.note || "");
-
-  if (intent.categories.includes(category)) score += 12;
-  for (const p of intent.providers) {
-    if (provider.includes(p) || title.includes(p)) score += 10;
+function intentForApi(api, rankedIntents) {
+  for (const { intent, score } of rankedIntents) {
+    if (score < 4) continue;
+    if (intent.categories.includes(api.category || "")) return intent;
+    const provider = normalize(`${api.provider || ""} ${api.companyName || ""}`);
+    if (intent.providers.some((p) => provider.includes(p))) return intent;
   }
-  for (const t of tokens) {
-    if (title.includes(t)) score += 3;
-    if (note.includes(t)) score += 1;
-    if (provider.includes(t)) score += 2;
-  }
-  if (api.pricing === "free") score += 1;
-  if (api.auth === "none") score += 1;
-  if (api.copyable) score += 1;
-  if (api.tier === "commercial") score += 0.5;
-  return score;
+  return null;
 }
 
 function authGuidance(api) {
@@ -261,11 +264,9 @@ function authGuidance(api) {
 }
 
 function plugInSteps(api, intent) {
-  const steps = [
-    `Use this for: ${intent.role.toLowerCase()}.`,
-    intent.where,
-    authGuidance(api),
-  ];
+  const role = intent?.role || api.category || "this capability";
+  const where = intent?.where || `Use when your product needs ${api.category || "this data"}.`;
+  const steps = [`Use this for: ${String(role).toLowerCase()}.`, where, authGuidance(api)];
   if (api.docs || api.sourceUrl) {
     steps.push("Open the official docs linked on the API page, then try a live request in the tester.");
   } else {
@@ -274,9 +275,29 @@ function plugInSteps(api, intent) {
   return steps;
 }
 
-function buildSummary(query, intents) {
-  if (!intents.length) {
-    return `No strong product match for “${query}”. Showing the closest catalogue hits — try naming payments, maps, delivery, or government data.`;
+function enrichApi(api, score, intent) {
+  const where = intent?.where || `Relevant when your product needs ${api.category || "this capability"}.`;
+  return {
+    ...publicListEntry(api),
+    matchScore: Number(score.toFixed(4)),
+    role: intent?.role || api.category || "Catalogue match",
+    plugIn: {
+      where,
+      auth: authGuidance(api),
+      steps: plugInSteps(api, intent),
+      docs: api.docs || api.sourceUrl || null,
+      href:
+        api.hubPath ||
+        (api.companyHub && api.categorySlug && api.companySlug
+          ? `/browse/${api.categorySlug}/${api.companySlug}/${api.slug || api.id}`
+          : `/apis/${api.slug || api.id}`),
+    },
+  };
+}
+
+function buildSummary(query, intents, { fit, bestScore }) {
+  if (!fit) {
+    return `We don’t have a good API fit for “${query}” in the Kazakhstan catalogue (best similarity ${bestScore.toFixed(2)}). Try payments, maps, delivery, banking, travel, weather, or government open data — or browse categories.`;
   }
   const labels = intents.slice(0, 3).map((i) => i.label.toLowerCase());
   if (labels.length === 1) {
@@ -285,16 +306,24 @@ function buildSummary(query, intents) {
   if (labels.length === 2) {
     return `Your build likely needs ${labels[0]} and ${labels[1]}. Suggested APIs and where to wire them in:`;
   }
-  return `Your build maps to ${labels.slice(0, -1).join(", ")}, and ${labels.at(-1)}. Suggested APIs and where to wire them in:`;
+  if (labels.length >= 3) {
+    return `Your build maps to ${labels.slice(0, -1).join(", ")}, and ${labels.at(-1)}. Suggested APIs and where to wire them in:`;
+  }
+  return `Here are the closest Kazakhstan APIs for “${query}”, grouped by how they plug into a product.`;
 }
 
-function uniqueById(items) {
-  const seen = new Set();
-  return items.filter((item) => {
-    if (seen.has(item.id)) return false;
-    seen.add(item.id);
-    return true;
-  });
+function noFitSuggestions(query) {
+  return {
+    query,
+    fit: false,
+    bestScore: 0,
+    summary: `We don’t have a good API fit for “${query}” in this catalogue. KhazakAPI focuses on Kazakhstan payments, maps, delivery, banking, travel, weather, telecom, and government open data.`,
+    reason: "no_semantic_fit",
+    examples: EXAMPLE_PROMPTS,
+    intents: [],
+    apis: [],
+    total: 0,
+  };
 }
 
 export function suggestApis(apis, query = "", { limit = 24 } = {}) {
@@ -302,6 +331,8 @@ export function suggestApis(apis, query = "", { limit = 24 } = {}) {
   if (!text) {
     return {
       query: null,
+      fit: null,
+      bestScore: 0,
       summary: "Describe the product you are building to get a stack of Kazakhstan APIs and where each one plugs in.",
       examples: EXAMPLE_PROMPTS,
       intents: [],
@@ -310,98 +341,69 @@ export function suggestApis(apis, query = "", { limit = 24 } = {}) {
     };
   }
 
+  const index = getIndex(apis);
+  const { hits, bestScore, fit } = index.search(text, { limit, minScore: NO_FIT_SCORE });
+
+  if (!fit || !hits.length) {
+    return {
+      ...noFitSuggestions(text),
+      bestScore,
+    };
+  }
+
+  // Drop marginal hits far below the best score so weak neighbours don't pollute the stack.
+  const cutoff = Math.max(MIN_SCORE, bestScore * 0.72);
+  const strongHits = hits.filter((h) => h.score >= cutoff).slice(0, limit);
+
+  if (!strongHits.length) {
+    return {
+      ...noFitSuggestions(text),
+      bestScore,
+    };
+  }
+
   const hay = normalize(text);
   const tokens = tokenize(text);
-
   const rankedIntents = INTENTS.map((intent) => ({
     intent,
     score: scoreIntent(intent, hay, tokens),
-  }))
-    .filter((row) => row.score > 0)
-    .sort((a, b) => b.score - a.score);
+  })).sort((a, b) => b.score - a.score);
 
-  const topIntents = rankedIntents.slice(0, 5);
-  const usedIds = new Set();
-  const intentBlocks = [];
+  const layers = new Map();
 
-  for (const { intent } of topIntents) {
-    const matches = apis
-      .map((api) => ({ api, score: scoreApiForIntent(api, intent, tokens) }))
-      .filter((row) => row.score >= 10)
-      .sort((a, b) => b.score - a.score || a.api.title.localeCompare(b.api.title))
-      .slice(0, 6)
-      .filter((row) => !usedIds.has(row.api.id));
+  for (const { api, score } of strongHits) {
+    const intent = intentForApi(api, rankedIntents);
+    const layerId = intent?.id || `cat-${(api.categorySlug || api.category || "other").toString()}`;
+    const label = intent?.label || api.category || "Related APIs";
+    const role = intent?.role || api.category || "Related APIs";
+    const where =
+      intent?.where || `Use when your product needs ${api.category || "this capability"}.`;
 
-    if (!matches.length) continue;
-
-    for (const row of matches) usedIds.add(row.api.id);
-
-    intentBlocks.push({
-      id: intent.id,
-      label: intent.label,
-      role: intent.role,
-      where: intent.where,
-      score: matches[0].score,
-      apis: matches.map(({ api, score }) => ({
-        ...publicListEntry(api),
-        matchScore: score,
-        role: intent.role,
-        plugIn: {
-          where: intent.where,
-          auth: authGuidance(api),
-          steps: plugInSteps(api, intent),
-          docs: api.docs || api.sourceUrl || null,
-          href:
-            api.hubPath ||
-            (api.companyHub && api.categorySlug && api.companySlug
-              ? `/browse/${api.categorySlug}/${api.companySlug}/${api.slug || api.id}`
-              : `/apis/${api.slug || api.id}`),
-        },
-      })),
-    });
+    if (!layers.has(layerId)) {
+      layers.set(layerId, {
+        id: layerId,
+        label,
+        role,
+        where,
+        score: score,
+        apis: [],
+      });
+    }
+    const layer = layers.get(layerId);
+    layer.score = Math.max(layer.score, score);
+    if (layer.apis.length < 6) {
+      layer.apis.push(enrichApi(api, score, intent));
+    }
   }
 
-  // Fill gaps with classic catalogue search so free-form wording still returns something useful.
-  const searchFallback = searchApis(apis, { q: text, limit: limit }).apis;
-  const flatFromIntents = intentBlocks.flatMap((block) => block.apis);
-  const merged = uniqueById([
-    ...flatFromIntents,
-    ...searchFallback.map((api) => ({
-      ...api,
-      role: api.category || "Catalogue match",
-      plugIn: {
-        where: `Relevant to “${text}” based on catalogue search`,
-        auth: authGuidance(api),
-        steps: [
-          `Matched your description via keywords in ${api.category}.`,
-          authGuidance(api),
-          "Open the API page to inspect the endpoint and try a live request.",
-        ],
-        docs: api.docs || api.sourceUrl || null,
-        href:
-          api.hubPath ||
-          (api.companyHub && api.categorySlug && api.companySlug
-            ? `/browse/${api.categorySlug}/${api.companySlug}/${api.slug || api.id}`
-            : `/apis/${api.slug || api.id}`),
-      },
-    })),
-  ]).slice(0, limit);
-
-  // If no intents fired but search found hits, synthesize a single “Closest matches” block.
-  if (!intentBlocks.length && merged.length) {
-    intentBlocks.push({
-      id: "closest",
-      label: "Closest catalogue matches",
-      role: "Keyword matches",
-      where: "Review these endpoints and open the ones that fit your product flow",
-      score: 1,
-      apis: merged.slice(0, 8),
-    });
-  }
+  const intentBlocks = [...layers.values()].sort((a, b) => b.score - a.score);
+  const merged = intentBlocks.flatMap((block) => block.apis);
 
   return {
     query: text,
-    summary: buildSummary(text, intentBlocks),
+    fit: true,
+    bestScore,
+    summary: buildSummary(text, intentBlocks, { fit: true, bestScore }),
     examples: EXAMPLE_PROMPTS,
     intents: intentBlocks,
     apis: merged,
