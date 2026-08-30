@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { fetchApi, fetchCompanyHub } from "../lib/api.js";
 import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTryPanel from "../components/ApiTryPanel.jsx";
+import ApiDocAssistant from "../components/ApiDocAssistant.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import EgovKeySetup from "../components/EgovKeySetup.jsx";
 import CompanyEndpointNav from "../components/CompanyEndpointNav.jsx";
@@ -89,6 +90,8 @@ function EndpointDetail({ api, hub }) {
       </div>
 
       {isDataEgovApi(api) && <EgovKeySetup compact />}
+
+      <ApiDocAssistant api={api} />
 
       <ApiTryPanel api={api} />
 

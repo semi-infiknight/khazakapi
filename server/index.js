@@ -11,6 +11,7 @@ import {
   searchApis,
 } from "./lib/search.js";
 import { suggestApis, suggestExamples } from "./lib/suggest.js";
+import { answerApiQuestion } from "./lib/apiAsk.js";
 import { warmLocalLlm } from "./lib/localLlm.js";
 import { warmQueryEmbedder } from "./lib/queryEmbedder.js";
 import { checkHealth } from "./lib/health.js";
@@ -155,6 +156,23 @@ app.get("/api/apis/:id", async (req, res) => {
   const detail = publicDetailEntry(entry);
   detail.health = await checkHealth(entry);
   res.json(detail);
+});
+
+app.post("/api/apis/:id/ask", async (req, res) => {
+  try {
+    const entry = KZ_APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
+    if (!entry) return res.status(404).json({ error: `no API with id '${req.params.id}'` });
+
+    const question = String(req.body?.q || req.body?.question || "").trim();
+    if (!question) return res.status(400).json({ error: "question required" });
+
+    const detail = publicDetailEntry(entry);
+    const result = await answerApiQuestion(detail, question);
+    res.json({ apiId: entry.id, question, ...result });
+  } catch (err) {
+    console.error("[api/ask]", err);
+    res.status(500).json({ error: "Ask failed", message: err.message });
+  }
 });
 
 app.post("/api/apis/:id/try", async (req, res) => {

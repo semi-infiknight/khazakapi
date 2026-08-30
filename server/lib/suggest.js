@@ -1,6 +1,5 @@
 import { publicListEntry, tokenize } from "./search.js";
 import { createVectorIndex } from "./vectorIndex.js";
-import { generateSuggestSummary } from "./localLlm.js";
 
 /**
  * Product-intent recipes: label semantic hits into stack layers when they fit.
@@ -328,21 +327,6 @@ function noFitSuggestions(query, bestScore = 0) {
   };
 }
 
-async function withLlmSummary(result, templateSummary) {
-  const llm = await generateSuggestSummary({
-    query: result.query,
-    fit: result.fit !== false,
-    intentBlocks: result.intents || [],
-    bestScore: result.bestScore,
-  });
-
-  return {
-    ...result,
-    summary: llm?.text || templateSummary || result.summary,
-    summarySource: llm?.source || "template",
-  };
-}
-
 export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
   const text = String(query || "").trim();
   if (!text) {
@@ -364,8 +348,12 @@ export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
   const { hits, bestScore, fit } = await index.search(text, { limit, minScore: noFit });
 
   if (!fit || !hits.length) {
-    const base = { ...noFitSuggestions(text, bestScore), mode };
-    return withLlmSummary(base, buildSummary(text, [], { fit: false, bestScore }));
+    return {
+      ...noFitSuggestions(text, bestScore),
+      mode,
+      summary: buildSummary(text, [], { fit: false, bestScore }),
+      summarySource: "template",
+    };
   }
 
   // Drop marginal hits far below the best score so weak neighbours don't pollute the stack.
@@ -373,8 +361,12 @@ export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
   const strongHits = hits.filter((h) => h.score >= cutoff).slice(0, limit);
 
   if (!strongHits.length) {
-    const base = { ...noFitSuggestions(text, bestScore), mode };
-    return withLlmSummary(base, buildSummary(text, [], { fit: false, bestScore }));
+    return {
+      ...noFitSuggestions(text, bestScore),
+      mode,
+      summary: buildSummary(text, [], { fit: false, bestScore }),
+      summarySource: "template",
+    };
   }
 
   const hay = normalize(text);
@@ -415,19 +407,18 @@ export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
   const merged = intentBlocks.flatMap((block) => block.apis);
   const templateSummary = buildSummary(text, intentBlocks, { fit: true, bestScore });
 
-  return withLlmSummary(
-    {
-      query: text,
-      fit: true,
-      bestScore,
-      mode,
-      examples: EXAMPLE_PROMPTS,
-      intents: intentBlocks,
-      apis: merged,
-      total: merged.length,
-    },
-    templateSummary,
-  );
+  return {
+    query: text,
+    fit: true,
+    bestScore,
+    mode,
+    summary: templateSummary,
+    summarySource: "template",
+    examples: EXAMPLE_PROMPTS,
+    intents: intentBlocks,
+    apis: merged,
+    total: merged.length,
+  };
 }
 
 export function suggestExamples() {

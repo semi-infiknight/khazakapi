@@ -18,6 +18,17 @@ export async function fetchSuggest(query, { limit = 24 } = {}) {
   return res.json();
 }
 
+export async function askApi(id, question) {
+  const res = await fetch(`/api/apis/${encodeURIComponent(id)}/ask`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ q: question }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Ask failed");
+  return data;
+}
+
 export async function fetchApi(id) {
   const res = await fetch(`/api/apis/${id}`);
   if (!res.ok) throw new Error("API not found");

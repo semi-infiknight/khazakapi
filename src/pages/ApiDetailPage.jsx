@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { fetchApi } from "../lib/api.js";
 import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTryPanel from "../components/ApiTryPanel.jsx";
+import ApiDocAssistant from "../components/ApiDocAssistant.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import EgovKeySetup from "../components/EgovKeySetup.jsx";
 import { isDataEgovApi } from "../lib/providerKeys.js";
@@ -99,6 +100,8 @@ export default function ApiDetailPage() {
       </div>
 
       {isDataEgovApi(api) && <EgovKeySetup compact />}
+
+      <ApiDocAssistant api={api} />
 
       <ApiTryPanel api={api} />
 
