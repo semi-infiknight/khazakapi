@@ -17,7 +17,7 @@ if (!fs.existsSync(REPORT_PATH)) {
 }
 
 const report = JSON.parse(fs.readFileSync(REPORT_PATH, "utf8"));
-const s = report.summary || report.stats || {};
+const s = report.summary || {};
 const stats = report.stats || s;
 
 console.log("\n═══════════════════════════════════════════════════════");
@@ -25,50 +25,60 @@ console.log("  KhazakAPI Capability → Feature Completeness Report");
 console.log("═══════════════════════════════════════════════════════\n");
 console.log(`Built:              ${report.builtAt || "unknown"}`);
 console.log(`APIs in catalogue:  ${s.totalApis ?? stats.totalApis}`);
-console.log(`Feature ontology:   ${s.ontologyFeatures ?? stats.featureCount} product features`);
-console.log(`Target per API:     ${s.targetFeaturesPerApi ?? stats.minFeaturesPerApi}+ features`);
+console.log(`Feature ontology:   ${s.ontologyFeatures ?? stats.ontologyFeatures ?? stats.featureCount}`);
+console.log(`Hard minimum/API:   ${s.targetFeaturesPerApi ?? stats.minFeaturesPerApi} features`);
 console.log("");
-console.log("── Coverage ──");
-console.log(`Avg features/API:     ${s.avgFeaturesPerApi ?? stats.avgFeaturesPerApi}`);
-console.log(`Median features/API:  ${s.medianFeaturesPerApi ?? stats.medianFeaturesPerApi}`);
-console.log(`Min / max observed:   ${s.minObserved ?? stats.minFeaturesObserved} / ${s.maxObserved ?? stats.maxFeaturesObserved}`);
-console.log(`Below target:         ${s.apisBelowTarget ?? stats.apisBelowMinFeatures}`);
+console.log("── Coverage (minimum-first, not average) ──");
+console.log(`Minimum observed:     ${s.minFeaturesPerApi ?? stats.minFeaturesObserved} features/API`);
+console.log(`10th percentile:      ${s.p10FeaturesPerApi ?? stats.p10FeaturesPerApi} features/API`);
+console.log(`Median:               ${s.medianFeaturesPerApi ?? stats.medianFeaturesPerApi} features/API`);
+console.log(`Maximum observed:     ${s.maxFeaturesPerApi ?? stats.maxFeaturesObserved} features/API`);
+console.log(`Below target:         ${s.apisBelowTarget ?? stats.apisBelowMinFeatures} APIs`);
 console.log(`Commercial covered:   ${s.commercialCoverage ?? `${stats.commercialWithFeatures}/${stats.commercialTotal}`}`);
 console.log(`Capabilities mapped:  ${stats.withCapabilities}/${stats.totalApis}`);
 console.log(`Orphan capabilities:  ${stats.orphanCapabilities?.length ? stats.orphanCapabilities.join(", ") : "none"}`);
-console.log("");
+
+if (stats.worstApis?.length) {
+  console.log("");
+  console.log("── Lowest feature counts (should all be ≥ target) ──");
+  for (const row of stats.worstApis.slice(0, 8)) {
+    console.log(`  ${String(row.features).padStart(3)}  ${row.id} (${row.category})`);
+  }
+}
 
 if (stats.featureCountHistogram) {
+  console.log("");
   console.log("── Feature count distribution ──");
   for (const [bucket, count] of Object.entries(stats.featureCountHistogram).sort()) {
     console.log(`  ${bucket.padEnd(8)} ${count} APIs`);
   }
-  console.log("");
 }
 
-if (stats.topFeatures?.length) {
-  console.log("── Top features (by API count) ──");
-  for (const f of stats.topFeatures.slice(0, 10)) {
-    console.log(`  ${String(f.apis).padStart(4)}  ${f.label} (${f.id})`);
-  }
+if (stats.categoryMinFeatures) {
   console.log("");
-}
-
-if (stats.categoryAvgFeatures) {
-  console.log("── Avg features by category (top 10) ──");
-  const rows = Object.entries(stats.categoryAvgFeatures).slice(0, 10);
-  for (const [cat, avg] of rows) {
-    console.log(`  ${String(avg).padStart(5)}  ${cat}`);
+  console.log("── Minimum features by category (lowest 10) ──");
+  const rows = Object.entries(stats.categoryMinFeatures).slice(0, 10);
+  for (const [cat, min] of rows) {
+    console.log(`  ${String(min).padStart(3)}  ${cat}`);
   }
-  console.log("");
 }
 
 if (stats.expansionSourceTotals) {
-  console.log("── Expansion source totals ──");
-  for (const [src, total] of Object.entries(stats.expansionSourceTotals).sort((a, b) => b[1] - a[1])) {
-    if (total > 0) console.log(`  ${src.padEnd(10)} ${total}`);
-  }
   console.log("");
+  console.log("── Expansion sources (proper inference, not generic floor) ──");
+  for (const [src, total] of Object.entries(stats.expansionSourceTotals).sort((a, b) => b[1] - a[1])) {
+    if (total > 0) console.log(`  ${src.padEnd(12)} ${total}`);
+  }
 }
 
-console.log("Full JSON: server/data/capability-completeness-report.json\n");
+if (stats.topFeatures?.length) {
+  console.log("");
+  console.log("── Top features (by API count) ──");
+  for (const f of stats.topFeatures.slice(0, 8)) {
+    console.log(`  ${String(f.apis).padStart(4)}  ${f.label}`);
+  }
+}
+
+console.log("\nFull JSON: server/data/capability-completeness-report.json\n");
+
+if ((s.apisBelowTarget ?? stats.apisBelowMinFeatures) > 0) process.exit(1);

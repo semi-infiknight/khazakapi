@@ -245,13 +245,30 @@ async function main() {
     .slice(0, 10)
     .map(([id, count]) => ({ id, label: FEATURES.find((f) => f.id === id)?.label || id, apis: count }));
 
-  const sourceTotals = { primary: 0, category: 0, keyword: 0, provider: 0, parent: 0, bundle: 0, group: 0, doc: 0, sibling: 0, floor: 0 };
+  const sourceTotals = { primary: 0, profile: 0, capability: 0, provider: 0, keyword: 0, doc: 0, parent: 0 };
   for (const entry of Object.values(entries)) {
     const fs = entry.featureSources || {};
     for (const key of Object.keys(sourceTotals)) {
       sourceTotals[key] += (fs[key] || []).length;
     }
   }
+
+  const categoryMinFeatures = Object.fromEntries(
+    [...categoryStats.entries()]
+      .map(([cat, row]) => {
+        const catApis = Object.values(entries).filter((e) => e.category === cat);
+        const min = Math.min(...catApis.map((e) => e.features.length));
+        return [cat, min];
+      })
+      .sort((a, b) => a[1] - b[1]),
+  );
+
+  const worstApis = Object.values(entries)
+    .map((e) => ({ id: e.id, title: e.title, category: e.category, features: e.features.length }))
+    .sort((a, b) => a.features - b.features)
+    .slice(0, 10);
+
+  const p10Index = Math.floor(featureCounts.length * 0.1);
 
   const stats = {
     totalApis: KZ_APIS.length,
@@ -275,25 +292,29 @@ async function main() {
     vocabularySize: (await import("../server/lib/capabilityVocabulary.js")).CAPABILITY_VOCABULARY.length,
     featureCount: FEATURES.length,
     medianFeaturesPerApi: featureCounts[Math.floor(featureCounts.length / 2)],
+    p10FeaturesPerApi: featureCounts[p10Index],
     minFeaturesObserved: featureCounts[0],
     maxFeaturesObserved: featureCounts[featureCounts.length - 1],
     featureCountHistogram: histogram,
+    categoryMinFeatures,
     categoryAvgFeatures,
+    worstApis,
     topFeatures,
     rareFeatures,
     expansionSourceTotals: sourceTotals,
+    ontologyFeatures: FEATURES.length,
   };
 
   const report = {
     builtAt: new Date().toISOString(),
     summary: {
       totalApis: stats.totalApis,
-      ontologyFeatures: stats.featureCount,
+      ontologyFeatures: stats.ontologyFeatures,
       targetFeaturesPerApi: stats.minFeaturesPerApi,
-      avgFeaturesPerApi: stats.avgFeaturesPerApi,
+      minFeaturesPerApi: stats.minFeaturesObserved,
+      p10FeaturesPerApi: stats.p10FeaturesPerApi,
       medianFeaturesPerApi: stats.medianFeaturesPerApi,
-      minObserved: stats.minFeaturesObserved,
-      maxObserved: stats.maxFeaturesObserved,
+      maxFeaturesPerApi: stats.maxFeaturesObserved,
       apisBelowTarget: stats.apisBelowMinFeatures,
       commercialCoverage: `${stats.commercialWithFeatures}/${stats.commercialTotal}`,
     },
@@ -317,7 +338,8 @@ async function main() {
   console.log("\n--- Completeness ---");
   console.log(`APIs with capabilities: ${stats.withCapabilities}/${stats.totalApis}`);
   console.log(`APIs with features:     ${stats.withFeatures}/${stats.totalApis}`);
-  console.log(`Avg features / API:     ${stats.avgFeaturesPerApi} (min target ${stats.minFeaturesPerApi})`);
+  console.log(`Avg features / API:     ${stats.avgFeaturesPerApi} (informational only)`);
+  console.log(`Min / P10 / median:     ${stats.minFeaturesObserved} / ${stats.p10FeaturesPerApi} / ${stats.medianFeaturesPerApi}`);
   console.log(`Below min features:     ${stats.apisBelowMinFeatures}`);
   console.log(`Commercial w/ features: ${stats.commercialWithFeatures}/${stats.commercialTotal}`);
   console.log(`Doc-enriched APIs:      ${stats.docEnrichedApis}`);
@@ -328,6 +350,11 @@ async function main() {
   console.log(`Feature histogram:      ${JSON.stringify(stats.featureCountHistogram)}`);
   if (commercialNoFeatures.length) {
     console.log(`Commercial missing features (${commercialNoFeatures.length}):`, commercialNoFeatures.slice(0, 8).join(", "));
+  }
+
+  if (stats.apisBelowMinFeatures > 0) {
+    console.error(`\nERROR: ${stats.apisBelowMinFeatures} APIs below minimum ${stats.minFeaturesPerApi} features`);
+    process.exit(1);
   }
 }
 

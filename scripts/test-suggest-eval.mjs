@@ -160,10 +160,12 @@ if (!stats || stats.commercialWithFeatures < stats.commercialTotal) {
 
 if (stats?.apisBelowMinFeatures > 0) {
   failed += 1;
-  console.log(`FAIL  ${stats.apisBelowMinFeatures} APIs below min ${stats.minFeaturesPerApi} features (avg ${stats.avgFeaturesPerApi})`);
+  console.log(`FAIL  ${stats.apisBelowMinFeatures} APIs below min ${stats.minFeaturesPerApi}`);
 } else if (stats) {
   passed += 1;
-  console.log(`OK    avg ${stats.avgFeaturesPerApi} features/API (min ${stats.minFeaturesPerApi})`);
+  console.log(
+    `OK    min ${stats.minFeaturesObserved} / p10 ${stats.p10FeaturesPerApi} / median ${stats.medianFeaturesPerApi} features/API (target ${stats.minFeaturesPerApi})`,
+  );
 }
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

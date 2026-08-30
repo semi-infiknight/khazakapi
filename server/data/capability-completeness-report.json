@@ -1,13 +1,13 @@
 {
-  "builtAt": "2026-08-30T05:49:32.878Z",
+  "builtAt": "2026-08-30T06:06:08.547Z",
   "summary": {
     "totalApis": 688,
-    "ontologyFeatures": 194,
+    "ontologyFeatures": 389,
     "targetFeaturesPerApi": 100,
-    "avgFeaturesPerApi": 100.32,
-    "medianFeaturesPerApi": 100,
-    "minObserved": 100,
-    "maxObserved": 126,
+    "minFeaturesPerApi": 106,
+    "p10FeaturesPerApi": 146,
+    "medianFeaturesPerApi": 299,
+    "maxFeaturesPerApi": 356,
     "apisBelowTarget": 0,
     "commercialCoverage": "139/139"
   },
@@ -17,7 +17,7 @@
     "withFeatures": 688,
     "minFeaturesPerApi": 100,
     "apisBelowMinFeatures": 0,
-    "avgFeaturesPerApi": 100.32,
+    "avgFeaturesPerApi": 277.13,
     "commercialTotal": 139,
     "commercialWithFeatures": 139,
     "commercialNoFeatures": 0,
@@ -29,70 +29,186 @@
     "unmappedCapabilities": [],
     "featuresWithZeroApis": [],
     "vocabularySize": 101,
-    "featureCount": 194,
-    "medianFeaturesPerApi": 100,
-    "minFeaturesObserved": 100,
-    "maxFeaturesObserved": 126,
+    "featureCount": 389,
+    "medianFeaturesPerApi": 299,
+    "p10FeaturesPerApi": 146,
+    "minFeaturesObserved": 106,
+    "maxFeaturesObserved": 356,
     "featureCountHistogram": {
       "100+": 688
     },
-    "categoryAvgFeatures": {
-      "E-commerce": 107.8,
-      "Communications": 102.5,
-      "Travel & mobility": 102.2,
-      "Payments": 102,
-      "Maps & location": 100.1,
-      "Demography": 100,
-      "Households": 100,
-      "Prices": 100,
-      "Data Dictionaries": 100,
-      "Financial Markets": 100,
-      "Economic Sectors": 100,
-      "Statistical Indicators": 100,
-      "Transportation": 100,
-      "Healthcare": 100,
-      "Labour Markets": 100,
-      "Public Administration": 100,
-      "Metadata": 100,
-      "National Accounts": 100,
-      "Environment": 100,
-      "Public Safety": 100,
-      "Education": 100,
-      "Public Welfare": 100,
-      "Government data": 100,
-      "Housing & property": 100,
-      "Economy & business": 100,
-      "Population & society": 100,
-      "Environment & climate": 100,
-      "Health": 100,
-      "Transport": 100,
-      "Work & income": 100,
-      "Finance": 100,
-      "Realtime": 100,
-      "Banking": 100,
-      "Other portals": 100,
-      "Auth & identity": 100,
-      "Government services": 100,
-      "Data & enrichment": 100,
-      "Banking & finance": 100,
-      "Property": 100,
-      "Crypto": 100,
-      "Commodities & metals": 100,
-      "AI": 100,
-      "Food & delivery": 100,
-      "Logistics & delivery": 100,
-      "E-invoicing & tax": 100,
-      "Cloud & infrastructure": 100
+    "categoryMinFeatures": {
+      "Cloud & infrastructure": 106,
+      "AI": 119,
+      "Government services": 124,
+      "Banking & finance": 131,
+      "Payments": 131,
+      "Logistics & delivery": 139,
+      "E-invoicing & tax": 143,
+      "Maps & location": 146,
+      "E-commerce": 147,
+      "Food & delivery": 148,
+      "Communications": 154,
+      "Travel & mobility": 164,
+      "Prices": 272,
+      "Economic Sectors": 292,
+      "Economy & business": 292,
+      "Financial Markets": 293,
+      "National Accounts": 295,
+      "Demography": 296,
+      "Education": 296,
+      "Population & society": 296,
+      "Labour Markets": 297,
+      "Health": 298,
+      "Work & income": 299,
+      "Households": 301,
+      "Environment": 302,
+      "Healthcare": 309,
+      "Banking": 309,
+      "Crypto": 309,
+      "Finance": 310,
+      "Environment & climate": 311,
+      "Commodities & metals": 315,
+      "Public Administration": 316,
+      "Metadata": 316,
+      "Data Dictionaries": 317,
+      "Statistical Indicators": 317,
+      "Public Safety": 317,
+      "Public Welfare": 317,
+      "Government data": 317,
+      "Transport": 324,
+      "Auth & identity": 327,
+      "Data & enrichment": 329,
+      "Property": 329,
+      "Transportation": 334,
+      "Housing & property": 334,
+      "Other portals": 346,
+      "Realtime": 355
     },
+    "categoryAvgFeatures": {
+      "Realtime": 355.1,
+      "Other portals": 347.6,
+      "Housing & property": 334.5,
+      "Transportation": 334,
+      "Data & enrichment": 329,
+      "Property": 329,
+      "Auth & identity": 327,
+      "Transport": 324.1,
+      "Government data": 317.2,
+      "Data Dictionaries": 317,
+      "Statistical Indicators": 317,
+      "Public Safety": 317,
+      "Public Welfare": 317,
+      "Public Administration": 316,
+      "Metadata": 316,
+      "Commodities & metals": 315,
+      "Environment & climate": 311,
+      "Finance": 310,
+      "Healthcare": 309,
+      "Banking": 309,
+      "Crypto": 309,
+      "Environment": 302,
+      "Households": 301.2,
+      "Work & income": 299,
+      "Prices": 298.4,
+      "Health": 298,
+      "Labour Markets": 297.4,
+      "Population & society": 297.2,
+      "Education": 296.6,
+      "Demography": 296.1,
+      "National Accounts": 295,
+      "Financial Markets": 293,
+      "Economy & business": 292.6,
+      "Economic Sectors": 292.2,
+      "Banking & finance": 236.5,
+      "Travel & mobility": 207.4,
+      "Government services": 193.6,
+      "Maps & location": 184.2,
+      "Communications": 173.4,
+      "E-commerce": 157.9,
+      "Food & delivery": 149,
+      "Payments": 143.7,
+      "E-invoicing & tax": 143.5,
+      "Logistics & delivery": 140.2,
+      "AI": 119.2,
+      "Cloud & infrastructure": 106
+    },
+    "worstApis": [
+      {
+        "id": "kz-ps-cloud",
+        "title": "PS Cloud ~ Kazakhstan data residency cloud (KZ)",
+        "category": "Cloud & infrastructure",
+        "features": 106
+      },
+      {
+        "id": "kz-beeline-cloud",
+        "title": "Beeline Cloud ~ telecom-hosted cloud (KZ)",
+        "category": "Cloud & infrastructure",
+        "features": 106
+      },
+      {
+        "id": "yandex-cloud-compute",
+        "title": "Yandex Compute Cloud ~ VMs & instances",
+        "category": "AI",
+        "features": 119
+      },
+      {
+        "id": "yandex-cloud-object-storage",
+        "title": "Yandex Object Storage ~ S3-compatible buckets",
+        "category": "AI",
+        "features": 119
+      },
+      {
+        "id": "yandex-cloud-managed-postgresql",
+        "title": "Yandex Managed PostgreSQL ~ managed DB",
+        "category": "AI",
+        "features": 119
+      },
+      {
+        "id": "yandex-cloud-functions",
+        "title": "Yandex Cloud Functions ~ serverless",
+        "category": "AI",
+        "features": 119
+      },
+      {
+        "id": "yandex-cloud-serverless-containers",
+        "title": "Yandex Serverless Containers ~ container runtime",
+        "category": "AI",
+        "features": 119
+      },
+      {
+        "id": "yandex-cloud-api-gateway",
+        "title": "Yandex API Gateway ~ managed API front door",
+        "category": "AI",
+        "features": 119
+      },
+      {
+        "id": "yandex-cloud-vpc",
+        "title": "Yandex Virtual Private Cloud ~ networking",
+        "category": "AI",
+        "features": 119
+      },
+      {
+        "id": "yandex-cloud-dns",
+        "title": "Yandex Cloud DNS ~ managed DNS zones",
+        "category": "AI",
+        "features": 119
+      }
+    ],
     "topFeatures": [
       {
-        "id": "address-autocomplete",
-        "label": "Address autocomplete",
+        "id": "data-enrichment",
+        "label": "Data enrichment & lookup",
         "apis": 688
       },
       {
-        "id": "address-geocoding",
-        "label": "Address lookup",
+        "id": "data-visualization",
+        "label": "Charts & dashboards",
+        "apis": 688
+      },
+      {
+        "id": "batch-export",
+        "label": "Batch & scheduled jobs",
         "apis": 688
       },
       {
@@ -101,129 +217,122 @@
         "apis": 688
       },
       {
-        "id": "cache-responses",
-        "label": "Response caching",
+        "id": "rest-api",
+        "label": "REST HTTP API",
         "apis": 688
       },
       {
-        "id": "address-validation",
-        "label": "Address validation",
+        "id": "webhook-callbacks",
+        "label": "Webhook callbacks",
         "apis": 688
       },
       {
-        "id": "analytics-tracking",
-        "label": "Analytics & measurement",
-        "apis": 687
+        "id": "oauth-flow",
+        "label": "OAuth authorization flow",
+        "apis": 688
       },
       {
-        "id": "ads-campaigns",
-        "label": "Ads & campaigns",
-        "apis": 684
+        "id": "api-key-auth",
+        "label": "API key authentication",
+        "apis": 688
       },
       {
-        "id": "ai-assistant",
-        "label": "AI & chat features",
-        "apis": 683
+        "id": "bearer-token-auth",
+        "label": "Bearer token auth",
+        "apis": 688
       },
       {
-        "id": "cloud-hosting",
-        "label": "Cloud & hosting",
-        "apis": 680
-      },
-      {
-        "id": "cdn-delivery",
-        "label": "CDN asset delivery",
-        "apis": 680
-      },
-      {
-        "id": "chat-completion",
-        "label": "Chat completions",
-        "apis": 677
-      },
-      {
-        "id": "campaign-analytics",
-        "label": "Campaign analytics",
-        "apis": 677
-      },
-      {
-        "id": "kyc-verification",
-        "label": "KYC verification",
-        "apis": 676
-      },
-      {
-        "id": "conversion-tracking",
-        "label": "Conversion tracking",
-        "apis": 676
-      },
-      {
-        "id": "admin-panel",
-        "label": "Admin panel integration",
-        "apis": 673
-      }
-    ],
-    "rareFeatures": [
-      {
-        "id": "web-app-backend",
-        "label": "Web app backend",
-        "apis": 4
+        "id": "rate-limit-handling",
+        "label": "Rate limit handling",
+        "apis": 688
       },
       {
         "id": "retry-backoff",
         "label": "Retry with backoff",
-        "apis": 5
+        "apis": 688
       },
       {
-        "id": "request-logging",
-        "label": "Request logging",
-        "apis": 8
+        "id": "idempotent-requests",
+        "label": "Idempotent requests",
+        "apis": 688
       },
       {
-        "id": "prayer-times",
-        "label": "Prayer times",
-        "apis": 12
+        "id": "pagination",
+        "label": "Paginated results",
+        "apis": 688
       },
       {
-        "id": "production-keys",
-        "label": "Production credentials",
-        "apis": 24
+        "id": "cursor-pagination",
+        "label": "Cursor pagination",
+        "apis": 688
       },
       {
-        "id": "product-catalog",
-        "label": "Product catalog",
-        "apis": 25
-      },
+        "id": "filtering",
+        "label": "Query filtering",
+        "apis": 688
+      }
+    ],
+    "rareFeatures": [
       {
-        "id": "promo-codes",
-        "label": "Promo codes & discounts",
-        "apis": 25
+        "id": "delivery-slot-booking",
+        "label": "Delivery slot booking",
+        "apis": 64
       },
       {
         "id": "restaurant-menu",
         "label": "Restaurant menu sync",
-        "apis": 25
+        "apis": 64
       },
       {
-        "id": "order-status",
-        "label": "Order status tracking",
-        "apis": 27
+        "id": "kitchen-display",
+        "label": "Kitchen / dispatch display",
+        "apis": 64
       },
       {
-        "id": "realtime-streams",
-        "label": "Realtime data streams",
-        "apis": 28
+        "id": "graphql-api",
+        "label": "GraphQL API",
+        "apis": 90
+      },
+      {
+        "id": "data-warehouse",
+        "label": "Data warehouse loads",
+        "apis": 90
+      },
+      {
+        "id": "text-generation",
+        "label": "Text generation",
+        "apis": 90
+      },
+      {
+        "id": "text-summarization",
+        "label": "Text summarization",
+        "apis": 90
+      },
+      {
+        "id": "chat-completion",
+        "label": "Chat completions",
+        "apis": 90
+      },
+      {
+        "id": "content-moderation",
+        "label": "Content moderation",
+        "apis": 90
+      },
+      {
+        "id": "voice-input",
+        "label": "Voice input (STT)",
+        "apis": 90
       }
     ],
     "expansionSourceTotals": {
-      "primary": 9721,
-      "category": 4453,
-      "keyword": 1285,
-      "provider": 6548,
-      "parent": 244,
-      "bundle": 1039,
-      "group": 2994,
-      "doc": 410,
-      "sibling": 18026,
-      "floor": 24299
-    }
+      "primary": 138535,
+      "profile": 45337,
+      "capability": 0,
+      "provider": 4302,
+      "keyword": 105,
+      "doc": 172,
+      "parent": 2212
+    },
+    "ontologyFeatures": 389
   }
 }

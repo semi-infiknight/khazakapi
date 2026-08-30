@@ -1,597 +1,21 @@
 /**
- * Expand per-API product feature lists beyond strict capability atoms.
- * Primary features (capability-derived) drive suggest matching; expanded features
- * power catalogue detail pages and completeness reporting.
+ * Expand per-API product feature lists using curated category profiles.
+ * Primary features (capability-derived) drive suggest matching only.
+ * Expanded features use domain profiles — no generic unrelated floor padding.
  */
 
 import { FEATURES, getFeature } from "./features.js";
 import { capabilitiesToFeatureIds } from "./capabilityMap.js";
+import {
+  MIN_FEATURES_PER_API,
+  INTEGRATION_CORE,
+  profileForCategory,
+  GOV_STAT_CATEGORIES,
+} from "./categoryFeatureProfiles.js";
 
-export const MIN_FEATURES_PER_API = 100;
+export { MIN_FEATURES_PER_API };
 
-/** Default bundles for categories with thin ontology coverage. */
-export const CATEGORY_FEATURE_BUNDLES = {
-  AI: [
-    "ai-assistant",
-    "speech-ai",
-    "computer-vision",
-    "site-search",
-    "analytics-tracking",
-    "cloud-hosting",
-    "user-auth",
-    "data-visualization",
-    "api-integration",
-    "batch-export",
-  ],
-  "Auth & identity": [
-    "user-auth",
-    "esignature",
-    "sms-otp",
-    "checkout-payment",
-    "bank-accounts",
-    "gov-digital-services",
-    "api-integration",
-    "data-visualization",
-    "analytics-tracking",
-    "batch-export",
-  ],
-  Banking: [
-    "bank-accounts",
-    "checkout-payment",
-    "wallet-payout",
-    "fx-rates",
-    "interest-rates",
-    "user-auth",
-    "open-data-export",
-    "data-visualization",
-    "api-integration",
-    "batch-export",
-  ],
-  "Banking & finance": [
-    "bank-accounts",
-    "checkout-payment",
-    "wallet-payout",
-    "fx-rates",
-    "interest-rates",
-    "price-indices",
-    "user-auth",
-    "analytics-tracking",
-    "data-visualization",
-    "api-integration",
-  ],
-  "Cloud & infrastructure": [
-    "cloud-hosting",
-    "api-integration",
-    "analytics-tracking",
-    "user-auth",
-    "data-visualization",
-    "batch-export",
-    "realtime-streams",
-    "site-search",
-    "checkout-payment",
-    "map-display",
-  ],
-  "Commodities & metals": [
-    "commodity-prices",
-    "price-indices",
-    "fx-rates",
-    "trade-statistics",
-    "gov-open-data",
-    "national-accounts",
-    "data-visualization",
-    "regional-analytics",
-    "open-data-export",
-    "batch-export",
-  ],
-  Communications: [
-    "sms-otp",
-    "workplace-productivity",
-    "analytics-tracking",
-    "ads-campaigns",
-    "site-search",
-    "seo-webmaster",
-    "user-auth",
-    "notifications-push",
-    "api-integration",
-    "data-visualization",
-  ],
-  Crypto: [
-    "crypto-trading",
-    "fx-rates",
-    "checkout-payment",
-    "wallet-payout",
-    "user-auth",
-    "analytics-tracking",
-    "realtime-streams",
-    "api-integration",
-    "data-visualization",
-    "batch-export",
-  ],
-  "Data & enrichment": [
-    "data-enrichment",
-    "address-geocoding",
-    "user-auth",
-    "analytics-tracking",
-    "site-search",
-    "api-integration",
-    "data-visualization",
-    "batch-export",
-    "realtime-streams",
-    "gov-open-data",
-  ],
-  "Data Dictionaries": [
-    "metadata-catalog",
-    "gov-open-data",
-    "open-data-export",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "batch-export",
-    "api-integration",
-    "population-stats",
-    "national-accounts",
-  ],
-  Demography: [
-    "population-stats",
-    "gov-open-data",
-    "household-stats",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "api-integration",
-    "national-accounts",
-  ],
-  "E-commerce": [
-    "marketplace-sync",
-    "checkout-payment",
-    "parcel-shipping",
-    "food-delivery-partner",
-    "grocery-delivery",
-    "address-autocomplete",
-    "delivery-eta",
-    "user-auth",
-    "analytics-tracking",
-    "api-integration",
-  ],
-  "E-invoicing & tax": [
-    "tax-invoicing",
-    "checkout-payment",
-    "esignature",
-    "gov-digital-services",
-    "user-auth",
-    "analytics-tracking",
-    "batch-export",
-    "api-integration",
-    "data-visualization",
-    "wallet-payout",
-  ],
-  "Economic Sectors": [
-    "industry-sectors",
-    "national-accounts",
-    "trade-statistics",
-    "gov-open-data",
-    "price-indices",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-  ],
-  "Economy & business": [
-    "national-accounts",
-    "trade-statistics",
-    "industry-sectors",
-    "gov-open-data",
-    "price-indices",
-    "labour-stats",
-    "data-visualization",
-    "regional-analytics",
-    "open-data-export",
-    "batch-export",
-  ],
-  Education: [
-    "education-stats",
-    "gov-open-data",
-    "population-stats",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "api-integration",
-    "national-accounts",
-  ],
-  Environment: [
-    "environment-stats",
-    "climate-data",
-    "weather-forecast",
-    "gov-open-data",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "map-display",
-  ],
-  "Environment & climate": [
-    "climate-data",
-    "environment-stats",
-    "weather-forecast",
-    "gov-open-data",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "map-display",
-  ],
-  Finance: [
-    "fx-rates",
-    "interest-rates",
-    "bank-accounts",
-    "checkout-payment",
-    "price-indices",
-    "national-accounts",
-    "data-visualization",
-    "analytics-tracking",
-    "api-integration",
-    "batch-export",
-  ],
-  "Financial Markets": [
-    "fx-rates",
-    "interest-rates",
-    "price-indices",
-    "national-accounts",
-    "gov-open-data",
-    "bank-accounts",
-    "data-visualization",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-  ],
-  "Food & delivery": [
-    "food-delivery-partner",
-    "grocery-delivery",
-    "delivery-eta",
-    "route-planning",
-    "address-autocomplete",
-    "checkout-payment",
-    "map-display",
-    "analytics-tracking",
-    "api-integration",
-    "parcel-shipping",
-  ],
-  "Government data": [
-    "gov-open-data",
-    "population-stats",
-    "national-accounts",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "api-integration",
-    "metadata-catalog",
-  ],
-  "Government services": [
-    "gov-digital-services",
-    "user-auth",
-    "esignature",
-    "gov-open-data",
-    "sms-otp",
-    "checkout-payment",
-    "data-visualization",
-    "api-integration",
-    "batch-export",
-    "analytics-tracking",
-  ],
-  Health: [
-    "health-stats",
-    "gov-open-data",
-    "population-stats",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "api-integration",
-    "public-safety",
-  ],
-  Healthcare: [
-    "health-stats",
-    "gov-open-data",
-    "user-auth",
-    "sms-otp",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "api-integration",
-    "analytics-tracking",
-  ],
-  Households: [
-    "household-stats",
-    "population-stats",
-    "gov-open-data",
-    "price-indices",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "national-accounts",
-  ],
-  "Housing & property": [
-    "housing-stats",
-    "address-geocoding",
-    "map-display",
-    "forward-geocode",
-    "gov-open-data",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-  ],
-  "Labour Markets": [
-    "labour-stats",
-    "gov-open-data",
-    "population-stats",
-    "education-stats",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "national-accounts",
-  ],
-  "Logistics & delivery": [
-    "parcel-shipping",
-    "delivery-eta",
-    "route-planning",
-    "logistics-routing",
-    "address-autocomplete",
-    "map-display",
-    "checkout-payment",
-    "analytics-tracking",
-    "api-integration",
-    "food-delivery-partner",
-  ],
-  "Maps & location": [
-    "address-geocoding",
-    "forward-geocode",
-    "reverse-geocode",
-    "address-autocomplete",
-    "poi-search",
-    "map-display",
-    "route-planning",
-    "delivery-eta",
-    "device-location",
-    "logistics-routing",
-  ],
-  Metadata: [
-    "metadata-catalog",
-    "gov-open-data",
-    "open-data-export",
-    "data-visualization",
-    "batch-export",
-    "api-integration",
-    "historical-data",
-    "regional-analytics",
-    "population-stats",
-    "national-accounts",
-  ],
-  "National Accounts": [
-    "national-accounts",
-    "gov-open-data",
-    "price-indices",
-    "fx-rates",
-    "trade-statistics",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-  ],
-  "Other portals": [
-    "prayer-times",
-    "map-display",
-    "weather-forecast",
-    "user-auth",
-    "analytics-tracking",
-    "api-integration",
-    "data-visualization",
-    "notifications-push",
-    "site-search",
-    "batch-export",
-  ],
-  Payments: [
-    "checkout-payment",
-    "wallet-payout",
-    "user-auth",
-    "sms-otp",
-    "bank-accounts",
-    "fx-rates",
-    "analytics-tracking",
-    "api-integration",
-    "data-visualization",
-    "batch-export",
-  ],
-  "Population & society": [
-    "population-stats",
-    "gov-open-data",
-    "household-stats",
-    "education-stats",
-    "health-stats",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-  ],
-  Prices: [
-    "price-indices",
-    "fx-rates",
-    "fuel-prices",
-    "commodity-prices",
-    "gov-open-data",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-  ],
-  Property: [
-    "housing-stats",
-    "address-geocoding",
-    "map-display",
-    "forward-geocode",
-    "gov-open-data",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "checkout-payment",
-  ],
-  "Public Administration": [
-    "gov-open-data",
-    "gov-digital-services",
-    "user-auth",
-    "esignature",
-    "population-stats",
-    "data-visualization",
-    "regional-analytics",
-    "open-data-export",
-    "batch-export",
-    "api-integration",
-  ],
-  "Public Safety": [
-    "public-safety",
-    "gov-open-data",
-    "map-display",
-    "health-stats",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "analytics-tracking",
-  ],
-  "Public Welfare": [
-    "welfare-benefits",
-    "gov-open-data",
-    "population-stats",
-    "household-stats",
-    "health-stats",
-    "data-visualization",
-    "regional-analytics",
-    "open-data-export",
-    "batch-export",
-    "national-accounts",
-  ],
-  Realtime: [
-    "realtime-streams",
-    "analytics-tracking",
-    "notifications-push",
-    "api-integration",
-    "map-display",
-    "device-location",
-    "data-visualization",
-    "checkout-payment",
-    "user-auth",
-    "batch-export",
-  ],
-  "Statistical Indicators": [
-    "gov-open-data",
-    "national-accounts",
-    "population-stats",
-    "price-indices",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "metadata-catalog",
-  ],
-  Transport: [
-    "transport-stats",
-    "travel-booking",
-    "route-planning",
-    "map-display",
-    "gov-open-data",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-  ],
-  Transportation: [
-    "transport-stats",
-    "route-planning",
-    "logistics-routing",
-    "delivery-eta",
-    "map-display",
-    "ride-hailing",
-    "gov-open-data",
-    "data-visualization",
-    "open-data-export",
-    "batch-export",
-  ],
-  "Travel & mobility": [
-    "travel-booking",
-    "ride-hailing",
-    "route-planning",
-    "delivery-eta",
-    "map-display",
-    "address-autocomplete",
-    "checkout-payment",
-    "analytics-tracking",
-    "api-integration",
-    "device-location",
-  ],
-  "Work & income": [
-    "labour-stats",
-    "household-stats",
-    "gov-open-data",
-    "price-indices",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "open-data-export",
-    "batch-export",
-    "national-accounts",
-  ],
-};
-
-const GROUP_BUNDLE = {
-  "Government & open data": [
-    "gov-open-data",
-    "open-data-export",
-    "data-visualization",
-    "regional-analytics",
-    "historical-data",
-    "batch-export",
-    "api-integration",
-    "metadata-catalog",
-    "csv-export",
-    "json-export",
-    "oblast-filter",
-    "year-filter",
-    "indicator-definitions",
-  ],
-  Build: [
-    "api-integration",
-    "rest-api",
-    "webhook-callbacks",
-    "error-handling",
-    "rate-limit-handling",
-    "cache-responses",
-    "mobile-app-backend",
-    "monitoring-alerts",
-  ],
-};
+const VALID_FEATURE_IDS = new Set(FEATURES.map((f) => f.id));
 
 const COMMERCIAL_CATEGORIES = new Set([
   "Maps & location",
@@ -608,53 +32,10 @@ const COMMERCIAL_CATEGORIES = new Set([
   "Communications",
   "Auth & identity",
   "E-invoicing & tax",
+  "Crypto",
+  "Data & enrichment",
+  "Realtime",
 ]);
-
-function scoreFeatureForApi(feature, api, primaryCaps, providerBlob) {
-  let score = 0;
-  if ((feature.categories || []).includes(api.category)) score += 6;
-  if (api.tier === "commercial" && (feature.categories || []).some((c) => COMMERCIAL_CATEGORIES.has(c))) score += 2;
-  if (api.group === "Government & open data") {
-    if (feature.capabilityTags?.some((t) => /gov|stat/i.test(t))) score += 4;
-    if (feature.parentId === "gov-open-data" || feature.id === "gov-open-data") score += 3;
-  }
-  if (feature.capabilityTags?.some((t) => primaryCaps.has(t))) score += 5;
-  if ((feature.providers || []).some((p) => providerBlob.includes(p.toLowerCase()))) score += 4;
-  if (feature.parentId && primaryCaps.size === 0) score += 1;
-  return score;
-}
-
-function addSiblings(expanded, sources, seedIds) {
-  for (const id of seedIds) {
-    const f = getFeature(id);
-    if (!f) continue;
-    for (const sibling of FEATURES) {
-      if (sibling.id === id) continue;
-      if (sibling.parentId && f.parentId && sibling.parentId === f.parentId) {
-        addFeature(expanded, sources, "sibling", sibling.id);
-      }
-      if (sibling.parentId === id) addFeature(expanded, sources, "sibling", sibling.id);
-    }
-  }
-}
-
-function padToMinimum(expanded, sources, api, primaryCaps, providerBlob) {
-  if (expanded.size >= MIN_FEATURES_PER_API) return;
-
-  const ranked = FEATURES.map((f) => ({
-    id: f.id,
-    score: scoreFeatureForApi(f, api, primaryCaps, providerBlob),
-  }))
-    .filter((row) => !expanded.has(row.id))
-    .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
-
-  for (const row of ranked) {
-    if (expanded.size >= MIN_FEATURES_PER_API) break;
-    addFeature(expanded, sources, "floor", row.id);
-  }
-}
-
-const VALID_FEATURE_IDS = new Set(FEATURES.map((f) => f.id));
 
 function normalize(text = "") {
   return String(text).toLowerCase().replace(/ё/g, "е");
@@ -681,6 +62,61 @@ function addFeature(set, sources, bucket, id) {
   set.add(id);
 }
 
+function addParents(expanded, sources, ids) {
+  for (const id of ids) {
+    let cur = getFeature(id);
+    while (cur?.parentId) {
+      addFeature(expanded, sources, "parent", cur.parentId);
+      cur = getFeature(cur.parentId);
+    }
+  }
+}
+
+function capabilityClosure(expanded, sources, capabilities) {
+  const caps = new Set(capabilities);
+  for (const f of FEATURES) {
+    if (f.capabilityTags?.some((t) => caps.has(t))) {
+      addFeature(expanded, sources, "capability", f.id);
+    }
+  }
+}
+
+function providerClosure(expanded, sources, api) {
+  const providerBlob = normalize(`${api.provider || ""} ${api.companyName || ""}`);
+  for (const f of FEATURES) {
+    if ((f.providers || []).some((p) => providerBlob.includes(p.toLowerCase()))) {
+      addFeature(expanded, sources, "provider", f.id);
+    }
+  }
+}
+
+function keywordClosure(expanded, sources, api, docText = "") {
+  const blob = featureMatchBlob(api);
+  const docBlob = normalize(docText);
+  for (const f of FEATURES) {
+    const hitBlob = (f.keywords || []).some((kw) => keywordMatches(blob, kw));
+    const hitDoc = docBlob && (f.keywords || []).some((kw) => keywordMatches(docBlob, kw));
+    if (hitBlob) addFeature(expanded, sources, "keyword", f.id);
+    else if (hitDoc) addFeature(expanded, sources, "doc", f.id);
+  }
+}
+
+/** Domain-safe top-up: only from category profile + integration core. */
+function topUpFromProfile(expanded, sources, api) {
+  if (expanded.size >= MIN_FEATURES_PER_API) return;
+  const profile = profileForCategory(api.category);
+  for (const id of profile) {
+    if (expanded.size >= MIN_FEATURES_PER_API) break;
+    addFeature(expanded, sources, "profile", id);
+  }
+  if (expanded.size < MIN_FEATURES_PER_API) {
+    for (const id of INTEGRATION_CORE) {
+      if (expanded.size >= MIN_FEATURES_PER_API) break;
+      addFeature(expanded, sources, "profile", id);
+    }
+  }
+}
+
 /**
  * @param {object} api
  * @param {string[]} capabilities
@@ -688,69 +124,50 @@ function addFeature(set, sources, bucket, id) {
  */
 export function expandApiFeatures(api, capabilities = [], options = {}) {
   const docText = options.docText || "";
-  const blob = featureMatchBlob(api);
-  const docBlob = normalize(docText);
-  const providerBlob = normalize(`${api.provider || ""} ${api.companyName || ""}`);
-
   const primary = new Set(capabilitiesToFeatureIds(capabilities));
   const expanded = new Set(primary);
   const sources = {
     primary: [...primary],
-    category: [],
-    keyword: [],
+    profile: [],
+    capability: [],
     provider: [],
-    parent: [],
-    bundle: [],
-    group: [],
+    keyword: [],
     doc: [],
-    sibling: [],
-    floor: [],
+    parent: [],
   };
 
-  const primaryCaps = new Set(capabilities);
-
-  for (const f of FEATURES) {
-    if ((f.categories || []).includes(api.category)) {
-      addFeature(expanded, sources, "category", f.id);
-    }
+  // 1. Curated domain profile (authoritative coverage)
+  for (const id of profileForCategory(api.category)) {
+    addFeature(expanded, sources, "profile", id);
   }
 
-  for (const f of FEATURES) {
-    const hitBlob = (f.keywords || []).some((kw) => keywordMatches(blob, kw));
-    const hitDoc = docBlob && (f.keywords || []).some((kw) => keywordMatches(docBlob, kw));
-    if (hitBlob) addFeature(expanded, sources, "keyword", f.id);
-    else if (hitDoc) addFeature(expanded, sources, "doc", f.id);
-  }
+  // 2. Capability-derived closure
+  capabilityClosure(expanded, sources, capabilities);
 
-  for (const f of FEATURES) {
-    const hit = (f.providers || []).some((p) => providerBlob.includes(p.toLowerCase()));
-    if (hit) addFeature(expanded, sources, "provider", f.id);
-  }
+  // 3. Provider ecosystem
+  providerClosure(expanded, sources, api);
 
-  for (const id of [...expanded]) {
-    const parentId = getFeature(id)?.parentId;
-    if (parentId) addFeature(expanded, sources, "parent", parentId);
-  }
+  // 4. Catalogue / doc keyword signals
+  keywordClosure(expanded, sources, api, docText);
 
-  for (const id of CATEGORY_FEATURE_BUNDLES[api.category] || []) {
-    addFeature(expanded, sources, "bundle", id);
-  }
+  // 5. Parent roll-up for hierarchy
+  addParents(expanded, sources, [...expanded]);
 
-  for (const id of GROUP_BUNDLE[api.group] || []) {
-    addFeature(expanded, sources, "group", id);
-  }
-
-  addSiblings(expanded, sources, [...expanded]);
-  for (const id of [...expanded]) {
-    const parentId = getFeature(id)?.parentId;
-    if (parentId) addFeature(expanded, sources, "parent", parentId);
-  }
-
-  padToMinimum(expanded, sources, api, primaryCaps, providerBlob);
+  // 6. Hard minimum from profile only (never unrelated globals)
+  topUpFromProfile(expanded, sources, api);
 
   return {
     primaryFeatures: [...primary].sort(),
     features: [...expanded].sort(),
     sources,
+    coverageMeta: {
+      profileSize: profileForCategory(api.category).length,
+      fromProfile: sources.profile.length,
+      fromCapability: sources.capability.length,
+      fromKeyword: sources.keyword.length + sources.doc.length,
+    },
   };
 }
+
+/** @deprecated kept for imports — use categoryFeatureProfiles instead */
+export const CATEGORY_FEATURE_BUNDLES = {};

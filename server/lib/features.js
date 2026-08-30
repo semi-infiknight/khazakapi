@@ -3,6 +3,7 @@
  */
 
 import { EXTENDED_FEATURES } from "./featureCatalogExtended.js";
+import { EXTENDED_FEATURES_WAVE2 } from "./featureCatalogExtended2.js";
 
 const CORE_FEATURES = [
   {
@@ -762,7 +763,7 @@ const CORE_FEATURES = [
   },
 ];
 
-export const FEATURES = [...CORE_FEATURES, ...EXTENDED_FEATURES];
+export const FEATURES = [...CORE_FEATURES, ...EXTENDED_FEATURES, ...EXTENDED_FEATURES_WAVE2];
 
 /** Whole-product shortcuts — boost features when prompt matches a known app type. */
 export const PRODUCT_RECIPES = [
