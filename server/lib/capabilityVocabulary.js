@@ -118,7 +118,7 @@ export const CAPABILITY_VOCABULARY = [
   { id: "welfare-benefits", label: "Welfare benefits", featureIds: ["welfare-benefits"], patterns: [/\bwelfare\b/i, /\bsocial protection\b/i, /\bpension stat/i, /\bbenefits\b/i] },
   { id: "commodity-prices", label: "Commodity prices", featureIds: ["commodity-prices"], patterns: [/\bcommodity price\b/i, /\bmetal price\b/i, /\bgold price\b/i] },
   { id: "crypto-trading", label: "Crypto trading", featureIds: ["crypto-trading"], patterns: [/\bcrypto\b/i, /\bbitcoin\b/i, /\bblockchain\b/i, /\bdigital asset\b/i] },
-  { id: "data-enrichment", label: "Data enrichment", featureIds: ["data-enrichment"], patterns: [/\benrichment\b/i, /\bdata append\b/i, /\bcompany lookup\b/i] },
+  { id: "data-enrichment", label: "Data enrichment", featureIds: ["data-enrichment"], patterns: [/\bdata enrichment\b/i, /\bdata append\b/i, /\bcompany lookup\b/i, /\bidentity lookup\b/i] },
   { id: "metadata-catalog", label: "Metadata catalog", featureIds: ["metadata-catalog"], patterns: [/\bmetadata catalog\b/i, /\bdataset schema\b/i, /\bdata dictionary\b/i] },
   { id: "realtime-streams", label: "Realtime streams", featureIds: ["realtime-streams"], patterns: [/\brealtime\b/i, /\blive feed\b/i, /\bwebsocket\b/i, /\bstream api\b/i] },
   { id: "gov-digital-services", label: "Gov digital services", featureIds: ["gov-digital-services"], patterns: [/\be.?gov\b/i, /\bgovernment service\b/i, /\bdigital gov\b/i, /\bpublic service api\b/i] },

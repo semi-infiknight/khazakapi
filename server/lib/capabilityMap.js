@@ -5,6 +5,10 @@
 import { FEATURES } from "./features.js";
 import { CAPABILITY_VOCABULARY } from "./capabilityVocabulary.js";
 
+function getCapabilityAtom(id) {
+  return CAPABILITY_VOCABULARY.find((a) => a.id === id) || null;
+}
+
 /** @type {Map<string, Set<string>>} */
 let capabilityToFeatures = null;
 
@@ -40,7 +44,18 @@ export function getCapabilityToFeatureMap() {
   return capabilityToFeatures;
 }
 
+/** Strict suggest/eligibility mapping — vocabulary atoms only (not ontology reverse-index). */
+export function capabilitiesToPrimaryFeatureIds(capabilities) {
+  const out = new Set();
+  for (const cap of capabilities) {
+    const atom = getCapabilityAtom(cap);
+    for (const fid of atom?.featureIds || []) out.add(fid);
+  }
+  return [...out].sort();
+}
+
 /**
+ * Broad ontology reverse-index (legacy). Avoid for suggest primary matching.
  * @param {Iterable<string>} capabilities
  * @returns {string[]}
  */

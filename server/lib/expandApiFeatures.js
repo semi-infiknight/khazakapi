@@ -5,12 +5,13 @@
  */
 
 import { FEATURES, getFeature } from "./features.js";
-import { capabilitiesToFeatureIds } from "./capabilityMap.js";
+import { capabilitiesToPrimaryFeatureIds } from "./capabilityMap.js";
+import { getCapabilityAtom } from "./capabilityVocabulary.js";
 import {
   MIN_FEATURES_PER_API,
   INTEGRATION_CORE,
   profileForCategory,
-  GOV_STAT_CATEGORIES,
+  RELATED_CATEGORIES,
 } from "./categoryFeatureProfiles.js";
 
 export { MIN_FEATURES_PER_API };
@@ -72,21 +73,47 @@ function addParents(expanded, sources, ids) {
   }
 }
 
+function providerSlugMatches(blob, slug) {
+  const p = String(slug).toLowerCase();
+  if (p.length < 4) {
+    return new RegExp(`\\b${p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(blob);
+  }
+  return blob.includes(p);
+}
+
+function categoryAllowsFeature(feature, apiCategory) {
+  const cats = feature.categories || [];
+  if (!cats.length || !apiCategory) return true;
+  if (cats.includes(apiCategory)) return true;
+  const related = RELATED_CATEGORIES[apiCategory] || [];
+  return cats.some((c) => related.includes(c));
+}
+
+/** Vocabulary-mapped features + direct descendants only (not full ontology reverse-index). */
 function capabilityClosure(expanded, sources, capabilities) {
-  const caps = new Set(capabilities);
-  for (const f of FEATURES) {
-    if (f.capabilityTags?.some((t) => caps.has(t))) {
-      addFeature(expanded, sources, "capability", f.id);
+  const seeds = new Set();
+  for (const cap of capabilities) {
+    for (const fid of getCapabilityAtom(cap)?.featureIds || []) seeds.add(fid);
+  }
+
+  function addSubtree(id) {
+    if (!VALID_FEATURE_IDS.has(id)) return;
+    addFeature(expanded, sources, "capability", id);
+    for (const f of FEATURES) {
+      if (f.parentId === id) addSubtree(f.id);
     }
   }
+
+  for (const id of seeds) addSubtree(id);
 }
 
 function providerClosure(expanded, sources, api) {
   const providerBlob = normalize(`${api.provider || ""} ${api.companyName || ""}`);
+  const apiCategory = api.category || "";
   for (const f of FEATURES) {
-    if ((f.providers || []).some((p) => providerBlob.includes(p.toLowerCase()))) {
-      addFeature(expanded, sources, "provider", f.id);
-    }
+    if (!(f.providers || []).some((p) => providerSlugMatches(providerBlob, p))) continue;
+    if (!categoryAllowsFeature(f, apiCategory)) continue;
+    addFeature(expanded, sources, "provider", f.id);
   }
 }
 
@@ -124,7 +151,7 @@ function topUpFromProfile(expanded, sources, api) {
  */
 export function expandApiFeatures(api, capabilities = [], options = {}) {
   const docText = options.docText || "";
-  const primary = new Set(capabilitiesToFeatureIds(capabilities));
+  const primary = new Set(capabilitiesToPrimaryFeatureIds(capabilities));
   const expanded = new Set(primary);
   const sources = {
     primary: [...primary],

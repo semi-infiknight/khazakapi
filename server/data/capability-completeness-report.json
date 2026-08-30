@@ -1,13 +1,13 @@
 {
-  "builtAt": "2026-08-30T06:06:08.547Z",
+  "builtAt": "2026-08-30T06:08:31.233Z",
   "summary": {
     "totalApis": 688,
     "ontologyFeatures": 389,
     "targetFeaturesPerApi": 100,
     "minFeaturesPerApi": 106,
-    "p10FeaturesPerApi": 146,
-    "medianFeaturesPerApi": 299,
-    "maxFeaturesPerApi": 356,
+    "p10FeaturesPerApi": 143,
+    "medianFeaturesPerApi": 183,
+    "maxFeaturesPerApi": 303,
     "apisBelowTarget": 0,
     "commercialCoverage": "139/139"
   },
@@ -17,30 +17,31 @@
     "withFeatures": 688,
     "minFeaturesPerApi": 100,
     "apisBelowMinFeatures": 0,
-    "avgFeaturesPerApi": 277.13,
+    "avgFeaturesPerApi": 189.28,
     "commercialTotal": 139,
     "commercialWithFeatures": 139,
     "commercialNoFeatures": 0,
     "docScavengeTargets": 139,
     "docEnrichedApis": 0,
     "docScavengedWithHits": 0,
-    "uniqueCapabilities": 97,
+    "uniqueCapabilities": 96,
     "orphanCapabilities": [],
     "unmappedCapabilities": [],
     "featuresWithZeroApis": [],
     "vocabularySize": 101,
     "featureCount": 389,
-    "medianFeaturesPerApi": 299,
-    "p10FeaturesPerApi": 146,
+    "medianFeaturesPerApi": 183,
+    "p10FeaturesPerApi": 143,
     "minFeaturesObserved": 106,
-    "maxFeaturesObserved": 356,
+    "maxFeaturesObserved": 303,
     "featureCountHistogram": {
       "100+": 688
     },
     "categoryMinFeatures": {
+      "AI": 106,
       "Cloud & infrastructure": 106,
-      "AI": 119,
       "Government services": 124,
+      "Prices": 127,
       "Banking & finance": 131,
       "Payments": 131,
       "Logistics & delivery": 139,
@@ -50,157 +51,151 @@
       "Food & delivery": 148,
       "Communications": 154,
       "Travel & mobility": 164,
-      "Prices": 272,
-      "Economic Sectors": 292,
-      "Economy & business": 292,
-      "Financial Markets": 293,
-      "National Accounts": 295,
-      "Demography": 296,
-      "Education": 296,
-      "Population & society": 296,
-      "Labour Markets": 297,
-      "Health": 298,
-      "Work & income": 299,
-      "Households": 301,
-      "Environment": 302,
-      "Healthcare": 309,
-      "Banking": 309,
-      "Crypto": 309,
-      "Finance": 310,
-      "Environment & climate": 311,
-      "Commodities & metals": 315,
-      "Public Administration": 316,
-      "Metadata": 316,
-      "Data Dictionaries": 317,
-      "Statistical Indicators": 317,
-      "Public Safety": 317,
-      "Public Welfare": 317,
-      "Government data": 317,
-      "Transport": 324,
-      "Auth & identity": 327,
-      "Data & enrichment": 329,
-      "Property": 329,
-      "Transportation": 334,
-      "Housing & property": 334,
-      "Other portals": 346,
-      "Realtime": 355
+      "Education": 169,
+      "Population & society": 170,
+      "Health": 170,
+      "Demography": 172,
+      "Labour Markets": 175,
+      "Environment": 178,
+      "Households": 182,
+      "Metadata": 182,
+      "Work & income": 182,
+      "Healthcare": 183,
+      "Environment & climate": 183,
+      "Data Dictionaries": 184,
+      "Statistical Indicators": 184,
+      "Public Safety": 184,
+      "Public Welfare": 184,
+      "Government data": 184,
+      "Public Administration": 185,
+      "Commodities & metals": 185,
+      "Economic Sectors": 187,
+      "Economy & business": 187,
+      "National Accounts": 200,
+      "Financial Markets": 218,
+      "Housing & property": 235,
+      "Property": 237,
+      "Banking": 240,
+      "Finance": 241,
+      "Crypto": 243,
+      "Transport": 245,
+      "Auth & identity": 247,
+      "Transportation": 260,
+      "Other portals": 271,
+      "Data & enrichment": 276,
+      "Realtime": 303
     },
     "categoryAvgFeatures": {
-      "Realtime": 355.1,
-      "Other portals": 347.6,
-      "Housing & property": 334.5,
-      "Transportation": 334,
-      "Data & enrichment": 329,
-      "Property": 329,
-      "Auth & identity": 327,
-      "Transport": 324.1,
-      "Government data": 317.2,
-      "Data Dictionaries": 317,
-      "Statistical Indicators": 317,
-      "Public Safety": 317,
-      "Public Welfare": 317,
-      "Public Administration": 316,
-      "Metadata": 316,
-      "Commodities & metals": 315,
-      "Environment & climate": 311,
-      "Finance": 310,
-      "Healthcare": 309,
-      "Banking": 309,
-      "Crypto": 309,
-      "Environment": 302,
-      "Households": 301.2,
-      "Work & income": 299,
-      "Prices": 298.4,
-      "Health": 298,
-      "Labour Markets": 297.4,
-      "Population & society": 297.2,
-      "Education": 296.6,
-      "Demography": 296.1,
-      "National Accounts": 295,
-      "Financial Markets": 293,
-      "Economy & business": 292.6,
-      "Economic Sectors": 292.2,
-      "Banking & finance": 236.5,
-      "Travel & mobility": 207.4,
-      "Government services": 193.6,
-      "Maps & location": 184.2,
-      "Communications": 173.4,
-      "E-commerce": 157.9,
+      "Realtime": 303,
+      "Data & enrichment": 277.1,
+      "Other portals": 275.5,
+      "Transportation": 262,
+      "Auth & identity": 247,
+      "Transport": 245.2,
+      "Crypto": 243.5,
+      "Finance": 241,
+      "Banking": 240,
+      "Property": 237,
+      "Housing & property": 235.3,
+      "Financial Markets": 218,
+      "Prices": 211.1,
+      "National Accounts": 200,
+      "Banking & finance": 196.4,
+      "Travel & mobility": 190.1,
+      "Economy & business": 187.6,
+      "Economic Sectors": 187,
+      "Public Administration": 185,
+      "Commodities & metals": 185,
+      "Government data": 184.5,
+      "Data Dictionaries": 184.3,
+      "Statistical Indicators": 184,
+      "Public Safety": 184,
+      "Public Welfare": 184,
+      "Environment & climate": 183.3,
+      "Healthcare": 183.1,
+      "Households": 182,
+      "Metadata": 182,
+      "Work & income": 182,
+      "Environment": 178,
+      "Labour Markets": 175.1,
+      "Population & society": 174.2,
+      "Demography": 172,
+      "Health": 171.9,
+      "Education": 170.7,
+      "Maps & location": 165.5,
+      "Communications": 161.1,
+      "Government services": 151.3,
+      "E-commerce": 149.4,
       "Food & delivery": 149,
-      "Payments": 143.7,
       "E-invoicing & tax": 143.5,
       "Logistics & delivery": 140.2,
-      "AI": 119.2,
+      "Payments": 139.9,
+      "AI": 106.4,
       "Cloud & infrastructure": 106
     },
     "worstApis": [
       {
-        "id": "kz-ps-cloud",
-        "title": "PS Cloud ~ Kazakhstan data residency cloud (KZ)",
-        "category": "Cloud & infrastructure",
-        "features": 106
-      },
-      {
-        "id": "kz-beeline-cloud",
-        "title": "Beeline Cloud ~ telecom-hosted cloud (KZ)",
-        "category": "Cloud & infrastructure",
-        "features": 106
-      },
-      {
         "id": "yandex-cloud-compute",
         "title": "Yandex Compute Cloud ~ VMs & instances",
         "category": "AI",
-        "features": 119
+        "features": 106
       },
       {
         "id": "yandex-cloud-object-storage",
         "title": "Yandex Object Storage ~ S3-compatible buckets",
         "category": "AI",
-        "features": 119
+        "features": 106
       },
       {
         "id": "yandex-cloud-managed-postgresql",
         "title": "Yandex Managed PostgreSQL ~ managed DB",
         "category": "AI",
-        "features": 119
+        "features": 106
       },
       {
         "id": "yandex-cloud-functions",
         "title": "Yandex Cloud Functions ~ serverless",
         "category": "AI",
-        "features": 119
+        "features": 106
       },
       {
         "id": "yandex-cloud-serverless-containers",
         "title": "Yandex Serverless Containers ~ container runtime",
         "category": "AI",
-        "features": 119
+        "features": 106
       },
       {
         "id": "yandex-cloud-api-gateway",
         "title": "Yandex API Gateway ~ managed API front door",
         "category": "AI",
-        "features": 119
+        "features": 106
       },
       {
         "id": "yandex-cloud-vpc",
         "title": "Yandex Virtual Private Cloud ~ networking",
         "category": "AI",
-        "features": 119
+        "features": 106
       },
       {
         "id": "yandex-cloud-dns",
         "title": "Yandex Cloud DNS ~ managed DNS zones",
         "category": "AI",
-        "features": 119
+        "features": 106
+      },
+      {
+        "id": "yandex-cloud-kms",
+        "title": "Yandex Key Management Service ~ encryption keys",
+        "category": "AI",
+        "features": 106
+      },
+      {
+        "id": "yandex-cloud-logging",
+        "title": "Yandex Cloud Logging ~ centralized logs",
+        "category": "AI",
+        "features": 106
       }
     ],
     "topFeatures": [
-      {
-        "id": "data-enrichment",
-        "label": "Data enrichment & lookup",
-        "apis": 688
-      },
       {
         "id": "data-visualization",
         "label": "Charts & dashboards",
@@ -270,68 +265,73 @@
         "id": "filtering",
         "label": "Query filtering",
         "apis": 688
+      },
+      {
+        "id": "sorting",
+        "label": "Result sorting",
+        "apis": 688
       }
     ],
     "rareFeatures": [
       {
-        "id": "delivery-slot-booking",
-        "label": "Delivery slot booking",
-        "apis": 64
+        "id": "esf-invoicing",
+        "label": "ESF e-invoicing",
+        "apis": 2
       },
       {
-        "id": "restaurant-menu",
-        "label": "Restaurant menu sync",
-        "apis": 64
+        "id": "crypto-wallet",
+        "label": "Crypto wallet integration",
+        "apis": 2
       },
       {
-        "id": "kitchen-display",
-        "label": "Kitchen / dispatch display",
-        "apis": 64
+        "id": "crypto-price-feed",
+        "label": "Crypto price feed",
+        "apis": 2
       },
       {
-        "id": "graphql-api",
-        "label": "GraphQL API",
-        "apis": 90
+        "id": "vat-reporting",
+        "label": "VAT reporting & filing",
+        "apis": 2
       },
       {
-        "id": "data-warehouse",
-        "label": "Data warehouse loads",
-        "apis": 90
+        "id": "e-invoice-archive",
+        "label": "E-invoice archive & audit",
+        "apis": 2
       },
       {
-        "id": "text-generation",
-        "label": "Text generation",
-        "apis": 90
+        "id": "warehouse-receipts",
+        "label": "Virtual warehouse receipts",
+        "apis": 2
       },
       {
-        "id": "text-summarization",
-        "label": "Text summarization",
-        "apis": 90
+        "id": "snt-documents",
+        "label": "SNT accompanying invoices",
+        "apis": 2
       },
       {
-        "id": "chat-completion",
-        "label": "Chat completions",
-        "apis": 90
+        "id": "invoice-numbering",
+        "label": "Invoice numbering sequences",
+        "apis": 2
       },
       {
-        "id": "content-moderation",
-        "label": "Content moderation",
-        "apis": 90
+        "id": "invoice-templates",
+        "label": "Invoice templates",
+        "apis": 2
       },
       {
-        "id": "voice-input",
-        "label": "Voice input (STT)",
-        "apis": 90
+        "id": "credit-note-issuance",
+        "label": "Credit note issuance",
+        "apis": 2
       }
     ],
     "expansionSourceTotals": {
-      "primary": 138535,
-      "profile": 45337,
-      "capability": 0,
-      "provider": 4302,
-      "keyword": 105,
-      "doc": 172,
-      "parent": 2212
+      "primary": 2145,
+      "profile": 79751,
+      "capability": 46431,
+      "provider": 0,
+      "keyword": 102,
+      "doc": 196,
+      "parent": 1602
     },
     "ontologyFeatures": 389
   }

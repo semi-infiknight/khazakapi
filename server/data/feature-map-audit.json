@@ -1,0 +1,568 @@
+{
+  "builtAt": "2026-08-30T06:08:55.774Z",
+  "ontology": {
+    "featureCount": 389,
+    "vocabularyAtoms": 101,
+    "duplicates": [],
+    "orphanParents": [],
+    "featuresWithoutCapabilityTags": 289,
+    "genericGovTagPairs": 6
+  },
+  "profiles": {
+    "categoriesBelowMinProfile": []
+  },
+  "capabilityMap": {
+    "bloatedCapabilityAtoms": [],
+    "birthsReference": {
+      "id": "births",
+      "title": "Daily Live Births ~ Kazakhstan",
+      "capabilities": [
+        "user-auth",
+        "gov-open-data",
+        "statistics",
+        "population-stats",
+        "gov-digital-services"
+      ],
+      "strictPrimary": [
+        "gov-digital-services",
+        "gov-open-data",
+        "population-stats",
+        "user-auth"
+      ],
+      "legacyPrimary": 17
+    }
+  },
+  "matrix": {
+    "apis": 688,
+    "primarySize": {
+      "min": 1,
+      "p10": 1,
+      "median": 3,
+      "p90": 4,
+      "max": 7
+    },
+    "featureSize": {
+      "min": 106,
+      "p10": 143,
+      "median": 183,
+      "max": 303,
+      "belowMin": 0
+    },
+    "universalFeatures": [
+      {
+        "id": "admin-panel",
+        "label": "Admin panel integration",
+        "apis": 688
+      },
+      {
+        "id": "api-key-auth",
+        "label": "API key authentication",
+        "apis": 688
+      },
+      {
+        "id": "batch-export",
+        "label": "Batch & scheduled jobs",
+        "apis": 688
+      },
+      {
+        "id": "bearer-token-auth",
+        "label": "Bearer token auth",
+        "apis": 688
+      },
+      {
+        "id": "bulk-read",
+        "label": "Bulk data reads",
+        "apis": 688
+      },
+      {
+        "id": "data-visualization",
+        "label": "Charts & dashboards",
+        "apis": 688
+      },
+      {
+        "id": "cursor-pagination",
+        "label": "Cursor pagination",
+        "apis": 688
+      },
+      {
+        "id": "embed-widget",
+        "label": "Embeddable widgets",
+        "apis": 688
+      },
+      {
+        "id": "idempotent-requests",
+        "label": "Idempotent requests",
+        "apis": 688
+      },
+      {
+        "id": "json-export",
+        "label": "JSON export",
+        "apis": 688
+      },
+      {
+        "id": "kpi-dashboard",
+        "label": "KPI dashboards",
+        "apis": 688
+      },
+      {
+        "id": "mobile-app-backend",
+        "label": "Mobile app backend",
+        "apis": 688
+      },
+      {
+        "id": "monitoring-alerts",
+        "label": "Monitoring & alerts",
+        "apis": 688
+      },
+      {
+        "id": "oauth-flow",
+        "label": "OAuth authorization flow",
+        "apis": 688
+      },
+      {
+        "id": "pagination",
+        "label": "Paginated results",
+        "apis": 688
+      },
+      {
+        "id": "production-keys",
+        "label": "Production credentials",
+        "apis": 688
+      },
+      {
+        "id": "filtering",
+        "label": "Query filtering",
+        "apis": 688
+      },
+      {
+        "id": "rate-limit-handling",
+        "label": "Rate limit handling",
+        "apis": 688
+      },
+      {
+        "id": "request-logging",
+        "label": "Request logging",
+        "apis": 688
+      },
+      {
+        "id": "cache-responses",
+        "label": "Response caching",
+        "apis": 688
+      },
+      {
+        "id": "api-integration",
+        "label": "REST API integration",
+        "apis": 688
+      },
+      {
+        "id": "rest-api",
+        "label": "REST HTTP API",
+        "apis": 688
+      },
+      {
+        "id": "sorting",
+        "label": "Result sorting",
+        "apis": 688
+      },
+      {
+        "id": "retry-backoff",
+        "label": "Retry with backoff",
+        "apis": 688
+      },
+      {
+        "id": "sandbox-testing",
+        "label": "Sandbox / test mode",
+        "apis": 688
+      },
+      {
+        "id": "field-selection",
+        "label": "Sparse field selection",
+        "apis": 688
+      },
+      {
+        "id": "error-handling",
+        "label": "Structured error handling",
+        "apis": 688
+      },
+      {
+        "id": "api-versioning",
+        "label": "Versioned endpoints",
+        "apis": 688
+      },
+      {
+        "id": "web-app-backend",
+        "label": "Web app backend",
+        "apis": 688
+      },
+      {
+        "id": "webhook-callbacks",
+        "label": "Webhook callbacks",
+        "apis": 688
+      }
+    ],
+    "topFeaturesByApiCount": [
+      {
+        "id": "admin-panel",
+        "label": "Admin panel integration",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "api-integration",
+        "label": "REST API integration",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "api-key-auth",
+        "label": "API key authentication",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "api-versioning",
+        "label": "Versioned endpoints",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "batch-export",
+        "label": "Batch & scheduled jobs",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "bearer-token-auth",
+        "label": "Bearer token auth",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "bulk-read",
+        "label": "Bulk data reads",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "cache-responses",
+        "label": "Response caching",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "cursor-pagination",
+        "label": "Cursor pagination",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "data-visualization",
+        "label": "Charts & dashboards",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "embed-widget",
+        "label": "Embeddable widgets",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "error-handling",
+        "label": "Structured error handling",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "field-selection",
+        "label": "Sparse field selection",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "filtering",
+        "label": "Query filtering",
+        "apis": 688,
+        "pct": 100
+      },
+      {
+        "id": "idempotent-requests",
+        "label": "Idempotent requests",
+        "apis": 688,
+        "pct": 100
+      }
+    ],
+    "primaryPollutionSamples": [
+      {
+        "id": "births",
+        "title": "Daily Live Births ~ Kazakhstan",
+        "category": "Demography",
+        "primary": 4,
+        "legacyPrimary": 17,
+        "sampleLegacy": [
+          "batch-export",
+          "csv-export",
+          "data-visualization",
+          "environment-stats",
+          "historical-data"
+        ]
+      },
+      {
+        "id": "population_district",
+        "title": "Population by Region (KATO) ~ Kazakhstan",
+        "category": "Demography",
+        "primary": 4,
+        "legacyPrimary": 17,
+        "sampleLegacy": [
+          "batch-export",
+          "csv-export",
+          "data-visualization",
+          "environment-stats",
+          "historical-data"
+        ]
+      },
+      {
+        "id": "population_malaysia",
+        "title": "Population Table: Kazakhstan",
+        "category": "Demography",
+        "primary": 4,
+        "legacyPrimary": 17,
+        "sampleLegacy": [
+          "batch-export",
+          "csv-export",
+          "data-visualization",
+          "environment-stats",
+          "historical-data"
+        ]
+      },
+      {
+        "id": "hies_district",
+        "title": "Household Income and Expenditure: Administrative Districts",
+        "category": "Households",
+        "primary": 4,
+        "legacyPrimary": 18,
+        "sampleLegacy": [
+          "batch-export",
+          "csv-export",
+          "data-visualization",
+          "environment-stats",
+          "historical-data"
+        ]
+      },
+      {
+        "id": "hies_state",
+        "title": "Household Income and Expenditure: States",
+        "category": "Households",
+        "primary": 4,
+        "legacyPrimary": 18,
+        "sampleLegacy": [
+          "batch-export",
+          "csv-export",
+          "data-visualization",
+          "environment-stats",
+          "historical-data"
+        ]
+      },
+      {
+        "id": "msic",
+        "title": "MSIC",
+        "category": "Data Dictionaries",
+        "primary": 3,
+        "legacyPrimary": 16,
+        "sampleLegacy": [
+          "batch-export",
+          "csv-export",
+          "data-visualization",
+          "environment-stats",
+          "historical-data"
+        ]
+      },
+      {
+        "id": "mcoicop",
+        "title": "MCOICOP",
+        "category": "Data Dictionaries",
+        "primary": 3,
+        "legacyPrimary": 16,
+        "sampleLegacy": [
+          "batch-export",
+          "csv-export",
+          "data-visualization",
+          "environment-stats",
+          "historical-data"
+        ]
+      },
+      {
+        "id": "population_state",
+        "title": "Population Table: States",
+        "category": "Demography",
+        "primary": 4,
+        "legacyPrimary": 17,
+        "sampleLegacy": [
+          "batch-export",
+          "csv-export",
+          "data-visualization",
+          "environment-stats",
+          "historical-data"
+        ]
+      }
+    ],
+    "govCategoryCommercialLeakage": [
+      {
+        "id": "fuelprice",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "fuelprice",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_strata",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_strata",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_state_inflation",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_state_inflation",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_state",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_state",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_lowincome",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_lowincome",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_headline_inflation",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_headline_inflation",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_headline",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_headline",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_core_inflation",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_core_inflation",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_annual_inflation",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_annual_inflation",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_annual",
+        "category": "Prices",
+        "feature": "apple-pay-integration",
+        "via": "expanded"
+      },
+      {
+        "id": "cpi_annual",
+        "category": "Prices",
+        "feature": "kaspi-merchant",
+        "via": "expanded"
+      }
+    ],
+    "primaryDriftFromStrict": [],
+    "categoryPrimaryMax": {
+      "Data & enrichment": 7,
+      "Housing & property": 6,
+      "Population & society": 6,
+      "Realtime": 6,
+      "Other portals": 6,
+      "Government services": 6,
+      "Transportation": 5,
+      "Labour Markets": 5,
+      "National Accounts": 5,
+      "Education": 5,
+      "Economy & business": 5,
+      "Environment & climate": 5
+    }
+  },
+  "reference": {
+    "bloatedCapabilityAtoms": [],
+    "birthsReference": {
+      "id": "births",
+      "title": "Daily Live Births ~ Kazakhstan",
+      "capabilities": [
+        "user-auth",
+        "gov-open-data",
+        "statistics",
+        "population-stats",
+        "gov-digital-services"
+      ],
+      "strictPrimary": [
+        "gov-digital-services",
+        "gov-open-data",
+        "population-stats",
+        "user-auth"
+      ],
+      "legacyPrimary": 17
+    }
+  }
+}

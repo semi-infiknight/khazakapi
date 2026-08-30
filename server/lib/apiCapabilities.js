@@ -1,4 +1,4 @@
-import { capabilitiesToFeatureIds } from "./capabilityMap.js";
+import { capabilitiesToFeatureIds, capabilitiesToPrimaryFeatureIds } from "./capabilityMap.js";
 import { getMatrixCapabilities, getMatrixFeatures, getMatrixPrimaryFeatures } from "./apiCapabilityMatrix.js";
 
 /** @type {Record<string, string[]>} */
@@ -370,7 +370,7 @@ export function getApiPrimaryFeatures(api) {
   const id = String(api.id || api.slug || "");
   const primary = getMatrixPrimaryFeatures(id);
   if (primary?.length) return primary;
-  return capabilitiesToFeatureIds(getApiCapabilities(api));
+  return capabilitiesToPrimaryFeatureIds([...getApiCapabilities(api)]);
 }
 
 export function capabilityOverlap(apiCaps, featureTags = []) {

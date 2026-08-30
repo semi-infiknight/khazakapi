@@ -9,7 +9,7 @@ function feat(f) {
     why: `Support ${f.label.toLowerCase()} in Kazakhstan product flows`,
     where: "Dashboards, research tools, or backend data pipelines",
     keywords: [f.label.toLowerCase(), ...(f.keywords || [])],
-    capabilityTags: f.capabilityTags || ["gov-open-data", "statistics"],
+    capabilityTags: f.capabilityTags || [],
     categories: f.categories || ["Government data"],
     providers: f.providers || ["bureau", "egov"],
     ...f,
@@ -23,7 +23,7 @@ function gov(id, label, extra = {}) {
     parentId: extra.parentId || "gov-open-data",
     categories: extra.categories || ["Government data"],
     keywords: extra.keywords || [label.toLowerCase()],
-    capabilityTags: extra.capabilityTags || ["gov-open-data", "statistics"],
+    capabilityTags: extra.capabilityTags || [],
   });
 }
 
