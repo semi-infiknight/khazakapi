@@ -121,23 +121,6 @@ function MermaidDiagram({ chart }) {
   return <div ref={hostRef} className="intent-prompt-mermaid" aria-label="Suggested API stack diagram" />;
 }
 
-function explainApi(api) {
-  if (api.plugIn?.auth) return api.plugIn.auth;
-  if (api.auth === "none") return "No authentication required — call it directly from your backend.";
-  if (api.auth === "apiKey") return `Get an API key from ${api.provider}, keep it server-side, then call this endpoint.`;
-  if (api.auth === "oauth") return `Complete OAuth with ${api.provider}, then call with a bearer token.`;
-  return `Wire this into your flow via ${api.provider}.`;
-}
-
-function PromptApiBlock({ api }) {
-  return (
-    <div className="intent-prompt-api">
-      <ApiCard api={api} />
-      <p className="intent-prompt-api-note">{explainApi(api)}</p>
-    </div>
-  );
-}
-
 export function IntentResults({ suggestion }) {
   if (!suggestion?.query) return null;
 
@@ -170,7 +153,7 @@ export function IntentResults({ suggestion }) {
           <p className="intent-prompt-layer-where">{block.where}</p>
           <div className="intent-prompt-api-grid">
             {block.apis.map((api) => (
-              <PromptApiBlock key={`${block.id}-${api.id}`} api={api} />
+              <ApiCard key={`${block.id}-${api.id}`} api={api} />
             ))}
           </div>
         </section>
