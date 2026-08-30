@@ -1889,6 +1889,22 @@ nav a:hover {
   min-width: 0;
 }
 
+.catalogue-load-footer {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 0 0.5rem;
+}
+
+.catalogue-load-status {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-soft);
+  text-align: center;
+}
+
 .catalogue-sidebar {
   position: sticky;
   top: 4.5rem;

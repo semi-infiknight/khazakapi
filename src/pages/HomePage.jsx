@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchSearch, fetchSuggest } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import { IntentResults } from "../components/IntentSuggest.jsx";
 import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
+
+const PAGE_SIZE = 24;
 
 export default function HomePage() {
   const { setCatalogue } = useCatalogueNav();
@@ -11,8 +13,12 @@ export default function HomePage() {
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [suggestion, setSuggestion] = useState(null);
   const [suggesting, setSuggesting] = useState(false);
-  const [data, setData] = useState(null);
+  const [apis, setApis] = useState([]);
+  const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const loadMoreRef = useRef(null);
+  const loadingMoreRef = useRef(false);
 
   const clearIntent = useCallback(() => {
     setSubmittedQuery("");
@@ -23,9 +29,11 @@ export default function HomePage() {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    fetchSearch({ q: "", limit: 200 })
+    fetchSearch({ q: "", limit: PAGE_SIZE, offset: 0 })
       .then((res) => {
-        if (!cancelled) setData(res);
+        if (cancelled) return;
+        setApis(res.apis);
+        setMeta(res);
       })
       .catch(console.error)
       .finally(() => {
@@ -35,6 +43,28 @@ export default function HomePage() {
       cancelled = true;
     };
   }, []);
+
+  const loadMore = useCallback(async () => {
+    if (!meta?.next_offset || loadingMoreRef.current) return;
+    loadingMoreRef.current = true;
+    setLoadingMore(true);
+    try {
+      const res = await fetchSearch({ q: "", limit: PAGE_SIZE, offset: meta.next_offset });
+      setApis((prev) => [...prev, ...res.apis]);
+      setMeta((prev) => ({
+        ...prev,
+        next_offset: res.next_offset,
+        offset: res.offset,
+        count: res.count,
+        total: res.total,
+      }));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      loadingMoreRef.current = false;
+      setLoadingMore(false);
+    }
+  }, [meta?.next_offset]);
 
   const submitIntent = useCallback(() => {
     const q = query.trim();
@@ -60,9 +90,10 @@ export default function HomePage() {
       .finally(() => setSuggesting(false));
   }, [query, submittedQuery, suggestion, suggesting, clearIntent]);
 
-  const stats = data?.facets;
+  const stats = meta?.facets;
   const showingIntent = Boolean(submittedQuery.trim());
   const draftChanged = showingIntent && query.trim() !== submittedQuery.trim();
+  const hasMore = Boolean(meta?.next_offset);
 
   useEffect(() => {
     setCatalogue({
@@ -75,6 +106,22 @@ export default function HomePage() {
     return () => setCatalogue(null);
   }, [query, showingIntent, suggesting, submitIntent, setCatalogue]);
 
+  useEffect(() => {
+    if (showingIntent || loading || !hasMore) return undefined;
+    const node = loadMoreRef.current;
+    if (!node) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) loadMore();
+      },
+      { rootMargin: "240px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [showingIntent, loading, hasMore, loadMore, apis.length]);
+
   return (
     <div className="container-main container-main--catalogue pt-6">
       <section className="hero-banner mb-8" aria-label="Khazak API">
@@ -85,7 +132,7 @@ export default function HomePage() {
       <section className="stats-metal-strip mb-8 grid grid-cols-2 lg:grid-cols-4">
         <div className="stats-block flex-col items-start justify-center">
           <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">APIs</span>
-          <span className="stats-big-number">{data?.catalogueTotal ?? data?.total ?? "—"}</span>
+          <span className="stats-big-number">{meta?.catalogueTotal ?? meta?.total ?? "—"}</span>
         </div>
         <div className="stats-block flex-col items-start justify-center">
           <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">Free</span>
@@ -148,7 +195,20 @@ export default function HomePage() {
           ) : loading ? (
             <p className="font-mono text-sm text-[var(--text-soft)]">Loading catalogue…</p>
           ) : (
-            <ApiGrid apis={data?.apis} />
+            <>
+              <ApiGrid apis={apis} />
+              <div className="catalogue-load-footer" ref={loadMoreRef}>
+                {loadingMore ? (
+                  <p className="catalogue-load-status">Loading more APIs…</p>
+                ) : hasMore ? (
+                  <p className="catalogue-load-status">
+                    Showing {apis.length} of {meta?.total ?? apis.length}
+                  </p>
+                ) : (
+                  <p className="catalogue-load-status">All {meta?.total ?? apis.length} APIs loaded</p>
+                )}
+              </div>
+            </>
           )}
         </div>
       </div>
