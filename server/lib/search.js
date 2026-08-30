@@ -1,3 +1,4 @@
+import { compareCatalogueByImpact } from "./catalogueSort.js";
 import { buildTrySpec } from "./requestSpec.js";
 
 const STOP = new Set([
@@ -111,10 +112,15 @@ export function searchApis(apis, query = {}) {
   if (tokens.length) {
     results = results
       .map((entry) => ({ entry, score: scoreEntry(entry, tokens) }))
-      .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
+      .sort(
+        (a, b) =>
+          b.score - a.score ||
+          compareCatalogueByImpact(a.entry, b.entry) ||
+          a.entry.title.localeCompare(b.entry.title),
+      )
       .map(({ entry }) => entry);
   } else {
-    results = [...results].sort((a, b) => a.title.localeCompare(b.title));
+    results = [...results].sort(compareCatalogueByImpact);
   }
 
   const total = results.length;

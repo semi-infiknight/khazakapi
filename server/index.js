@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { CATALOGUE_META, KZ_APIS } from "./data/apis.js";
+import { sortCatalogueByImpact } from "./lib/catalogueSort.js";
 import {
   freshnessReport,
   listCategories,
@@ -53,7 +54,7 @@ app.use((_req, res, next) => {
 app.get("/api/catalogue", (req, res) => {
   const limit = Math.min(Number(req.query.limit) || 200, 200);
   const offset = Number(req.query.offset) || 0;
-  const apis = KZ_APIS.slice(offset, offset + limit).map(publicListEntry);
+  const apis = sortCatalogueByImpact(KZ_APIS).slice(offset, offset + limit).map(publicListEntry);
   res.json({
     ...CATALOGUE_META,
     count: apis.length,
