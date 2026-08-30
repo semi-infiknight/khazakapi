@@ -7,7 +7,7 @@
 import { FEATURES, getFeature } from "./features.js";
 import { capabilitiesToFeatureIds } from "./capabilityMap.js";
 
-export const MIN_FEATURES_PER_API = 10;
+export const MIN_FEATURES_PER_API = 100;
 
 /** Default bundles for categories with thin ontology coverage. */
 export const CATEGORY_FEATURE_BUNDLES = {
@@ -575,8 +575,84 @@ const GROUP_BUNDLE = {
     "batch-export",
     "api-integration",
     "metadata-catalog",
+    "csv-export",
+    "json-export",
+    "oblast-filter",
+    "year-filter",
+    "indicator-definitions",
+  ],
+  Build: [
+    "api-integration",
+    "rest-api",
+    "webhook-callbacks",
+    "error-handling",
+    "rate-limit-handling",
+    "cache-responses",
+    "mobile-app-backend",
+    "monitoring-alerts",
   ],
 };
+
+const COMMERCIAL_CATEGORIES = new Set([
+  "Maps & location",
+  "Payments",
+  "Banking & finance",
+  "Banking",
+  "Finance",
+  "E-commerce",
+  "Food & delivery",
+  "Logistics & delivery",
+  "Travel & mobility",
+  "AI",
+  "Cloud & infrastructure",
+  "Communications",
+  "Auth & identity",
+  "E-invoicing & tax",
+]);
+
+function scoreFeatureForApi(feature, api, primaryCaps, providerBlob) {
+  let score = 0;
+  if ((feature.categories || []).includes(api.category)) score += 6;
+  if (api.tier === "commercial" && (feature.categories || []).some((c) => COMMERCIAL_CATEGORIES.has(c))) score += 2;
+  if (api.group === "Government & open data") {
+    if (feature.capabilityTags?.some((t) => /gov|stat/i.test(t))) score += 4;
+    if (feature.parentId === "gov-open-data" || feature.id === "gov-open-data") score += 3;
+  }
+  if (feature.capabilityTags?.some((t) => primaryCaps.has(t))) score += 5;
+  if ((feature.providers || []).some((p) => providerBlob.includes(p.toLowerCase()))) score += 4;
+  if (feature.parentId && primaryCaps.size === 0) score += 1;
+  return score;
+}
+
+function addSiblings(expanded, sources, seedIds) {
+  for (const id of seedIds) {
+    const f = getFeature(id);
+    if (!f) continue;
+    for (const sibling of FEATURES) {
+      if (sibling.id === id) continue;
+      if (sibling.parentId && f.parentId && sibling.parentId === f.parentId) {
+        addFeature(expanded, sources, "sibling", sibling.id);
+      }
+      if (sibling.parentId === id) addFeature(expanded, sources, "sibling", sibling.id);
+    }
+  }
+}
+
+function padToMinimum(expanded, sources, api, primaryCaps, providerBlob) {
+  if (expanded.size >= MIN_FEATURES_PER_API) return;
+
+  const ranked = FEATURES.map((f) => ({
+    id: f.id,
+    score: scoreFeatureForApi(f, api, primaryCaps, providerBlob),
+  }))
+    .filter((row) => !expanded.has(row.id))
+    .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+
+  for (const row of ranked) {
+    if (expanded.size >= MIN_FEATURES_PER_API) break;
+    addFeature(expanded, sources, "floor", row.id);
+  }
+}
 
 const VALID_FEATURE_IDS = new Set(FEATURES.map((f) => f.id));
 
@@ -627,8 +703,11 @@ export function expandApiFeatures(api, capabilities = [], options = {}) {
     bundle: [],
     group: [],
     doc: [],
+    sibling: [],
     floor: [],
   };
+
+  const primaryCaps = new Set(capabilities);
 
   for (const f of FEATURES) {
     if ((f.categories || []).includes(api.category)) {
@@ -661,22 +740,13 @@ export function expandApiFeatures(api, capabilities = [], options = {}) {
     addFeature(expanded, sources, "group", id);
   }
 
-  if (expanded.size < MIN_FEATURES_PER_API) {
-    const floor = [
-      ...(CATEGORY_FEATURE_BUNDLES[api.category] || []),
-      ...(GROUP_BUNDLE[api.group] || []),
-      "api-integration",
-      "data-visualization",
-      "batch-export",
-      "analytics-tracking",
-      "gov-open-data",
-      "open-data-export",
-    ];
-    for (const id of floor) {
-      if (expanded.size >= MIN_FEATURES_PER_API) break;
-      addFeature(expanded, sources, "floor", id);
-    }
+  addSiblings(expanded, sources, [...expanded]);
+  for (const id of [...expanded]) {
+    const parentId = getFeature(id)?.parentId;
+    if (parentId) addFeature(expanded, sources, "parent", parentId);
   }
+
+  padToMinimum(expanded, sources, api, primaryCaps, providerBlob);
 
   return {
     primaryFeatures: [...primary].sort(),

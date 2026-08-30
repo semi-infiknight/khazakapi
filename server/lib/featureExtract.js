@@ -114,6 +114,8 @@ export async function extractFeatures(query) {
   const featureVectors = queryVec ? await loadFeatureVectors() : [];
 
   const scored = FEATURES.map((feature) => {
+    if ((feature.negativeKeywords || []).some((neg) => hay.includes(neg.toLowerCase()))) return null;
+
     let keywordScore = scoreFeatureKeywords(feature, hay, tokens);
     if (recipeFeatureIds.has(feature.id)) keywordScore += RECIPE_BOOST;
 

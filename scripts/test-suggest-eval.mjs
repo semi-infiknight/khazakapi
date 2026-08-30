@@ -165,6 +165,5 @@ if (stats?.apisBelowMinFeatures > 0) {
   passed += 1;
   console.log(`OK    avg ${stats.avgFeaturesPerApi} features/API (min ${stats.minFeaturesPerApi})`);
 }
-
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

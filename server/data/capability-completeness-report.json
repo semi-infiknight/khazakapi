@@ -1,12 +1,23 @@
 {
-  "builtAt": "2026-08-30T05:40:14.595Z",
+  "builtAt": "2026-08-30T05:49:32.878Z",
+  "summary": {
+    "totalApis": 688,
+    "ontologyFeatures": 194,
+    "targetFeaturesPerApi": 100,
+    "avgFeaturesPerApi": 100.32,
+    "medianFeaturesPerApi": 100,
+    "minObserved": 100,
+    "maxObserved": 126,
+    "apisBelowTarget": 0,
+    "commercialCoverage": "139/139"
+  },
   "stats": {
     "totalApis": 688,
     "withCapabilities": 688,
     "withFeatures": 688,
-    "minFeaturesPerApi": 10,
+    "minFeaturesPerApi": 100,
     "apisBelowMinFeatures": 0,
-    "avgFeaturesPerApi": 25.96,
+    "avgFeaturesPerApi": 100.32,
     "commercialTotal": 139,
     "commercialWithFeatures": 139,
     "commercialNoFeatures": 0,
@@ -18,6 +29,201 @@
     "unmappedCapabilities": [],
     "featuresWithZeroApis": [],
     "vocabularySize": 101,
-    "featureCount": 66
+    "featureCount": 194,
+    "medianFeaturesPerApi": 100,
+    "minFeaturesObserved": 100,
+    "maxFeaturesObserved": 126,
+    "featureCountHistogram": {
+      "100+": 688
+    },
+    "categoryAvgFeatures": {
+      "E-commerce": 107.8,
+      "Communications": 102.5,
+      "Travel & mobility": 102.2,
+      "Payments": 102,
+      "Maps & location": 100.1,
+      "Demography": 100,
+      "Households": 100,
+      "Prices": 100,
+      "Data Dictionaries": 100,
+      "Financial Markets": 100,
+      "Economic Sectors": 100,
+      "Statistical Indicators": 100,
+      "Transportation": 100,
+      "Healthcare": 100,
+      "Labour Markets": 100,
+      "Public Administration": 100,
+      "Metadata": 100,
+      "National Accounts": 100,
+      "Environment": 100,
+      "Public Safety": 100,
+      "Education": 100,
+      "Public Welfare": 100,
+      "Government data": 100,
+      "Housing & property": 100,
+      "Economy & business": 100,
+      "Population & society": 100,
+      "Environment & climate": 100,
+      "Health": 100,
+      "Transport": 100,
+      "Work & income": 100,
+      "Finance": 100,
+      "Realtime": 100,
+      "Banking": 100,
+      "Other portals": 100,
+      "Auth & identity": 100,
+      "Government services": 100,
+      "Data & enrichment": 100,
+      "Banking & finance": 100,
+      "Property": 100,
+      "Crypto": 100,
+      "Commodities & metals": 100,
+      "AI": 100,
+      "Food & delivery": 100,
+      "Logistics & delivery": 100,
+      "E-invoicing & tax": 100,
+      "Cloud & infrastructure": 100
+    },
+    "topFeatures": [
+      {
+        "id": "address-autocomplete",
+        "label": "Address autocomplete",
+        "apis": 688
+      },
+      {
+        "id": "address-geocoding",
+        "label": "Address lookup",
+        "apis": 688
+      },
+      {
+        "id": "api-integration",
+        "label": "REST API integration",
+        "apis": 688
+      },
+      {
+        "id": "cache-responses",
+        "label": "Response caching",
+        "apis": 688
+      },
+      {
+        "id": "address-validation",
+        "label": "Address validation",
+        "apis": 688
+      },
+      {
+        "id": "analytics-tracking",
+        "label": "Analytics & measurement",
+        "apis": 687
+      },
+      {
+        "id": "ads-campaigns",
+        "label": "Ads & campaigns",
+        "apis": 684
+      },
+      {
+        "id": "ai-assistant",
+        "label": "AI & chat features",
+        "apis": 683
+      },
+      {
+        "id": "cloud-hosting",
+        "label": "Cloud & hosting",
+        "apis": 680
+      },
+      {
+        "id": "cdn-delivery",
+        "label": "CDN asset delivery",
+        "apis": 680
+      },
+      {
+        "id": "chat-completion",
+        "label": "Chat completions",
+        "apis": 677
+      },
+      {
+        "id": "campaign-analytics",
+        "label": "Campaign analytics",
+        "apis": 677
+      },
+      {
+        "id": "kyc-verification",
+        "label": "KYC verification",
+        "apis": 676
+      },
+      {
+        "id": "conversion-tracking",
+        "label": "Conversion tracking",
+        "apis": 676
+      },
+      {
+        "id": "admin-panel",
+        "label": "Admin panel integration",
+        "apis": 673
+      }
+    ],
+    "rareFeatures": [
+      {
+        "id": "web-app-backend",
+        "label": "Web app backend",
+        "apis": 4
+      },
+      {
+        "id": "retry-backoff",
+        "label": "Retry with backoff",
+        "apis": 5
+      },
+      {
+        "id": "request-logging",
+        "label": "Request logging",
+        "apis": 8
+      },
+      {
+        "id": "prayer-times",
+        "label": "Prayer times",
+        "apis": 12
+      },
+      {
+        "id": "production-keys",
+        "label": "Production credentials",
+        "apis": 24
+      },
+      {
+        "id": "product-catalog",
+        "label": "Product catalog",
+        "apis": 25
+      },
+      {
+        "id": "promo-codes",
+        "label": "Promo codes & discounts",
+        "apis": 25
+      },
+      {
+        "id": "restaurant-menu",
+        "label": "Restaurant menu sync",
+        "apis": 25
+      },
+      {
+        "id": "order-status",
+        "label": "Order status tracking",
+        "apis": 27
+      },
+      {
+        "id": "realtime-streams",
+        "label": "Realtime data streams",
+        "apis": 28
+      }
+    ],
+    "expansionSourceTotals": {
+      "primary": 9721,
+      "category": 4453,
+      "keyword": 1285,
+      "provider": 6548,
+      "parent": 244,
+      "bundle": 1039,
+      "group": 2994,
+      "doc": 410,
+      "sibling": 18026,
+      "floor": 24299
+    }
   }
 }

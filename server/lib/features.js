@@ -2,7 +2,9 @@
  * Product feature ontology — grouping axis for API suggest (not provider domains).
  */
 
-export const FEATURES = [
+import { EXTENDED_FEATURES } from "./featureCatalogExtended.js";
+
+const CORE_FEATURES = [
   {
     id: "address-autocomplete",
     label: "Address autocomplete",
@@ -759,6 +761,8 @@ export const FEATURES = [
     providers: [],
   },
 ];
+
+export const FEATURES = [...CORE_FEATURES, ...EXTENDED_FEATURES];
 
 /** Whole-product shortcuts — boost features when prompt matches a known app type. */
 export const PRODUCT_RECIPES = [
