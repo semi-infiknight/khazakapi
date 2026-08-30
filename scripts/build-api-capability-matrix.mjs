@@ -16,6 +16,7 @@ import {
   capabilitiesToFeatureIds,
   orphanCapabilities,
 } from "../server/lib/capabilityMap.js";
+import { expandApiFeatures, MIN_FEATURES_PER_API } from "../server/lib/expandApiFeatures.js";
 import { FEATURES } from "../server/lib/features.js";
 import {
   catalogueBlob,
@@ -152,7 +153,10 @@ function buildEntry(api, docCache) {
   }
 
   const capabilities = [...caps].sort();
-  const features = capabilitiesToFeatureIds(capabilities);
+  const docText = docCache[id]?.text || "";
+  const { primaryFeatures, features, sources: featureSources } = expandApiFeatures(api, capabilities, {
+    docText,
+  });
 
   return {
     id,
@@ -161,7 +165,9 @@ function buildEntry(api, docCache) {
     category: api.category,
     provider: api.provider,
     capabilities,
+    primaryFeatures,
     features,
+    featureSources,
     sources,
     docHits,
     docsUrl: api.docs || api.sourceUrl || null,
@@ -210,6 +216,11 @@ async function main() {
     totalApis: KZ_APIS.length,
     withCapabilities: Object.values(entries).filter((e) => e.capabilities.length).length,
     withFeatures: Object.values(entries).filter((e) => e.features.length).length,
+    minFeaturesPerApi: MIN_FEATURES_PER_API,
+    apisBelowMinFeatures: Object.values(entries).filter((e) => e.features.length < MIN_FEATURES_PER_API).length,
+    avgFeaturesPerApi: Number(
+      (Object.values(entries).reduce((sum, e) => sum + e.features.length, 0) / KZ_APIS.length).toFixed(2),
+    ),
     commercialTotal: KZ_APIS.filter((a) => a.tier === "commercial").length,
     commercialWithFeatures,
     commercialNoFeatures: commercialNoFeatures.length,
@@ -241,6 +252,8 @@ async function main() {
   console.log("\n--- Completeness ---");
   console.log(`APIs with capabilities: ${stats.withCapabilities}/${stats.totalApis}`);
   console.log(`APIs with features:     ${stats.withFeatures}/${stats.totalApis}`);
+  console.log(`Avg features / API:     ${stats.avgFeaturesPerApi} (min target ${stats.minFeaturesPerApi})`);
+  console.log(`Below min features:     ${stats.apisBelowMinFeatures}`);
   console.log(`Commercial w/ features: ${stats.commercialWithFeatures}/${stats.commercialTotal}`);
   console.log(`Doc-enriched APIs:      ${stats.docEnrichedApis}`);
   console.log(`Orphan capabilities:    ${stats.orphanCapabilities.length ? stats.orphanCapabilities.join(", ") : "none"}`);

@@ -1,5 +1,5 @@
 import { capabilitiesToFeatureIds } from "./capabilityMap.js";
-import { getMatrixCapabilities, getMatrixFeatures } from "./apiCapabilityMatrix.js";
+import { getMatrixCapabilities, getMatrixFeatures, getMatrixPrimaryFeatures } from "./apiCapabilityMatrix.js";
 
 /** @type {Record<string, string[]>} */
 export const API_CAPABILITY_OVERRIDES = {
@@ -357,11 +357,19 @@ export function getApiCapabilities(api) {
   return caps;
 }
 
-/** Product features this API supports (from precomputed matrix or capability map). */
+/** Product features this API supports (expanded list for catalogue UI). */
 export function getApiFeatures(api) {
   const id = String(api.id || api.slug || "");
   const matrixFeatures = getMatrixFeatures(id);
   if (matrixFeatures?.length) return matrixFeatures;
+  return capabilitiesToFeatureIds(getApiCapabilities(api));
+}
+
+/** Strict capability-derived features — used for suggest matching only. */
+export function getApiPrimaryFeatures(api) {
+  const id = String(api.id || api.slug || "");
+  const primary = getMatrixPrimaryFeatures(id);
+  if (primary?.length) return primary;
   return capabilitiesToFeatureIds(getApiCapabilities(api));
 }
 
@@ -376,9 +384,9 @@ export function capabilityOverlap(apiCaps, featureTags = []) {
 
 export function apiMatchesFeature(api, feature) {
   const caps = getApiCapabilities(api);
-  const apiFeatures = getApiFeatures(api);
+  const primaryFeatures = getApiPrimaryFeatures(api);
 
-  if (apiFeatures.includes(feature.id)) {
+  if (primaryFeatures.includes(feature.id)) {
     const overlap = capabilityOverlap(caps, feature.capabilityTags);
     return { ok: true, overlap: Math.max(overlap, 0.55), caps };
   }

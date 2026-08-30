@@ -1,20 +1,23 @@
 {
-  "builtAt": "2026-08-30T05:34:19.006Z",
+  "builtAt": "2026-08-30T05:40:14.595Z",
   "stats": {
     "totalApis": 688,
     "withCapabilities": 688,
     "withFeatures": 688,
+    "minFeaturesPerApi": 10,
+    "apisBelowMinFeatures": 0,
+    "avgFeaturesPerApi": 25.96,
     "commercialTotal": 139,
     "commercialWithFeatures": 139,
     "commercialNoFeatures": 0,
     "docScavengeTargets": 139,
     "docEnrichedApis": 0,
     "docScavengedWithHits": 0,
-    "uniqueCapabilities": 88,
+    "uniqueCapabilities": 97,
     "orphanCapabilities": [],
     "unmappedCapabilities": [],
     "featuresWithZeroApis": [],
-    "vocabularySize": 88,
-    "featureCount": 46
+    "vocabularySize": 101,
+    "featureCount": 66
   }
 }

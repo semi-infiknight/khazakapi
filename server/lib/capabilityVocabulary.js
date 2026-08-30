@@ -108,6 +108,20 @@ export const CAPABILITY_VOCABULARY = [
   { id: "org-directory", label: "Org directory", featureIds: ["workplace-productivity", "user-auth"], patterns: [/\borg directory\b/i, /\bemployee directory\b/i, /\byandex 360 connect\b/i] },
 
   { id: "prayer-times", label: "Prayer times", featureIds: ["prayer-times"], patterns: [/\bprayer time\b/i, /\bsalah\b/i, /\bnamaz\b/i, /\baladhan\b/i] },
+
+  { id: "interest-rates", label: "Interest rates", featureIds: ["interest-rates"], patterns: [/\binterest rate\b/i, /\bdeposit rate\b/i, /\blending rate\b/i, /\byield\b/i, /\bbond yield\b/i] },
+  { id: "environment-stats", label: "Environment stats", featureIds: ["environment-stats"], patterns: [/\benvironment stat/i, /\bforest reserve\b/i, /\bemissions\b/i, /\becolog/i] },
+  { id: "climate-data", label: "Climate data", featureIds: ["climate-data"], patterns: [/\bclimate\b/i, /\bdrought\b/i, /\btemperature anomaly\b/i] },
+  { id: "transport-stats", label: "Transport stats", featureIds: ["transport-stats"], patterns: [/\btransport stat/i, /\bpassenger flow\b/i, /\bfreight stat/i, /\brail stat/i] },
+  { id: "trade-statistics", label: "Trade statistics", featureIds: ["trade-statistics"], patterns: [/\bforeign trade\b/i, /\bexport stat/i, /\bimport stat/i, /\btrade balance\b/i] },
+  { id: "industry-sectors", label: "Industry sectors", featureIds: ["industry-sectors"], patterns: [/\bindustry output\b/i, /\beconomic sector\b/i, /\bmanufacturing stat/i] },
+  { id: "welfare-benefits", label: "Welfare benefits", featureIds: ["welfare-benefits"], patterns: [/\bwelfare\b/i, /\bsocial protection\b/i, /\bpension stat/i, /\bbenefits\b/i] },
+  { id: "commodity-prices", label: "Commodity prices", featureIds: ["commodity-prices"], patterns: [/\bcommodity price\b/i, /\bmetal price\b/i, /\bgold price\b/i] },
+  { id: "crypto-trading", label: "Crypto trading", featureIds: ["crypto-trading"], patterns: [/\bcrypto\b/i, /\bbitcoin\b/i, /\bblockchain\b/i, /\bdigital asset\b/i] },
+  { id: "data-enrichment", label: "Data enrichment", featureIds: ["data-enrichment"], patterns: [/\benrichment\b/i, /\bdata append\b/i, /\bcompany lookup\b/i] },
+  { id: "metadata-catalog", label: "Metadata catalog", featureIds: ["metadata-catalog"], patterns: [/\bmetadata catalog\b/i, /\bdataset schema\b/i, /\bdata dictionary\b/i] },
+  { id: "realtime-streams", label: "Realtime streams", featureIds: ["realtime-streams"], patterns: [/\brealtime\b/i, /\blive feed\b/i, /\bwebsocket\b/i, /\bstream api\b/i] },
+  { id: "gov-digital-services", label: "Gov digital services", featureIds: ["gov-digital-services"], patterns: [/\be.?gov\b/i, /\bgovernment service\b/i, /\bdigital gov\b/i, /\bpublic service api\b/i] },
 ];
 
 const byId = new Map(CAPABILITY_VOCABULARY.map((a) => [a.id, a]));

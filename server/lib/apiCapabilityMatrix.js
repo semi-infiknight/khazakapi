@@ -37,9 +37,17 @@ export function getMatrixCapabilities(apiId) {
   return entry?.capabilities?.length ? entry.capabilities : null;
 }
 
+export function getMatrixPrimaryFeatures(apiId) {
+  const entry = getMatrixEntry(apiId);
+  if (entry?.primaryFeatures?.length) return entry.primaryFeatures;
+  if (entry?.capabilities?.length) return capabilitiesToFeatureIds(entry.capabilities);
+  return null;
+}
+
 export function getMatrixFeatures(apiId) {
   const entry = getMatrixEntry(apiId);
   if (entry?.features?.length) return entry.features;
+  if (entry?.primaryFeatures?.length) return entry.primaryFeatures;
   if (entry?.capabilities?.length) return capabilitiesToFeatureIds(entry.capabilities);
   return null;
 }
