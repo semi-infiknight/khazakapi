@@ -41,6 +41,12 @@ export const INTEGRATION_CORE = [
   "kpi-dashboard",
 ];
 
+/** Generic API plumbing — not buildable product features; never assigned in per-API matrix. */
+export const NON_BUILDABLE_MATRIX_FEATURES = new Set([
+  ...INTEGRATION_CORE,
+  "graphql-api",
+]);
+
 export const GOV_DATA_CORE = [
   "gov-open-data",
   "open-data-export",
@@ -309,7 +315,7 @@ function relatedCategoriesForProfile(category) {
 
 export function featureAllowedInGovProfile(feature) {
   if (!feature) return false;
-  if (INTEGRATION_CORE.includes(feature.id) || GOV_DATA_CORE.includes(feature.id)) return true;
+  if (GOV_DATA_CORE.includes(feature.id)) return true;
   const cats = feature.categories || [];
   if (!cats.length) return true;
   if (cats.some((c) => GOV_STAT_CATEGORIES.has(c))) return true;
@@ -399,7 +405,6 @@ function domainBlockForCategory(category) {
       "sigex-signing",
       "user-auth",
       "pdf-reports",
-      ...INTEGRATION_CORE,
     ];
   }
   if (GOV_STAT_CATEGORIES.has(category)) return [GOV_DATA_CORE, allGovTaggedFeatures()];
@@ -412,11 +417,15 @@ function domainBlockForCategory(category) {
   if (["E-commerce", "Food & delivery"].includes(category)) {
     return [COMMERCE_CORE, PAYMENTS_CORE.slice(0, 15)];
   }
-  if (category === "AI" || category === "Communications") return [...AI_CORE, ...CLOUD_CORE, ...INTEGRATION_CORE, ...featuresTaggedCategory("Data & enrichment")];
-  if (["Cloud & infrastructure", "Data & enrichment", "Realtime"].includes(category)) {
-    return [...CLOUD_CORE, ...INTEGRATION_CORE, ...AI_CORE, ...featuresTaggedCategory("Communications")];
+  if (category === "AI" || category === "Communications") {
+    return [...AI_CORE, ...CLOUD_CORE, ...featuresTaggedCategory("Data & enrichment")];
   }
-  if (category === "Crypto") return [...PAYMENTS_CORE.slice(0, 15), "crypto-trading", "crypto-wallet", "crypto-price-feed", ...INTEGRATION_CORE];
+  if (["Cloud & infrastructure", "Data & enrichment", "Realtime"].includes(category)) {
+    return [...CLOUD_CORE, ...AI_CORE, ...featuresTaggedCategory("Communications")];
+  }
+  if (category === "Crypto") {
+    return [...PAYMENTS_CORE.slice(0, 15), "crypto-trading", "crypto-wallet", "crypto-price-feed"];
+  }
   if (category === "Auth & identity" || category === "Government services") {
     return [
       ...PAYMENTS_CORE.filter((id) =>
@@ -426,7 +435,6 @@ function domainBlockForCategory(category) {
       "gov-digital-services",
       "identity-verification",
       "mTLS-auth",
-      ...INTEGRATION_CORE,
     ];
   }
   if (category === "Other portals") {
@@ -453,7 +461,6 @@ function domainBlockForCategory(category) {
       "map-display",
       "device-location",
       ...AI_CORE,
-      ...INTEGRATION_CORE,
       ...featuresTaggedCategories(["Communications", "Realtime", "Environment & climate"]),
     ]);
   }
@@ -483,7 +490,6 @@ function fillProfileToMin(profile, category) {
     domainBlockForCategory(category).flat(),
     categoryUnionFeatures(category),
     isGov ? allGovTaggedFeatures() : [],
-    INTEGRATION_CORE,
   ];
 
   for (const pool of pools) {
@@ -521,7 +527,6 @@ export function buildCategoryProfile(category) {
   }
 
   const blocks = [
-    INTEGRATION_CORE,
     featuresTaggedCategory(category),
     filterGov(featuresTaggedCategories(related)),
     categoryUnionFeatures(category),
@@ -534,7 +539,6 @@ export function buildCategoryProfile(category) {
     ...categoryUnionFeatures(category),
     ...domainBlockForCategory(category),
     ...(isGov ? allGovTaggedFeatures() : []),
-    ...INTEGRATION_CORE,
   ]);
 
   for (const id of filterGov(overflow)) {

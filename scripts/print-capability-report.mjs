@@ -26,21 +26,24 @@ console.log("══════════════════════�
 console.log(`Built:              ${report.builtAt || "unknown"}`);
 console.log(`APIs in catalogue:  ${s.totalApis ?? stats.totalApis}`);
 console.log(`Feature ontology:   ${s.ontologyFeatures ?? stats.ontologyFeatures ?? stats.featureCount}`);
-console.log(`Hard minimum/API:   ${s.targetFeaturesPerApi ?? stats.minFeaturesPerApi} features`);
+console.log(`Buildable min/API:  ${s.minBuildableFeatures ?? stats.minBuildableFeatures ?? 3} inferred features`);
+console.log(`Category ontology:  ${s.categoryOntologyTarget ?? stats.categoryOntologyTarget ?? "100+"} features/category pool`);
 console.log("");
-console.log("── Coverage (minimum-first, not average) ──");
+console.log("── Buildable feature coverage (inference-only) ──");
 console.log(`Minimum observed:     ${s.minFeaturesPerApi ?? stats.minFeaturesObserved} features/API`);
 console.log(`10th percentile:      ${s.p10FeaturesPerApi ?? stats.p10FeaturesPerApi} features/API`);
 console.log(`Median:               ${s.medianFeaturesPerApi ?? stats.medianFeaturesPerApi} features/API`);
 console.log(`Maximum observed:     ${s.maxFeaturesPerApi ?? stats.maxFeaturesObserved} features/API`);
-console.log(`Below target:         ${s.apisBelowTarget ?? stats.apisBelowMinFeatures} APIs`);
+console.log(`Below buildable min:  ${s.apisBelowBuildableMin ?? stats.apisBelowMinFeatures} APIs`);
+console.log(`Gov commercial leak:  ${s.govCommercialLeakage ?? stats.govCommercialLeakage ?? 0} APIs`);
+console.log(`Universal plumbing:   ${s.universalPlumbingFeatures ?? stats.universalPlumbingFeatures ?? 0} features on all APIs`);
 console.log(`Commercial covered:   ${s.commercialCoverage ?? `${stats.commercialWithFeatures}/${stats.commercialTotal}`}`);
 console.log(`Capabilities mapped:  ${stats.withCapabilities}/${stats.totalApis}`);
 console.log(`Orphan capabilities:  ${stats.orphanCapabilities?.length ? stats.orphanCapabilities.join(", ") : "none"}`);
 
 if (stats.worstApis?.length) {
   console.log("");
-  console.log("── Lowest feature counts (should all be ≥ target) ──");
+  console.log("── Lowest buildable feature counts ──");
   for (const row of stats.worstApis.slice(0, 8)) {
     console.log(`  ${String(row.features).padStart(3)}  ${row.id} (${row.category})`);
   }
@@ -54,18 +57,9 @@ if (stats.featureCountHistogram) {
   }
 }
 
-if (stats.categoryMinFeatures) {
-  console.log("");
-  console.log("── Minimum features by category (lowest 10) ──");
-  const rows = Object.entries(stats.categoryMinFeatures).slice(0, 10);
-  for (const [cat, min] of rows) {
-    console.log(`  ${String(min).padStart(3)}  ${cat}`);
-  }
-}
-
 if (stats.expansionSourceTotals) {
   console.log("");
-  console.log("── Expansion sources (proper inference, not generic floor) ──");
+  console.log("── Expansion sources (capability / keyword / provider inference) ──");
   for (const [src, total] of Object.entries(stats.expansionSourceTotals).sort((a, b) => b[1] - a[1])) {
     if (total > 0) console.log(`  ${src.padEnd(12)} ${total}`);
   }
@@ -81,4 +75,7 @@ if (stats.topFeatures?.length) {
 
 console.log("\nFull JSON: server/data/capability-completeness-report.json\n");
 
-if ((s.apisBelowTarget ?? stats.apisBelowMinFeatures) > 0) process.exit(1);
+const belowMin = s.apisBelowBuildableMin ?? stats.apisBelowMinFeatures ?? 0;
+const govLeak = s.govCommercialLeakage ?? stats.govCommercialLeakage ?? 0;
+const plumbing = s.universalPlumbingFeatures ?? stats.universalPlumbingFeatures ?? 0;
+if (belowMin > 0 || govLeak > 0 || plumbing > 0) process.exit(1);

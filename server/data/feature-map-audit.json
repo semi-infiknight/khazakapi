@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-08-30T06:12:49.677Z",
+  "builtAt": "2026-08-30T06:15:04.683Z",
   "ontology": {
     "featureCount": 389,
     "vocabularyAtoms": 101,
@@ -9,7 +9,16 @@
     "genericGovTagPairs": 6
   },
   "profiles": {
-    "categoriesBelowMinProfile": []
+    "categoriesBelowMinProfile": [
+      {
+        "category": "AI",
+        "profileSize": 97
+      },
+      {
+        "category": "Cloud & infrastructure",
+        "profileSize": 97
+      }
+    ]
   },
   "capabilityMap": {
     "bloatedCapabilityAtoms": [],
@@ -42,254 +51,103 @@
       "max": 7
     },
     "featureSize": {
-      "min": 101,
-      "p10": 143,
-      "median": 174,
-      "max": 303,
+      "min": 4,
+      "p10": 21,
+      "median": 132,
+      "max": 173,
       "belowMin": 0
     },
-    "universalFeatures": [
-      {
-        "id": "admin-panel",
-        "label": "Admin panel integration",
-        "apis": 688
-      },
-      {
-        "id": "api-key-auth",
-        "label": "API key authentication",
-        "apis": 688
-      },
-      {
-        "id": "batch-export",
-        "label": "Batch & scheduled jobs",
-        "apis": 688
-      },
-      {
-        "id": "bearer-token-auth",
-        "label": "Bearer token auth",
-        "apis": 688
-      },
-      {
-        "id": "bulk-read",
-        "label": "Bulk data reads",
-        "apis": 688
-      },
-      {
-        "id": "data-visualization",
-        "label": "Charts & dashboards",
-        "apis": 688
-      },
-      {
-        "id": "cursor-pagination",
-        "label": "Cursor pagination",
-        "apis": 688
-      },
-      {
-        "id": "embed-widget",
-        "label": "Embeddable widgets",
-        "apis": 688
-      },
-      {
-        "id": "idempotent-requests",
-        "label": "Idempotent requests",
-        "apis": 688
-      },
-      {
-        "id": "json-export",
-        "label": "JSON export",
-        "apis": 688
-      },
-      {
-        "id": "kpi-dashboard",
-        "label": "KPI dashboards",
-        "apis": 688
-      },
-      {
-        "id": "mobile-app-backend",
-        "label": "Mobile app backend",
-        "apis": 688
-      },
-      {
-        "id": "monitoring-alerts",
-        "label": "Monitoring & alerts",
-        "apis": 688
-      },
-      {
-        "id": "oauth-flow",
-        "label": "OAuth authorization flow",
-        "apis": 688
-      },
-      {
-        "id": "pagination",
-        "label": "Paginated results",
-        "apis": 688
-      },
-      {
-        "id": "production-keys",
-        "label": "Production credentials",
-        "apis": 688
-      },
-      {
-        "id": "filtering",
-        "label": "Query filtering",
-        "apis": 688
-      },
-      {
-        "id": "rate-limit-handling",
-        "label": "Rate limit handling",
-        "apis": 688
-      },
-      {
-        "id": "request-logging",
-        "label": "Request logging",
-        "apis": 688
-      },
-      {
-        "id": "cache-responses",
-        "label": "Response caching",
-        "apis": 688
-      },
-      {
-        "id": "api-integration",
-        "label": "REST API integration",
-        "apis": 688
-      },
-      {
-        "id": "rest-api",
-        "label": "REST HTTP API",
-        "apis": 688
-      },
-      {
-        "id": "sorting",
-        "label": "Result sorting",
-        "apis": 688
-      },
-      {
-        "id": "retry-backoff",
-        "label": "Retry with backoff",
-        "apis": 688
-      },
-      {
-        "id": "sandbox-testing",
-        "label": "Sandbox / test mode",
-        "apis": 688
-      },
-      {
-        "id": "field-selection",
-        "label": "Sparse field selection",
-        "apis": 688
-      },
-      {
-        "id": "error-handling",
-        "label": "Structured error handling",
-        "apis": 688
-      },
-      {
-        "id": "api-versioning",
-        "label": "Versioned endpoints",
-        "apis": 688
-      },
-      {
-        "id": "web-app-backend",
-        "label": "Web app backend",
-        "apis": 688
-      },
-      {
-        "id": "webhook-callbacks",
-        "label": "Webhook callbacks",
-        "apis": 688
-      }
-    ],
+    "universalFeatures": [],
     "topFeaturesByApiCount": [
       {
-        "id": "admin-panel",
-        "label": "Admin panel integration",
-        "apis": 688,
-        "pct": 100
+        "id": "user-auth",
+        "label": "Sign-in & identity",
+        "apis": 601,
+        "pct": 87.4
       },
       {
-        "id": "api-integration",
-        "label": "REST API integration",
-        "apis": 688,
-        "pct": 100
+        "id": "gov-open-data",
+        "label": "Government open data",
+        "apis": 592,
+        "pct": 86
       },
       {
-        "id": "api-key-auth",
-        "label": "API key authentication",
-        "apis": 688,
-        "pct": 100
+        "id": "metadata-catalog",
+        "label": "Dataset metadata & catalog",
+        "apis": 570,
+        "pct": 82.8
       },
       {
-        "id": "api-versioning",
-        "label": "Versioned endpoints",
-        "apis": 688,
-        "pct": 100
+        "id": "national-accounts",
+        "label": "Economy & national accounts",
+        "apis": 565,
+        "pct": 82.1
       },
       {
-        "id": "batch-export",
-        "label": "Batch & scheduled jobs",
-        "apis": 688,
-        "pct": 100
+        "id": "dataset-revisions",
+        "label": "Dataset revision history",
+        "apis": 564,
+        "pct": 82
       },
       {
-        "id": "bearer-token-auth",
-        "label": "Bearer token auth",
-        "apis": 688,
-        "pct": 100
+        "id": "trade-statistics",
+        "label": "Trade & exports data",
+        "apis": 564,
+        "pct": 82
       },
       {
-        "id": "bulk-read",
-        "label": "Bulk data reads",
-        "apis": 688,
-        "pct": 100
+        "id": "regional-analytics",
+        "label": "Regional breakdowns",
+        "apis": 560,
+        "pct": 81.4
       },
       {
-        "id": "cache-responses",
-        "label": "Response caching",
-        "apis": 688,
-        "pct": 100
+        "id": "city-filter",
+        "label": "City-level filter",
+        "apis": 556,
+        "pct": 80.8
       },
       {
-        "id": "cursor-pagination",
-        "label": "Cursor pagination",
-        "apis": 688,
-        "pct": 100
+        "id": "environment-stats",
+        "label": "Environment & ecology data",
+        "apis": 554,
+        "pct": 80.5
       },
       {
-        "id": "data-visualization",
-        "label": "Charts & dashboards",
-        "apis": 688,
-        "pct": 100
+        "id": "population-stats",
+        "label": "Population & demography",
+        "apis": 553,
+        "pct": 80.4
       },
       {
-        "id": "embed-widget",
-        "label": "Embeddable widgets",
-        "apis": 688,
-        "pct": 100
+        "id": "historical-data",
+        "label": "Historical time series",
+        "apis": 551,
+        "pct": 80.1
       },
       {
-        "id": "error-handling",
-        "label": "Structured error handling",
-        "apis": 688,
-        "pct": 100
+        "id": "district-filter",
+        "label": "District breakdown",
+        "apis": 550,
+        "pct": 79.9
       },
       {
-        "id": "field-selection",
-        "label": "Sparse field selection",
-        "apis": 688,
-        "pct": 100
+        "id": "gender-breakdown",
+        "label": "Gender breakdown",
+        "apis": 550,
+        "pct": 79.9
       },
       {
-        "id": "filtering",
-        "label": "Query filtering",
-        "apis": 688,
-        "pct": 100
+        "id": "health-stats",
+        "label": "Health & medical stats",
+        "apis": 550,
+        "pct": 79.9
       },
       {
-        "id": "idempotent-requests",
-        "label": "Idempotent requests",
-        "apis": 688,
-        "pct": 100
+        "id": "migration-stats",
+        "label": "Migration statistics",
+        "apis": 550,
+        "pct": 79.9
       }
     ],
     "primaryPollutionSamples": [
@@ -407,6 +265,8 @@
       }
     ],
     "govCategoryCommercialLeakage": [],
+    "govCommercialLeakageCount": 0,
+    "universalPlumbingFeatures": 0,
     "primaryDriftFromStrict": [],
     "categoryPrimaryMax": {
       "Data & enrichment": 7,

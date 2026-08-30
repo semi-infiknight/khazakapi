@@ -15,8 +15,13 @@ import {
   capabilitiesToPrimaryFeatureIds,
 } from "../server/lib/capabilityMap.js";
 import { CAPABILITY_VOCABULARY } from "../server/lib/capabilityVocabulary.js";
-import { expandApiFeatures, MIN_FEATURES_PER_API } from "../server/lib/expandApiFeatures.js";
-import { profileForCategory } from "../server/lib/categoryFeatureProfiles.js";
+import { expandApiFeatures } from "../server/lib/expandApiFeatures.js";
+import {
+  GOV_STAT_CATEGORIES,
+  MIN_FEATURES_PER_API,
+  NON_BUILDABLE_MATRIX_FEATURES,
+  profileForCategory,
+} from "../server/lib/categoryFeatureProfiles.js";
 import { API_CAPABILITY_OVERRIDES } from "../server/lib/apiCapabilities.js";
 import { inferCapabilitiesFromCatalogue } from "../server/lib/inferCapabilities.js";
 
@@ -24,30 +29,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATRIX_PATH = path.join(__dirname, "../server/data/api-capability-matrix.json");
 const AUDIT_PATH = path.join(__dirname, "../server/data/feature-map-audit.json");
 
-const COMMERCIAL_LEAK_PATTERNS = [
-  { id: "apple-pay-integration", label: "Apple Pay" },
-  { id: "arbuz-integration", label: "Arbuz grocery" },
-  { id: "kaspi-merchant", label: "Kaspi merchant" },
-  { id: "yandex-cloud-compute", label: "Yandex Cloud compute" },
-  { id: "ride-hailing", label: "Ride-hailing" },
+const MIN_BUILDABLE_FEATURES = 3;
+const COMMERCIAL_LEAK_IDS = [
+  "apple-pay-integration",
+  "kaspi-merchant",
+  "google-pay-integration",
+  "freedompay-checkout",
+  "arbuz-integration",
 ];
+const COMMERCIAL_LEAK_PATTERNS = COMMERCIAL_LEAK_IDS.map((id) => ({ id, label: id }));
 
-const GOV_CATEGORIES = new Set([
-  "Demography",
-  "Government data",
-  "Statistical Indicators",
-  "Population & society",
-  "Health",
-  "Education",
-  "Labour Markets",
-  "National Accounts",
-  "Prices",
-  "Households",
-  "Housing & property",
-  "Public Safety",
-  "Metadata",
-  "Data Dictionaries",
-]);
+const GOV_CATEGORIES = GOV_STAT_CATEGORIES;
 
 function percentile(sorted, p) {
   if (!sorted.length) return 0;
@@ -188,7 +180,7 @@ function auditMatrix(entries) {
       pct: Number(((count / total) * 100).toFixed(1)),
     }));
 
-  const belowMin = Object.values(entries).filter((e) => (e.features || []).length < MIN_FEATURES_PER_API);
+  const belowMin = Object.values(entries).filter((e) => (e.features || []).length < MIN_BUILDABLE_FEATURES);
 
   const categoryPrimaryMax = {};
   for (const entry of Object.values(entries)) {
@@ -216,6 +208,9 @@ function auditMatrix(entries) {
     topFeaturesByApiCount: topExpanded,
     primaryPollutionSamples: primaryPollution.slice(0, 8),
     govCategoryCommercialLeakage: govLeakage.slice(0, 20),
+    govCommercialLeakageCount: govLeakage.length,
+    universalPlumbingFeatures: [...NON_BUILDABLE_MATRIX_FEATURES].filter((id) => universalFeatures.get(id) === total)
+      .length,
     primaryDriftFromStrict: profileOnlyPrimary.slice(0, 5),
     categoryPrimaryMax: Object.fromEntries(
       Object.entries(categoryPrimaryMax).sort((a, b) => b[1] - a[1]).slice(0, 12),
@@ -273,7 +268,8 @@ function printReport(audit) {
   console.log("");
   console.log("── Expanded features (internal matrix) ──");
   console.log(`  min ${audit.matrix.featureSize.min} · p10 ${audit.matrix.featureSize.p10} · median ${audit.matrix.featureSize.median} · max ${audit.matrix.featureSize.max}`);
-  console.log(`  below ${MIN_FEATURES_PER_API}: ${audit.matrix.featureSize.belowMin} APIs`);
+  console.log(`  below buildable min (${MIN_BUILDABLE_FEATURES}): ${audit.matrix.featureSize.belowMin} APIs`);
+  console.log(`  universal plumbing on all APIs: ${audit.matrix.universalPlumbingFeatures ?? 0}`);
   console.log("");
 
   if (audit.reference.birthsReference) {
@@ -339,8 +335,16 @@ function main() {
   printReport(audit);
 
   const issues = [];
-  if (audit.matrix.featureSize.belowMin > 0) issues.push(`${audit.matrix.featureSize.belowMin} APIs below min features`);
+  if (audit.matrix.featureSize.belowMin > 0) {
+    issues.push(`${audit.matrix.featureSize.belowMin} APIs below buildable min`);
+  }
   if (audit.matrix.primarySize.max > 40) issues.push(`primary max ${audit.matrix.primarySize.max} still high`);
+  if (audit.matrix.govCommercialLeakageCount > 0) {
+    issues.push(`${audit.matrix.govCommercialLeakageCount} gov APIs with commercial feature leakage`);
+  }
+  if (audit.matrix.universalPlumbingFeatures > 0) {
+    issues.push(`${audit.matrix.universalPlumbingFeatures} plumbing features on all APIs`);
+  }
   if (audit.matrix.govCategoryCommercialLeakage.some((r) => r.via === "primary")) {
     issues.push("commercial features in gov primary sets");
   }

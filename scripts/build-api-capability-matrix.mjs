@@ -16,7 +16,12 @@ import {
   capabilitiesToFeatureIds,
   orphanCapabilities,
 } from "../server/lib/capabilityMap.js";
-import { expandApiFeatures, MIN_FEATURES_PER_API } from "../server/lib/expandApiFeatures.js";
+import { expandApiFeatures } from "../server/lib/expandApiFeatures.js";
+import {
+  GOV_STAT_CATEGORIES,
+  MIN_FEATURES_PER_API,
+  NON_BUILDABLE_MATRIX_FEATURES,
+} from "../server/lib/categoryFeatureProfiles.js";
 import { FEATURES } from "../server/lib/features.js";
 import {
   catalogueBlob,
@@ -32,6 +37,14 @@ const MATRIX_PATH = path.join(DATA_DIR, "api-capability-matrix.json");
 const REPORT_PATH = path.join(DATA_DIR, "capability-completeness-report.json");
 const CACHE_PATH = path.join(DATA_DIR, "doc-scavenge-cache.json");
 
+const MIN_BUILDABLE_FEATURES = 3;
+const COMMERCIAL_LEAK_IDS = [
+  "apple-pay-integration",
+  "kaspi-merchant",
+  "google-pay-integration",
+  "freedompay-checkout",
+  "arbuz-integration",
+];
 const SCAVENGE = String(process.env.SCAVENGE_DOCS ?? "1") !== "0";
 const FETCH_TIMEOUT_MS = 12_000;
 const MAX_DOC_CHARS = 80_000;
@@ -270,12 +283,27 @@ async function main() {
 
   const p10Index = Math.floor(featureCounts.length * 0.1);
 
+  let govCommercialLeakage = 0;
+  let universalPlumbing = 0;
+  for (const entry of Object.values(entries)) {
+    if (GOV_STAT_CATEGORIES.has(entry.category)) {
+      if (COMMERCIAL_LEAK_IDS.some((id) => entry.features.includes(id))) govCommercialLeakage += 1;
+    }
+  }
+  for (const id of NON_BUILDABLE_MATRIX_FEATURES) {
+    const count = featureApiCounts.get(id) || 0;
+    if (count === KZ_APIS.length) universalPlumbing += 1;
+  }
+
   const stats = {
     totalApis: KZ_APIS.length,
     withCapabilities: Object.values(entries).filter((e) => e.capabilities.length).length,
     withFeatures: Object.values(entries).filter((e) => e.features.length).length,
-    minFeaturesPerApi: MIN_FEATURES_PER_API,
-    apisBelowMinFeatures: Object.values(entries).filter((e) => e.features.length < MIN_FEATURES_PER_API).length,
+    minBuildableFeatures: MIN_BUILDABLE_FEATURES,
+    categoryOntologyTarget: MIN_FEATURES_PER_API,
+    apisBelowMinFeatures: Object.values(entries).filter((e) => e.features.length < MIN_BUILDABLE_FEATURES).length,
+    govCommercialLeakage,
+    universalPlumbingFeatures: universalPlumbing,
     avgFeaturesPerApi: Number(
       (Object.values(entries).reduce((sum, e) => sum + e.features.length, 0) / KZ_APIS.length).toFixed(2),
     ),
@@ -310,12 +338,15 @@ async function main() {
     summary: {
       totalApis: stats.totalApis,
       ontologyFeatures: stats.ontologyFeatures,
-      targetFeaturesPerApi: stats.minFeaturesPerApi,
+      categoryOntologyTarget: stats.categoryOntologyTarget,
+      minBuildableFeatures: stats.minBuildableFeatures,
       minFeaturesPerApi: stats.minFeaturesObserved,
       p10FeaturesPerApi: stats.p10FeaturesPerApi,
       medianFeaturesPerApi: stats.medianFeaturesPerApi,
       maxFeaturesPerApi: stats.maxFeaturesObserved,
-      apisBelowTarget: stats.apisBelowMinFeatures,
+      apisBelowBuildableMin: stats.apisBelowMinFeatures,
+      govCommercialLeakage: stats.govCommercialLeakage,
+      universalPlumbingFeatures: stats.universalPlumbingFeatures,
       commercialCoverage: `${stats.commercialWithFeatures}/${stats.commercialTotal}`,
     },
     stats,
@@ -340,7 +371,9 @@ async function main() {
   console.log(`APIs with features:     ${stats.withFeatures}/${stats.totalApis}`);
   console.log(`Avg features / API:     ${stats.avgFeaturesPerApi} (informational only)`);
   console.log(`Min / P10 / median:     ${stats.minFeaturesObserved} / ${stats.p10FeaturesPerApi} / ${stats.medianFeaturesPerApi}`);
-  console.log(`Below min features:     ${stats.apisBelowMinFeatures}`);
+  console.log(`Below buildable min:    ${stats.apisBelowMinFeatures} (min ${MIN_BUILDABLE_FEATURES})`);
+  console.log(`Gov commercial leakage: ${stats.govCommercialLeakage} APIs`);
+  console.log(`Universal plumbing:     ${stats.universalPlumbingFeatures} features on all APIs`);
   console.log(`Commercial w/ features: ${stats.commercialWithFeatures}/${stats.commercialTotal}`);
   console.log(`Doc-enriched APIs:      ${stats.docEnrichedApis}`);
   console.log(`Orphan capabilities:    ${stats.orphanCapabilities.length ? stats.orphanCapabilities.join(", ") : "none"}`);
@@ -353,7 +386,15 @@ async function main() {
   }
 
   if (stats.apisBelowMinFeatures > 0) {
-    console.error(`\nERROR: ${stats.apisBelowMinFeatures} APIs below minimum ${stats.minFeaturesPerApi} features`);
+    console.error(`\nERROR: ${stats.apisBelowMinFeatures} APIs below buildable minimum ${MIN_BUILDABLE_FEATURES}`);
+    process.exit(1);
+  }
+  if (stats.govCommercialLeakage > 0) {
+    console.error(`\nERROR: ${stats.govCommercialLeakage} gov/stat APIs with commercial payment feature leakage`);
+    process.exit(1);
+  }
+  if (stats.universalPlumbingFeatures > 0) {
+    console.error(`\nERROR: ${stats.universalPlumbingFeatures} plumbing features assigned to all APIs`);
     process.exit(1);
   }
 }

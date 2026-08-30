@@ -158,13 +158,19 @@ if (!stats || stats.commercialWithFeatures < stats.commercialTotal) {
   );
 }
 
-if (stats?.apisBelowMinFeatures > 0) {
+if (stats?.govCommercialLeakage > 0) {
   failed += 1;
-  console.log(`FAIL  ${stats.apisBelowMinFeatures} APIs below min ${stats.minFeaturesPerApi}`);
+  console.log(`FAIL  ${stats.govCommercialLeakage} gov/stat APIs with commercial payment leakage`);
+} else if (stats?.universalPlumbingFeatures > 0) {
+  failed += 1;
+  console.log(`FAIL  ${stats.universalPlumbingFeatures} plumbing features assigned to all APIs`);
+} else if (stats?.apisBelowMinFeatures > 0) {
+  failed += 1;
+  console.log(`FAIL  ${stats.apisBelowMinFeatures} APIs below buildable min ${stats.minBuildableFeatures ?? 3}`);
 } else if (stats) {
   passed += 1;
   console.log(
-    `OK    min ${stats.minFeaturesObserved} / p10 ${stats.p10FeaturesPerApi} / median ${stats.medianFeaturesPerApi} features/API (target ${stats.minFeaturesPerApi})`,
+    `OK    buildable min ${stats.minFeaturesObserved} / p10 ${stats.p10FeaturesPerApi} / median ${stats.medianFeaturesPerApi} features/API`,
   );
 }
 console.log(`\n${passed} passed, ${failed} failed`);
