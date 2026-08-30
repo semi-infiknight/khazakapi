@@ -1,48 +1,11 @@
-const LOCAL_LOGOS = {
-  "2gis": "/logos/2gis.png",
-  "air-astana": "/logos/air-astana.svg",
-  "aviata-kz": "/logos/aviata-kz.svg",
-  "bank-rbk": "/logos/bank-rbk.svg",
-  "beeline-kazakhstan": "/logos/beeline-kazakhstan.svg",
-  "bereke-bank": "/logos/bereke-bank.svg",
-  "data-egov-kz": "/logos/data-egov-kz.svg",
-  "egov-kz": "/logos/egov-kz.svg",
-  "esf-kgd": "/logos/esf-kgd.svg",
-  "flyarystan": "/logos/flyarystan.svg",
-  "fortebank": "/logos/fortebank.svg",
-  "freedompay-kz": "/logos/freedompay-kz.svg",
-  "halyk-bank": "/logos/halyk-bank.svg",
-  "halyk-epay": "/logos/halyk-bank.svg",
-  "kaspi-kz": "/logos/kaspi-kz.svg",
-  "kazhydromet": "/logos/kazhydromet.svg",
-  "kazpost": "/logos/kazpost.svg",
-  "kcell": "/logos/kcell.svg",
-  "ktz": "/logos/ktz.svg",
-  "nbk": "/logos/nbk.svg",
-  "npck": "/logos/npck.svg",
-  "paybox": "/logos/paybox.svg",
-  "scat-airlines": "/logos/scat-airlines.svg",
-  "sigex": "/logos/sigex.svg",
-  "stat-gov-kz": "/logos/stat-gov-kz.svg",
-  "tele2-kazakhstan": "/logos/tele2-kazakhstan.svg",
-  "wooppay": "/logos/wooppay.svg",
-  "yandex": "/logos/yandex.svg",
-};
+import logosManifest from "./logosManifest.json";
 
-const SIMPLE_ICONS = {
-  cdek: "00B33C",
-  glovo: "F2672A",
-  indriver: "7BD042",
-  ozon: "005BFF",
-  wildberries: "CB11AB",
-  wolt: "00C2E8",
-};
-
+/** Canonical domains for logo fetch fallbacks (matches scripts/fetch-provider-logos.mjs) */
 const DOMAIN_BY_SLUG = {
   "2gis": "2gis.kz",
   "air-astana": "airastana.com",
   aladhan: "aladhan.com",
-  "alatau-city-bank": "alataubank.kz",
+  "alatau-city-bank": "jusan.kz",
   "apipay-kz": "apipay.kz",
   asiapay: "asiapay.kz",
   "aviata-kz": "aviata.kz",
@@ -51,7 +14,7 @@ const DOMAIN_BY_SLUG = {
   "beeline-kazakhstan": "beeline.kz",
   "bereke-bank": "berekebank.kz",
   cdek: "cdek.ru",
-  chocofamily: "choco.kz",
+  chocofamily: "chocofamily.kz",
   "data-egov-kz": "data.egov.kz",
   "egov-kz": "egov.kz",
   "esf-kgd": "kgd.gov.kz",
@@ -83,17 +46,17 @@ const DOMAIN_BY_SLUG = {
   wildberries: "wildberries.ru",
   wolt: "wolt.com",
   wooppay: "wooppay.com",
-  "yandex-360": "yandex.kz",
+  "yandex-360": "yandex.ru",
   "yandex-ai": "yandex.cloud",
   "yandex-cloud": "yandex.cloud",
-  "yandex-direct": "yandex.kz",
-  "yandex-go": "yandex.kz",
-  "yandex-id": "yandex.kz",
-  "yandex-maps": "yandex.kz",
-  "yandex-market": "market.yandex.kz",
-  "yandex-metrica": "metrika.yandex.kz",
+  "yandex-direct": "yandex.ru",
+  "yandex-go": "yandex.ru",
+  "yandex-id": "yandex.ru",
+  "yandex-maps": "yandex.ru",
+  "yandex-market": "market.yandex.ru",
+  "yandex-metrica": "metrika.yandex.ru",
   "yandex-pay": "pay.yandex.ru",
-  "yandex-search-ads": "yandex.kz",
+  "yandex-search-ads": "yandex.ru",
 };
 
 function extractDomain(api) {
@@ -113,6 +76,32 @@ function slugify(text = "") {
     .replace(/^-|-$/g, "");
 }
 
+function googleFaviconUrl(domain, size = 128) {
+  return `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(`https://${domain}`)}&size=${size}`;
+}
+
+function remoteLogoUrls(domain) {
+  return [
+    googleFaviconUrl(domain, 128),
+    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+    `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`,
+  ];
+}
+
+function manifestPathForSlug(slug) {
+  if (logosManifest[slug]) return logosManifest[slug];
+  if (slug.startsWith("yandex-")) {
+    return (
+      logosManifest[slug] ||
+      logosManifest["yandex-cloud"] ||
+      logosManifest["yandex-maps"] ||
+      null
+    );
+  }
+  if (slug === "halyk-epay") return logosManifest["halyk-epay"] || logosManifest["halyk-bank"];
+  return null;
+}
+
 export function resolveCompanySlug(api) {
   if (api.companySlug) return api.companySlug;
   if (api.provider) return slugify(api.provider);
@@ -122,34 +111,23 @@ export function resolveCompanySlug(api) {
 
 export function resolveProviderLogo(api) {
   const slug = resolveCompanySlug(api);
-
-  if (LOCAL_LOGOS[slug]) {
-    return { src: LOCAL_LOGOS[slug], kind: "local", label: api.companyName || api.provider };
-  }
-
-  if (slug.startsWith("yandex-")) {
-    return { src: LOCAL_LOGOS.yandex, kind: "local", label: "Yandex" };
-  }
-
-  const simpleIcon = SIMPLE_ICONS[slug];
-  if (simpleIcon) {
-    return {
-      src: `https://cdn.simpleicons.org/${slug}/${simpleIcon}`,
-      kind: "remote",
-      label: api.companyName || api.provider,
-    };
-  }
-
+  const label = api.companyName || api.provider || "API";
+  const local = manifestPathForSlug(slug);
   const domain = DOMAIN_BY_SLUG[slug] || extractDomain(api);
-  if (domain) {
-    return {
-      src: `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`,
-      kind: "remote",
-      label: api.companyName || api.provider,
-    };
+  const remote = domain ? remoteLogoUrls(domain) : [];
+
+  if (local) {
+    return { src: local, fallbacks: remote, kind: "local", label };
   }
 
-  return null;
+  if (!domain) return null;
+
+  return {
+    src: remote[0],
+    fallbacks: remote.slice(1),
+    kind: "remote",
+    label,
+  };
 }
 
 export function providerBrandColor(slug) {
