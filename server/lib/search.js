@@ -1,6 +1,4 @@
 import { buildTrySpec } from "./requestSpec.js";
-import { getFeature } from "./features.js";
-import { getApiCapabilities, getApiFeatures } from "./apiCapabilities.js";
 
 const STOP = new Set([
   "a", "an", "the", "and", "or", "for", "to", "of", "in", "on", "at", "by", "with", "from", "is", "are",
@@ -161,17 +159,6 @@ export function publicDetailEntry(entry) {
     Object.assign(detail, snippetsFromEndpoint(entry));
   }
   detail.trySpec = buildTrySpec(entry);
-  return detail;
-}
-
-/** Enrich API detail with product features + atomic capabilities from the precomputed matrix. */
-export function enrichDetailWithFeatures(detail) {
-  const featureIds = getApiFeatures(detail) || [];
-  detail.productFeatures = featureIds.map((id) => {
-    const f = getFeature(id);
-    return f ? { id: f.id, label: f.label } : { id, label: id };
-  });
-  detail.capabilities = [...getApiCapabilities(detail)];
   return detail;
 }
 

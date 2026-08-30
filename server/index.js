@@ -7,7 +7,6 @@ import {
   freshnessReport,
   listCategories,
   publicDetailEntry,
-  enrichDetailWithFeatures,
   publicListEntry,
   searchApis,
 } from "./lib/search.js";
@@ -154,7 +153,7 @@ app.get("/api/apis/:id", async (req, res) => {
   const entry = KZ_APIS.find((a) => a.id === req.params.id || a.slug === req.params.id);
   if (!entry) return res.status(404).json({ error: `no API with id '${req.params.id}'` });
 
-  const detail = enrichDetailWithFeatures(publicDetailEntry(entry));
+  const detail = publicDetailEntry(entry);
   detail.health = await checkHealth(entry);
   res.json(detail);
 });
