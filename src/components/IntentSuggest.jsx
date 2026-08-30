@@ -144,18 +144,9 @@ export function IntentResults({ suggestion }) {
   if (suggestion.fit === false || (!suggestion?.intents?.length && !suggestion?.apis?.length)) {
     return (
       <div className="panel intent-prompt intent-prompt--empty">
-        <header className="intent-prompt-head">
-          <span className="intent-prompt-role">assistant</span>
-          <span className="intent-prompt-meta">
-            no fit{suggestion.summarySource === "llm" ? " · ai" : ""}
-          </span>
-        </header>
         <p className="intent-prompt-body">
           {suggestion.summary ||
             `We don’t have a good API fit for “${suggestion.query}” in the Kazakhstan catalogue.`}
-        </p>
-        <p className="intent-prompt-quote">
-          Prompt: <span>&ldquo;{suggestion.query}&rdquo;</span>
         </p>
         <p className="intent-prompt-nofit-hint">
           This directory covers KZ payments, maps, delivery, banking, travel, weather, telecom, and government open
@@ -169,26 +160,7 @@ export function IntentResults({ suggestion }) {
 
   return (
     <article className="panel intent-prompt" aria-label="Suggested API stack">
-      <header className="intent-prompt-head">
-        <span className="intent-prompt-role">assistant</span>
-        <span className="intent-prompt-meta">
-          {suggestion.total} API{suggestion.total === 1 ? "" : "s"} · {suggestion.intents.length} layer
-          {suggestion.intents.length === 1 ? "" : "s"}
-          {suggestion.bestScore != null ? ` · score ${Number(suggestion.bestScore).toFixed(2)}` : ""}
-          {suggestion.summarySource === "llm" ? " · ai" : ""}
-        </span>
-      </header>
-
-      <p className="intent-prompt-body">{suggestion.summary}</p>
-
-      {suggestion.query && (
-        <p className="intent-prompt-quote">
-          Prompt: <span>&ldquo;{suggestion.query}&rdquo;</span>
-        </p>
-      )}
-
       <section className="intent-prompt-diagram" aria-label="Architecture diagram">
-        <h3 className="intent-prompt-section-label">Stack diagram</h3>
         <MermaidDiagram chart={chart} />
       </section>
 
