@@ -2,6 +2,8 @@
  * Shared catalogue document text for embedding / TF–IDF indexing.
  */
 
+import { capabilitiesDocumentText } from "./apiCapabilities.js";
+
 export const CATEGORY_HINTS = {
   Payments: "checkout payments wallet billing invoice pay card acquiring merchant",
   "Maps & location": "maps address geocode location nearby places poi autocomplete coordinates",
@@ -38,6 +40,7 @@ export const CATEGORY_HINTS = {
 
 export function apiDocumentText(api) {
   const hints = CATEGORY_HINTS[api.category] || "";
+  const caps = capabilitiesDocumentText(api);
   return [
     api.title || "",
     api.category || "",
@@ -48,6 +51,7 @@ export function apiDocumentText(api) {
     api.apiType || "",
     api.group || "",
     hints,
+    caps,
   ]
     .filter(Boolean)
     .join(" ");

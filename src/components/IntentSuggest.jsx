@@ -20,10 +20,14 @@ function escapeMermaidLabel(text) {
     .replace(/\n/g, " ");
 }
 
-/** Build a left-to-right stack flowchart from matched intents. */
+function featureBlocks(suggestion) {
+  return suggestion?.features?.length ? suggestion.features : suggestion?.intents || [];
+}
+
+/** Build a left-to-right stack flowchart from matched features. */
 export function buildStackMermaid(suggestion) {
-  const intents = suggestion?.intents || [];
-  if (!intents.length) return "";
+  const blocks = featureBlocks(suggestion);
+  if (!blocks.length) return "";
 
   const lines = [
     "flowchart LR",
@@ -34,8 +38,8 @@ export function buildStackMermaid(suggestion) {
     "  class App app",
   ];
 
-  intents.forEach((block, index) => {
-    const layerId = `L_${mermaidSafeId(block.id)}`;
+  blocks.forEach((block, index) => {
+    const layerId = `F_${mermaidSafeId(block.id)}`;
     const layerLabel = escapeMermaidLabel(block.label);
     lines.push(`  ${layerId}["${layerLabel}"]`);
     lines.push(`  class ${layerId} layer`);
@@ -121,10 +125,35 @@ function MermaidDiagram({ chart }) {
   return <div ref={hostRef} className="intent-prompt-mermaid" aria-label="Suggested API stack diagram" />;
 }
 
+function FeatureApiCard({ api, feature }) {
+  const showApiContext =
+    api.plugIn?.why &&
+    (api.plugIn.why !== feature.why || api.plugIn.where !== feature.where);
+
+  return (
+    <div className="intent-feature-api">
+      <ApiCard api={api} />
+      {showApiContext && (
+        <p className="intent-feature-api-note">
+          <span className="intent-feature-api-note-label">Why</span> {api.plugIn.why}
+          {api.plugIn.where ? (
+            <>
+              {" "}
+              <span className="intent-feature-api-note-label">Where</span> {api.plugIn.where}
+            </>
+          ) : null}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function IntentResults({ suggestion }) {
   if (!suggestion?.query) return null;
 
-  if (suggestion.fit === false || (!suggestion?.intents?.length && !suggestion?.apis?.length)) {
+  const blocks = featureBlocks(suggestion);
+
+  if (suggestion.fit === false || (!blocks.length && !suggestion?.apis?.length)) {
     return (
       <div className="panel intent-prompt intent-prompt--empty">
         <p className="intent-prompt-body">
@@ -147,13 +176,30 @@ export function IntentResults({ suggestion }) {
         <MermaidDiagram chart={chart} />
       </section>
 
-      {suggestion.intents.map((block) => (
-        <section key={block.id} className="intent-prompt-layer">
-          <h3 className="intent-prompt-layer-title">{block.label}</h3>
-          <p className="intent-prompt-layer-where">{block.where}</p>
+      {blocks.map((block) => (
+        <section key={block.id} className="intent-prompt-layer intent-feature-block">
+          <h3 className="intent-prompt-layer-title">
+            {block.parentLabel ? (
+              <>
+                <span className="intent-feature-parent">{block.parentLabel}</span>
+                <span className="intent-feature-sep"> / </span>
+              </>
+            ) : null}
+            {block.label}
+          </h3>
+          {block.why ? (
+            <p className="intent-feature-why">
+              <span className="intent-feature-label">Why</span> {block.why}
+            </p>
+          ) : null}
+          {block.where ? (
+            <p className="intent-feature-where">
+              <span className="intent-feature-label">Where</span> {block.where}
+            </p>
+          ) : null}
           <div className="intent-prompt-api-grid">
             {block.apis.map((api) => (
-              <ApiCard key={`${block.id}-${api.id}`} api={api} />
+              <FeatureApiCard key={`${block.id}-${api.id}`} api={api} feature={block} />
             ))}
           </div>
         </section>

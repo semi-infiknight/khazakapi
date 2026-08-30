@@ -787,6 +787,64 @@ a {
   line-height: 1.45;
 }
 
+.intent-feature-block {
+  margin-top: 1.25rem;
+}
+
+.intent-feature-parent {
+  color: var(--text-mute);
+  font-weight: 500;
+}
+
+.intent-feature-sep {
+  color: var(--text-mute);
+  font-weight: 400;
+}
+
+.intent-feature-why,
+.intent-feature-where {
+  margin: 0.35rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.intent-feature-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-right: 0.35rem;
+}
+
+.intent-feature-api {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.intent-feature-api-note {
+  margin: 0;
+  padding: 0 0.15rem;
+  color: var(--text-mute);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.intent-feature-api-note-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-right: 0.25rem;
+}
+
+.intent-feature-api-note-label + .intent-feature-api-note-label {
+  margin-left: 0.35rem;
+}
+
 .intent-prompt-diagram {
   padding: 0.85rem;
   border: 1px solid var(--line);

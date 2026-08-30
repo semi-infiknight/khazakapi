@@ -185,7 +185,7 @@ export default function HomePage() {
                 <input
                   className="search-input"
                   type="search"
-                  placeholder="Describe what you're building — or search Kaspi, 2GIS, weather…"
+                  placeholder="Describe your app or features — address autocomplete, Kaspi checkout, courier ETA…"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   aria-label="Search APIs"
@@ -202,7 +202,7 @@ export default function HomePage() {
               <p className="catalogue-intent-hint">
                 {draftChanged
                   ? "Press Enter to refresh suggestions"
-                  : "Describe your app, then press Enter — typing won't filter the catalogue"}
+                  : "Describe your app or list features, then press Enter"}
               </p>
             </form>
           </section>

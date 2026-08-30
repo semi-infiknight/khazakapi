@@ -286,7 +286,7 @@ export default function MobileBottomNav() {
                 ref={searchInputRef}
                 className="catalogue-mobile-search-input"
                 type="search"
-                placeholder="Describe what you're building…"
+                placeholder="Describe your app or features…"
                 value={catalogue?.query || ""}
                 onChange={(e) => catalogue?.onQueryChange(e.target.value)}
                 aria-label="Search APIs"
