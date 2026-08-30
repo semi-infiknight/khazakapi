@@ -12,6 +12,8 @@
     "dev:server": "node --watch server/index.js",
     "build": "vite build",
     "embed:build": "node scripts/build-api-embeddings.mjs",
+    "cap:build": "node scripts/build-api-capability-matrix.mjs",
+    "cap:report": "node -e \"import fs from 'fs'; const r=JSON.parse(fs.readFileSync('./server/data/capability-completeness-report.json','utf8')); console.log(JSON.stringify(r,null,2));\"",
     "suggest:eval": "node scripts/test-suggest-eval.mjs",
     "start": "NODE_ENV=production node server/index.js",
     "preview": "vite preview",

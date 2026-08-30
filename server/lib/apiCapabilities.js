@@ -1,7 +1,5 @@
-/**
- * API capability tags + per-API why/where overrides for feature-based suggest.
- * Explicit overrides win over heuristics (production accuracy).
- */
+import { capabilitiesToFeatureIds } from "./capabilityMap.js";
+import { getMatrixCapabilities, getMatrixFeatures } from "./apiCapabilityMatrix.js";
 
 /** @type {Record<string, string[]>} */
 export const API_CAPABILITY_OVERRIDES = {
@@ -340,6 +338,9 @@ function inferFromText(text) {
 export function getApiCapabilities(api) {
   const id = String(api.id || api.slug || "");
 
+  const matrixCaps = getMatrixCapabilities(id);
+  if (matrixCaps?.length) return new Set(matrixCaps);
+
   // Explicit overrides are authoritative — no heuristic merge.
   if (API_CAPABILITY_OVERRIDES[id]) {
     return new Set(API_CAPABILITY_OVERRIDES[id]);
@@ -356,6 +357,14 @@ export function getApiCapabilities(api) {
   return caps;
 }
 
+/** Product features this API supports (from precomputed matrix or capability map). */
+export function getApiFeatures(api) {
+  const id = String(api.id || api.slug || "");
+  const matrixFeatures = getMatrixFeatures(id);
+  if (matrixFeatures?.length) return matrixFeatures;
+  return capabilitiesToFeatureIds(getApiCapabilities(api));
+}
+
 export function capabilityOverlap(apiCaps, featureTags = []) {
   if (!featureTags.length) return 0;
   let hit = 0;
@@ -367,6 +376,13 @@ export function capabilityOverlap(apiCaps, featureTags = []) {
 
 export function apiMatchesFeature(api, feature) {
   const caps = getApiCapabilities(api);
+  const apiFeatures = getApiFeatures(api);
+
+  if (apiFeatures.includes(feature.id)) {
+    const overlap = capabilityOverlap(caps, feature.capabilityTags);
+    return { ok: true, overlap: Math.max(overlap, 0.55), caps };
+  }
+
   const overlap = capabilityOverlap(caps, feature.capabilityTags);
   if (overlap > 0) {
     if (feature.id === "sms-otp" && caps.has("user-auth") && !caps.has("sms")) {

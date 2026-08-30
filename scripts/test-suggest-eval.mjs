@@ -7,6 +7,7 @@
 import { KZ_APIS } from "../server/data/apis.js";
 import { suggestApis } from "../server/lib/suggest.js";
 import { getApiCapabilities } from "../server/lib/apiCapabilities.js";
+import { matrixStats } from "../server/lib/apiCapabilityMatrix.js";
 
 const CASES = [
   {
@@ -65,6 +66,11 @@ const CASES = [
     q: "health dashboard covid hospital stats",
     expectFit: true,
     expectFeatures: ["health-stats"],
+  },
+  {
+    q: "Fintech wallet with NBK rates and FreedomPay",
+    expectFit: true,
+    expectFeatures: ["fx-rates", "checkout-payment"],
   },
   {
     q: "grocery delivery with Arbuz",
@@ -139,6 +145,17 @@ for (const tc of CASES) {
     passed += 1;
     console.log(`OK    "${tc.q}" → ${res.features?.map((f) => f.label).join(", ") || "no fit"}`);
   }
+}
+
+const stats = matrixStats();
+if (!stats || stats.commercialWithFeatures < stats.commercialTotal) {
+  failed += 1;
+  console.log("FAIL  capability matrix incomplete");
+} else {
+  passed += 1;
+  console.log(
+    `OK    matrix ${stats.withFeatures}/${stats.totalApis} APIs, ${stats.commercialWithFeatures}/${stats.commercialTotal} commercial`,
+  );
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);

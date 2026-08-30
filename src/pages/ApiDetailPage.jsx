@@ -63,6 +63,22 @@ export default function ApiDetailPage() {
 
       {api.note && <p className="mt-4 text-sm text-[var(--amber)]">{api.note}</p>}
 
+      {api.productFeatures?.length > 0 && (
+        <div className="panel mt-6 p-5">
+          <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]">Product features</h2>
+          <p className="mt-2 text-sm text-[var(--text-soft)]">
+            What you can build with this API — matched from catalogue metadata and provider docs.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {api.productFeatures.map((f) => (
+              <span key={f.id} className="chip">
+                {f.label}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       <CodeSnippetsPanel api={api} />
 
       <div className="panel mt-6 p-5">

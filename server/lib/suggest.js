@@ -1,6 +1,6 @@
 import { publicListEntry, tokenize } from "./search.js";
 import { createVectorIndex } from "./vectorIndex.js";
-import { apiMatchesFeature, buildPlugInContext, capabilityOverlap, getApiCapabilities } from "./apiCapabilities.js";
+import { apiMatchesFeature, buildPlugInContext, capabilityOverlap, getApiCapabilities, getApiFeatures } from "./apiCapabilities.js";
 import { extractFeatures, featureBlocksFromExtraction } from "./featureExtract.js";
 
 const EXAMPLE_PROMPTS = [
@@ -67,12 +67,17 @@ function rankApiForFeature(api, semanticScore, feature, hay) {
   const titleBlob = normalize(api.title || "");
   const titleBoost = feature.keywords?.some((kw) => kw.length > 4 && titleBlob.includes(kw)) ? 0.06 : 0;
 
+  const apiFeatures = getApiFeatures(api);
+  const featureListed = apiFeatures.includes(feature.id);
+  const featureBoost = featureListed ? 0.14 : 0;
+
   const finalScore =
     semanticScore * 0.42 +
     overlap * 0.38 +
     (match.overlap > 0 ? 0.12 : 0) +
     providerBoost +
-    titleBoost;
+    titleBoost +
+    featureBoost;
 
   return {
     api,

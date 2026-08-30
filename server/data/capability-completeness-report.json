@@ -1,0 +1,20 @@
+{
+  "builtAt": "2026-08-30T05:34:19.006Z",
+  "stats": {
+    "totalApis": 688,
+    "withCapabilities": 688,
+    "withFeatures": 688,
+    "commercialTotal": 139,
+    "commercialWithFeatures": 139,
+    "commercialNoFeatures": 0,
+    "docScavengeTargets": 139,
+    "docEnrichedApis": 0,
+    "docScavengedWithHits": 0,
+    "uniqueCapabilities": 88,
+    "orphanCapabilities": [],
+    "unmappedCapabilities": [],
+    "featuresWithZeroApis": [],
+    "vocabularySize": 88,
+    "featureCount": 46
+  }
+}
