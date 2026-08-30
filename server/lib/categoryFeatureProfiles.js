@@ -283,6 +283,40 @@ export const GOV_STAT_CATEGORIES = new Set([
   "Commodities & metals",
 ]);
 
+/** Commercial product categories — excluded from gov/stat expanded profiles. */
+const COMMERCIAL_PRODUCT_CATEGORIES = new Set([
+  "Payments",
+  "E-commerce",
+  "Food & delivery",
+  "Logistics & delivery",
+  "Maps & location",
+  "Travel & mobility",
+  "Auth & identity",
+  "Communications",
+  "AI",
+  "Cloud & infrastructure",
+  "Crypto",
+  "Realtime",
+  "Banking",
+  "Banking & finance",
+]);
+
+function relatedCategoriesForProfile(category) {
+  const related = RELATED_CATEGORIES[category] || [];
+  if (!GOV_STAT_CATEGORIES.has(category)) return related;
+  return related.filter((c) => GOV_STAT_CATEGORIES.has(c));
+}
+
+export function featureAllowedInGovProfile(feature) {
+  if (!feature) return false;
+  if (INTEGRATION_CORE.includes(feature.id) || GOV_DATA_CORE.includes(feature.id)) return true;
+  const cats = feature.categories || [];
+  if (!cats.length) return true;
+  if (cats.some((c) => GOV_STAT_CATEGORIES.has(c))) return true;
+  if (cats.every((c) => COMMERCIAL_PRODUCT_CATEGORIES.has(c))) return false;
+  return true;
+}
+
 export const RELATED_CATEGORIES = {
   Prices: ["National Accounts", "Financial Markets", "Finance", "Commodities & metals"],
   "Financial Markets": ["Prices", "Finance", "National Accounts", "Banking & finance"],
@@ -427,35 +461,47 @@ function domainBlockForCategory(category) {
 }
 
 function categoryUnionFeatures(category) {
-  const cats = new Set([category, ...(RELATED_CATEGORIES[category] || [])]);
+  const cats = new Set([category, ...relatedCategoriesForProfile(category)]);
   for (const r of [...cats]) {
-    for (const rr of RELATED_CATEGORIES[r] || []) cats.add(rr);
+    for (const rr of relatedCategoriesForProfile(r)) cats.add(rr);
   }
-  return FEATURES.filter((f) => f.categories?.some((c) => cats.has(c))).map((f) => f.id);
+  return FEATURES.filter((f) => {
+    if (!f.categories?.some((c) => cats.has(c))) return false;
+    if (GOV_STAT_CATEGORIES.has(category) && !featureAllowedInGovProfile(f)) return false;
+    return true;
+  }).map((f) => f.id);
 }
 
 function fillProfileToMin(profile, category) {
-  const allowedCats = new Set([category, ...(RELATED_CATEGORIES[category] || [])]);
+  const allowedCats = new Set([category, ...relatedCategoriesForProfile(category)]);
   for (const r of [...allowedCats]) {
-    for (const rr of RELATED_CATEGORIES[r] || []) allowedCats.add(rr);
+    for (const rr of relatedCategoriesForProfile(r)) allowedCats.add(rr);
   }
+  const isGov = GOV_STAT_CATEGORIES.has(category);
 
   const pools = [
     domainBlockForCategory(category).flat(),
     categoryUnionFeatures(category),
-    GOV_STAT_CATEGORIES.has(category) ? allGovTaggedFeatures() : [],
+    isGov ? allGovTaggedFeatures() : [],
     INTEGRATION_CORE,
   ];
 
   for (const pool of pools) {
     for (const id of pool) {
       if (profile.length >= MIN_FEATURES_PER_API) return profile;
-      if (!profile.includes(id) && ALL_IDS.has(id)) profile.push(id);
+      if (!profile.includes(id) && ALL_IDS.has(id)) {
+        if (isGov) {
+          const f = getFeature(id);
+          if (f && !featureAllowedInGovProfile(f)) continue;
+        }
+        profile.push(id);
+      }
     }
   }
 
   for (const f of FEATURES) {
     if (profile.length >= MIN_FEATURES_PER_API) break;
+    if (isGov && !featureAllowedInGovProfile(f)) continue;
     if (f.categories?.some((c) => allowedCats.has(c)) && !profile.includes(f.id)) profile.push(f.id);
   }
 
@@ -463,11 +509,21 @@ function fillProfileToMin(profile, category) {
 }
 
 export function buildCategoryProfile(category) {
-  const related = RELATED_CATEGORIES[category] || [];
+  const related = relatedCategoriesForProfile(category);
+  const isGov = GOV_STAT_CATEGORIES.has(category);
+
+  function filterGov(ids) {
+    if (!isGov) return ids;
+    return ids.filter((id) => {
+      const f = getFeature(id);
+      return !f || featureAllowedInGovProfile(f);
+    });
+  }
+
   const blocks = [
     INTEGRATION_CORE,
     featuresTaggedCategory(category),
-    featuresTaggedCategories(related),
+    filterGov(featuresTaggedCategories(related)),
     categoryUnionFeatures(category),
     domainBlockForCategory(category),
   ];
@@ -477,11 +533,11 @@ export function buildCategoryProfile(category) {
   const overflow = uniq([
     ...categoryUnionFeatures(category),
     ...domainBlockForCategory(category),
-    ...(GOV_STAT_CATEGORIES.has(category) ? allGovTaggedFeatures() : []),
+    ...(isGov ? allGovTaggedFeatures() : []),
     ...INTEGRATION_CORE,
   ]);
 
-  for (const id of overflow) {
+  for (const id of filterGov(overflow)) {
     if (profile.length >= MIN_FEATURES_PER_API) break;
     if (!profile.includes(id)) profile.push(id);
   }

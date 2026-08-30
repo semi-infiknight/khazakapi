@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-08-30T06:08:55.774Z",
+  "builtAt": "2026-08-30T06:12:49.677Z",
   "ontology": {
     "featureCount": 389,
     "vocabularyAtoms": 101,
@@ -42,9 +42,9 @@
       "max": 7
     },
     "featureSize": {
-      "min": 106,
+      "min": 101,
       "p10": 143,
-      "median": 183,
+      "median": 174,
       "max": 303,
       "belowMin": 0
     },
@@ -406,128 +406,7 @@
         ]
       }
     ],
-    "govCategoryCommercialLeakage": [
-      {
-        "id": "fuelprice",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "fuelprice",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_strata",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_strata",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_state_inflation",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_state_inflation",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_state",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_state",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_lowincome",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_lowincome",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_headline_inflation",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_headline_inflation",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_headline",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_headline",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_core_inflation",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_core_inflation",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_annual_inflation",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_annual_inflation",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_annual",
-        "category": "Prices",
-        "feature": "apple-pay-integration",
-        "via": "expanded"
-      },
-      {
-        "id": "cpi_annual",
-        "category": "Prices",
-        "feature": "kaspi-merchant",
-        "via": "expanded"
-      }
-    ],
+    "govCategoryCommercialLeakage": [],
     "primaryDriftFromStrict": [],
     "categoryPrimaryMax": {
       "Data & enrichment": 7,

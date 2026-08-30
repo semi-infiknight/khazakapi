@@ -11,6 +11,8 @@ import {
   MIN_FEATURES_PER_API,
   INTEGRATION_CORE,
   profileForCategory,
+  GOV_STAT_CATEGORIES,
+  featureAllowedInGovProfile,
   RELATED_CATEGORIES,
 } from "./categoryFeatureProfiles.js";
 
@@ -57,17 +59,18 @@ function keywordMatches(blob, kw) {
   return new RegExp(`\\b${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(blob);
 }
 
-function addFeature(set, sources, bucket, id) {
+function addFeature(set, sources, bucket, id, api) {
   if (!VALID_FEATURE_IDS.has(id)) return;
+  if (GOV_STAT_CATEGORIES.has(api?.category) && !featureAllowedInGovProfile(getFeature(id))) return;
   if (!set.has(id)) sources[bucket].push(id);
   set.add(id);
 }
 
-function addParents(expanded, sources, ids) {
+function addParents(expanded, sources, ids, api) {
   for (const id of ids) {
     let cur = getFeature(id);
     while (cur?.parentId) {
-      addFeature(expanded, sources, "parent", cur.parentId);
+      addFeature(expanded, sources, "parent", cur.parentId, api);
       cur = getFeature(cur.parentId);
     }
   }
@@ -90,7 +93,7 @@ function categoryAllowsFeature(feature, apiCategory) {
 }
 
 /** Vocabulary-mapped features + direct descendants only (not full ontology reverse-index). */
-function capabilityClosure(expanded, sources, capabilities) {
+function capabilityClosure(expanded, sources, capabilities, api) {
   const seeds = new Set();
   for (const cap of capabilities) {
     for (const fid of getCapabilityAtom(cap)?.featureIds || []) seeds.add(fid);
@@ -98,7 +101,7 @@ function capabilityClosure(expanded, sources, capabilities) {
 
   function addSubtree(id) {
     if (!VALID_FEATURE_IDS.has(id)) return;
-    addFeature(expanded, sources, "capability", id);
+    addFeature(expanded, sources, "capability", id, api);
     for (const f of FEATURES) {
       if (f.parentId === id) addSubtree(f.id);
     }
@@ -113,7 +116,7 @@ function providerClosure(expanded, sources, api) {
   for (const f of FEATURES) {
     if (!(f.providers || []).some((p) => providerSlugMatches(providerBlob, p))) continue;
     if (!categoryAllowsFeature(f, apiCategory)) continue;
-    addFeature(expanded, sources, "provider", f.id);
+    addFeature(expanded, sources, "provider", f.id, api);
   }
 }
 
@@ -123,8 +126,8 @@ function keywordClosure(expanded, sources, api, docText = "") {
   for (const f of FEATURES) {
     const hitBlob = (f.keywords || []).some((kw) => keywordMatches(blob, kw));
     const hitDoc = docBlob && (f.keywords || []).some((kw) => keywordMatches(docBlob, kw));
-    if (hitBlob) addFeature(expanded, sources, "keyword", f.id);
-    else if (hitDoc) addFeature(expanded, sources, "doc", f.id);
+    if (hitBlob) addFeature(expanded, sources, "keyword", f.id, api);
+    else if (hitDoc) addFeature(expanded, sources, "doc", f.id, api);
   }
 }
 
@@ -134,12 +137,12 @@ function topUpFromProfile(expanded, sources, api) {
   const profile = profileForCategory(api.category);
   for (const id of profile) {
     if (expanded.size >= MIN_FEATURES_PER_API) break;
-    addFeature(expanded, sources, "profile", id);
+    addFeature(expanded, sources, "profile", id, api);
   }
   if (expanded.size < MIN_FEATURES_PER_API) {
     for (const id of INTEGRATION_CORE) {
       if (expanded.size >= MIN_FEATURES_PER_API) break;
-      addFeature(expanded, sources, "profile", id);
+      addFeature(expanded, sources, "profile", id, api);
     }
   }
 }
@@ -165,11 +168,11 @@ export function expandApiFeatures(api, capabilities = [], options = {}) {
 
   // 1. Curated domain profile (authoritative coverage)
   for (const id of profileForCategory(api.category)) {
-    addFeature(expanded, sources, "profile", id);
+    addFeature(expanded, sources, "profile", id, api);
   }
 
   // 2. Capability-derived closure
-  capabilityClosure(expanded, sources, capabilities);
+  capabilityClosure(expanded, sources, capabilities, api);
 
   // 3. Provider ecosystem
   providerClosure(expanded, sources, api);
@@ -178,7 +181,7 @@ export function expandApiFeatures(api, capabilities = [], options = {}) {
   keywordClosure(expanded, sources, api, docText);
 
   // 5. Parent roll-up for hierarchy
-  addParents(expanded, sources, [...expanded]);
+  addParents(expanded, sources, [...expanded], api);
 
   // 6. Hard minimum from profile only (never unrelated globals)
   topUpFromProfile(expanded, sources, api);
