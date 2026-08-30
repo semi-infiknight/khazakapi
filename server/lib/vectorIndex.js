@@ -6,7 +6,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { apiDocumentText } from "./catalogText.js";
+import { apiDocumentTextWithHints } from "./catalogText.js";
 import { embedQuery, warmQueryEmbedder } from "./queryEmbedder.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -70,7 +70,7 @@ function loadEmbeddingStore() {
 
 function createTfidfFallback(apis) {
   const docs = apis.map((api) => {
-    const tokens = tokenize(apiDocumentText(api));
+    const tokens = tokenize(apiDocumentTextWithHints(api));
     return { api, tokens, tf: buildTf(tokens) };
   });
 

@@ -20,7 +20,6 @@ function normalize(text = "") {
 
 function featureMatchBlob(api) {
   const fields = [api.title, api.note, api.category, api.provider, api.companyName, api.apiType];
-  if (api.tier !== "commercial") fields.push(api.setup?.summary);
   return normalize(fields.filter(Boolean).join(" "));
 }
 
@@ -41,23 +40,21 @@ function addFeature(set, sources, bucket, id, api) {
   set.add(id);
 }
 
-function addParents(expanded, sources, ids, api) {
-  for (const id of ids) {
-    let cur = getFeature(id);
-    while (cur?.parentId) {
-      if (NON_BUILDABLE_MATRIX_FEATURES.has(cur.parentId)) break;
-      addFeature(expanded, sources, "parent", cur.parentId, api);
-      cur = getFeature(cur.parentId);
-    }
+/** One parent hop for hierarchy display — no full ontology subtree. */
+function addDirectParents(expanded, sources, api) {
+  for (const id of [...expanded]) {
+    const parentId = getFeature(id)?.parentId;
+    if (parentId) addFeature(expanded, sources, "parent", parentId, api);
   }
 }
 
-function providerSlugMatches(blob, slug) {
-  const p = String(slug).toLowerCase();
+function providerTokenMatches(blob, slug) {
+  const p = String(slug).toLowerCase().trim();
+  if (!p) return false;
   if (p.length < 4) {
     return new RegExp(`\\b${p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(blob);
   }
-  return blob.includes(p);
+  return new RegExp(`\\b${p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(blob);
 }
 
 function categoryAllowsFeature(feature, apiCategory) {
@@ -68,30 +65,26 @@ function categoryAllowsFeature(feature, apiCategory) {
   return cats.some((c) => related.includes(c));
 }
 
-/** Vocabulary-mapped features + direct descendants only (not full ontology reverse-index). */
+/** Strict vocabulary mapping only — no recursive ontology subtree. */
 function capabilityClosure(expanded, sources, capabilities, api) {
-  const seeds = new Set();
   for (const cap of capabilities) {
-    for (const fid of getCapabilityAtom(cap)?.featureIds || []) seeds.add(fid);
-  }
-
-  function addSubtree(id) {
-    if (!getFeature(id) || NON_BUILDABLE_MATRIX_FEATURES.has(id)) return;
-    addFeature(expanded, sources, "capability", id, api);
-    for (const f of FEATURES) {
-      if (f.parentId === id) addSubtree(f.id);
+    for (const fid of getCapabilityAtom(cap)?.featureIds || []) {
+      addFeature(expanded, sources, "capability", fid, api);
     }
   }
-
-  for (const id of seeds) addSubtree(id);
 }
 
-function providerClosure(expanded, sources, api) {
+function providerClosure(expanded, sources, api, capabilities) {
   const providerBlob = normalize(`${api.provider || ""} ${api.companyName || ""}`);
   const apiCategory = api.category || "";
+  const capSet = new Set(capabilities);
+
   for (const f of FEATURES) {
-    if (!(f.providers || []).some((p) => providerSlugMatches(providerBlob, p))) continue;
+    if (!(f.providers || []).some((p) => providerTokenMatches(providerBlob, p))) continue;
     if (!categoryAllowsFeature(f, apiCategory)) continue;
+    const capHit = (f.capabilityTags || []).some((t) => capSet.has(t));
+    const catHit = (f.categories || []).includes(apiCategory);
+    if (!capHit && !catHit) continue;
     addFeature(expanded, sources, "provider", f.id, api);
   }
 }
@@ -128,11 +121,10 @@ export function expandApiFeatures(api, capabilities = [], options = {}) {
     parent: [],
   };
 
-  // Infer buildable features from this API's capabilities, provider, and catalogue text only.
   capabilityClosure(expanded, sources, capabilities, api);
-  providerClosure(expanded, sources, api);
+  providerClosure(expanded, sources, api, capabilities);
   keywordClosure(expanded, sources, api, docText);
-  addParents(expanded, sources, [...expanded], api);
+  addDirectParents(expanded, sources, api);
 
   return {
     primaryFeatures: [...primary].sort(),

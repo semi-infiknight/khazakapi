@@ -56,6 +56,7 @@ const CASES = [
     q: "YandexGPT chatbot with speech",
     expectFit: true,
     expectFeatures: ["ai-assistant", "speech-ai"],
+    rejectFeatures: ["yandex-direct-campaigns", "yandex-market-seller", "yandex-cloud-compute"],
   },
   {
     q: "real estate app with maps",
@@ -117,6 +118,13 @@ for (const tc of CASES) {
     const ids = (res.features || []).map((f) => f.id);
     const hit = tc.expectFeatures.some((id) => ids.includes(id));
     if (!hit) errors.push(`expected one of features [${tc.expectFeatures.join(", ")}] (got ${ids.join(", ")})`);
+  }
+
+  if (tc.rejectFeatures?.length) {
+    const ids = (res.features || []).map((f) => f.id);
+    for (const id of tc.rejectFeatures) {
+      if (ids.includes(id)) errors.push(`should not include feature ${id}`);
+    }
   }
 
   if (tc.expectApiIds?.length) {

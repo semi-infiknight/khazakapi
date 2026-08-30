@@ -5,16 +5,33 @@
 import { tokenize } from "./search.js";
 import { embedQuery } from "./queryEmbedder.js";
 import { FEATURES, PRODUCT_RECIPES, featureSearchText, getFeature } from "./features.js";
+import { NON_BUILDABLE_MATRIX_FEATURES } from "./categoryFeatureProfiles.js";
 
 const MAX_FEATURES = 5;
 const KEYWORD_FLOOR = 4;
 const SEMANTIC_FLOOR = 0.38;
 const RECIPE_BOOST = 12;
 
+/** Exclude plumbing; allow extended depth when keyword/recipe hits. */
+const EXTRACT_FEATURES = FEATURES.filter((f) => !NON_BUILDABLE_MATRIX_FEATURES.has(f.id));
+
 let cachedFeatureVectors = null;
 
 function normalize(text = "") {
   return text.toLowerCase().replace(/ё/g, "е");
+}
+
+function escapeRegExp(s) {
+  return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function keywordInHay(hay, kw) {
+  const k = String(kw).toLowerCase();
+  if (k.length < 4) {
+    return new RegExp(`\\b${escapeRegExp(k)}\\b`, "i").test(hay);
+  }
+  if (k.includes(" ")) return hay.includes(k);
+  return new RegExp(`\\b${escapeRegExp(k)}\\b`, "i").test(hay);
 }
 
 function cosine(a, b) {
@@ -27,7 +44,7 @@ function cosine(a, b) {
 async function loadFeatureVectors() {
   if (cachedFeatureVectors) return cachedFeatureVectors;
   cachedFeatureVectors = await Promise.all(
-    FEATURES.map(async (feature) => ({
+    EXTRACT_FEATURES.map(async (feature) => ({
       feature,
       vec: await embedQuery(featureSearchText(feature)),
     })),
@@ -38,14 +55,14 @@ async function loadFeatureVectors() {
 function scoreFeatureKeywords(feature, hay, tokens) {
   let score = 0;
   for (const kw of feature.keywords || []) {
-    if (hay.includes(kw)) score += kw.includes(" ") ? 8 : 4;
+    if (keywordInHay(hay, kw)) score += kw.includes(" ") ? 8 : 4;
   }
   for (const neg of feature.negativeKeywords || []) {
-    if (hay.includes(neg)) score -= 6;
+    if (keywordInHay(hay, neg)) score -= 6;
   }
   for (const t of tokens) {
     if (t.length < 3) continue;
-    if (feature.keywords?.some((kw) => kw === t || kw.includes(t) || t.includes(kw))) score += 2;
+    if (feature.keywords?.some((kw) => keywordInHay(t, kw) || keywordInHay(kw, t))) score += 2;
   }
   return score;
 }
@@ -113,8 +130,8 @@ export async function extractFeatures(query) {
 
   const featureVectors = queryVec ? await loadFeatureVectors() : [];
 
-  const scored = FEATURES.map((feature) => {
-    if ((feature.negativeKeywords || []).some((neg) => hay.includes(neg.toLowerCase()))) return null;
+  const scored = EXTRACT_FEATURES.map((feature) => {
+    if ((feature.negativeKeywords || []).some((neg) => keywordInHay(hay, neg))) return null;
 
     let keywordScore = scoreFeatureKeywords(feature, hay, tokens);
     if (recipeFeatureIds.has(feature.id)) keywordScore += RECIPE_BOOST;
@@ -126,20 +143,19 @@ export async function extractFeatures(query) {
     }
 
     const keywordHit = keywordScore >= KEYWORD_FLOOR;
-    const semanticHit = semanticScore >= SEMANTIC_FLOOR;
     const recipeHit = recipeFeatureIds.has(feature.id);
 
-    if (!keywordHit && !semanticHit && !recipeHit) return null;
+    // Semantic-only hits caused Yandex/extended false positives — require keyword or recipe.
+    if (!keywordHit && !recipeHit) return null;
 
     const combined =
       (recipeHit ? 1 : 0) * 2 +
-      Math.min(keywordScore / 16, 1) * 0.45 +
-      semanticScore * 0.55;
+      Math.min(keywordScore / 16, 1) * 0.55 +
+      semanticScore * 0.45;
 
     let source = "keyword";
     if (recipeHit) source = "recipe";
-    else if (semanticHit && !keywordHit) source = "semantic";
-    else if (semanticHit && keywordHit) source = "hybrid";
+    else if (semanticScore >= SEMANTIC_FLOOR && keywordHit) source = "hybrid";
 
     return { feature, keywordScore, semanticScore, combined, source };
   }).filter(Boolean);

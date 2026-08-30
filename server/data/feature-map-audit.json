@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-08-30T06:15:04.683Z",
+  "builtAt": "2026-08-30T06:19:11.059Z",
   "ontology": {
     "featureCount": 389,
     "vocabularyAtoms": 101,
@@ -26,19 +26,17 @@
       "id": "births",
       "title": "Daily Live Births ~ Kazakhstan",
       "capabilities": [
-        "user-auth",
+        "gov-digital-services",
         "gov-open-data",
-        "statistics",
         "population-stats",
-        "gov-digital-services"
+        "statistics"
       ],
       "strictPrimary": [
         "gov-digital-services",
         "gov-open-data",
-        "population-stats",
-        "user-auth"
+        "population-stats"
       ],
-      "legacyPrimary": 17
+      "legacyPrimary": 15
     }
   },
   "matrix": {
@@ -46,108 +44,108 @@
     "primarySize": {
       "min": 1,
       "p10": 1,
-      "median": 3,
-      "p90": 4,
-      "max": 7
+      "median": 2,
+      "p90": 3,
+      "max": 6
     },
     "featureSize": {
-      "min": 4,
-      "p10": 21,
-      "median": 132,
-      "max": 173,
+      "min": 1,
+      "p10": 6,
+      "median": 12,
+      "max": 26,
       "belowMin": 0
     },
     "universalFeatures": [],
     "topFeaturesByApiCount": [
       {
-        "id": "user-auth",
-        "label": "Sign-in & identity",
-        "apis": 601,
-        "pct": 87.4
-      },
-      {
         "id": "gov-open-data",
         "label": "Government open data",
-        "apis": 592,
-        "pct": 86
+        "apis": 581,
+        "pct": 84.4
       },
       {
-        "id": "metadata-catalog",
-        "label": "Dataset metadata & catalog",
-        "apis": 570,
-        "pct": 82.8
-      },
-      {
-        "id": "national-accounts",
-        "label": "Economy & national accounts",
-        "apis": 565,
-        "pct": 82.1
-      },
-      {
-        "id": "dataset-revisions",
-        "label": "Dataset revision history",
-        "apis": 564,
-        "pct": 82
-      },
-      {
-        "id": "trade-statistics",
-        "label": "Trade & exports data",
-        "apis": 564,
-        "pct": 82
+        "id": "gov-digital-services",
+        "label": "Government digital services",
+        "apis": 507,
+        "pct": 73.7
       },
       {
         "id": "regional-analytics",
         "label": "Regional breakdowns",
-        "apis": 560,
-        "pct": 81.4
-      },
-      {
-        "id": "city-filter",
-        "label": "City-level filter",
-        "apis": 556,
-        "pct": 80.8
-      },
-      {
-        "id": "environment-stats",
-        "label": "Environment & ecology data",
-        "apis": 554,
-        "pct": 80.5
+        "apis": 273,
+        "pct": 39.7
       },
       {
         "id": "population-stats",
         "label": "Population & demography",
-        "apis": 553,
-        "pct": 80.4
+        "apis": 216,
+        "pct": 31.4
       },
       {
         "id": "historical-data",
         "label": "Historical time series",
-        "apis": 551,
-        "pct": 80.1
+        "apis": 170,
+        "pct": 24.7
       },
       {
-        "id": "district-filter",
-        "label": "District breakdown",
-        "apis": 550,
-        "pct": 79.9
-      },
-      {
-        "id": "gender-breakdown",
-        "label": "Gender breakdown",
-        "apis": 550,
-        "pct": 79.9
+        "id": "national-accounts",
+        "label": "Economy & national accounts",
+        "apis": 142,
+        "pct": 20.6
       },
       {
         "id": "health-stats",
         "label": "Health & medical stats",
-        "apis": 550,
-        "pct": 79.9
+        "apis": 128,
+        "pct": 18.6
+      },
+      {
+        "id": "education-stats",
+        "label": "Education statistics",
+        "apis": 109,
+        "pct": 15.8
+      },
+      {
+        "id": "household-stats",
+        "label": "Household income & expenditure",
+        "apis": 104,
+        "pct": 15.1
+      },
+      {
+        "id": "industry-sectors",
+        "label": "Industry & sector data",
+        "apis": 101,
+        "pct": 14.7
+      },
+      {
+        "id": "mortality-stats",
+        "label": "Mortality & death statistics",
+        "apis": 100,
+        "pct": 14.5
+      },
+      {
+        "id": "metadata-catalog",
+        "label": "Dataset metadata & catalog",
+        "apis": 96,
+        "pct": 14
+      },
+      {
+        "id": "environment-stats",
+        "label": "Environment & ecology data",
+        "apis": 81,
+        "pct": 11.8
       },
       {
         "id": "migration-stats",
         "label": "Migration statistics",
-        "apis": 550,
-        "pct": 79.9
+        "apis": 77,
+        "pct": 11.2
+      },
+      {
+        "id": "public-safety",
+        "label": "Public safety data",
+        "apis": 76,
+        "pct": 11
       }
     ],
     "primaryPollutionSamples": [
@@ -155,8 +153,8 @@
         "id": "births",
         "title": "Daily Live Births ~ Kazakhstan",
         "category": "Demography",
-        "primary": 4,
-        "legacyPrimary": 17,
+        "primary": 3,
+        "legacyPrimary": 15,
         "sampleLegacy": [
           "batch-export",
           "csv-export",
@@ -169,8 +167,8 @@
         "id": "population_district",
         "title": "Population by Region (KATO) ~ Kazakhstan",
         "category": "Demography",
-        "primary": 4,
-        "legacyPrimary": 17,
+        "primary": 3,
+        "legacyPrimary": 15,
         "sampleLegacy": [
           "batch-export",
           "csv-export",
@@ -183,8 +181,8 @@
         "id": "population_malaysia",
         "title": "Population Table: Kazakhstan",
         "category": "Demography",
-        "primary": 4,
-        "legacyPrimary": 17,
+        "primary": 3,
+        "legacyPrimary": 15,
         "sampleLegacy": [
           "batch-export",
           "csv-export",
@@ -197,8 +195,8 @@
         "id": "hies_district",
         "title": "Household Income and Expenditure: Administrative Districts",
         "category": "Households",
-        "primary": 4,
-        "legacyPrimary": 18,
+        "primary": 3,
+        "legacyPrimary": 16,
         "sampleLegacy": [
           "batch-export",
           "csv-export",
@@ -211,8 +209,8 @@
         "id": "hies_state",
         "title": "Household Income and Expenditure: States",
         "category": "Households",
-        "primary": 4,
-        "legacyPrimary": 18,
+        "primary": 3,
+        "legacyPrimary": 16,
         "sampleLegacy": [
           "batch-export",
           "csv-export",
@@ -225,8 +223,8 @@
         "id": "msic",
         "title": "MSIC",
         "category": "Data Dictionaries",
-        "primary": 3,
-        "legacyPrimary": 16,
+        "primary": 2,
+        "legacyPrimary": 14,
         "sampleLegacy": [
           "batch-export",
           "csv-export",
@@ -239,8 +237,8 @@
         "id": "mcoicop",
         "title": "MCOICOP",
         "category": "Data Dictionaries",
-        "primary": 3,
-        "legacyPrimary": 16,
+        "primary": 2,
+        "legacyPrimary": 14,
         "sampleLegacy": [
           "batch-export",
           "csv-export",
@@ -253,8 +251,8 @@
         "id": "population_state",
         "title": "Population Table: States",
         "category": "Demography",
-        "primary": 4,
-        "legacyPrimary": 17,
+        "primary": 3,
+        "legacyPrimary": 15,
         "sampleLegacy": [
           "batch-export",
           "csv-export",
@@ -269,18 +267,18 @@
     "universalPlumbingFeatures": 0,
     "primaryDriftFromStrict": [],
     "categoryPrimaryMax": {
-      "Data & enrichment": 7,
-      "Housing & property": 6,
-      "Population & society": 6,
       "Realtime": 6,
-      "Other portals": 6,
-      "Government services": 6,
-      "Transportation": 5,
-      "Labour Markets": 5,
-      "National Accounts": 5,
-      "Education": 5,
-      "Economy & business": 5,
-      "Environment & climate": 5
+      "Data & enrichment": 6,
+      "Housing & property": 5,
+      "Population & society": 5,
+      "Other portals": 5,
+      "Government services": 5,
+      "Transportation": 4,
+      "Labour Markets": 4,
+      "National Accounts": 4,
+      "Education": 4,
+      "Economy & business": 4,
+      "Environment & climate": 4
     }
   },
   "reference": {
@@ -289,19 +287,17 @@
       "id": "births",
       "title": "Daily Live Births ~ Kazakhstan",
       "capabilities": [
-        "user-auth",
+        "gov-digital-services",
         "gov-open-data",
-        "statistics",
         "population-stats",
-        "gov-digital-services"
+        "statistics"
       ],
       "strictPrimary": [
         "gov-digital-services",
         "gov-open-data",
-        "population-stats",
-        "user-auth"
+        "population-stats"
       ],
-      "legacyPrimary": 17
+      "legacyPrimary": 15
     }
   }
 }

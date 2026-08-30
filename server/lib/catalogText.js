@@ -50,7 +50,6 @@ export const CATEGORY_HINTS = {
 };
 
 export function apiDocumentText(api) {
-  const hints = CATEGORY_HINTS[api.category] || "";
   const caps = capabilitiesDocumentText(api);
   return [
     api.title || "",
@@ -61,11 +60,16 @@ export function apiDocumentText(api) {
     api.note || "",
     api.apiType || "",
     api.group || "",
-    hints,
     caps,
   ]
     .filter(Boolean)
     .join(" ");
+}
+
+/** TF–IDF fallback only — category hints help sparse lexical match without polluting embeddings. */
+export function apiDocumentTextWithHints(api) {
+  const hints = CATEGORY_HINTS[api.category] || "";
+  return [apiDocumentText(api), hints].filter(Boolean).join(" ");
 }
 
 export function apiDocumentId(api) {

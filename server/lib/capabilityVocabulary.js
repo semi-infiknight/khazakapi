@@ -34,7 +34,7 @@ export const CAPABILITY_VOCABULARY = [
   { id: "refunds", label: "Refunds", featureIds: ["checkout-payment"], patterns: [/\brefund\b/i, /\bchargeback\b/i, /\breversal\b/i] },
   { id: "subscriptions", label: "Subscriptions", featureIds: ["checkout-payment"], patterns: [/\bsubscription\b/i, /\brecurring payment\b/i] },
 
-  { id: "user-auth", label: "User authentication", featureIds: ["user-auth"], patterns: [/\boauth\b/i, /\blogin\b/i, /\bsign.?in\b/i, /\bidentity\b/i, /\byandex id\b/i] },
+  { id: "user-auth", label: "User authentication", featureIds: ["user-auth"], patterns: [/\boauth2?\b/i, /\bauthorization code\b/i, /\bbearer token\b/i, /\blogin api\b/i, /\byandex id\b/i, /\bidentity api\b/i] },
   { id: "oauth", label: "OAuth", featureIds: ["user-auth"], patterns: [/\boauth2?\b/i, /\bauthorization code\b/i, /\bbearer token\b/i] },
   { id: "mobile-id", label: "Mobile ID", featureIds: ["user-auth"], patterns: [/\bmobile.?id\b/i, /\be.?gov mobile\b/i, /\bbiometric auth\b/i] },
   { id: "esignature", label: "E-signature", featureIds: ["esignature"], patterns: [/\be.?sign/i, /\bsigex\b/i, /\bdigital signature\b/i, /\beds\b/i] },
@@ -62,8 +62,8 @@ export const CAPABILITY_VOCABULARY = [
   { id: "ride-hailing", label: "Ride-hailing", featureIds: ["ride-hailing"], patterns: [/\btaxi\b/i, /\bride.?hail/i, /\bindriver\b/i, /\byandex go\b/i] },
 
   { id: "weather-forecast", label: "Weather", featureIds: ["weather-forecast"], patterns: [/\bweather\b/i, /\bforecast\b/i, /\bkazhydromet\b/i] },
-  { id: "gov-open-data", label: "Open government data", featureIds: ["gov-open-data"], patterns: [/\bopen data\b/i, /\bdata\.egov\b/i, /\bstat\.gov\b/i, /\bdataset\b/i] },
-  { id: "statistics", label: "Statistics", featureIds: ["gov-open-data"], patterns: [/\bstatistics\b/i, /\bindicator\b/i, /\btime series\b/i] },
+  { id: "gov-open-data", label: "Open government data", featureIds: ["gov-open-data"], patterns: [/\bopen data\b/i, /\bdata\.egov\b/i, /\bstat\.gov\b/i, /\bgovernment data\b/i] },
+  { id: "statistics", label: "Statistics", featureIds: ["gov-open-data"], patterns: [/\bstatistics\b/i, /\bstat\.gov\b/i, /\bstatistical indicator\b/i] },
   { id: "population-stats", label: "Population stats", featureIds: ["population-stats"], patterns: [/\bpopulation\b/i, /\bdemograph/i, /\bbirths\b/i, /\bcensus\b/i] },
   { id: "housing-stats", label: "Housing stats", featureIds: ["housing-stats"], patterns: [/\bhousing\b/i, /\bapartment\b/i, /\breal estate stat/i, /\bcadastr/i] },
   { id: "education-stats", label: "Education stats", featureIds: ["education-stats"], patterns: [/\beducation stat/i, /\bschool enrollment\b/i, /\buniversity\b/i] },

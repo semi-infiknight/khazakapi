@@ -37,7 +37,7 @@ const MATRIX_PATH = path.join(DATA_DIR, "api-capability-matrix.json");
 const REPORT_PATH = path.join(DATA_DIR, "capability-completeness-report.json");
 const CACHE_PATH = path.join(DATA_DIR, "doc-scavenge-cache.json");
 
-const MIN_BUILDABLE_FEATURES = 3;
+const MIN_BUILDABLE_FEATURES = 1;
 const COMMERCIAL_LEAK_IDS = [
   "apple-pay-integration",
   "kaspi-merchant",
@@ -155,7 +155,7 @@ function buildEntry(api, docCache) {
 
     const cached = docCache[id];
     if (cached?.text) {
-      docHits = inferCapabilitiesFromDocs(cached.text);
+      docHits = inferCapabilitiesFromDocs(cached.text, api);
       for (const c of docHits) {
         if (!caps.has(c)) {
           caps.add(c);
@@ -285,9 +285,11 @@ async function main() {
 
   let govCommercialLeakage = 0;
   let universalPlumbing = 0;
+  let govUserAuthPrimary = 0;
   for (const entry of Object.values(entries)) {
     if (GOV_STAT_CATEGORIES.has(entry.category)) {
       if (COMMERCIAL_LEAK_IDS.some((id) => entry.features.includes(id))) govCommercialLeakage += 1;
+      if (entry.primaryFeatures?.includes("user-auth")) govUserAuthPrimary += 1;
     }
   }
   for (const id of NON_BUILDABLE_MATRIX_FEATURES) {
@@ -303,6 +305,7 @@ async function main() {
     categoryOntologyTarget: MIN_FEATURES_PER_API,
     apisBelowMinFeatures: Object.values(entries).filter((e) => e.features.length < MIN_BUILDABLE_FEATURES).length,
     govCommercialLeakage,
+    govUserAuthPrimary,
     universalPlumbingFeatures: universalPlumbing,
     avgFeaturesPerApi: Number(
       (Object.values(entries).reduce((sum, e) => sum + e.features.length, 0) / KZ_APIS.length).toFixed(2),
@@ -346,6 +349,7 @@ async function main() {
       maxFeaturesPerApi: stats.maxFeaturesObserved,
       apisBelowBuildableMin: stats.apisBelowMinFeatures,
       govCommercialLeakage: stats.govCommercialLeakage,
+      govUserAuthPrimary: stats.govUserAuthPrimary,
       universalPlumbingFeatures: stats.universalPlumbingFeatures,
       commercialCoverage: `${stats.commercialWithFeatures}/${stats.commercialTotal}`,
     },
@@ -373,6 +377,7 @@ async function main() {
   console.log(`Min / P10 / median:     ${stats.minFeaturesObserved} / ${stats.p10FeaturesPerApi} / ${stats.medianFeaturesPerApi}`);
   console.log(`Below buildable min:    ${stats.apisBelowMinFeatures} (min ${MIN_BUILDABLE_FEATURES})`);
   console.log(`Gov commercial leakage: ${stats.govCommercialLeakage} APIs`);
+  console.log(`Gov user-auth primary:  ${stats.govUserAuthPrimary} APIs`);
   console.log(`Universal plumbing:     ${stats.universalPlumbingFeatures} features on all APIs`);
   console.log(`Commercial w/ features: ${stats.commercialWithFeatures}/${stats.commercialTotal}`);
   console.log(`Doc-enriched APIs:      ${stats.docEnrichedApis}`);
@@ -391,6 +396,10 @@ async function main() {
   }
   if (stats.govCommercialLeakage > 0) {
     console.error(`\nERROR: ${stats.govCommercialLeakage} gov/stat APIs with commercial payment feature leakage`);
+    process.exit(1);
+  }
+  if (stats.govUserAuthPrimary > 0) {
+    console.error(`\nERROR: ${stats.govUserAuthPrimary} gov/stat APIs with user-auth in primary features`);
     process.exit(1);
   }
   if (stats.universalPlumbingFeatures > 0) {

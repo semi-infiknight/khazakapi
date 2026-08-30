@@ -69,7 +69,7 @@ function rankApiForFeature(api, semanticScore, feature, hay) {
 
   const primaryFeatures = getApiPrimaryFeatures(api);
   const featureListed = primaryFeatures.includes(feature.id);
-  const featureBoost = featureListed ? 0.14 : 0;
+  const featureBoost = featureListed && overlap > 0 ? 0.14 : 0;
 
   const finalScore =
     semanticScore * 0.42 +

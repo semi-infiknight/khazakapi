@@ -765,6 +765,9 @@ const CORE_FEATURES = [
 
 export const FEATURES = [...CORE_FEATURES, ...EXTENDED_FEATURES, ...EXTENDED_FEATURES_WAVE2];
 
+/** Core product features used for homepage suggest extraction (not matrix padding catalog). */
+export const SUGGEST_FEATURES = CORE_FEATURES;
+
 /** Whole-product shortcuts — boost features when prompt matches a known app type. */
 export const PRODUCT_RECIPES = [
   {

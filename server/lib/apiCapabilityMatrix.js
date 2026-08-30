@@ -5,7 +5,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { capabilitiesToFeatureIds } from "./capabilityMap.js";
+import { capabilitiesToPrimaryFeatureIds } from "./capabilityMap.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATRIX_PATH = path.join(__dirname, "../data/api-capability-matrix.json");
@@ -40,7 +40,7 @@ export function getMatrixCapabilities(apiId) {
 export function getMatrixPrimaryFeatures(apiId) {
   const entry = getMatrixEntry(apiId);
   if (entry?.primaryFeatures?.length) return entry.primaryFeatures;
-  if (entry?.capabilities?.length) return capabilitiesToFeatureIds(entry.capabilities);
+  if (entry?.capabilities?.length) return capabilitiesToPrimaryFeatureIds(entry.capabilities);
   return null;
 }
 
@@ -48,7 +48,7 @@ export function getMatrixFeatures(apiId) {
   const entry = getMatrixEntry(apiId);
   if (entry?.features?.length) return entry.features;
   if (entry?.primaryFeatures?.length) return entry.primaryFeatures;
-  if (entry?.capabilities?.length) return capabilitiesToFeatureIds(entry.capabilities);
+  if (entry?.capabilities?.length) return capabilitiesToPrimaryFeatureIds(entry.capabilities);
   return null;
 }
 

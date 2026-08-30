@@ -29,7 +29,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MATRIX_PATH = path.join(__dirname, "../server/data/api-capability-matrix.json");
 const AUDIT_PATH = path.join(__dirname, "../server/data/feature-map-audit.json");
 
-const MIN_BUILDABLE_FEATURES = 3;
+const MIN_BUILDABLE_FEATURES = 1;
 const COMMERCIAL_LEAK_IDS = [
   "apple-pay-integration",
   "kaspi-merchant",

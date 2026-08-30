@@ -1,4 +1,6 @@
-import { capabilitiesToFeatureIds, capabilitiesToPrimaryFeatureIds } from "./capabilityMap.js";
+import { capabilitiesToPrimaryFeatureIds } from "./capabilityMap.js";
+import { expandApiFeatures } from "./expandApiFeatures.js";
+import { GOV_STAT_CATEGORIES } from "./categoryFeatureProfiles.js";
 import { getMatrixCapabilities, getMatrixFeatures, getMatrixPrimaryFeatures } from "./apiCapabilityMatrix.js";
 
 /** @type {Record<string, string[]>} */
@@ -357,12 +359,13 @@ export function getApiCapabilities(api) {
   return caps;
 }
 
-/** Product features this API supports (expanded list for catalogue UI). */
+/** Product features this API supports (expanded list — internal matrix only). */
 export function getApiFeatures(api) {
   const id = String(api.id || api.slug || "");
   const matrixFeatures = getMatrixFeatures(id);
   if (matrixFeatures?.length) return matrixFeatures;
-  return capabilitiesToFeatureIds(getApiCapabilities(api));
+  const caps = [...getApiCapabilities(api)];
+  return expandApiFeatures(api, caps).features;
 }
 
 /** Strict capability-derived features — used for suggest matching only. */
@@ -388,7 +391,18 @@ export function apiMatchesFeature(api, feature) {
 
   if (primaryFeatures.includes(feature.id)) {
     const overlap = capabilityOverlap(caps, feature.capabilityTags);
-    return { ok: true, overlap: Math.max(overlap, 0.55), caps };
+    if (
+      feature.id === "user-auth" &&
+      GOV_STAT_CATEGORIES.has(api.category || "") &&
+      !caps.has("oauth") &&
+      !caps.has("mobile-id")
+    ) {
+      return { ok: false, overlap: 0, caps };
+    }
+    if (feature.capabilityTags?.length && overlap <= 0) {
+      return { ok: false, overlap: 0, caps };
+    }
+    return { ok: true, overlap: overlap > 0 ? overlap : 0.25, caps };
   }
 
   const overlap = capabilityOverlap(caps, feature.capabilityTags);
@@ -396,7 +410,6 @@ export function apiMatchesFeature(api, feature) {
     if (feature.id === "sms-otp" && caps.has("user-auth") && !caps.has("sms")) {
       return { ok: false, overlap: 0, caps };
     }
-    // Don't let soft category tags alone match unrelated commercial APIs into open-data features
     if (
       feature.capabilityTags?.some((t) => t.includes("stats") || t === "gov-open-data") &&
       api.tier === "commercial" &&
@@ -405,19 +418,6 @@ export function apiMatchesFeature(api, feature) {
       return { ok: false, overlap: 0, caps };
     }
     return { ok: true, overlap, caps };
-  }
-
-  const categoryOk =
-    !feature.categories?.length || feature.categories.includes(api.category || "");
-  const provider = normalize(`${api.provider || ""} ${api.companyName || ""}`);
-  const providerOk = feature.providers?.some((p) => provider.includes(p));
-
-  if (categoryOk && providerOk) return { ok: true, overlap: 0.15, caps };
-  if (
-    categoryOk &&
-    feature.capabilityTags?.every((t) => t.includes("gov") || t.includes("stat") || t.includes("stats"))
-  ) {
-    return { ok: true, overlap: 0.1, caps };
   }
 
   return { ok: false, overlap: 0, caps };
