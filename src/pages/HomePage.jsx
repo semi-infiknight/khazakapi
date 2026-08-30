@@ -47,7 +47,7 @@ export default function HomePage() {
     let cancelled = false;
     setLoading(true);
     fetchSearch({
-      q: submittedQuery ? "" : query,
+      q: "",
       category,
       auth,
       pricing,
@@ -64,7 +64,7 @@ export default function HomePage() {
     return () => {
       cancelled = true;
     };
-  }, [query, category, auth, pricing, tier, submittedQuery]);
+  }, [category, auth, pricing, tier]);
 
   const submitIntent = useCallback(() => {
     const q = query.trim();
@@ -202,7 +202,7 @@ export default function HomePage() {
               <p className="catalogue-intent-hint">
                 {draftChanged
                   ? "Press Enter to refresh suggestions"
-                  : "Describe your app, then press Enter — we won't analyze until you submit"}
+                  : "Describe your app, then press Enter — typing won't filter the catalogue"}
               </p>
             </form>
           </section>
