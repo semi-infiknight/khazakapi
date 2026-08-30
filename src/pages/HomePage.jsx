@@ -6,6 +6,13 @@ import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 const PAGE_SIZE = 24;
+const LOAD_ROOT_MARGIN = "480px 0px";
+
+function sentinelInView(node) {
+  if (!node) return false;
+  const rect = node.getBoundingClientRect();
+  return rect.top <= window.innerHeight + 480;
+}
 
 export default function HomePage() {
   const { setCatalogue } = useCatalogueNav();
@@ -19,6 +26,7 @@ export default function HomePage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const loadMoreRef = useRef(null);
   const loadingMoreRef = useRef(false);
+  const nextOffsetRef = useRef(null);
 
   const clearIntent = useCallback(() => {
     setSubmittedQuery("");
@@ -32,6 +40,7 @@ export default function HomePage() {
     fetchSearch({ q: "", limit: PAGE_SIZE, offset: 0 })
       .then((res) => {
         if (cancelled) return;
+        nextOffsetRef.current = res.next_offset;
         setApis(res.apis);
         setMeta(res);
       })
@@ -45,11 +54,14 @@ export default function HomePage() {
   }, []);
 
   const loadMore = useCallback(async () => {
-    if (!meta?.next_offset || loadingMoreRef.current) return;
+    const offset = nextOffsetRef.current;
+    if (offset == null || loadingMoreRef.current) return null;
+
     loadingMoreRef.current = true;
     setLoadingMore(true);
     try {
-      const res = await fetchSearch({ q: "", limit: PAGE_SIZE, offset: meta.next_offset });
+      const res = await fetchSearch({ q: "", limit: PAGE_SIZE, offset });
+      nextOffsetRef.current = res.next_offset;
       setApis((prev) => [...prev, ...res.apis]);
       setMeta((prev) => ({
         ...prev,
@@ -58,13 +70,24 @@ export default function HomePage() {
         count: res.count,
         total: res.total,
       }));
+      return res.next_offset;
     } catch (err) {
       console.error(err);
+      return nextOffsetRef.current;
     } finally {
       loadingMoreRef.current = false;
       setLoadingMore(false);
     }
-  }, [meta?.next_offset]);
+  }, []);
+
+  const loadMoreIfNeeded = useCallback(async () => {
+    let next = await loadMore();
+    let chained = 0;
+    while (next != null && chained < 2 && sentinelInView(loadMoreRef.current)) {
+      next = await loadMore();
+      chained += 1;
+    }
+  }, [loadMore]);
 
   const submitIntent = useCallback(() => {
     const q = query.trim();
@@ -94,6 +117,7 @@ export default function HomePage() {
   const showingIntent = Boolean(submittedQuery.trim());
   const draftChanged = showingIntent && query.trim() !== submittedQuery.trim();
   const hasMore = Boolean(meta?.next_offset);
+  const catalogueTotal = meta?.catalogueTotal ?? meta?.total ?? apis.length;
 
   useEffect(() => {
     setCatalogue({
@@ -113,14 +137,20 @@ export default function HomePage() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) loadMore();
+        if (entries.some((entry) => entry.isIntersecting)) loadMoreIfNeeded();
       },
-      { rootMargin: "240px 0px" },
+      { rootMargin: LOAD_ROOT_MARGIN },
     );
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [showingIntent, loading, hasMore, loadMore, apis.length]);
+  }, [showingIntent, loading, hasMore, loadMoreIfNeeded, apis.length]);
+
+  useEffect(() => {
+    if (showingIntent || loading || !hasMore || loadingMore) return undefined;
+    if (!sentinelInView(loadMoreRef.current)) return undefined;
+    loadMoreIfNeeded();
+  }, [showingIntent, loading, hasMore, loadingMore, apis.length, loadMoreIfNeeded]);
 
   return (
     <div className="container-main container-main--catalogue pt-6">
@@ -132,7 +162,7 @@ export default function HomePage() {
       <section className="stats-metal-strip mb-8 grid grid-cols-2 lg:grid-cols-4">
         <div className="stats-block flex-col items-start justify-center">
           <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">APIs</span>
-          <span className="stats-big-number">{meta?.catalogueTotal ?? meta?.total ?? "—"}</span>
+          <span className="stats-big-number">{catalogueTotal}</span>
         </div>
         <div className="stats-block flex-col items-start justify-center">
           <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">Free</span>
@@ -201,11 +231,18 @@ export default function HomePage() {
                 {loadingMore ? (
                   <p className="catalogue-load-status">Loading more APIs…</p>
                 ) : hasMore ? (
-                  <p className="catalogue-load-status">
-                    Showing {apis.length} of {meta?.total ?? apis.length}
-                  </p>
+                  <>
+                    <p className="catalogue-load-status">
+                      Showing {apis.length} of {catalogueTotal} — keep scrolling or load more
+                    </p>
+                    <button type="button" className="catalogue-load-btn" onClick={loadMoreIfNeeded}>
+                      Load more APIs
+                    </button>
+                  </>
                 ) : (
-                  <p className="catalogue-load-status">All {meta?.total ?? apis.length} APIs loaded</p>
+                  <p className="catalogue-load-status catalogue-load-status--done">
+                    All {catalogueTotal} APIs loaded
+                  </p>
                 )}
               </div>
             </>

@@ -1890,11 +1890,13 @@ nav a:hover {
 }
 
 .catalogue-load-footer {
-  min-height: 3rem;
+  min-height: 4.5rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem 0 0.5rem;
+  gap: 0.75rem;
+  padding: 1.5rem 0 calc(1rem + var(--catalogue-dock-offset, 0px));
 }
 
 .catalogue-load-status {
@@ -1903,6 +1905,28 @@ nav a:hover {
   font-size: var(--fs-xs);
   color: var(--text-soft);
   text-align: center;
+}
+
+.catalogue-load-status--done {
+  color: var(--text);
+}
+
+.catalogue-load-btn {
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface-alt));
+  padding: 0.55rem 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color var(--dur-1) var(--ease-out), background var(--dur-1) var(--ease-out);
+}
+
+.catalogue-load-btn:hover,
+.catalogue-load-btn:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 65%, var(--line));
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface-alt));
 }
 
 .catalogue-sidebar {
