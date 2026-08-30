@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { fetchCatalog, fetchSearch, fetchSuggest } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
-import { IntegrationChain, IntegrationChainLoading } from "../components/IntentSuggest.jsx";
+import { IntentResults } from "../components/IntentSuggest.jsx";
 import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
@@ -185,23 +185,23 @@ export default function HomePage() {
                 <input
                   className="search-input"
                   type="search"
-                  placeholder="Describe what you're building — press Enter to get an integration chain"
+                  placeholder="Describe what you're building — or search Kaspi, 2GIS, weather…"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  aria-label="Describe your product"
+                  aria-label="Search APIs"
                 />
                 <button
                   type="submit"
                   className="catalogue-intent-submit"
                   disabled={!query.trim() || suggesting}
-                  aria-label="Analyze integration chain"
+                  aria-label="Analyze APIs"
                 >
                   {suggesting ? "…" : "↵"}
                 </button>
               </div>
               <p className="catalogue-intent-hint">
                 {draftChanged
-                  ? "Press Enter to refresh the integration chain"
+                  ? "Press Enter to refresh suggestions"
                   : "Describe your app, then press Enter — we won't analyze until you submit"}
               </p>
             </form>
@@ -209,10 +209,10 @@ export default function HomePage() {
 
           {showingIntent ? (
             <div id="intent-results">
-              {suggesting ? (
-                <IntegrationChainLoading query={submittedQuery} />
+              {suggesting && !suggestion ? (
+                <p className="font-mono text-sm text-[var(--text-soft)]">Finding APIs…</p>
               ) : (
-                <IntegrationChain suggestion={suggestion} />
+                <IntentResults suggestion={suggestion} />
               )}
             </div>
           ) : loading ? (

@@ -1,210 +1,208 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import ApiCard from "./ApiCard.jsx";
 
 function shortApiLabel(title = "") {
   const base = title.split("~")[0].trim();
-  return base.length > 36 ? `${base.slice(0, 34)}…` : base || "API";
+  return base.length > 26 ? `${base.slice(0, 24)}…` : base || "API";
 }
 
-function explainApi(api) {
-  if (api.plugIn?.where) return api.plugIn.where;
-  if (api.plugIn?.auth) return api.plugIn.auth;
-  if (api.auth === "none") return "Call directly from your backend — no API key.";
-  if (api.auth === "apiKey") return `Get an API key from ${api.provider} and call server-side.`;
-  if (api.auth === "oauth") return `OAuth with ${api.provider}, then call with a bearer token.`;
-  return `Integrate via ${api.provider}.`;
+function mermaidSafeId(value) {
+  const id = String(value || "n")
+    .replace(/[^a-zA-Z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+  return id || "n";
 }
 
-function ChainStep({ index, title, status = "done", children, isLast = false }) {
-  return (
-    <li className={`integration-step integration-step--${status}`} style={{ "--step-i": index }}>
-      <div className="integration-step-rail" aria-hidden="true">
-        <span className="integration-step-dot">{index}</span>
-        {!isLast && <span className="integration-step-line" />}
-      </div>
-      <div className="integration-step-body">
-        {title ? <h3 className="integration-step-title">{title}</h3> : null}
-        {children}
-      </div>
-    </li>
-  );
+function escapeMermaidLabel(text) {
+  return String(text || "")
+    .replace(/"/g, "'")
+    .replace(/[\[\]]/g, "")
+    .replace(/\n/g, " ");
 }
 
-export function IntegrationChainLoading({ query }) {
-  const phases = [
-    "Reading your product description",
-    "Matching Kazakhstan APIs in the catalogue",
-    "Building your integration chain",
+/** Build a left-to-right stack flowchart from matched intents. */
+export function buildStackMermaid(suggestion) {
+  const intents = suggestion?.intents || [];
+  if (!intents.length) return "";
+
+  const lines = [
+    "flowchart LR",
+    '  App["Your product"]',
+    "  classDef app fill:#1a1030,stroke:#9c88fa,color:#f4f0ff,stroke-width:1.5px",
+    "  classDef layer fill:#12101c,stroke:#5b4d8a,color:#e8e4f5,stroke-width:1px",
+    "  classDef api fill:#0d1520,stroke:#3d5a80,color:#dce8f5,stroke-width:1px",
+    "  class App app",
   ];
-  const [phase, setPhase] = useState(0);
 
-  useEffect(() => {
-    const timers = [
-      window.setTimeout(() => setPhase(1), 900),
-      window.setTimeout(() => setPhase(2), 2200),
-    ];
-    return () => timers.forEach(clearTimeout);
-  }, []);
+  intents.forEach((block, index) => {
+    const layerId = `L_${mermaidSafeId(block.id)}`;
+    const layerLabel = escapeMermaidLabel(block.label);
+    lines.push(`  ${layerId}["${layerLabel}"]`);
+    lines.push(`  class ${layerId} layer`);
+    lines.push(`  App --> ${layerId}`);
 
-  return (
-    <article className="panel integration-chain integration-chain--loading" aria-busy="true" aria-live="polite">
-      <header className="integration-chain-head">
-        <span className="integration-chain-label">Integration chain</span>
-        <span className="integration-chain-meta">analyzing…</span>
-      </header>
+    block.apis.slice(0, 4).forEach((api) => {
+      const apiId = `A_${mermaidSafeId(api.id)}_${index}`;
+      const apiLabel = escapeMermaidLabel(shortApiLabel(api.title));
+      lines.push(`  ${apiId}["${apiLabel}"]`);
+      lines.push(`  class ${apiId} api`);
+      lines.push(`  ${layerId} --> ${apiId}`);
+    });
+  });
 
-      <ol className="integration-chain-list">
-        <ChainStep index={1} title="Your product" status="done">
-          <p className="integration-step-quote">&ldquo;{query}&rdquo;</p>
-        </ChainStep>
-
-        {phases.map((label, i) => {
-          const status = i < phase ? "done" : i === phase ? "active" : "pending";
-          return (
-            <ChainStep key={label} index={i + 2} title={label} status={status} isLast={i === phases.length - 1}>
-              <p className="integration-step-thought">
-                {status === "active" ? "…" : status === "done" ? "Done" : "Waiting"}
-              </p>
-            </ChainStep>
-          );
-        })}
-      </ol>
-    </article>
-  );
+  return lines.join("\n");
 }
 
-export function IntegrationChain({ suggestion }) {
-  const [revealed, setRevealed] = useState(0);
-  const fit = suggestion?.fit !== false && (suggestion?.intents?.length || suggestion?.apis?.length);
-  const steps = fit
-    ? (suggestion.intents || []).flatMap((block, blockIndex) =>
-        block.apis.map((api, apiIndex) => ({
-          key: `${block.id}-${api.id}`,
-          stepIndex: blockIndex + 3 + apiIndex,
-          block,
-          api,
-          showBlockHeader: apiIndex === 0,
-        })),
-      )
-    : [];
-
-  const totalSteps = fit ? 2 + steps.length : 3;
+function MermaidDiagram({ chart }) {
+  const hostRef = useRef(null);
+  const reactId = useId().replace(/:/g, "");
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    setRevealed(0);
-    const timers = [];
-    for (let i = 0; i <= totalSteps; i++) {
-      timers.push(window.setTimeout(() => setRevealed(i), 120 + i * 180));
+    let cancelled = false;
+    setFailed(false);
+
+    async function renderChart() {
+      if (!chart || !hostRef.current) return;
+      try {
+        const mermaid = (await import("mermaid")).default;
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: "strict",
+          theme: "dark",
+          flowchart: {
+            curve: "basis",
+            padding: 12,
+            nodeSpacing: 28,
+            rankSpacing: 40,
+            htmlLabels: false,
+          },
+          themeVariables: {
+            darkMode: true,
+            background: "transparent",
+            primaryColor: "#1a1030",
+            primaryTextColor: "#f4f0ff",
+            primaryBorderColor: "#9c88fa",
+            lineColor: "#7a7199",
+            secondaryColor: "#12101c",
+            tertiaryColor: "#0d1520",
+            fontFamily: "JetBrains Mono, ui-monospace, monospace",
+            fontSize: "13px",
+          },
+        });
+
+        const id = `stack-${reactId}-${Date.now()}`;
+        const { svg } = await mermaid.render(id, chart);
+        if (!cancelled && hostRef.current) {
+          hostRef.current.innerHTML = svg;
+        }
+      } catch (err) {
+        console.error(err);
+        if (!cancelled) setFailed(true);
+      }
     }
-    return () => timers.forEach(clearTimeout);
-  }, [suggestion?.query, totalSteps]);
 
-  if (!suggestion?.query) return null;
+    renderChart();
+    return () => {
+      cancelled = true;
+    };
+  }, [chart, reactId]);
 
-  if (!fit) {
+  if (!chart) return null;
+
+  if (failed) {
     return (
-      <article className="panel integration-chain" aria-label="Integration analysis">
-        <header className="integration-chain-head">
-          <span className="integration-chain-label">Integration chain</span>
-          <span className="integration-chain-meta">
-            no match{suggestion.summarySource === "llm" ? " · ai" : ""}
-          </span>
-        </header>
-
-        <ol className="integration-chain-list">
-          <ChainStep index={1} title="Your product" status={revealed >= 1 ? "done" : "pending"}>
-            <p className="integration-step-quote">&ldquo;{suggestion.query}&rdquo;</p>
-          </ChainStep>
-
-          <ChainStep
-            index={2}
-            title="Catalogue check"
-            status={revealed >= 2 ? "done" : revealed === 1 ? "active" : "pending"}
-            isLast={revealed < 3}
-          >
-            <p className="integration-step-thought">
-              {suggestion.summary ||
-                `No strong API match in the Kazakhstan catalogue (similarity ${Number(suggestion.bestScore || 0).toFixed(2)}).`}
-            </p>
-          </ChainStep>
-
-          <ChainStep
-            index={3}
-            title="What we do cover"
-            status={revealed >= 3 ? "done" : revealed === 2 ? "active" : "pending"}
-            isLast
-          >
-            <p className="integration-step-thought">
-              KhazakAPI focuses on KZ payments, maps, delivery, banking, travel, weather, telecom, and government
-              open data — not every product idea worldwide.
-            </p>
-          </ChainStep>
-        </ol>
-      </article>
+      <pre className="intent-prompt-mermaid-fallback">
+        <code>{chart}</code>
+      </pre>
     );
   }
 
+  return <div ref={hostRef} className="intent-prompt-mermaid" aria-label="Suggested API stack diagram" />;
+}
+
+function explainApi(api) {
+  if (api.plugIn?.auth) return api.plugIn.auth;
+  if (api.auth === "none") return "No authentication required — call it directly from your backend.";
+  if (api.auth === "apiKey") return `Get an API key from ${api.provider}, keep it server-side, then call this endpoint.`;
+  if (api.auth === "oauth") return `Complete OAuth with ${api.provider}, then call with a bearer token.`;
+  return `Wire this into your flow via ${api.provider}.`;
+}
+
+function PromptApiBlock({ api }) {
   return (
-    <article className="panel integration-chain" aria-label="Suggested API integration chain">
-      <header className="integration-chain-head">
-        <span className="integration-chain-label">Integration chain</span>
-        <span className="integration-chain-meta">
-          {steps.length} connection{steps.length === 1 ? "" : "s"}
+    <div className="intent-prompt-api">
+      <ApiCard api={api} />
+      <p className="intent-prompt-api-note">{explainApi(api)}</p>
+    </div>
+  );
+}
+
+export function IntentResults({ suggestion }) {
+  if (!suggestion?.query) return null;
+
+  if (suggestion.fit === false || (!suggestion?.intents?.length && !suggestion?.apis?.length)) {
+    return (
+      <div className="panel intent-prompt intent-prompt--empty">
+        <header className="intent-prompt-head">
+          <span className="intent-prompt-role">assistant</span>
+          <span className="intent-prompt-meta">
+            no fit{suggestion.summarySource === "llm" ? " · ai" : ""}
+          </span>
+        </header>
+        <p className="intent-prompt-body">
+          {suggestion.summary ||
+            `We don’t have a good API fit for “${suggestion.query}” in the Kazakhstan catalogue.`}
+        </p>
+        <p className="intent-prompt-quote">
+          Prompt: <span>&ldquo;{suggestion.query}&rdquo;</span>
+        </p>
+        <p className="intent-prompt-nofit-hint">
+          This directory covers KZ payments, maps, delivery, banking, travel, weather, telecom, and government open
+          data — not every product idea worldwide.
+        </p>
+      </div>
+    );
+  }
+
+  const chart = buildStackMermaid(suggestion);
+
+  return (
+    <article className="panel intent-prompt" aria-label="Suggested API stack">
+      <header className="intent-prompt-head">
+        <span className="intent-prompt-role">assistant</span>
+        <span className="intent-prompt-meta">
+          {suggestion.total} API{suggestion.total === 1 ? "" : "s"} · {suggestion.intents.length} layer
+          {suggestion.intents.length === 1 ? "" : "s"}
+          {suggestion.bestScore != null ? ` · score ${Number(suggestion.bestScore).toFixed(2)}` : ""}
           {suggestion.summarySource === "llm" ? " · ai" : ""}
         </span>
       </header>
 
-      <ol className="integration-chain-list">
-        <ChainStep index={1} title="Your product" status={revealed >= 1 ? "done" : "pending"}>
-          <p className="integration-step-quote">&ldquo;{suggestion.query}&rdquo;</p>
-        </ChainStep>
+      <p className="intent-prompt-body">{suggestion.summary}</p>
 
-        <ChainStep
-          index={2}
-          title="Integration plan"
-          status={revealed >= 2 ? "done" : revealed === 1 ? "active" : "pending"}
-          isLast={revealed < 3 && steps.length === 0}
-        >
-          <p className="integration-step-thought">{suggestion.summary}</p>
-        </ChainStep>
+      {suggestion.query && (
+        <p className="intent-prompt-quote">
+          Prompt: <span>&ldquo;{suggestion.query}&rdquo;</span>
+        </p>
+      )}
 
-        {steps.map(({ key, stepIndex, block, api, showBlockHeader }, i) => {
-          const status =
-            revealed >= stepIndex ? "done" : revealed === stepIndex - 1 ? "active" : "pending";
-          const isLast = i === steps.length - 1;
+      <section className="intent-prompt-diagram" aria-label="Architecture diagram">
+        <h3 className="intent-prompt-section-label">Stack diagram</h3>
+        <MermaidDiagram chart={chart} />
+      </section>
 
-          return (
-            <ChainStep
-              key={key}
-              index={stepIndex}
-              title={showBlockHeader ? block.label : null}
-              status={status}
-              isLast={isLast}
-            >
-              {showBlockHeader && (
-                <p className="integration-step-phase">
-                  <span className="integration-step-phase-label">When</span>
-                  {block.where}
-                </p>
-              )}
-              <div className="integration-step-connect">
-                <span className="integration-step-connect-label">Connect</span>
-                <div className="integration-step-api">
-                  <ApiCard api={api} />
-                  <p className="integration-step-api-note">
-                    <strong>{shortApiLabel(api.title)}</strong> — {explainApi(api)}
-                  </p>
-                </div>
-              </div>
-            </ChainStep>
-          );
-        })}
-      </ol>
+      {suggestion.intents.map((block) => (
+        <section key={block.id} className="intent-prompt-layer">
+          <h3 className="intent-prompt-layer-title">{block.label}</h3>
+          <p className="intent-prompt-layer-where">{block.where}</p>
+          <div className="intent-prompt-api-grid">
+            {block.apis.map((api) => (
+              <PromptApiBlock key={`${block.id}-${api.id}`} api={api} />
+            ))}
+          </div>
+        </section>
+      ))}
     </article>
   );
-}
-
-/** @deprecated use IntegrationChain */
-export function IntentResults(props) {
-  return <IntegrationChain {...props} />;
 }

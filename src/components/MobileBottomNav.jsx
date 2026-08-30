@@ -289,13 +289,13 @@ export default function MobileBottomNav() {
                 placeholder="Describe what you're building…"
                 value={catalogue?.query || ""}
                 onChange={(e) => catalogue?.onQueryChange(e.target.value)}
-                aria-label="Describe your product"
+                aria-label="Search APIs"
                 enterKeyHint="go"
               />
               <button
                 type="submit"
                 className="catalogue-mobile-search-go"
-                aria-label="Analyze integration chain"
+                aria-label="Analyze APIs"
                 disabled={!catalogue?.query?.trim() || catalogue?.intentSubmitting}
               >
                 {catalogue?.intentSubmitting ? "…" : "↵"}
