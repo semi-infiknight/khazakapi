@@ -6,7 +6,7 @@ import { tokenize } from "./search.js";
 import { embedQuery } from "./queryEmbedder.js";
 import { FEATURES, PRODUCT_RECIPES, featureSearchText, getFeature } from "./features.js";
 
-const MAX_FEATURES = 4;
+const MAX_FEATURES = 5;
 const KEYWORD_FLOOR = 4;
 const SEMANTIC_FLOOR = 0.38;
 const RECIPE_BOOST = 12;
