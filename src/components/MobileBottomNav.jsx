@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
-import CategorySidebar from "./CategorySidebar.jsx";
 import SiteNavPanel from "./SiteNavPanel.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
@@ -43,14 +42,7 @@ function DockIcon({ name }) {
     );
   }
 
-  return (
-    <svg {...common}>
-      <rect x="5" y="5" width="5.5" height="5.5" rx="1.2" />
-      <rect x="13.5" y="5" width="5.5" height="5.5" rx="1.2" />
-      <rect x="5" y="13.5" width="5.5" height="5.5" rx="1.2" />
-      <rect x="13.5" y="13.5" width="5.5" height="5.5" rx="1.2" />
-    </svg>
-  );
+  return null;
 }
 
 export default function MobileBottomNav() {
@@ -62,12 +54,6 @@ export default function MobileBottomNav() {
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [renderedPanel, setRenderedPanel] = useState(null);
   const [sheetVisible, setSheetVisible] = useState(false);
-
-  const activeFilterCount = catalogue
-    ? [catalogue.filters.category, catalogue.filters.auth, catalogue.filters.pricing, catalogue.filters.tier].filter(
-        Boolean,
-      ).length
-    : 0;
 
   useEffect(() => {
     document.body.classList.add("catalogue-mobile-nav-active");
@@ -121,8 +107,8 @@ export default function MobileBottomNav() {
     if (!requested || location.pathname !== "/") return;
     if (requested === "search") {
       setSearchExpanded(true);
-    } else {
-      setOpenPanel(requested);
+    } else if (requested === "menu") {
+      setOpenPanel("menu");
     }
     navigate(location.pathname, { replace: true, state: null });
   }, [location.pathname, location.state, navigate]);
@@ -182,22 +168,10 @@ export default function MobileBottomNav() {
 
   const closeSearch = () => setSearchExpanded(false);
 
-  const openCataloguePanel = (panel) => {
-    setSearchExpanded(false);
-    if (catalogue) {
-      setOpenPanel(openPanel === panel ? null : panel);
-      return;
-    }
-    navigate("/", { state: { openPanel: panel } });
-  };
-
   const openMenu = () => {
     setSearchExpanded(false);
     setOpenPanel(openPanel === "menu" ? null : "menu");
   };
-
-  const panelTitle = renderedPanel === "filters" ? "Browse & filter" : "Menu";
-  const panelLabel = renderedPanel === "filters" ? "Browse and filter APIs" : "Site navigation";
 
   const nav = (
     <div className="catalogue-mobile-nav" aria-hidden={false}>
@@ -207,43 +181,23 @@ export default function MobileBottomNav() {
           role="presentation"
         >
           <button type="button" className="catalogue-mobile-backdrop" aria-label="Close panel" onClick={closePanel} />
-          <div
-            className="catalogue-mobile-panel panel"
-            role="dialog"
-            aria-modal="true"
-            aria-label={panelLabel}
-          >
+          <div className="catalogue-mobile-panel panel" role="dialog" aria-modal="true" aria-label="Site navigation">
             <div className="catalogue-mobile-panel-head">
-              <h2 className="catalogue-mobile-panel-title">{panelTitle}</h2>
+              <h2 className="catalogue-mobile-panel-title">Menu</h2>
               <button type="button" className="catalogue-mobile-close" onClick={closePanel}>
                 Done
               </button>
             </div>
 
             <div className="catalogue-mobile-panel-body">
-              {renderedPanel === "filters" && catalogue ? (
-                <CategorySidebar
-                  className="catalogue-sidebar catalogue-sidebar--sheet"
-                  facets={catalogue.facets}
-                  total={catalogue.total}
-                  filteredTotal={catalogue.filteredTotal}
-                  filters={catalogue.filters}
-                  onFilterChange={(key, value) => {
-                    catalogue.onFilterChange(key, value);
-                    if (key === "category") closePanel();
-                  }}
-                  catalogCategories={catalogue.catalogCategories}
-                />
-              ) : (
-                <SiteNavPanel onNavigate={closePanel} />
-              )}
+              <SiteNavPanel onNavigate={closePanel} />
             </div>
           </div>
         </div>
       )}
 
       <nav
-        className={`catalogue-mobile-bar ${searchExpanded ? "catalogue-mobile-bar--search-open" : ""}`}
+        className={`catalogue-mobile-bar catalogue-mobile-bar--two-up ${searchExpanded ? "catalogue-mobile-bar--search-open" : ""}`}
         aria-label="Mobile navigation"
       >
         <button
@@ -311,22 +265,6 @@ export default function MobileBottomNav() {
             </form>
           )}
         </div>
-
-        <button
-          type="button"
-          className={`catalogue-mobile-bar-btn catalogue-mobile-bar-btn-side ${openPanel === "filters" ? "catalogue-mobile-bar-btn-active" : ""}`}
-          aria-expanded={openPanel === "filters"}
-          aria-label="Browse categories and filters"
-          onClick={() => openCataloguePanel("filters")}
-          tabIndex={searchExpanded ? -1 : 0}
-        >
-          <span className="catalogue-mobile-bar-icon">
-            <DockIcon name="browse" />
-          </span>
-          {activeFilterCount > 0 && (
-            <span className="catalogue-mobile-bar-badge">{activeFilterCount}</span>
-          )}
-        </button>
       </nav>
     </div>
   );

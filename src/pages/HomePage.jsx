@@ -1,33 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { fetchCatalog, fetchSearch, fetchSuggest } from "../lib/api.js";
+import { fetchSearch, fetchSuggest } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
-import CategorySidebar from "../components/CategorySidebar.jsx";
 import { IntentResults } from "../components/IntentSuggest.jsx";
 import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 export default function HomePage() {
   const { setCatalogue } = useCatalogueNav();
-  const location = useLocation();
-  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [suggestion, setSuggestion] = useState(null);
   const [suggesting, setSuggesting] = useState(false);
-  const [category, setCategory] = useState("");
-  const [auth, setAuth] = useState("");
-  const [pricing, setPricing] = useState("");
-  const [tier, setTier] = useState("");
   const [data, setData] = useState(null);
-  const [catalog, setCatalog] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCatalog()
-      .then((res) => setCatalog(res.categories))
-      .catch(console.error);
-  }, []);
 
   const clearIntent = useCallback(() => {
     setSubmittedQuery("");
@@ -36,24 +21,9 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (!location.state?.category) return;
-    setCategory(location.state.category);
-    clearIntent();
-    setQuery("");
-    navigate(location.pathname, { replace: true, state: null });
-  }, [location.state?.category, location.pathname, navigate, clearIntent]);
-
-  useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    fetchSearch({
-      q: "",
-      category,
-      auth,
-      pricing,
-      tier,
-      limit: 200,
-    })
+    fetchSearch({ q: "", limit: 200 })
       .then((res) => {
         if (!cancelled) setData(res);
       })
@@ -64,7 +34,7 @@ export default function HomePage() {
     return () => {
       cancelled = true;
     };
-  }, [category, auth, pricing, tier]);
+  }, []);
 
   const submitIntent = useCallback(() => {
     const q = query.trim();
@@ -94,17 +64,6 @@ export default function HomePage() {
   const showingIntent = Boolean(submittedQuery.trim());
   const draftChanged = showingIntent && query.trim() !== submittedQuery.trim();
 
-  const setFilter = (key, value) => {
-    if (key === "category") setCategory(value);
-    if (key === "auth") setAuth(value);
-    if (key === "pricing") setPricing(value);
-    if (key === "tier") setTier(value);
-    if (value) {
-      clearIntent();
-      setQuery("");
-    }
-  };
-
   useEffect(() => {
     setCatalogue({
       query,
@@ -112,28 +71,9 @@ export default function HomePage() {
       onIntentSubmit: submitIntent,
       intentSubmitting: suggesting,
       intentActive: showingIntent,
-      facets: data?.facets,
-      total: data?.catalogueTotal ?? data?.total,
-      filteredTotal: showingIntent ? suggestion?.total : data?.total,
-      filters: { category, auth, pricing, tier },
-      onFilterChange: setFilter,
-      catalogCategories: catalog,
     });
     return () => setCatalogue(null);
-  }, [
-    query,
-    category,
-    auth,
-    pricing,
-    tier,
-    data,
-    catalog,
-    suggestion,
-    showingIntent,
-    suggesting,
-    submitIntent,
-    setCatalogue,
-  ]);
+  }, [query, showingIntent, suggesting, submitIntent, setCatalogue]);
 
   return (
     <div className="container-main container-main--catalogue pt-6">
@@ -162,16 +102,6 @@ export default function HomePage() {
       </section>
 
       <div className="catalogue-layout">
-        <CategorySidebar
-          className="catalogue-sidebar-desktop"
-          facets={data?.facets}
-          total={data?.catalogueTotal ?? data?.total}
-          filteredTotal={showingIntent ? suggestion?.total : data?.total}
-          filters={{ category, auth, pricing, tier }}
-          onFilterChange={setFilter}
-          catalogCategories={catalog}
-        />
-
         <div className="catalogue-main">
           <section className="catalogue-search-desktop mb-6">
             <form

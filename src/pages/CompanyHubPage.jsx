@@ -37,9 +37,7 @@ function EndpointDetail({ api, hub }) {
           Catalogue
         </Link>
         <span className="service-breadcrumb-sep">/</span>
-        <Link to="/" state={{ category: hub.category.name }} className="service-breadcrumb-link">
-          {categoryLabel(hub.category.name)}
-        </Link>
+        <span className="service-breadcrumb-link">{categoryLabel(hub.category.name)}</span>
         <span className="service-breadcrumb-sep">/</span>
         <Link to={`/browse/${hub.category.slug}/${hub.company.slug}`} className="service-breadcrumb-link">
           {hub.company.name}

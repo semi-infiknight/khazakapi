@@ -1882,10 +1882,7 @@ nav a:hover {
 
 /* Catalogue layout — Khazak theme */
 .catalogue-layout {
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  gap: 1.25rem;
-  align-items: start;
+  display: block;
 }
 
 .catalogue-main {
@@ -2036,12 +2033,20 @@ nav a:hover {
     padding 320ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
+.catalogue-mobile-bar--two-up {
+  grid-template-columns: 3.25rem 3.25rem;
+}
+
 .catalogue-mobile-bar--search-open {
   width: min(calc(100vw - 1.25rem), 24rem);
   max-width: min(calc(100vw - 1.25rem), 24rem);
   grid-template-columns: 0 1fr 0;
   gap: 0;
   padding-inline: 0.35rem;
+}
+
+.catalogue-mobile-bar--two-up.catalogue-mobile-bar--search-open {
+  grid-template-columns: 0 1fr;
 }
 
 .catalogue-mobile-bar-btn-side {
@@ -2505,11 +2510,6 @@ body.catalogue-mobile-sheet-open {
     );
   }
 
-  .catalogue-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .catalogue-sidebar-desktop,
   .catalogue-search-desktop {
     display: none;
   }

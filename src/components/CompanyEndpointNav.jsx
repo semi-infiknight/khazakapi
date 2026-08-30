@@ -1,7 +1,5 @@
 import { useMemo, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { categoryLabel } from "../lib/categoryStyle.js";
-
 function GroupSection({ group, browsePath, query, defaultOpen }) {
   const [open, setOpen] = useState(defaultOpen);
   const endpoints = useMemo(() => {
@@ -70,9 +68,6 @@ export default function CompanyEndpointNav({ hub, endpointQuery = "" }) {
       <div className="service-nav-header">
         <Link to="/" className="service-nav-back">
           ← Catalogue
-        </Link>
-        <Link to="/" state={{ category: hub.category.name }} className="service-nav-back mt-1 inline-block">
-          ← {categoryLabel(hub.category.name)}
         </Link>
         <h1 className="service-nav-title">{hub.company.name}</h1>
         <p className="service-nav-meta">
