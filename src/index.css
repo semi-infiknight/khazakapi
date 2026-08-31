@@ -61,24 +61,6 @@
   );
 }
 
-:root[data-theme="light"] {
-  color-scheme: light;
-  --bg: #f6f1ea;
-  --surface: #ffffff;
-  --surface-alt: #f0ebe4;
-  --text: #1a1420;
-  --text-soft: #5b4f5a;
-  --text-mute: #857785;
-  --line: rgba(20, 10, 24, 0.13);
-  --black: #ffffff;
-  --accent: #5b6470;
-  --on-accent: #ffffff;
-  --logo-ink: #1a1420;
-  --logo-shadow: rgba(0, 0, 0, 0.12);
-  --fluid-opacity: 0.2;
-  --card-bg: linear-gradient(180deg, #ffffff 0%, #f6f1ea 100%);
-}
-
 html,
 body,
 #root {
@@ -2998,23 +2980,6 @@ nav a:hover {
 .json-empty {
   color: var(--text-mute);
   font-style: italic;
-}
-
-:root[data-theme="light"] .json-key {
-  color: #0451a5;
-}
-
-:root[data-theme="light"] .json-str {
-  color: #a31515;
-}
-
-:root[data-theme="light"] .json-num {
-  color: #098658;
-}
-
-:root[data-theme="light"] .json-bool,
-:root[data-theme="light"] .json-null {
-  color: #0000ff;
 }
 
 .http-html-preview {

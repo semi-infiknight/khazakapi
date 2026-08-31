@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
-import { useTheme } from "../hooks/useTheme.js";
 
 export default function SiteNavPanel({ onNavigate }) {
-  const { theme, toggle } = useTheme();
   const close = onNavigate || (() => {});
 
   return (
@@ -16,9 +14,6 @@ export default function SiteNavPanel({ onNavigate }) {
       <Link to="/keys" className="site-nav-panel-link" onClick={close}>
         Keys
       </Link>
-      <button type="button" className="site-nav-panel-link site-nav-panel-link-btn" onClick={toggle}>
-        Theme: {theme === "dark" ? "Light" : "Dark"}
-      </button>
     </nav>
   );
 }
