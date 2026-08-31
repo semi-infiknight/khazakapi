@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import FeatureApiCard from "./FeatureApiCard.jsx";
 import PostmanFlowNode from "./PostmanFlowNode.jsx";
 import { useFlowEdgePaths } from "./useFlowEdgePaths.js";
+import { formatProductLabel } from "./intentShared.js";
 import { useMobileLayout } from "../../hooks/useMediaQuery.js";
 
 function FlowSvgEdges({ paths }) {
@@ -61,6 +62,7 @@ export default function IntentFlowsView({ suggestion, blocks }) {
   const paths = useFlowEdgePaths(stageRef, edgePairs, [blocks.length]);
 
   const apiCount = blocks.reduce((n, b) => n + b.apis.length, 0);
+  const productLabel = formatProductLabel(suggestion?.query);
 
   return (
     <div className="intent-flows">
@@ -79,13 +81,10 @@ export default function IntentFlowsView({ suggestion, blocks }) {
             <PostmanFlowNode
               nodeRef={startRef}
               type="start"
-              title="Your product intent"
-              subtitle="Entry point"
+              title={productLabel}
+              subtitle="Product"
               fields={[
-                { label: "Intent", value: suggestion.query },
-                suggestion.summary
-                  ? { label: "Summary", value: suggestion.summary }
-                  : null,
+                suggestion.summary ? { label: "Summary", value: suggestion.summary } : null,
               ].filter(Boolean)}
               showFailPort={false}
             />

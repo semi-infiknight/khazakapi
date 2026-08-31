@@ -3,6 +3,34 @@ export function shortApiLabel(title = "") {
   return base.length > 26 ? `${base.slice(0, 24)}…` : base || "API";
 }
 
+const PRODUCT_PROMPT_PREFIXES = [
+  /^i\s+(?:want|would like|need)\s+to\s+(?:build|make|create|launch)\s+(?:a\s+|an\s+|my\s+)?/i,
+  /^i(?:'m|\s+am)\s+(?:building|making|creating|launching)\s+(?:a\s+|an\s+|my\s+)?/i,
+  /^(?:help me\s+)?(?:build|make|create|launch)\s+(?:a\s+|an\s+|my\s+)?/i,
+  /^(?:a\s+|an\s+)\s*/i,
+];
+
+const PRODUCT_NOUN = /\b(app|application|platform|portal|dashboard|marketplace|store|service|product|tool|bot|site|website)\b/i;
+
+/** Turn a free-text intent prompt into a readable product name for flow UIs. */
+export function formatProductLabel(query = "") {
+  let text = String(query || "").trim();
+  if (!text) return "Your product";
+
+  for (const pattern of PRODUCT_PROMPT_PREFIXES) {
+    text = text.replace(pattern, "");
+  }
+
+  text = text.replace(/^["'`]|["'`]$/g, "").replace(/[.!?…]+$/, "").trim();
+  if (!text) return "Your product";
+
+  if (!PRODUCT_NOUN.test(text)) {
+    text = `${text} app`;
+  }
+
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+}
+
 export function mermaidSafeId(value) {
   const id = String(value || "n")
     .replace(/[^a-zA-Z0-9]+/g, "_")
@@ -29,7 +57,7 @@ export function buildStackMermaid(suggestion, { direction = "LR" } = {}) {
   const flow = direction === "TB" ? "flowchart TB" : "flowchart LR";
   const lines = [
     flow,
-    '  App["Your product"]',
+    `  App["${escapeMermaidLabel(formatProductLabel(suggestion?.query))}"]`,
     "  classDef app fill:#1a1030,stroke:#9c88fa,color:#f4f0ff,stroke-width:1.5px",
     "  classDef layer fill:#12101c,stroke:#5b4d8a,color:#e8e4f5,stroke-width:1px",
     "  classDef api fill:#0d1520,stroke:#3d5a80,color:#dce8f5,stroke-width:1px",

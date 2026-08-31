@@ -1,6 +1,6 @@
 import FeatureApiCard from "./FeatureApiCard.jsx";
 import MermaidDiagram from "./MermaidDiagram.jsx";
-import { buildStackMermaid } from "./intentShared.js";
+import { buildStackMermaid, formatProductLabel } from "./intentShared.js";
 import { useMobileLayout } from "../../hooks/useMediaQuery.js";
 
 function FeatureStepTitle({ block }) {
@@ -37,6 +37,7 @@ function FeatureStepMeta({ block }) {
 export default function IntentTimelineView({ suggestion, blocks }) {
   const isMobile = useMobileLayout();
   const chart = buildStackMermaid(suggestion, { direction: isMobile ? "TB" : "LR" });
+  const productLabel = formatProductLabel(suggestion?.query);
 
   return (
     <>
@@ -51,8 +52,7 @@ export default function IntentTimelineView({ suggestion, blocks }) {
             <span className="intent-timeline-line" />
           </div>
           <div className="intent-timeline-panel">
-            <p className="intent-timeline-kicker">Your product</p>
-            <p className="intent-timeline-query">“{suggestion.query}”</p>
+            <p className="intent-timeline-kicker">{productLabel}</p>
             {suggestion.summary ? <p className="intent-timeline-summary">{suggestion.summary}</p> : null}
           </div>
         </li>

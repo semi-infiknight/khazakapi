@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import FeatureApiCard from "./FeatureApiCard.jsx";
+import { formatProductLabel } from "./intentShared.js";
 
 function ZapierConnector() {
   return (
@@ -96,6 +97,7 @@ function PathColumn({ pathLabel, block, stepBase, activeStep, onSelect }) {
 
 export default function IntentZapierView({ suggestion, blocks }) {
   const [activeStep, setActiveStep] = useState(1);
+  const productLabel = formatProductLabel(suggestion?.query);
   const pathLabels = useMemo(
     () => blocks.map((_, i) => String.fromCharCode(65 + i)),
     [blocks],
@@ -115,9 +117,8 @@ export default function IntentZapierView({ suggestion, blocks }) {
         <div className="intent-zapier-trunk">
           <ZapierStepCard
             stepNumber={1}
-            title="Your product"
+            title={productLabel}
             kind="trigger"
-            meta={suggestion.query}
             active={activeStep === 1}
             onSelect={setActiveStep}
           />

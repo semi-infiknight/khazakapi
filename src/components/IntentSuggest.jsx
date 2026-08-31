@@ -6,11 +6,12 @@ import IntentZapierView from "./intent/IntentZapierView.jsx";
 import {
   buildStackMermaid,
   featureBlocks,
+  formatProductLabel,
   readStoredIntentView,
   INTENT_VIEW_STORAGE_KEY,
 } from "./intent/intentShared.js";
 
-export { buildStackMermaid, featureBlocks };
+export { buildStackMermaid, featureBlocks, formatProductLabel };
 
 export function IntentResults({ suggestion }) {
   const [view, setView] = useState(readStoredIntentView);
