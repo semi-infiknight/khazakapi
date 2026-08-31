@@ -10,6 +10,8 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "vite",
     "dev:server": "node --watch server/index.js",
+    "dev:reset": "bash scripts/dev-reset.sh",
+    "dev:verify": "bash scripts/dev-verify.sh",
     "build": "vite build",
     "embed:build": "node scripts/build-api-embeddings.mjs",
     "cap:build": "node scripts/build-api-capability-matrix.mjs",
