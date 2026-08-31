@@ -114,7 +114,6 @@ export default function HomePage() {
       .finally(() => setSuggesting(false));
   }, [query, submittedQuery, suggestion, suggesting, clearIntent]);
 
-  const stats = meta?.facets;
   const showingIntent = Boolean(submittedQuery.trim());
   const draftChanged = showingIntent && query.trim() !== submittedQuery.trim();
   const hasMore = Boolean(meta?.next_offset);
@@ -160,25 +159,6 @@ export default function HomePage() {
         <div className="hero-arch-stack">
           <KhazakArchFigure />
           <KhazakLogoWall catalogueTotal={catalogueTotal} />
-        </div>
-      </section>
-
-      <section className="stats-metal-strip mb-8 grid grid-cols-2 lg:grid-cols-4">
-        <div className="stats-block flex-col items-start justify-center">
-          <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">APIs</span>
-          <span className="stats-big-number">{catalogueTotal}</span>
-        </div>
-        <div className="stats-block flex-col items-start justify-center">
-          <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">Free</span>
-          <span className="stats-big-number">{stats?.pricing?.free ?? "—"}</span>
-        </div>
-        <div className="stats-block flex-col items-start justify-center">
-          <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">No auth</span>
-          <span className="stats-big-number">{stats?.auth?.none ?? "—"}</span>
-        </div>
-        <div className="stats-block flex-col items-start justify-center">
-          <span className="font-mono text-[10px] uppercase tracking-widest opacity-70">Categories</span>
-          <span className="stats-big-number">{Object.keys(stats?.category || {}).length || "—"}</span>
         </div>
       </section>
 
