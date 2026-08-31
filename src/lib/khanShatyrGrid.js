@@ -47,12 +47,13 @@ export function buildSvgDataLayer(reducedMotion = false) {
 }
 
 /** Merge streak paths into the Khan Shatyr SVG source */
-export function buildInlineKhanShatyrSvg(svgRaw, reducedMotion = false) {
+export function buildInlineKhanShatyrSvg(svgRaw, reducedMotion = false, align = "right") {
   const dataLayer = buildSvgDataLayer(reducedMotion);
+  const preserveAspectRatio = align === "center" ? "xMidYMid meet" : "xMaxYMid meet";
 
   let svg = svgRaw.replace(
     "<svg ",
-    '<svg class="ks-inline-svg" preserveAspectRatio="xMaxYMid meet" ',
+    `<svg class="ks-inline-svg" preserveAspectRatio="${preserveAspectRatio}" `,
   );
 
   svg = svg.replace("<defs>", `<defs>${SVG_EXTRA_DEFS}`);

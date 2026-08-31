@@ -16,11 +16,11 @@ function useReducedMotion() {
   return reduced;
 }
 
-export default function KhanShatyrAnimated({ className = "" }) {
+export default function KhanShatyrAnimated({ className = "", align = "right" }) {
   const reducedMotion = useReducedMotion();
   const svgMarkup = useMemo(
-    () => buildInlineKhanShatyrSvg(khanShatyrRaw, reducedMotion),
-    [reducedMotion],
+    () => buildInlineKhanShatyrSvg(khanShatyrRaw, reducedMotion, align),
+    [reducedMotion, align],
   );
 
   return (

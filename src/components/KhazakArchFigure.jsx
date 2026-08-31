@@ -443,7 +443,7 @@ export default function KhazakArchFigure() {
         </div>
 
         <div className="kz-af-hub">
-          <KhanShatyrAnimated className="kz-af-hub-art" />
+          <KhanShatyrAnimated className="kz-af-hub-art" align="center" />
         </div>
 
         <div className="kz-af-fieldwrap">
