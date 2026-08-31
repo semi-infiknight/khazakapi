@@ -140,6 +140,9 @@ a {
   gap: 0;
   --kz-teal: 174 58% 28%;
   --kz-cyan: 174 72% 52%;
+  --kz-amber: 38 92% 58%;
+  --kz-green: 152 68% 48%;
+  --kz-red: 0 72% 58%;
   --kz-ink-dim: 210 12% 72%;
 }
 
@@ -602,10 +605,74 @@ a {
 
 /* Jentic-style moving logo wall */
 .kz-wall {
+  position: relative;
+  overflow: hidden;
   padding: 30px 0 84px;
 }
 
+.kz-river {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.22;
+  pointer-events: none;
+  overflow: hidden;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.35) 18%, rgb(0 0 0 / 0.55) 50%, rgb(0 0 0 / 0.35) 82%, transparent 100%),
+    linear-gradient(transparent 0%, black 12% 78%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.35) 18%, rgb(0 0 0 / 0.55) 50%, rgb(0 0 0 / 0.35) 82%, transparent 100%),
+    linear-gradient(transparent 0%, black 12% 78%, transparent 100%);
+  -webkit-mask-composite: source-in;
+}
+
+.kz-river-track {
+  animation: kz-river-flow 52s linear infinite;
+}
+
+@keyframes kz-river-flow {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.kz-river-line {
+  padding-left: clamp(0.5rem, 4vw, 2rem);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 2.35;
+  white-space: nowrap;
+  color: hsl(var(--kz-ink-dim) / 0.42);
+}
+
+.kz-river-a {
+  color: hsl(var(--kz-cyan) / 0.38);
+}
+
+.kz-river-ok {
+  color: hsl(var(--kz-green) / 0.42);
+}
+
+.kz-river-warn {
+  color: hsl(var(--kz-amber) / 0.4);
+}
+
+.kz-river-deny {
+  color: hsl(var(--kz-red) / 0.38);
+}
+
+.kz-river-dim {
+  color: hsl(var(--kz-ink-dim) / 0.28);
+}
+
 .kz-wall-rows {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -659,6 +726,8 @@ a {
 }
 
 .kz-wall-caption {
+  position: relative;
+  z-index: 1;
   margin-top: 34px;
   text-align: center;
 }
@@ -680,7 +749,8 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kz-wall-track {
+  .kz-wall-track,
+  .kz-river-track {
     animation: none;
   }
 }

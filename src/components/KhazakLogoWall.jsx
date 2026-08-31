@@ -1,3 +1,4 @@
+import KhazakLogRiver from "./KhazakLogRiver.jsx";
 import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
 
 const ROW_CONFIG = [
@@ -38,6 +39,8 @@ export default function KhazakLogoWall({ catalogueTotal = KZ_ARCH_TILES.length }
 
   return (
     <section className="kz-wall" aria-label="Integrated Kazakhstan API providers">
+      <KhazakLogRiver />
+
       <div className="kz-wall-rows" aria-hidden="true">
         {rows.map((rowTiles, index) => (
           <LogoTrack
