@@ -135,6 +135,14 @@ a {
   gap: 1.25rem;
 }
 
+.hero-arch-stack {
+  display: grid;
+  gap: 0;
+  --kz-teal: 174 58% 28%;
+  --kz-cyan: 174 72% 52%;
+  --kz-ink-dim: 210 12% 72%;
+}
+
 .hero-arch-title {
   max-width: 16ch;
   margin: 0;
@@ -143,12 +151,9 @@ a {
 
 /* Jentic-style agent → hub → API arch animation */
 .kz-af {
-  --kz-teal: 174 58% 28%;
-  --kz-cyan: 174 72% 52%;
   --kz-amber: 38 92% 58%;
   --kz-green: 152 68% 48%;
   --kz-red: 0 72% 58%;
-  --kz-ink-dim: 210 12% 72%;
   position: relative;
   overflow: hidden;
   border: 1px solid hsl(var(--kz-teal) / 0.3);
@@ -592,6 +597,91 @@ a {
 
   .kz-af .kz-af-line.kz-af-aged {
     opacity: 0.34;
+  }
+}
+
+/* Jentic-style moving logo wall */
+.kz-wall {
+  padding: 30px 0 84px;
+}
+
+.kz-wall-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 12% 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12% 88%, transparent);
+}
+
+.kz-wall-row {
+  display: flex;
+  overflow: hidden;
+}
+
+.kz-wall-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  padding-right: 14px;
+  animation: kz-wall-flow linear infinite;
+}
+
+.kz-wall-track-rev {
+  animation-direction: reverse;
+}
+
+@keyframes kz-wall-flow {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.kz-wall-tile {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid hsl(var(--kz-teal) / 0.14);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface-alt) 85%, transparent);
+}
+
+.kz-wall-tile img {
+  width: 26px;
+  height: 26px;
+  opacity: 0.85;
+}
+
+.kz-wall-caption {
+  margin-top: 34px;
+  text-align: center;
+}
+
+.kz-wall-big {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 26px;
+  color: var(--text);
+}
+
+.kz-wall-small {
+  display: block;
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 20px;
+  color: hsl(var(--kz-ink-dim));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kz-wall-track {
+    animation: none;
   }
 }
 
@@ -2281,6 +2371,10 @@ nav a:hover {
   .hero-banner {
     max-height: none;
     min-height: 160px;
+  }
+
+  .hero-arch-title {
+    font-size: 2rem;
   }
 
   .hero-banner-title {
