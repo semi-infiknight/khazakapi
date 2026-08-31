@@ -3,7 +3,6 @@ import { fetchSearch, fetchSuggest } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import { IntentResults } from "../components/IntentSuggest.jsx";
 import KhazakArchFigure from "../components/KhazakArchFigure.jsx";
-import KhazakLogoWall from "../components/KhazakLogoWall.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 const PAGE_SIZE = 24;
@@ -157,8 +156,7 @@ export default function HomePage() {
       <section className="hero-arch mb-8" aria-label="Khazak API">
         <h1 className="hero-title hero-arch-title">every Kazakhstan API you need</h1>
         <div className="hero-arch-stack">
-          <KhazakArchFigure />
-          <KhazakLogoWall catalogueTotal={catalogueTotal} />
+          <KhazakArchFigure catalogueTotal={catalogueTotal} />
         </div>
       </section>
 

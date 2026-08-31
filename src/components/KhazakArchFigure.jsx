@@ -117,7 +117,7 @@ function spireChipPoint(spire) {
   };
 }
 
-export default function KhazakArchFigure() {
+export default function KhazakArchFigure({ catalogueTotal = 688 }) {
   const rootRef = useRef(null);
   const aliveRef = useRef(true);
 
@@ -177,7 +177,7 @@ export default function KhazakArchFigure() {
 
     const prepareTarget = (call) => {
       releasePausedRow();
-      const rowIndex = call.row ?? rowIndexForSlug(KZ_ARCH_TILES, call.slug);
+      const rowIndex = rowIndexForSlug(KZ_ARCH_TILES, call.slug);
       const rowEl = wallRows[rowIndex];
       const track = wallTracks[rowIndex];
       if (!rowEl || !track) return;
@@ -413,7 +413,7 @@ export default function KhazakArchFigure() {
         </svg>
 
         <span className="kz-af-cap kz-af-cap-agents">any agent</span>
-        <span className="kz-af-cap kz-af-cap-apis">Kazakhstan APIs · public or private</span>
+        <span className="kz-af-cap kz-af-cap-apis">{catalogueTotal} Kazakhstan APIs in the catalogue.</span>
 
         <div className="kz-af-agents">
           {KZ_ARCH_AGENTS.map((mask) => (

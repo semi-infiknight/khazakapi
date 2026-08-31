@@ -1,14 +1,19 @@
 import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
-import { buildArchWallRows, KZ_WALL_ROW_CONFIG } from "../lib/kzArchWall.js";
+import {
+  buildArchWallRows,
+  buildTrackLoop,
+  KZ_ARCH_ROW_COUNT,
+  KZ_WALL_ROW_CONFIG,
+} from "../lib/kzArchWall.js";
 
 export default function KhazakArchWallRows() {
-  const rows = buildArchWallRows(KZ_ARCH_TILES);
+  const rows = buildArchWallRows(KZ_ARCH_TILES, KZ_ARCH_ROW_COUNT);
 
   return (
     <div className="kz-af-wall-rows">
       {rows.map((rowTiles, index) => {
         const cfg = KZ_WALL_ROW_CONFIG[index];
-        const loop = [...rowTiles, ...rowTiles];
+        const loop = buildTrackLoop(rowTiles);
 
         return (
           <div key={index} className="kz-af-wall-row" data-row={index}>
@@ -23,7 +28,7 @@ export default function KhazakArchWallRows() {
                   data-slug={tile.slug}
                   title={tile.vendor}
                 >
-                  <img src={tile.src} alt="" width={22} height={22} loading="lazy" decoding="async" />
+                  <img src={tile.src} alt="" width={24} height={24} loading="lazy" decoding="async" />
                 </span>
               ))}
             </div>
