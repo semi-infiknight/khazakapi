@@ -116,7 +116,9 @@ export default function HomePage() {
   const showingIntent = Boolean(submittedQuery.trim());
   const draftChanged = showingIntent && query.trim() !== submittedQuery.trim();
   const hasMore = Boolean(meta?.next_offset);
-  const catalogueTotal = meta?.catalogueTotal ?? meta?.total ?? apis.length;
+  // Hero caption: KZ-filtered baseline only. Legacy servers returned unfiltered total (1407).
+  const catalogueTotal = meta?.catalogueTotal ?? 688;
+  const resultsTotal = meta?.total ?? catalogueTotal;
 
   useEffect(() => {
     setCatalogue({
@@ -215,7 +217,7 @@ export default function HomePage() {
                 ) : hasMore ? (
                   <>
                     <p className="catalogue-load-status">
-                      Showing {apis.length} of {catalogueTotal} — keep scrolling or load more
+                      Showing {apis.length} of {resultsTotal} — keep scrolling or load more
                     </p>
                     <button type="button" className="catalogue-load-btn" onClick={loadMoreIfNeeded}>
                       Load more APIs
@@ -223,7 +225,7 @@ export default function HomePage() {
                   </>
                 ) : (
                   <p className="catalogue-load-status catalogue-load-status--done">
-                    All {catalogueTotal} APIs loaded
+                    All {resultsTotal} APIs loaded
                   </p>
                 )}
               </div>
