@@ -11,23 +11,17 @@ export default function Footer() {
           </p>
         </div>
         <div className="flex flex-col gap-1">
-          <a href="/api-docs.html" className="foot-link">
-            API reference
-          </a>
-          <a href="/postman.json" className="foot-link">
-            Postman collection
-          </a>
-          <a href="/docs.html" className="foot-link">
-            Docs
-          </a>
-          <a href="/api/catalogue" className="foot-link">
-            /api/catalogue
-          </a>
           <Link to="/mcp" className="foot-link">
             MCP server
           </Link>
-          <a href="/api/mcp" className="foot-link">
-            /api/mcp
+          <Link to="/keys" className="foot-link">
+            API keys
+          </Link>
+          <a href="/postman.json" className="foot-link">
+            Postman collection
+          </a>
+          <a href="/api/catalogue" className="foot-link">
+            /api/catalogue
           </a>
         </div>
       </div>

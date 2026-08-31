@@ -11,23 +11,11 @@ export default function SiteNavPanel({ onNavigate }) {
         Directory
       </Link>
       <Link to="/mcp" className="site-nav-panel-link" onClick={close}>
-        MCP server
+        MCP
       </Link>
-      <Link to="/setup/data-egov-key" className="site-nav-panel-link" onClick={close}>
-        data.egov key setup
+      <Link to="/keys" className="site-nav-panel-link" onClick={close}>
+        Keys
       </Link>
-      <a href="/api-docs.html" className="site-nav-panel-link" onClick={close}>
-        API reference
-      </a>
-      <a href="/docs.html" className="site-nav-panel-link" onClick={close}>
-        Docs
-      </a>
-      <a href="/api/catalogue" className="site-nav-panel-link" onClick={close}>
-        REST catalogue
-      </a>
-      <a href="/api/mcp" className="site-nav-panel-link" onClick={close}>
-        MCP JSON (/api/mcp)
-      </a>
       <button type="button" className="site-nav-panel-link site-nav-panel-link-btn" onClick={toggle}>
         Theme: {theme === "dark" ? "Light" : "Dark"}
       </button>

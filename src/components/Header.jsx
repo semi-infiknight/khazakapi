@@ -17,17 +17,11 @@ export default function Header() {
             {theme === "dark" ? "Light" : "Dark"}
           </button>
           <Link to="/mcp" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
-            MCP server
+            MCP
           </Link>
-          <Link to="/setup/data-egov-key" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
-            data.egov key
+          <Link to="/keys" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
+            Keys
           </Link>
-          <a href="/api-docs.html" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
-            Reference
-          </a>
-          <a href="/docs.html" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
-            Docs
-          </a>
         </div>
       </div>
     </header>

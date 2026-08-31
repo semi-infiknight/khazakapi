@@ -4,9 +4,7 @@ import { fetchApi, fetchService } from "../lib/api.js";
 import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTryPanel from "../components/ApiTryPanel.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
-import EgovKeySetup from "../components/EgovKeySetup.jsx";
-import ServiceEndpointNav from "../components/ServiceEndpointNav.jsx";
-import { isDataEgovApi } from "../lib/providerKeys.js";
+import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
 
 function ServiceOverview({ service }) {
   const navigate = useNavigate();
@@ -75,7 +73,7 @@ function EndpointDetail({ api, service }) {
         <p className="mt-3 text-sm text-[var(--text-mute)]">{api.trust?.caveat}</p>
       </div>
 
-      {isDataEgovApi(api) && <EgovKeySetup compact />}
+      <ApiKeyBanner api={api} />
 
       <ApiTryPanel api={api} />
 

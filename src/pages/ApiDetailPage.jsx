@@ -5,8 +5,7 @@ import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTryPanel from "../components/ApiTryPanel.jsx";
 import ApiDocAssistant from "../components/ApiDocAssistant.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
-import EgovKeySetup from "../components/EgovKeySetup.jsx";
-import { isDataEgovApi } from "../lib/providerKeys.js";
+import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
 
 export default function ApiDetailPage() {
   const { id } = useParams();
@@ -99,7 +98,7 @@ export default function ApiDetailPage() {
         )}
       </div>
 
-      {isDataEgovApi(api) && <EgovKeySetup compact />}
+      <ApiKeyBanner api={api} />
 
       <ApiDocAssistant api={api} />
 

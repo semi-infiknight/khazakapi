@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { tryApi } from "../lib/api.js";
-import { getProviderKey, isDataEgovApi } from "../lib/providerKeys.js";
+import { getProviderIdForApi, getProviderKey } from "../lib/providerKeys.js";
 import ResponseViewer from "./ResponseViewer.jsx";
 
 function TabBar({ tabs, active, onChange }) {
@@ -93,21 +93,23 @@ export default function ApiTryPanel({ api }) {
   const [result, setResult] = useState(null);
   const [requestTab, setRequestTab] = useState("params");
 
+  const providerId = useMemo(() => getProviderIdForApi(api), [api]);
+
   useEffect(() => {
     setParams(spec?.defaults?.params || {});
     setHeaders(spec?.defaults?.headers || { Accept: "application/json, text/plain, */*" });
-    setApiKey(isDataEgovApi(api) ? getProviderKey("data.egov.kz") : "");
+    setApiKey(providerId ? getProviderKey(providerId) : "");
     setResult(null);
     setError(null);
     setRequestTab("params");
-  }, [api.id, spec, api]);
+  }, [api.id, spec, api, providerId]);
 
   useEffect(() => {
-    if (!isDataEgovApi(api)) return;
-    const syncKey = () => setApiKey(getProviderKey("data.egov.kz"));
+    if (!providerId) return;
+    const syncKey = () => setApiKey(getProviderKey(providerId));
     window.addEventListener("khazak:provider-key", syncKey);
     return () => window.removeEventListener("khazak:provider-key", syncKey);
-  }, [api]);
+  }, [providerId]);
 
   const showKeyField = useMemo(() => {
     if (!api.endpoint) return false;
@@ -149,7 +151,7 @@ export default function ApiTryPanel({ api }) {
   const reset = () => {
     setParams(defaults);
     setHeaders(defaultHeaders);
-    setApiKey(isDataEgovApi(api) ? getProviderKey("data.egov.kz") : "");
+    setApiKey(providerId ? getProviderKey(providerId) : "");
     setResult(null);
     setError(null);
   };
@@ -213,13 +215,13 @@ export default function ApiTryPanel({ api }) {
               <span className="font-mono text-[var(--text)]">{spec.auth.label}</span>
               {spec.auth.placement && <span className="text-[var(--text-mute)]"> · {spec.auth.placement}</span>}
             </p>
-            {isDataEgovApi(api) && !apiKey && (
+            {providerId && !apiKey && (
               <p className="http-auth-hint">
-                No saved data.egov.kz key —{" "}
-                <a href="/setup/data-egov-key" className="text-[var(--accent)] underline">
-                  set up your free key
+                No saved key for this provider —{" "}
+                <a href={`/keys?provider=${encodeURIComponent(providerId)}`} className="text-[var(--accent)] underline">
+                  add it in Keys
                 </a>{" "}
-                once to unlock all portal datasets.
+                once to auto-fill live testing.
               </p>
             )}
             <label className="http-field">
