@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import KhanShatyrAnimated from "./KhanShatyrAnimated.jsx";
 import KhazakArchWallRows from "./KhazakArchWallRows.jsx";
-import { KZ_ARCH_AGENTS, KZ_ARCH_ALLOWS, KZ_ARCH_DENIES } from "../data/kzArchCalls.js";
+import { KZ_ARCH_AGENTS, KZ_ARCH_ALLOWS } from "../data/kzArchCalls.js";
 import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
 import {
   alignTrackToSlug,
@@ -9,8 +9,6 @@ import {
   resumeRowTrack,
   rowIndexForSlug,
 } from "../lib/kzArchWall.js";
-
-const DENY_LABEL = "blocked";
 
 function schedule(queue, ms, fn, alive) {
   const id = setTimeout(() => {
@@ -149,7 +147,6 @@ export default function KhazakArchFigure() {
     const chipText = q(".kz-af-chip-t");
     const keyBadge = q(".kz-af-key");
     const retPill = q(".kz-af-ret");
-    const noPill = q(".kz-af-no");
     const slots = Array.from(root.querySelectorAll(".kz-af-slot"));
     const wallRows = Array.from(root.querySelectorAll(".kz-af-wall-row"));
     const wallTracks = Array.from(root.querySelectorAll(".kz-af-wall-track"));
@@ -250,13 +247,12 @@ export default function KhazakArchFigure() {
     };
 
     const resetVisual = () => {
-      [chip, retPill, noPill].forEach(hidePill);
+      [chip, retPill].forEach(hidePill);
       [beamA, beamB].forEach(hideBeam);
-      hub.classList.remove("kz-af-hot-a", "kz-af-hot-r", "kz-af-routing");
+      hub.classList.remove("kz-af-hot-a", "kz-af-routing");
       capAgents.classList.remove("kz-af-lit");
       capApis.classList.remove("kz-af-lit");
       keyBadge.classList.remove("kz-af-show");
-      chip.classList.remove("kz-af-bad");
       slots.forEach((slot) => slot.classList.remove("kz-af-calling"));
       root.querySelectorAll(".kz-af-tile").forEach((tile) => tile.classList.remove("kz-af-bloom"));
       releasePausedRow();
@@ -266,7 +262,6 @@ export default function KhazakArchFigure() {
     const runCycle = () => {
       cycling = true;
       const allow = KZ_ARCH_ALLOWS[cycleIndex % KZ_ARCH_ALLOWS.length];
-      const deny = KZ_ARCH_DENIES[cycleIndex % KZ_ARCH_DENIES.length];
       activeSlot = slots[cycleIndex % slots.length];
       cycleIndex += 1;
       measure();
@@ -274,14 +269,13 @@ export default function KhazakArchFigure() {
       const slotPoint = layout.slots[slots.indexOf(activeSlot)];
       const spirePoint = () => spireChipPoint(layout.spire);
 
-      const allowSteps = [
+      const steps = [
         [0, () => {
           activeSlot.classList.add("kz-af-calling");
           capAgents.classList.add("kz-af-lit");
         }],
         [520, () => {
           chipText.textContent = `${allow.method} ${allow.path}`;
-          chip.classList.remove("kz-af-bad");
           keyBadge.classList.remove("kz-af-show");
           snapPill(chip, slotPoint);
           chip.classList.add("kz-af-vis");
@@ -327,50 +321,10 @@ export default function KhazakArchFigure() {
           capAgents.classList.remove("kz-af-lit");
           capApis.classList.remove("kz-af-lit");
         }],
-        [1500, () => {
-          activeSlot.classList.add("kz-af-calling");
-          capAgents.classList.add("kz-af-lit");
-        }],
-        [520, () => {
-          chipText.textContent = `${deny.method} ${deny.path}`;
-          keyBadge.classList.remove("kz-af-show");
-          snapPill(chip, slotPoint);
-          chip.classList.add("kz-af-vis");
-        }],
-        [260, () => {
-          drawBeam(beamA, slotPoint, layout.hubIn, 900);
-          animatePill(chip, layout.hubIn, 900);
-          hub.classList.add("kz-af-routing");
-        }],
-        [940, () => {
-          hub.classList.add("kz-af-hot-r");
-          hub.classList.remove("kz-af-routing");
-          snapPill(chip, spirePoint(), true);
-          chip.classList.add("kz-af-bad");
-          setBeamTone(beamA, "kz-af-b-red");
-        }],
-        [560, () => {
-          hidePill(chip);
-          beamA.style.opacity = "0.45";
-        }],
-        [400, () => {
-          noPill.textContent = `${DENY_LABEL} · ${deny.rule}`;
-          const anchor = spirePoint();
-          snapPill(noPill, anchor, true);
-          noPill.classList.add("kz-af-vis");
-          animatePill(noPill, { x: anchor.x - 26, y: anchor.y }, 800, true);
-        }],
-        [820, () => {
-          hidePill(noPill);
-          hub.classList.remove("kz-af-hot-r");
-          hideBeam(beamA);
-          activeSlot.classList.remove("kz-af-calling");
-          capAgents.classList.remove("kz-af-lit");
-        }],
       ];
 
-      const { total } = runTimeline(allowSteps, alive);
-      schedule(timers, total + 300, () => {
+      const { total } = runTimeline(steps, alive);
+      schedule(timers, total + 1200, () => {
         if (visible) runCycle();
         else cycling = false;
       }, alive);
@@ -488,7 +442,6 @@ export default function KhazakArchFigure() {
           <span className="kz-af-key">key_████</span>
         </div>
         <div className="kz-af-pill kz-af-ret" />
-        <div className="kz-af-pill kz-af-no" />
       </div>
     </figure>
   );
