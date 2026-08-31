@@ -177,7 +177,7 @@ export default function KhazakArchFigure({ catalogueTotal = 688 }) {
 
     const prepareTarget = (call) => {
       releasePausedRow();
-      const rowIndex = call.row ?? rowIndexForSlug(KZ_ARCH_TILES, call.slug);
+      const rowIndex = rowIndexForSlug(KZ_ARCH_TILES, call.slug);
       const rowEl = wallRows[rowIndex];
       const track = wallTracks[rowIndex];
       if (!rowEl || !track) return;
