@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import FeatureApiCard from "./FeatureApiCard.jsx";
 import PostmanFlowNode from "./PostmanFlowNode.jsx";
 import { useFlowEdgePaths } from "./useFlowEdgePaths.js";
+import { useMobileLayout } from "../../hooks/useMediaQuery.js";
 
 function FlowSvgEdges({ paths }) {
   if (!paths.length) return null;
@@ -21,6 +22,7 @@ function FlowSvgEdges({ paths }) {
 }
 
 export default function IntentFlowsView({ suggestion, blocks }) {
+  const isMobile = useMobileLayout();
   const stageRef = useRef(null);
   const startRef = useRef(null);
   const featureRefs = useRef([]);
@@ -72,7 +74,7 @@ export default function IntentFlowsView({ suggestion, blocks }) {
       <div className="intent-flows-stage" ref={stageRef}>
         <FlowSvgEdges paths={paths} />
 
-        <div className="intent-flows-spine">
+        <div className={`intent-flows-spine${isMobile ? " intent-flows-spine--stacked" : ""}`}>
           <div className="intent-flows-col intent-flows-col--start">
             <PostmanFlowNode
               nodeRef={startRef}

@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from "react";
+import { MOBILE_LAYOUT_QUERY } from "../../hooks/useMediaQuery.js";
 
 function portPoint(nodeEl, root, port) {
   const portEl = nodeEl?.querySelector(`[data-port="${port}"]`);
@@ -30,6 +31,12 @@ function topCenter(el, root) {
   return { x: r.left - o.left + r.width / 2, y: r.top - o.top };
 }
 
+function bottomCenter(el, root) {
+  const r = el.getBoundingClientRect();
+  const o = root.getBoundingClientRect();
+  return { x: r.left - o.left + r.width / 2, y: r.bottom - o.top };
+}
+
 function bezierPath(from, to, bend = 0.45) {
   const dx = to.x - from.x;
   const c1x = from.x + dx * bend;
@@ -37,7 +44,18 @@ function bezierPath(from, to, bend = 0.45) {
   return `M ${from.x} ${from.y} C ${c1x} ${from.y}, ${c2x} ${to.y}, ${to.x} ${to.y}`;
 }
 
-function branchPath(from, to) {
+function verticalBezierPath(from, to, bend = 0.45) {
+  const dy = to.y - from.y;
+  const c1y = from.y + dy * bend;
+  const c2y = to.y - dy * bend;
+  return `M ${from.x} ${from.y} C ${from.x} ${c1y}, ${to.x} ${c2y}, ${to.x} ${to.y}`;
+}
+
+function branchPath(from, to, stacked) {
+  if (stacked) {
+    const midY = from.y + (to.y - from.y) * 0.35;
+    return `M ${from.x} ${from.y} C ${from.x} ${midY}, ${to.x} ${midY}, ${to.x} ${to.y}`;
+  }
   const midY = from.y + (to.y - from.y) * 0.35;
   return `M ${from.x} ${from.y} C ${from.x} ${midY}, ${to.x} ${midY}, ${to.x} ${to.y}`;
 }
@@ -50,6 +68,8 @@ export function useFlowEdgePaths(stageRef, pairs, deps = []) {
     if (!stage) return;
 
     const measure = () => {
+      const stacked = window.matchMedia(MOBILE_LAYOUT_QUERY).matches;
+
       const next = pairs
         .map(({ getFrom, getTo, kind = "spine", tone = "feature", fromPort }, index) => {
           const fromEl = getFrom?.();
@@ -61,13 +81,21 @@ export function useFlowEdgePaths(stageRef, pairs, deps = []) {
           if (kind === "branch") {
             from = portPoint(fromEl, stage, fromPort || "success");
             to = topCenter(toEl, stage);
+          } else if (stacked) {
+            from = bottomCenter(fromEl, stage);
+            to = topCenter(toEl, stage);
           } else {
             from = centerRight(fromEl, stage);
             to = centerLeft(toEl, stage);
           }
 
           return {
-            d: kind === "branch" ? branchPath(from, to) : bezierPath(from, to),
+            d:
+              kind === "branch"
+                ? branchPath(from, to, stacked)
+                : stacked
+                  ? verticalBezierPath(from, to)
+                  : bezierPath(from, to),
             tone,
             id: `edge-${index}`,
           };

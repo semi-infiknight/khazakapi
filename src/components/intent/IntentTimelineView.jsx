@@ -1,6 +1,7 @@
 import FeatureApiCard from "./FeatureApiCard.jsx";
 import MermaidDiagram from "./MermaidDiagram.jsx";
 import { buildStackMermaid } from "./intentShared.js";
+import { useMobileLayout } from "../../hooks/useMediaQuery.js";
 
 function FeatureStepTitle({ block }) {
   return (
@@ -34,7 +35,8 @@ function FeatureStepMeta({ block }) {
 }
 
 export default function IntentTimelineView({ suggestion, blocks }) {
-  const chart = buildStackMermaid(suggestion);
+  const isMobile = useMobileLayout();
+  const chart = buildStackMermaid(suggestion, { direction: isMobile ? "TB" : "LR" });
 
   return (
     <>

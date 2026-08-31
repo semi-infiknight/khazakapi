@@ -21,13 +21,14 @@ export function featureBlocks(suggestion) {
   return suggestion?.features?.length ? suggestion.features : suggestion?.intents || [];
 }
 
-/** Build a left-to-right stack flowchart from matched features. */
-export function buildStackMermaid(suggestion) {
+/** Build a stack flowchart from matched features (TB on mobile, LR on desktop). */
+export function buildStackMermaid(suggestion, { direction = "LR" } = {}) {
   const blocks = featureBlocks(suggestion);
   if (!blocks.length) return "";
 
+  const flow = direction === "TB" ? "flowchart TB" : "flowchart LR";
   const lines = [
-    "flowchart LR",
+    flow,
     '  App["Your product"]',
     "  classDef app fill:#1a1030,stroke:#9c88fa,color:#f4f0ff,stroke-width:1.5px",
     "  classDef layer fill:#12101c,stroke:#5b4d8a,color:#e8e4f5,stroke-width:1px",
