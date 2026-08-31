@@ -1452,6 +1452,204 @@ a {
   }
 }
 
+.integration-step--done .integration-step-dot {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  color: var(--accent);
+}
+
+.integration-step-thought--live {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-soft);
+}
+
+.agent-thought-cursor {
+  display: inline-block;
+  width: 0.55rem;
+  height: 1em;
+  margin-left: 0.1rem;
+  vertical-align: -0.08em;
+  background: var(--accent);
+  animation: agent-cursor-blink 1s step-end infinite;
+}
+
+@keyframes agent-cursor-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.intent-agent-loader-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.agent-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.18rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.agent-status-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 55%, transparent);
+  animation: agent-status-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes agent-status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.82);
+  }
+}
+
+.agent-submit-spinner {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.agent-submit-spinner-orbit,
+.agent-submit-spinner-core {
+  position: absolute;
+  border-radius: 999px;
+}
+
+.agent-submit-spinner-orbit {
+  inset: 0;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 18%, transparent);
+  border-top-color: var(--accent);
+  animation: agent-orbit-spin 0.85s linear infinite;
+}
+
+.agent-submit-spinner-core {
+  width: 0.28rem;
+  height: 0.28rem;
+  background: var(--accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 65%, transparent);
+}
+
+@keyframes agent-orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.catalogue-intent-submit--busy,
+.catalogue-mobile-search-go--busy {
+  animation: integration-pulse 1.2s ease-in-out infinite;
+}
+
+.catalogue-agent-loader {
+  display: grid;
+  gap: 1rem;
+  padding: 0.35rem 0 0.5rem;
+}
+
+.catalogue-agent-loader-head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.catalogue-agent-loader-title {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.catalogue-agent-loader-meta {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-soft);
+}
+
+.catalogue-agent-skeleton {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.catalogue-agent-skeleton-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .catalogue-agent-skeleton-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.catalogue-agent-skeleton-card {
+  height: 8.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+  background:
+    linear-gradient(
+      110deg,
+      color-mix(in srgb, var(--surface-alt) 88%, transparent) 8%,
+      color-mix(in srgb, var(--accent) 10%, var(--surface)) 18%,
+      color-mix(in srgb, var(--surface-alt) 88%, transparent) 33%
+    );
+  background-size: 220% 100%;
+  animation: agent-skeleton-shimmer 1.35s ease-in-out infinite;
+  animation-delay: calc(var(--sk-i, 0) * 90ms);
+}
+
+@keyframes agent-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .integration-step--active .integration-step-dot,
+  .agent-status-dot,
+  .agent-submit-spinner-orbit,
+  .catalogue-agent-skeleton-card,
+  .catalogue-intent-submit--busy,
+  .catalogue-mobile-search-go--busy {
+    animation: none;
+  }
+
+  .agent-thought-cursor {
+    opacity: 1;
+    animation: none;
+  }
+}
+
 .intent-prompt {
   padding: 0.95rem 0.85rem 1.1rem;
   border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
