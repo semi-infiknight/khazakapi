@@ -177,7 +177,7 @@ export default function KhazakArchFigure() {
 
     const prepareTarget = (call) => {
       releasePausedRow();
-      const rowIndex = call.row ?? rowIndexForSlug(KZ_ARCH_TILES, call.slug);
+      const rowIndex = rowIndexForSlug(KZ_ARCH_TILES, call.slug);
       const rowEl = wallRows[rowIndex];
       const track = wallTracks[rowIndex];
       if (!rowEl || !track) return;
@@ -231,7 +231,13 @@ export default function KhazakArchFigure() {
       });
 
       if (activeTile) {
-        layout.target = tileCenter(activeTile, stage);
+        const raw = tileCenter(activeTile, stage);
+        const padX = Math.max(24, stageRect.width * 0.04);
+        const padY = Math.max(18, stageRect.height * 0.04);
+        layout.target = {
+          x: Math.min(Math.max(raw.x, padX), stageRect.width - padX),
+          y: Math.min(Math.max(raw.y, padY), stageRect.height - padY),
+        };
       }
 
       fan.setAttribute(

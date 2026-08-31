@@ -3,8 +3,7 @@ export const KZ_ARCH_AGENTS = ["/agents/cursor.svg", "/agents/claude.svg", "/age
 export const KZ_ARCH_ALLOWS = [
   {
     slug: "kaspi-kz",
-    row: 0,
-    align: 0.84,
+    align: 0.66,
     agent: "Cursor",
     method: "POST",
     path: "/pay/qr/create",
@@ -14,8 +13,7 @@ export const KZ_ARCH_ALLOWS = [
   },
   {
     slug: "2gis",
-    row: 0,
-    align: 0.19,
+    align: 0.34,
     agent: "Claude",
     method: "GET",
     path: "/3.0/items/search",
@@ -25,8 +23,7 @@ export const KZ_ARCH_ALLOWS = [
   },
   {
     slug: "yandex-maps",
-    row: 2,
-    align: 0.58,
+    align: 0.52,
     agent: "OpenClaw",
     method: "GET",
     path: "/v1/geocode",
@@ -36,8 +33,7 @@ export const KZ_ARCH_ALLOWS = [
   },
   {
     slug: "data-egov-kz",
-    row: 1,
-    align: 0.72,
+    align: 0.61,
     agent: "Cursor",
     method: "GET",
     path: "/datastore_search",
@@ -47,8 +43,7 @@ export const KZ_ARCH_ALLOWS = [
   },
   {
     slug: "halyk-bank",
-    row: 0,
-    align: 0.36,
+    align: 0.38,
     agent: "Claude",
     method: "POST",
     path: "/v1/transfers",
@@ -58,8 +53,7 @@ export const KZ_ARCH_ALLOWS = [
   },
   {
     slug: "wolt",
-    row: 0,
-    align: 0.63,
+    align: 0.58,
     agent: "OpenClaw",
     method: "GET",
     path: "/v1/venues",
@@ -69,8 +63,7 @@ export const KZ_ARCH_ALLOWS = [
   },
   {
     slug: "freedompay-kz",
-    row: 1,
-    align: 0.28,
+    align: 0.35,
     agent: "Cursor",
     method: "POST",
     path: "/v1/payments",
@@ -80,8 +73,7 @@ export const KZ_ARCH_ALLOWS = [
   },
   {
     slug: "kazpost",
-    row: 2,
-    align: 0.81,
+    align: 0.64,
     agent: "Claude",
     method: "GET",
     path: "/track",
