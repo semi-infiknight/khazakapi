@@ -1,6 +1,6 @@
 import KhazakLogRiver from "./KhazakLogRiver.jsx";
 import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
-import { buildArchWallRows, KZ_WALL_ROW_CONFIG } from "../lib/kzArchWall.js";
+import { buildArchWallRows, KZ_ARCH_ROW_COUNT, KZ_WALL_ROW_CONFIG } from "../lib/kzArchWall.js";
 
 function LogoTrack({ tiles, duration, reverse }) {
   const loop = [...tiles, ...tiles];
@@ -22,7 +22,7 @@ function LogoTrack({ tiles, duration, reverse }) {
 }
 
 export default function KhazakLogoWall({ catalogueTotal = KZ_ARCH_TILES.length }) {
-  const rows = buildArchWallRows(KZ_ARCH_TILES, KZ_WALL_ROW_CONFIG.length);
+  const rows = buildArchWallRows(KZ_ARCH_TILES, KZ_ARCH_ROW_COUNT);
 
   return (
     <section className="kz-wall" aria-label="Integrated Kazakhstan API providers">
