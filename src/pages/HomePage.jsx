@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchSearch, fetchSuggest } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import { IntentResults } from "../components/IntentSuggest.jsx";
-import KhanShatyrAnimated from "../components/KhanShatyrAnimated.jsx";
+import KhazakArchFigure from "../components/KhazakArchFigure.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 const PAGE_SIZE = 24;
@@ -154,9 +154,9 @@ export default function HomePage() {
 
   return (
     <div className="container-main container-main--catalogue pt-6">
-      <section className="hero-banner mb-8" aria-label="Khazak API">
-        <KhanShatyrAnimated className="hero-banner-art" />
-        <h1 className="hero-title hero-banner-title">every Kazakhstan API you need</h1>
+      <section className="hero-arch mb-8" aria-label="Khazak API">
+        <h1 className="hero-title hero-arch-title">every Kazakhstan API you need</h1>
+        <KhazakArchFigure />
       </section>
 
       <section className="stats-metal-strip mb-8 grid grid-cols-2 lg:grid-cols-4">
