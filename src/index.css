@@ -439,6 +439,10 @@ a {
   box-shadow: 0 0 20px -8px hsl(var(--kz-cyan) / 0.6);
 }
 
+.kz-af-chip.kz-af-vis {
+  transform-origin: left center;
+}
+
 .kz-af-chip-t {
   display: inline-block;
   max-width: 150px;

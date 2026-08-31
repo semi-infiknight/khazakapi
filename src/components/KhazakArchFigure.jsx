@@ -105,10 +105,10 @@ function anchorPoint(svg, selector, stage, fallback) {
   return svgPoint(svg, cx, cy, stage);
 }
 
-function spireChipPoint(spire, pill) {
+function spireChipPoint(spire) {
   return {
-    x: spire.x + 14,
-    y: spire.y + 2,
+    x: spire.x + 18,
+    y: spire.y + 3,
   };
 }
 
@@ -276,7 +276,7 @@ export default function KhazakArchFigure() {
       measure();
 
       const slotPoint = layout.slots[slots.indexOf(activeSlot)];
-      const spirePoint = () => spireChipPoint(layout.spire, chip);
+      const spirePoint = () => spireChipPoint(layout.spire);
 
       const allowSteps = [
         [0, () => {
@@ -417,7 +417,7 @@ export default function KhazakArchFigure() {
       capApis.classList.add("kz-af-lit");
       keyBadge.classList.add("kz-af-show");
       chipText.textContent = `${KZ_ARCH_ALLOWS[0].method} ${KZ_ARCH_ALLOWS[0].path}`;
-      snapPill(chip, spireChipPoint(layout.spire, chip), true);
+      snapPill(chip, spireChipPoint(layout.spire), true);
       chip.classList.add("kz-af-vis");
       seedLogs(true);
       strip.lastElementChild?.classList.remove("kz-af-aged");
