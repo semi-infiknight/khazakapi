@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Stop stale Khazak dev processes and start a fresh API + Vite pair.
+# Stop stale Kazakh API dev processes and start a fresh API + Vite pair.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

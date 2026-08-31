@@ -41,7 +41,7 @@ export async function validateDataEgovKey(apiKey) {
       return {
         valid: true,
         status: res.status,
-        message: "Key works — one key unlocks all data.egov.kz datasets in Khazak.",
+        message: "Key works — one key unlocks all data.egov.kz datasets in Kazakh.",
       };
     }
 

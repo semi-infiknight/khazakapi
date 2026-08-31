@@ -144,7 +144,7 @@ export async function answerApiQuestion(api, question) {
       {
         role: "system",
         content:
-          "You are KhazakAPI doc assistant. Answer ONLY using the API facts provided. If the facts do not contain the answer, say you do not have that detail in the catalogue and point to official docs. Max 3 short sentences. Plain English. Do not invent parameters or URLs.",
+          "You are KazakhAPI doc assistant. Answer ONLY using the API facts provided. If the facts do not contain the answer, say you do not have that detail in the catalogue and point to official docs. Max 3 short sentences. Plain English. Do not invent parameters or URLs.",
       },
       {
         role: "user",

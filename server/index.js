@@ -241,7 +241,7 @@ function mcpManifest(req) {
     version: "1.0.0",
     description: "Remote MCP server for Kazakhstan APIs (Streamable HTTP).",
     tools: [
-      { name: "search_kz_apis", description: "Search Khazak API catalogue" },
+      { name: "search_kz_apis", description: "Search Kazakh API catalogue" },
       { name: "get_kz_api", description: "Get one API by id" },
       { name: "list_api_categories", description: "List categories with counts" },
     ],
@@ -308,7 +308,7 @@ app.use((_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Khazak API server on http://localhost:${PORT} (${KZ_APIS.length} KZ APIs)`);
+  console.log(`Kazakh API server on http://localhost:${PORT} (${KZ_APIS.length} KZ APIs)`);
   warmQueryEmbedder();
   warmLocalLlm();
 });

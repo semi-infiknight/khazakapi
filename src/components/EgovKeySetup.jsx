@@ -94,7 +94,7 @@ export default function EgovKeySetup({ compact = false, onKeyChange }) {
             data.egov.kz API key
           </h2>
           <p className="mt-1 text-sm text-[var(--text-soft)]">
-            Khazak cannot generate keys for you — they are issued only by the official Open Data portal.
+            Kazakh cannot generate keys for you — they are issued only by the official Open Data portal.
             Save your key once here and every data.egov.kz entry in the tester will use it automatically.
           </p>
         </div>

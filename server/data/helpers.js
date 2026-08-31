@@ -95,7 +95,7 @@ export function keySetup(docs, portalUrl = DATA_EGOV_PORTAL) {
         items: [
           "Register at " + DATA_EGOV_REGISTER + " (or sign in on data.egov.kz).",
           "Open Developer Cabinet at " + portalUrl + " and copy your API key.",
-          "Use Khazak's key setup to validate and save the key in your browser for all ~140 datasets.",
+          "Use Kazakh's key setup to validate and save the key in your browser for all ~140 datasets.",
         ],
       },
       {

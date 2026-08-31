@@ -30,7 +30,7 @@ export default function KeysPage() {
             <p className="keys-kicker">Local key manager</p>
             <h1 className="keys-title">API keys</h1>
             <p className="keys-lead">
-              Store provider credentials once in this browser. Khazak auto-imports them into the API tester — no
+              Store provider credentials once in this browser. Kazakh auto-imports them into the API tester — no
               account, no server-side vault, no login.
             </p>
           </div>
@@ -49,7 +49,7 @@ export default function KeysPage() {
         <section className="keys-privacy panel">
           <h2 className="keys-section-title">How storage works</h2>
           <ul className="keys-privacy-list">
-            <li>Keys live in your browser&apos;s localStorage only — they never sync to Khazak accounts.</li>
+            <li>Keys live in your browser&apos;s localStorage only — they never sync to Kazakh accounts.</li>
             <li>When you run &ldquo;Try it out&rdquo;, the key is sent with that single proxy request to the provider.</li>
             <li>data.egov.kz keys are validated once against a live portal request when you save.</li>
             <li>Clear a key any time; other users on shared machines should use a private browser profile.</li>

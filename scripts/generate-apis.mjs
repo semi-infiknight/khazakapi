@@ -313,7 +313,7 @@ const TEXT_RULES = [
   [/Southeast Asia/gi, "Central Asia"],
   [/SEA/g, "CIS"],
   [/Asean|ASEAN/gi, "EAEU"],
-  [/Pasar API/gi, "Khazak API"],
+  [/Pasar API/gi, "Kazakh API"],
   [/pasarapi\.xyz/gi, "khazakapi"],
   [/seed=pasar/gi, "seed=khazak"],
   [/GovTech Kazakhstan \(eGov Mobile ID\)/gi, "eGov Kazakhstan"],

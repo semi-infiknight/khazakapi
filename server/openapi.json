@@ -1,11 +1,11 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Khazak API",
+    "title": "Kazakh API",
     "version": "2026-07-24",
-    "description": "Public REST API for the Khazak API Kazakhstan API directory. Read-only, authless, and CORS-open. Browse ~1,400 government and commercial APIs catalogued for Kazakhstan.",
+    "description": "Public REST API for the Kazakh API — Kazakhstan API directory. Read-only, authless, and CORS-open. Browse ~688 government and commercial APIs catalogued for Kazakhstan.",
     "contact": {
-      "name": "Khazak API",
+      "name": "Kazakh API",
       "url": "https://github.com/khazakapi"
     },
     "license": {
