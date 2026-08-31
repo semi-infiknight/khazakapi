@@ -15,6 +15,11 @@ export const KZ_WALL_ROW_CONFIG = [
 export const SAFE_ALIGN_MIN = 0.32;
 export const SAFE_ALIGN_MAX = 0.68;
 
+/** Keep in sync with .kz-af-tile width + .kz-af-wall-track gap (mobile-first). */
+export const ARCH_TILE_STEP_PX = 38;
+/** Hero logo field can exceed 800px on large screens — pad each loop half past that. */
+export const ARCH_TRACK_MIN_SEGMENT_PX = 960;
+
 function vendorKey(slug) {
   if (slug.startsWith("yandex-")) return "yandex";
   if (slug.startsWith("halyk-")) return "halyk";
@@ -126,8 +131,16 @@ export function buildArchWallRows(tiles, rowCount = KZ_ARCH_ROW_COUNT) {
 
 /** Duplicate a row for seamless marquee scrolling (always an even repeat). */
 export function buildTrackLoop(rowTiles, repeat = 2) {
+  if (!rowTiles.length) return [];
+
+  const minTiles = Math.ceil(ARCH_TRACK_MIN_SEGMENT_PX / ARCH_TILE_STEP_PX);
+  let segment = [];
+  while (segment.length < minTiles) {
+    segment = segment.concat(rowTiles);
+  }
+
   const copies = Math.max(2, repeat);
-  return Array.from({ length: copies }, () => rowTiles).flat();
+  return Array.from({ length: copies }, () => segment).flat();
 }
 
 export function resolveArchWallSlug(slug, tiles) {

@@ -1,9 +1,9 @@
 import KhazakLogRiver from "./KhazakLogRiver.jsx";
 import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
-import { buildArchWallRows, KZ_ARCH_ROW_COUNT, KZ_WALL_ROW_CONFIG } from "../lib/kzArchWall.js";
+import { buildArchWallRows, buildTrackLoop, KZ_ARCH_ROW_COUNT, KZ_WALL_ROW_CONFIG } from "../lib/kzArchWall.js";
 
 function LogoTrack({ tiles, duration, reverse }) {
-  const loop = [...tiles, ...tiles];
+  const loop = buildTrackLoop(tiles);
 
   return (
     <div className="kz-wall-row">
