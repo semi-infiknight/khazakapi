@@ -112,29 +112,6 @@ function spireChipPoint(spire) {
   };
 }
 
-function appendLog(strip, kind, text, timers, alive, instant = false) {
-  const line = document.createElement("div");
-  line.className = "kz-af-line";
-  const span = document.createElement("span");
-  span.className = kind === "ok" ? "kz-af-ok" : "kz-af-nok";
-  span.textContent = text;
-  line.appendChild(span);
-  strip.appendChild(line);
-  line.offsetHeight;
-  if (instant) line.classList.add("kz-af-in");
-  else schedule(timers, 30, () => line.classList.add("kz-af-in"), alive);
-
-  const lines = strip.querySelectorAll(".kz-af-line");
-  lines.forEach((node, index) => {
-    node.classList.toggle("kz-af-aged", index < lines.length - 1);
-  });
-  if (lines.length > 3) {
-    const first = lines[0];
-    first.classList.add("kz-af-gone");
-    schedule(timers, 600, () => first.remove(), alive);
-  }
-}
-
 export default function KhazakArchFigure() {
   const rootRef = useRef(null);
   const aliveRef = useRef(true);
@@ -166,7 +143,6 @@ export default function KhazakArchFigure() {
     const keyBadge = q(".kz-af-key");
     const retPill = q(".kz-af-ret");
     const noPill = q(".kz-af-no");
-    const strip = q(".kz-af-strip");
     const slots = Array.from(root.querySelectorAll(".kz-af-slot"));
     const tiles = Array.from(root.querySelectorAll(".kz-af-tile"));
     const tileBySlug = new Map(KZ_ARCH_TILES.map((tile, index) => [tile.slug, tiles[index]]));
@@ -242,18 +218,6 @@ export default function KhazakArchFigure() {
       );
     };
 
-    const formatAllow = (call) =>
-      `✓ ${call.agent} · ${call.method} ${call.path} · ${call.vendor} → ${call.status} · ${call.dur}`;
-
-    const formatDeny = (call) =>
-      `✗ ${call.agent} · ${call.method} ${call.path} · ${call.vendor} → ${DENY_LABEL} ${call.rule}`;
-
-    const seedLogs = (instant = false) => {
-      appendLog(strip, "ok", formatAllow(KZ_ARCH_ALLOWS[0]), timers, alive, instant);
-      appendLog(strip, "nok", formatDeny(KZ_ARCH_DENIES[0]), timers, alive, instant);
-      strip.querySelectorAll(".kz-af-line").forEach((line) => line.classList.add("kz-af-aged"));
-    };
-
     const resetVisual = () => {
       [chip, retPill, noPill].forEach(hidePill);
       [beamA, beamB].forEach(hideBeam);
@@ -320,7 +284,6 @@ export default function KhazakArchFigure() {
           retPill.classList.add("kz-af-vis");
           animatePill(retPill, spirePoint(), 950, true);
         }],
-        [980, () => appendLog(strip, "ok", formatAllow(allow), timers, alive)],
         [520, () => hidePill(retPill)],
         [420, () => {
           activeTile.classList.remove("kz-af-bloom");
@@ -363,7 +326,6 @@ export default function KhazakArchFigure() {
           noPill.classList.add("kz-af-vis");
           animatePill(noPill, { x: anchor.x - 26, y: anchor.y }, 800, true);
         }],
-        [760, () => appendLog(strip, "nok", formatDeny(deny), timers, alive)],
         [820, () => {
           hidePill(noPill);
           hub.classList.remove("kz-af-hot-r");
@@ -390,7 +352,6 @@ export default function KhazakArchFigure() {
       observer?.disconnect();
       window.removeEventListener("resize", onResize);
       clearTimeout(resizeTimer);
-      strip.replaceChildren();
       root.classList.remove("kz-af-on");
       resetVisual();
     };
@@ -419,8 +380,6 @@ export default function KhazakArchFigure() {
       chipText.textContent = `${KZ_ARCH_ALLOWS[0].method} ${KZ_ARCH_ALLOWS[0].path}`;
       snapPill(chip, spireChipPoint(layout.spire), true);
       chip.classList.add("kz-af-vis");
-      seedLogs(true);
-      strip.lastElementChild?.classList.remove("kz-af-aged");
       return cleanup;
     }
 
@@ -439,7 +398,6 @@ export default function KhazakArchFigure() {
             started = true;
             cycling = true;
             root.classList.add("kz-af-on");
-            seedLogs();
             schedule(timers, 900, runCycle, alive);
           }
         }
@@ -498,8 +456,6 @@ export default function KhazakArchFigure() {
         <div className="kz-af-pill kz-af-ret" />
         <div className="kz-af-pill kz-af-no" />
       </div>
-
-      <div className="kz-af-strip" aria-hidden="true" />
     </figure>
   );
 }
