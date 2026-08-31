@@ -67,3 +67,13 @@ export function readStoredIntentView() {
   const stored = window.localStorage.getItem(INTENT_VIEW_STORAGE_KEY);
   return INTENT_VIEW_MODES.some((m) => m.id === stored) ? stored : "timeline";
 }
+
+export function apiHref(api) {
+  return (
+    api.plugIn?.href ||
+    api.hubPath ||
+    (api.companyHub && api.categorySlug && api.companySlug
+      ? `/browse/${api.categorySlug}/${api.companySlug}/${api.slug || api.id}`
+      : `/apis/${api.slug || api.id}`)
+  );
+}

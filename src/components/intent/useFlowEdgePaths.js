@@ -1,0 +1,91 @@
+import { useLayoutEffect, useState } from "react";
+
+function portPoint(nodeEl, root, port) {
+  const portEl = nodeEl?.querySelector(`[data-port="${port}"]`);
+  if (!portEl) {
+    const r = nodeEl.getBoundingClientRect();
+    const o = root.getBoundingClientRect();
+    return { x: r.right - o.left, y: r.top - o.top + r.height / 2 };
+  }
+  const r = portEl.getBoundingClientRect();
+  const o = root.getBoundingClientRect();
+  return { x: r.left - o.left + r.width / 2, y: r.top - o.top + r.height / 2 };
+}
+
+function centerRight(el, root) {
+  const r = el.getBoundingClientRect();
+  const o = root.getBoundingClientRect();
+  return { x: r.right - o.left, y: r.top - o.top + r.height / 2 };
+}
+
+function centerLeft(el, root) {
+  const r = el.getBoundingClientRect();
+  const o = root.getBoundingClientRect();
+  return { x: r.left - o.left, y: r.top - o.top + r.height / 2 };
+}
+
+function topCenter(el, root) {
+  const r = el.getBoundingClientRect();
+  const o = root.getBoundingClientRect();
+  return { x: r.left - o.left + r.width / 2, y: r.top - o.top };
+}
+
+function bezierPath(from, to, bend = 0.45) {
+  const dx = to.x - from.x;
+  const c1x = from.x + dx * bend;
+  const c2x = to.x - dx * bend;
+  return `M ${from.x} ${from.y} C ${c1x} ${from.y}, ${c2x} ${to.y}, ${to.x} ${to.y}`;
+}
+
+function branchPath(from, to) {
+  const midY = from.y + (to.y - from.y) * 0.35;
+  return `M ${from.x} ${from.y} C ${from.x} ${midY}, ${to.x} ${midY}, ${to.x} ${to.y}`;
+}
+
+export function useFlowEdgePaths(stageRef, pairs, deps = []) {
+  const [paths, setPaths] = useState([]);
+
+  useLayoutEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const measure = () => {
+      const next = pairs
+        .map(({ getFrom, getTo, kind = "spine", tone = "feature", fromPort }, index) => {
+          const fromEl = getFrom?.();
+          const toEl = getTo?.();
+          if (!fromEl || !toEl) return null;
+
+          let from;
+          let to;
+          if (kind === "branch") {
+            from = portPoint(fromEl, stage, fromPort || "success");
+            to = topCenter(toEl, stage);
+          } else {
+            from = centerRight(fromEl, stage);
+            to = centerLeft(toEl, stage);
+          }
+
+          return {
+            d: kind === "branch" ? branchPath(from, to) : bezierPath(from, to),
+            tone,
+            id: `edge-${index}`,
+          };
+        })
+        .filter(Boolean);
+
+      setPaths(next);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(stage);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [stageRef, pairs, ...deps]);
+
+  return paths;
+}

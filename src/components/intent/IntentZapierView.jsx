@@ -1,133 +1,170 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import ApiLogo from "../ApiLogo.jsx";
-import { shortApiLabel } from "./intentShared.js";
+import FeatureApiCard from "./FeatureApiCard.jsx";
 
 function ZapierConnector() {
   return (
     <div className="intent-zapier-connector" aria-hidden="true">
       <span className="intent-zapier-connector-line" />
       <span className="intent-zapier-connector-plus">+</span>
+      <span className="intent-zapier-connector-line" />
     </div>
   );
 }
 
-function apiHref(api) {
-  return (
-    api.plugIn?.href ||
-    api.hubPath ||
-    (api.companyHub && api.categorySlug && api.companySlug
-      ? `/browse/${api.categorySlug}/${api.companySlug}/${api.slug || api.id}`
-      : `/apis/${api.slug || api.id}`)
-  );
-}
+function ZapierStepCard({ stepNumber, title, kind, meta, active, onSelect, dark }) {
+  const isTrigger = kind === "trigger";
+  const isPaths = kind === "paths";
 
-function buildSteps(suggestion, blocks) {
-  const steps = [
-    {
-      id: "trigger",
-      kind: "trigger",
-      title: "Your product",
-      meta: suggestion.query,
-      detail: suggestion.summary,
-      apis: [],
-    },
-  ];
-
-  blocks.forEach((block) => {
-    steps.push({
-      id: block.id,
-      kind: "feature",
-      title: block.label,
-      meta: block.parentLabel,
-      detail: block.why,
-      where: block.where,
-      apis: block.apis,
-    });
-  });
-
-  return steps;
-}
-
-function ZapierStepCard({ step, active, onSelect }) {
   return (
     <button
       type="button"
-      className={`intent-zapier-step ${active ? "intent-zapier-step-active" : ""} intent-zapier-step--${step.kind}`}
-      onClick={() => onSelect(step.id)}
+      className={[
+        "intent-zapier-step",
+        active ? "intent-zapier-step-active" : "",
+        isTrigger ? "intent-zapier-step--trigger" : "",
+        isPaths ? "intent-zapier-step--paths" : "",
+        dark ? "intent-zapier-step--dark" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      onClick={() => onSelect?.(stepNumber)}
       aria-pressed={active}
     >
-      <span className="intent-zapier-step-icon">{step.kind === "trigger" ? "⚡" : "▣"}</span>
-      <span className="intent-zapier-step-copy">
-        <span className="intent-zapier-step-kind">{step.kind === "trigger" ? "Trigger" : "Action"}</span>
-        <strong className="intent-zapier-step-title">{step.title}</strong>
-        {step.meta ? <span className="intent-zapier-step-meta">{step.meta}</span> : null}
+      <span className="intent-zapier-step-status" aria-hidden="true">
+        ✓
       </span>
-      {step.apis.length > 0 && (
-        <span className="intent-zapier-step-count">{step.apis.length} APIs</span>
-      )}
+      <span className="intent-zapier-step-icon" aria-hidden="true">
+        {isTrigger ? "⚡" : isPaths ? "⎇" : "▣"}
+      </span>
+      <span className="intent-zapier-step-copy">
+        <span className="intent-zapier-step-head">
+          <strong className="intent-zapier-step-title">
+            {stepNumber}. {title}
+          </strong>
+          {isTrigger ? <span className="intent-zapier-step-badge">Trigger</span> : null}
+        </span>
+        {meta ? <span className="intent-zapier-step-meta">{meta}</span> : null}
+      </span>
     </button>
   );
 }
 
+function PathColumn({ pathLabel, block, stepBase, activeStep, onSelect }) {
+  const rulesStep = stepBase;
+  const actionStep = stepBase + 1;
+
+  return (
+    <div className="intent-zapier-path-col">
+      <span className="intent-zapier-path-label">{pathLabel}</span>
+
+      <ZapierConnector />
+
+      <ZapierStepCard
+        stepNumber={rulesStep}
+        title="Path rules"
+        kind="rules"
+        meta={block.why || `Continue when ${block.label} is required`}
+        active={activeStep === rulesStep}
+        onSelect={onSelect}
+      />
+
+      <ZapierConnector />
+
+      <ZapierStepCard
+        stepNumber={actionStep}
+        title={block.label}
+        kind="action"
+        meta={block.parentLabel || "Feature action"}
+        active={activeStep === actionStep}
+        onSelect={onSelect}
+      />
+
+      {block.where ? (
+        <p className="intent-zapier-path-note">
+          <span className="intent-feature-label">Where</span> {block.where}
+        </p>
+      ) : null}
+
+      <div className="intent-prompt-api-grid intent-zapier-api-grid">
+        {block.apis.map((api) => (
+          <FeatureApiCard key={`${block.id}-${api.id}`} api={api} feature={block} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function IntentZapierView({ suggestion, blocks }) {
-  const steps = useMemo(() => buildSteps(suggestion, blocks), [suggestion, blocks]);
-  const [selectedId, setSelectedId] = useState(steps[0]?.id || "trigger");
-  const selected = steps.find((s) => s.id === selectedId) || steps[0];
+  const [activeStep, setActiveStep] = useState(1);
+  const pathLabels = useMemo(
+    () => blocks.map((_, i) => String.fromCharCode(65 + i)),
+    [blocks],
+  );
+  const pathStepBase = 4;
 
   return (
     <div className="intent-zapier">
       <div className="intent-zapier-toolbar">
-        <span className="intent-zapier-toolbar-label">Zapier-style stack</span>
-        <span className="intent-zapier-toolbar-meta">{steps.length - 1} actions</span>
+        <span className="intent-zapier-toolbar-label">Visual flow</span>
+        <span className="intent-zapier-toolbar-meta">
+          {blocks.length} paths · {blocks.reduce((n, b) => n + b.apis.length, 0)} APIs
+        </span>
       </div>
 
-      <div className="intent-zapier-shell">
-        <div className="intent-zapier-canvas" aria-label="Automation flow canvas">
-          {steps.map((step, index) => (
-            <div key={step.id} className="intent-zapier-step-wrap">
-              <ZapierStepCard step={step} active={selectedId === step.id} onSelect={setSelectedId} />
-              {step.apis.length > 0 && (
-                <div className="intent-zapier-substeps">
-                  {step.apis.map((api) => (
-                    <Link key={api.id} to={apiHref(api)} className="intent-zapier-substep">
-                      <ApiLogo api={api} />
-                      <span className="intent-zapier-substep-copy">
-                        <strong>{shortApiLabel(api.title)}</strong>
-                        <span>{api.provider || api.companyName}</span>
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-              {index < steps.length - 1 ? <ZapierConnector /> : null}
-            </div>
-          ))}
+      <div className="intent-zapier-chart" aria-label="Structured integration flowchart">
+        <div className="intent-zapier-trunk">
+          <ZapierStepCard
+            stepNumber={1}
+            title="Your product"
+            kind="trigger"
+            meta={suggestion.query}
+            active={activeStep === 1}
+            onSelect={setActiveStep}
+          />
+
+          <ZapierConnector />
+
+          <ZapierStepCard
+            stepNumber={2}
+            title="Only continue if…"
+            kind="filter"
+            meta={suggestion.summary || "Intent matches KZ catalogue features"}
+            active={activeStep === 2}
+            onSelect={setActiveStep}
+          />
+
+          <ZapierConnector />
+
+          <ZapierStepCard
+            stepNumber={3}
+            title="Paths"
+            kind="paths"
+            meta={`Split stack into ${blocks.length} feature paths`}
+            active={activeStep === 3}
+            onSelect={setActiveStep}
+            dark
+          />
+
+          <div className="intent-zapier-paths-rail" aria-hidden="true">
+            <span className="intent-zapier-paths-rail-line" />
+          </div>
         </div>
 
-        <aside className="intent-zapier-inspector panel" aria-label="Step details">
-          <p className="intent-zapier-inspector-kicker">
-            {selected?.kind === "trigger" ? "Trigger" : "Action"} details
-          </p>
-          <h3 className="intent-zapier-inspector-title">{selected?.title}</h3>
-          {selected?.detail ? <p className="intent-zapier-inspector-body">{selected.detail}</p> : null}
-          {selected?.where ? (
-            <p className="intent-zapier-inspector-body">
-              <span className="intent-feature-label">Where</span> {selected.where}
-            </p>
-          ) : null}
-          {selected?.apis?.length ? (
-            <ul className="intent-zapier-inspector-list">
-              {selected.apis.map((api) => (
-                <li key={api.id}>
-                  <Link to={apiHref(api)} className="intent-zapier-inspector-link">
-                    {shortApiLabel(api.title)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </aside>
+        <div
+          className="intent-zapier-paths"
+          style={{ "--path-count": Math.max(blocks.length, 1) }}
+        >
+          {blocks.map((block, index) => (
+            <PathColumn
+              key={block.id}
+              pathLabel={`Path ${pathLabels[index]}`}
+              block={block}
+              stepBase={pathStepBase + index * 2}
+              activeStep={activeStep}
+              onSelect={setActiveStep}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

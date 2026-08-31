@@ -1013,7 +1013,8 @@ a {
 }
 
 /* Postman Flows canvas */
-.intent-flows {
+.intent-flows,
+.intent-zapier {
   margin-top: 0.35rem;
 }
 
@@ -1033,11 +1034,11 @@ a {
   font-size: var(--fs-2xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #ff6c37;
+  color: color-mix(in srgb, #ff6c37 75%, var(--accent));
 }
 
 .intent-zapier-toolbar-label {
-  color: #ff4f00;
+  color: color-mix(in srgb, #ff8f66 70%, var(--accent));
 }
 
 .intent-flows-toolbar-meta,
@@ -1047,94 +1048,131 @@ a {
   color: var(--text-mute);
 }
 
-.intent-flows-canvas {
+.intent-flows-stage {
+  position: relative;
   overflow: auto;
-  padding: 1rem;
+  padding: 1.25rem 1rem 1.5rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background:
-    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 0)
-      0 0 / 18px 18px,
-    color-mix(in srgb, var(--code-bg) 88%, #000);
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--line) 45%, transparent) 1px, transparent 0)
+      0 0 / 20px 20px,
+    color-mix(in srgb, var(--code-bg) 92%, #000);
 }
 
-.intent-flows-track {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem 0.15rem;
-  min-width: min(100%, 720px);
+.intent-flows-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
 }
 
-.intent-flows-connector {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.15rem;
-  color: color-mix(in srgb, #ff6c37 55%, var(--text-mute));
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  padding: 0 0.15rem;
+.intent-flows-edge {
+  stroke-width: 2px;
+  stroke-linecap: round;
 }
 
-.intent-flows-connector-line {
-  width: 1.25rem;
-  height: 2px;
-  background: currentColor;
-  opacity: 0.65;
+.intent-flows-edge--start {
+  stroke: color-mix(in srgb, #9c88fa 80%, #fff);
 }
 
-.intent-flows-block {
+.intent-flows-edge--feature {
+  stroke: color-mix(in srgb, #ff6c37 75%, #fff);
+}
+
+.intent-flows-edge--api {
+  stroke: color-mix(in srgb, var(--green) 75%, #fff);
+  stroke-dasharray: 6 4;
+}
+
+.intent-flows-spine {
   position: relative;
-  display: inline-flex;
-  align-items: stretch;
-  min-width: 11rem;
-  max-width: 14rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  color: inherit;
-  text-decoration: none;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-  transition: border-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
-}
-
-.intent-flows-block:hover {
-  border-color: color-mix(in srgb, #ff6c37 45%, var(--line));
-  transform: translateY(-1px);
-}
-
-.intent-flows-block-inner {
+  z-index: 1;
   display: flex;
-  min-width: 0;
-  flex: 1;
+  align-items: flex-start;
+  gap: 2.5rem;
+  min-width: min-content;
+  padding-bottom: 0.5rem;
 }
 
-.intent-flows-block-stripe {
-  width: 0.28rem;
-  border-radius: var(--radius-md) 0 0 var(--radius-md);
+.intent-flows-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: min(100%, 17.5rem);
   flex-shrink: 0;
 }
 
-.intent-flows-block-stripe--start {
-  background: #9c88fa;
+.intent-flows-col--start {
+  align-self: flex-start;
 }
 
-.intent-flows-block-stripe--feature {
-  background: #ff6c37;
-}
-
-.intent-flows-block-stripe--api {
-  background: #47b04b;
-}
-
-.intent-flows-block-copy {
+.intent-flows-node {
+  position: relative;
   display: grid;
-  gap: 0.2rem;
-  padding: 0.65rem 0.55rem 0.65rem 0.45rem;
+  grid-template-rows: auto 1fr auto;
+  min-height: 8.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: color-mix(in srgb, var(--surface) 92%, #0a0015);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.intent-flows-node-port--in {
+  position: absolute;
+  left: 0;
+  top: 2.35rem;
+  width: 0.28rem;
+  height: 1.35rem;
+  border-radius: 0 0.2rem 0.2rem 0;
+  background: color-mix(in srgb, var(--line) 70%, #fff);
+}
+
+.intent-flows-node-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem;
+  align-items: start;
+  padding: 0.65rem 0.75rem 0.55rem 0.85rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+}
+
+.intent-flows-node--start .intent-flows-node-head {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, #7d57f9 35%, var(--surface)),
+    color-mix(in srgb, #9c88fa 18%, var(--surface))
+  );
+}
+
+.intent-flows-node--feature .intent-flows-node-head {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, #ff6c37 28%, var(--surface)),
+    color-mix(in srgb, #ff6c37 10%, var(--surface))
+  );
+}
+
+.intent-flows-node-icon {
+  display: grid;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--surface-alt) 70%, transparent);
+  font-size: 0.72rem;
+}
+
+.intent-flows-node-head-copy {
+  display: grid;
+  gap: 0.12rem;
   min-width: 0;
 }
 
-.intent-flows-block-type {
+.intent-flows-node-kind {
   font-family: var(--font-mono);
   font-size: 0.58rem;
   letter-spacing: 0.08em;
@@ -1142,160 +1180,263 @@ a {
   color: var(--text-mute);
 }
 
-.intent-flows-block-title {
+.intent-flows-node-title {
   font-size: 0.88rem;
   line-height: 1.35;
   color: var(--text);
 }
 
-.intent-flows-block-meta,
-.intent-flows-block-note,
-.intent-flows-block-score {
+.intent-flows-node-subtitle {
   font-size: 0.72rem;
+  color: var(--text-soft);
+}
+
+.intent-flows-node-body {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.intent-flows-field {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.intent-flows-field-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.intent-flows-field-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.85rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--code-bg) 75%, var(--surface));
+}
+
+.intent-flows-field-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #9c88fa 22%, var(--surface-alt));
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: #d8cbff;
+}
+
+.intent-flows-field-text {
+  font-size: 0.76rem;
   line-height: 1.35;
   color: var(--text-soft);
 }
 
-.intent-flows-block-score {
-  color: #47b04b;
-  font-family: var(--font-mono);
-}
-
-.intent-flows-port {
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 999px;
-  border: 2px solid color-mix(in srgb, #ff6c37 70%, var(--line));
-  background: var(--surface);
-  align-self: center;
-  flex-shrink: 0;
-}
-
-.intent-flows-port--in {
-  margin-left: -0.28rem;
-}
-
-.intent-flows-port--out {
-  margin-right: -0.28rem;
-}
-
-/* Zapier-style stack */
-.intent-zapier {
-  margin-top: 0.35rem;
-}
-
-.intent-zapier-shell {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1rem;
-}
-
-@media (min-width: 960px) {
-  .intent-zapier-shell {
-    grid-template-columns: minmax(0, 1fr) 18rem;
-    align-items: start;
-  }
-}
-
-.intent-zapier-canvas {
+.intent-flows-node-foot {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 0.45rem 0.65rem 0.55rem;
+  border-top: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+}
+
+.intent-flows-node-port--success,
+.intent-flows-node-port--fail {
+  display: inline-flex;
   align-items: center;
-  padding: 1.25rem 0.75rem;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.intent-flows-node-port--success::before,
+.intent-flows-node-port--fail::before {
+  content: "";
+  width: 0.28rem;
+  height: 0.95rem;
+  border-radius: 0.15rem;
+}
+
+.intent-flows-node-port--success::before {
+  background: color-mix(in srgb, var(--green) 80%, #fff);
+}
+
+.intent-flows-node-port--fail::before {
+  background: color-mix(in srgb, var(--red) 70%, #fff);
+}
+
+.intent-flows-branch {
+  display: grid;
+  gap: 0.65rem;
+  padding-top: 0.15rem;
+}
+
+.intent-flows-branch-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.intent-flows-branch-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+}
+
+.intent-flows-branch-dot--success {
+  background: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 20%, transparent);
+}
+
+.intent-flows-api-grid {
+  grid-template-columns: 1fr;
+}
+
+/* Zapier-style structured flowchart */
+.intent-zapier-chart {
+  padding: 1.25rem 0.85rem 1.5rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-alt) 80%, #fff), var(--surface-alt));
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--line) 40%, transparent) 1px, transparent 0)
+      0 0 / 22px 22px,
+    color-mix(in srgb, var(--surface-alt) 88%, #000);
 }
 
-.intent-zapier-step-wrap {
+.intent-zapier-trunk {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: min(100%, 24rem);
+  max-width: 28rem;
+  margin-inline: auto;
 }
 
 .intent-zapier-step {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto auto 1fr;
   align-items: center;
-  gap: 0.65rem;
-  width: 100%;
-  border: 1px solid color-mix(in srgb, var(--line) 85%, #fff);
-  border-radius: 0.85rem;
-  background: #fff;
-  color: #1f2430;
-  padding: 0.75rem 0.85rem;
+  gap: 0.55rem;
+  width: min(100%, 28rem);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--surface) 94%, #0a0015);
+  color: var(--text);
+  padding: 0.7rem 0.85rem;
   text-align: left;
   cursor: pointer;
-  box-shadow: 0 10px 24px rgba(31, 36, 48, 0.08);
-  transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  transition:
+    border-color var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-1) var(--ease-out),
+    background var(--dur-1) var(--ease-out);
 }
 
 .intent-zapier-step--trigger {
-  border-color: color-mix(in srgb, #ff4f00 35%, #fff);
+  border-color: color-mix(in srgb, #ff8f66 35%, var(--line));
+}
+
+.intent-zapier-step--paths,
+.intent-zapier-step--dark {
+  background: color-mix(in srgb, #1f2430 55%, var(--surface));
+  border-color: color-mix(in srgb, #ff8f66 28%, var(--line));
 }
 
 .intent-zapier-step-active,
 .intent-zapier-step:hover {
-  border-color: color-mix(in srgb, #ff4f00 55%, #fff);
+  border-color: color-mix(in srgb, #ff8f66 55%, var(--line));
   box-shadow:
-    0 0 0 3px color-mix(in srgb, #ff4f00 12%, transparent),
-    0 10px 24px rgba(31, 36, 48, 0.08);
+    0 0 0 3px color-mix(in srgb, #ff8f66 12%, transparent),
+    0 10px 24px rgba(0, 0, 0, 0.24);
+}
+
+.intent-zapier-step-status {
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--green) 18%, var(--surface-alt));
+  color: var(--green);
+  font-size: 0.62rem;
+  font-weight: 700;
 }
 
 .intent-zapier-step-icon {
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.55rem;
-  background: color-mix(in srgb, #ff4f00 12%, #fff);
-  font-size: 0.95rem;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 0.45rem;
+  background: color-mix(in srgb, #ff8f66 14%, var(--surface-alt));
+  font-size: 0.85rem;
 }
 
 .intent-zapier-step-copy {
   display: grid;
-  gap: 0.1rem;
+  gap: 0.15rem;
   min-width: 0;
 }
 
-.intent-zapier-step-kind {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #6b7280;
+.intent-zapier-step-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 .intent-zapier-step-title {
-  font-size: 0.92rem;
-  line-height: 1.3;
-  color: #111827;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--text);
 }
 
-.intent-zapier-step-meta,
-.intent-zapier-step-count {
-  font-size: 0.72rem;
-  color: #6b7280;
-}
-
-.intent-zapier-step-count {
+.intent-zapier-step-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.4rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #ff8f66 18%, var(--surface-alt));
   font-family: var(--font-mono);
-  white-space: nowrap;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #ffb08a 80%, var(--text));
+}
+
+.intent-zapier-step-meta {
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: var(--text-soft);
 }
 
 .intent-zapier-connector {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.35rem 0;
+  width: 100%;
+  max-width: 28rem;
 }
 
 .intent-zapier-connector-line {
   width: 2px;
-  height: 1.4rem;
-  background: color-mix(in srgb, #ff4f00 35%, #cbd5e1);
+  height: 1.15rem;
+  background: color-mix(in srgb, var(--line) 85%, #fff);
 }
 
 .intent-zapier-connector-plus {
@@ -1304,89 +1445,77 @@ a {
   width: 1.35rem;
   height: 1.35rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, #ff4f00 35%, #cbd5e1);
-  background: #fff;
-  color: #ff4f00;
+  border: 1px solid color-mix(in srgb, #ff8f66 35%, var(--line));
+  background: color-mix(in srgb, var(--surface) 92%, #0a0015);
+  color: color-mix(in srgb, #ff8f66 80%, var(--text));
   font-size: 0.85rem;
   line-height: 1;
 }
 
-.intent-zapier-substeps {
-  display: grid;
-  gap: 0.45rem;
-  width: calc(100% - 1.5rem);
-  margin: 0.55rem 0 0 1.5rem;
+.intent-zapier-paths-rail {
+  display: flex;
+  justify-content: center;
+  width: min(100%, calc(var(--path-count, 1) * 16rem));
+  margin-top: 0.15rem;
 }
 
-.intent-zapier-substep {
+.intent-zapier-paths-rail-line {
+  width: calc(100% - 4rem);
+  height: 2px;
+  background: color-mix(in srgb, var(--line) 85%, #fff);
+}
+
+.intent-zapier-paths {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.55rem;
+  grid-template-columns: repeat(var(--path-count, 1), minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .intent-zapier-paths {
+    grid-template-columns: 1fr;
+  }
+
+  .intent-zapier-paths-rail {
+    display: none;
+  }
+}
+
+.intent-zapier-path-col {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  border: 1px solid color-mix(in srgb, var(--line) 80%, #fff);
-  border-radius: var(--radius-md);
-  background: color-mix(in srgb, #fff 92%, var(--surface-alt));
-  padding: 0.45rem 0.55rem;
-  color: inherit;
-  text-decoration: none;
-}
-
-.intent-zapier-substep-copy {
-  display: grid;
-  gap: 0.1rem;
   min-width: 0;
 }
 
-.intent-zapier-substep-copy strong {
-  font-size: 0.82rem;
-  color: #111827;
-}
-
-.intent-zapier-substep-copy span {
-  font-size: 0.72rem;
-  color: #6b7280;
-}
-
-.intent-zapier-inspector {
-  padding: 0.95rem 1rem;
-  border-color: color-mix(in srgb, #ff4f00 18%, var(--line));
-}
-
-.intent-zapier-inspector-kicker {
-  margin: 0 0 0.35rem;
+.intent-zapier-path-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface) 90%, #000);
+  border: 1px solid var(--line);
   font-family: var(--font-mono);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #ff4f00;
-}
-
-.intent-zapier-inspector-title {
-  margin: 0 0 0.55rem;
-  font-size: 1rem;
-  line-height: 1.35;
-}
-
-.intent-zapier-inspector-body {
-  margin: 0 0 0.55rem;
-  color: var(--text-soft);
-  font-size: 0.9rem;
-  line-height: 1.45;
-}
-
-.intent-zapier-inspector-list {
-  margin: 0;
-  padding-left: 1rem;
   color: var(--text-soft);
 }
 
-.intent-zapier-inspector-link {
-  color: var(--accent);
-  text-decoration: none;
+.intent-zapier-path-note {
+  width: 100%;
+  margin: 0.55rem 0 0;
+  padding: 0 0.15rem;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  line-height: 1.4;
 }
 
-.intent-zapier-inspector-link:hover {
-  text-decoration: underline;
+.intent-zapier-api-grid {
+  width: 100%;
+  margin-top: 0.75rem;
+  grid-template-columns: 1fr;
 }
 
 .intent-prompt-layer + .intent-prompt-layer {
