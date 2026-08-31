@@ -19,11 +19,11 @@ function RiverLine({ entry }) {
   );
 }
 
-export default function KhazakLogRiver() {
+export default function KhazakLogRiver({ variant = "section" }) {
   const loop = [...KZ_RIVER_LOGS, ...KZ_RIVER_LOGS];
 
   return (
-    <div className="kz-river" aria-hidden="true">
+    <div className={`kz-river${variant === "page" ? " kz-river--page" : ""}`} aria-hidden="true">
       <div className="kz-river-track">
         {loop.map((entry, index) => (
           <RiverLine key={`${entry.time}-${entry.vendor}-${index}`} entry={entry} />

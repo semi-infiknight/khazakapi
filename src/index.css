@@ -90,6 +90,7 @@ a {
   position: relative;
   z-index: 10;
   min-height: 100vh;
+  background: transparent;
 }
 
 .container-main {
@@ -678,6 +679,25 @@ a {
     linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.35) 18%, rgb(0 0 0 / 0.55) 50%, rgb(0 0 0 / 0.35) 82%, transparent 100%),
     linear-gradient(transparent 0%, black 12% 78%, transparent 100%);
   -webkit-mask-composite: source-in;
+}
+
+/* Jentic-style full-page audit scroll — sits above fluid bg, under app chrome */
+.kz-river--page {
+  position: fixed;
+  z-index: 1;
+  opacity: 0.16;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.2) 6%, rgb(0 0 0 / 0.42) 50%, rgb(0 0 0 / 0.2) 94%, transparent 100%),
+    linear-gradient(transparent 0%, black 4% 96%, transparent 100%);
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.2) 6%, rgb(0 0 0 / 0.42) 50%, rgb(0 0 0 / 0.2) 94%, transparent 100%),
+    linear-gradient(transparent 0%, black 4% 96%, transparent 100%);
+}
+
+.kz-river--page .kz-river-line {
+  font-size: 11px;
+  line-height: 2.05;
+  padding-left: clamp(0.65rem, 2.5vw, 2rem);
 }
 
 .kz-river-track {
