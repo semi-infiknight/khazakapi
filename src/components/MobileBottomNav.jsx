@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import SiteNavPanel from "./SiteNavPanel.jsx";
-import { AgentSubmitSpinner } from "./intent/IntentAgentLoader.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 function DockIcon({ name }) {
@@ -249,11 +248,11 @@ export default function MobileBottomNav() {
               />
               <button
                 type="submit"
-                className={`catalogue-mobile-search-go${catalogue?.intentSubmitting ? " catalogue-mobile-search-go--busy" : ""}`}
+                className="catalogue-mobile-search-go"
                 aria-label="Analyze APIs"
                 disabled={!catalogue?.query?.trim() || catalogue?.intentSubmitting}
               >
-                {catalogue?.intentSubmitting ? <AgentSubmitSpinner label="Analyzing APIs" /> : "↵"}
+                {catalogue?.intentSubmitting ? "…" : "↵"}
               </button>
               <button
                 type="button"

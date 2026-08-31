@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchSearch, fetchSuggest } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
-import { AgentSubmitSpinner } from "../components/intent/IntentAgentLoader.jsx";
-import CatalogueAgentLoader from "../components/intent/CatalogueAgentLoader.jsx";
-import IntentAgentLoader from "../components/intent/IntentAgentLoader.jsx";
 import { IntentResults } from "../components/IntentSuggest.jsx";
 import KhazakArchFigure from "../components/KhazakArchFigure.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
@@ -186,11 +183,11 @@ export default function HomePage() {
                 />
                 <button
                   type="submit"
-                  className={`catalogue-intent-submit${suggesting ? " catalogue-intent-submit--busy" : ""}`}
+                  className="catalogue-intent-submit"
                   disabled={!query.trim() || suggesting}
                   aria-label="Analyze APIs"
                 >
-                  {suggesting ? <AgentSubmitSpinner label="Analyzing APIs" /> : "↵"}
+                  {suggesting ? "…" : "↵"}
                 </button>
               </div>
               <p className="catalogue-intent-hint">
@@ -204,13 +201,13 @@ export default function HomePage() {
           {showingIntent ? (
             <div id="intent-results">
               {suggesting && !suggestion ? (
-                <IntentAgentLoader query={submittedQuery} loading={suggesting} />
+                <p className="font-mono text-sm text-[var(--text-soft)]">Finding APIs…</p>
               ) : (
                 <IntentResults suggestion={suggestion} />
               )}
             </div>
           ) : loading ? (
-            <CatalogueAgentLoader />
+            <p className="font-mono text-sm text-[var(--text-soft)]">Loading catalogue…</p>
           ) : (
             <>
               <ApiGrid apis={apis} />
