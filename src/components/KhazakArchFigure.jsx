@@ -37,16 +37,22 @@ function movePill(pill, point) {
   pill.style.transform = `translate(${point.x}px, ${point.y}px) translate(-50%, -50%)`;
 }
 
-function snapPill(pill, point) {
+function movePillBeside(pill, point) {
+  pill.style.transform = `translate(${point.x}px, ${point.y}px) translate(0, -50%)`;
+}
+
+function snapPill(pill, point, beside = false) {
   pill.style.transition = "none";
-  movePill(pill, point);
+  if (beside) movePillBeside(pill, point);
+  else movePill(pill, point);
   pill.offsetWidth;
   pill.style.transition = "";
 }
 
-function animatePill(pill, point, ms) {
+function animatePill(pill, point, ms, beside = false) {
   pill.style.transitionDuration = `0.35s, ${ms}ms, 0.4s, 0.4s`;
-  movePill(pill, point);
+  if (beside) movePillBeside(pill, point);
+  else movePill(pill, point);
 }
 
 function drawBeam(beam, from, to, ms, tone = "") {
@@ -78,8 +84,32 @@ function hidePill(pill) {
   pill.classList.remove("kz-af-vis");
 }
 
-function pillAnchor(hub, pill, offset = 0) {
-  return { x: hub.right - (pill.offsetWidth + offset) / 2 - 14, y: hub.top + 24 };
+function svgPoint(svg, vx, vy, stage) {
+  const stageRect = stage.getBoundingClientRect();
+  const pt = svg.createSVGPoint();
+  pt.x = vx;
+  pt.y = vy;
+  const screen = pt.matrixTransform(svg.getScreenCTM());
+  return {
+    x: screen.x - stageRect.left,
+    y: screen.y - stageRect.top,
+  };
+}
+
+function anchorPoint(svg, selector, stage, fallback) {
+  const node = svg.querySelector(selector);
+  if (!node) return fallback;
+  const cx = Number(node.getAttribute("cx"));
+  const cy = Number(node.getAttribute("cy"));
+  if (!Number.isFinite(cx) || !Number.isFinite(cy)) return fallback;
+  return svgPoint(svg, cx, cy, stage);
+}
+
+function spireChipPoint(spire, pill) {
+  return {
+    x: spire.x + 14,
+    y: spire.y + 2,
+  };
 }
 
 function appendLog(strip, kind, text, timers, alive, instant = false) {
@@ -151,6 +181,7 @@ export default function KhazakArchFigure() {
       stacked: false,
       hubIn: { x: 0, y: 0 },
       hubOut: { x: 0, y: 0 },
+      spire: { x: 0, y: 0 },
       hub: { left: 0, right: 0, top: 0, bottom: 0 },
       slots: [],
       target: { x: 0, y: 0 },
@@ -159,6 +190,7 @@ export default function KhazakArchFigure() {
     const measure = () => {
       const stageRect = stage.getBoundingClientRect();
       const hubRect = hub.getBoundingClientRect();
+      const inlineSvg = hub.querySelector(".ks-inline-svg");
       layout.stacked = window.matchMedia("(max-width: 860px)").matches;
       wires.setAttribute("viewBox", `0 0 ${Math.round(stageRect.width)} ${Math.round(stageRect.height)}`);
 
@@ -169,20 +201,32 @@ export default function KhazakArchFigure() {
         bottom: hubRect.bottom - stageRect.top,
       };
 
+      const fallbackIn = layout.stacked
+        ? { x: (layout.hub.left + layout.hub.right) / 2, y: layout.hub.top + layout.hub.bottom * 0.72 }
+        : { x: layout.hub.left + hubRect.width * 0.18, y: layout.hub.top + hubRect.height * 0.78 };
+      const fallbackSpire = layout.stacked
+        ? { x: (layout.hub.left + layout.hub.right) / 2, y: layout.hub.top + hubRect.height * 0.08 }
+        : { x: layout.hub.left + hubRect.width * 0.68, y: layout.hub.top + hubRect.height * 0.06 };
+      const fallbackOut = layout.stacked
+        ? { x: (layout.hub.left + layout.hub.right) / 2, y: layout.hub.top + hubRect.height * 0.1 }
+        : { x: layout.hub.left + hubRect.width * 0.72, y: layout.hub.top + hubRect.height * 0.1 };
+
+      if (inlineSvg) {
+        layout.hubIn = anchorPoint(inlineSvg, ".ks-af-anchor-in", stage, fallbackIn);
+        layout.spire = anchorPoint(inlineSvg, ".ks-af-anchor-spire", stage, fallbackSpire);
+        layout.hubOut = anchorPoint(inlineSvg, ".ks-af-anchor-out", stage, fallbackOut);
+      } else {
+        layout.hubIn = fallbackIn;
+        layout.spire = fallbackSpire;
+        layout.hubOut = fallbackOut;
+      }
+
       layout.slots = slots.map((slot) => {
         const rect = slot.getBoundingClientRect();
         return layout.stacked
           ? { x: rect.left - stageRect.left + rect.width / 2, y: rect.bottom - stageRect.top + 5 }
           : { x: rect.right - stageRect.left + 5, y: rect.top - stageRect.top + rect.height / 2 };
       });
-
-      layout.hubIn = layout.stacked
-        ? { x: (layout.hub.left + layout.hub.right) / 2, y: layout.hub.top - 2 }
-        : { x: layout.hub.left - 7, y: (layout.hub.top + layout.hub.bottom) / 2 };
-
-      layout.hubOut = layout.stacked
-        ? { x: (layout.hub.left + layout.hub.right) / 2, y: layout.hub.bottom + 2 }
-        : { x: layout.hub.right + 7, y: (layout.hub.top + layout.hub.bottom) / 2 };
 
       layout.target = tileCenter(activeTile, stage);
 
@@ -191,7 +235,7 @@ export default function KhazakArchFigure() {
         layout.slots
           .map((point) =>
             layout.stacked
-              ? `M${point.x} ${point.y}L${point.x} ${layout.hub.top - 2}`
+              ? `M${point.x} ${point.y}L${point.x} ${layout.hubIn.y}`
               : `M${point.x} ${point.y}L${layout.hubIn.x} ${layout.hubIn.y}`,
           )
           .join(""),
@@ -213,7 +257,7 @@ export default function KhazakArchFigure() {
     const resetVisual = () => {
       [chip, retPill, noPill].forEach(hidePill);
       [beamA, beamB].forEach(hideBeam);
-      hub.classList.remove("kz-af-hot-a", "kz-af-hot-r");
+      hub.classList.remove("kz-af-hot-a", "kz-af-hot-r", "kz-af-routing");
       capAgents.classList.remove("kz-af-lit");
       capApis.classList.remove("kz-af-lit");
       keyBadge.classList.remove("kz-af-show");
@@ -232,7 +276,7 @@ export default function KhazakArchFigure() {
       measure();
 
       const slotPoint = layout.slots[slots.indexOf(activeSlot)];
-      const hubChipPoint = () => pillAnchor(layout.hub, chip, 54);
+      const spirePoint = () => spireChipPoint(layout.spire, chip);
 
       const allowSteps = [
         [0, () => {
@@ -247,21 +291,18 @@ export default function KhazakArchFigure() {
           chip.classList.add("kz-af-vis");
         }],
         [260, () => {
-          drawBeam(beamA, slotPoint, layout.stacked ? { x: slotPoint.x, y: layout.hub.top - 2 } : layout.hubIn, 900);
-          animatePill(chip, hubChipPoint(), 900);
-          hub.classList.add("kz-af-hot-a");
+          drawBeam(beamA, slotPoint, layout.hubIn, 900);
+          animatePill(chip, layout.hubIn, 900);
+          hub.classList.add("kz-af-hot-a", "kz-af-routing");
         }],
         [940, () => {
+          snapPill(chip, spirePoint(), true);
           keyBadge.classList.add("kz-af-show");
           setBeamTone(beamA, "kz-af-b-amber");
+          hub.classList.remove("kz-af-routing");
         }],
         [760, () => {
-          drawBeam(
-            beamB,
-            layout.stacked ? { x: layout.target.x, y: layout.hub.bottom + 2 } : layout.hubOut,
-            layout.target,
-            900,
-          );
+          drawBeam(beamB, layout.hubOut, layout.target, 900);
           animatePill(chip, layout.target, 900);
           hub.classList.remove("kz-af-hot-a");
           keyBadge.classList.remove("kz-af-show");
@@ -277,7 +318,7 @@ export default function KhazakArchFigure() {
           setBeamTone(beamB, "kz-af-b-green");
           snapPill(retPill, layout.target);
           retPill.classList.add("kz-af-vis");
-          animatePill(retPill, pillAnchor(layout.hub, retPill), 950);
+          animatePill(retPill, spirePoint(), 950, true);
         }],
         [980, () => appendLog(strip, "ok", formatAllow(allow), timers, alive)],
         [520, () => hidePill(retPill)],
@@ -300,11 +341,14 @@ export default function KhazakArchFigure() {
           chip.classList.add("kz-af-vis");
         }],
         [260, () => {
-          drawBeam(beamA, slotPoint, layout.stacked ? { x: slotPoint.x, y: layout.hub.top - 2 } : layout.hubIn, 900);
-          animatePill(chip, hubChipPoint(), 900);
+          drawBeam(beamA, slotPoint, layout.hubIn, 900);
+          animatePill(chip, layout.hubIn, 900);
+          hub.classList.add("kz-af-routing");
         }],
         [940, () => {
           hub.classList.add("kz-af-hot-r");
+          hub.classList.remove("kz-af-routing");
+          snapPill(chip, spirePoint(), true);
           chip.classList.add("kz-af-bad");
           setBeamTone(beamA, "kz-af-b-red");
         }],
@@ -314,10 +358,10 @@ export default function KhazakArchFigure() {
         }],
         [400, () => {
           noPill.textContent = `${DENY_LABEL} · ${deny.rule}`;
-          const anchor = pillAnchor(layout.hub, noPill);
-          snapPill(noPill, anchor);
+          const anchor = spirePoint();
+          snapPill(noPill, anchor, true);
           noPill.classList.add("kz-af-vis");
-          animatePill(noPill, { x: anchor.x - 26, y: anchor.y }, 800);
+          animatePill(noPill, { x: anchor.x - 26, y: anchor.y }, 800, true);
         }],
         [760, () => appendLog(strip, "nok", formatDeny(deny), timers, alive)],
         [820, () => {
@@ -366,24 +410,15 @@ export default function KhazakArchFigure() {
       activeSlot = slots[1] ?? slots[0];
       activeSlot.classList.add("kz-af-calling");
       const slotPoint = layout.slots[slots.indexOf(activeSlot)];
-      drawBeam(
-        beamA,
-        slotPoint,
-        layout.stacked ? { x: slotPoint.x, y: layout.hub.top - 2 } : layout.hubIn,
-        0,
-        "kz-af-b-amber",
-      );
-      drawBeam(
-        beamB,
-        layout.stacked ? { x: layout.target.x, y: layout.hub.bottom + 2 } : layout.hubOut,
-        layout.target,
-        0,
-        "kz-af-b-green",
-      );
+      drawBeam(beamA, slotPoint, layout.hubIn, 0, "kz-af-b-amber");
+      drawBeam(beamB, layout.hubOut, layout.target, 0, "kz-af-b-green");
       activeTile.classList.add("kz-af-bloom");
       capAgents.classList.add("kz-af-lit");
       capApis.classList.add("kz-af-lit");
       keyBadge.classList.add("kz-af-show");
+      chipText.textContent = `${KZ_ARCH_ALLOWS[0].method} ${KZ_ARCH_ALLOWS[0].path}`;
+      snapPill(chip, spireChipPoint(layout.spire, chip), true);
+      chip.classList.add("kz-af-vis");
       seedLogs(true);
       strip.lastElementChild?.classList.remove("kz-af-aged");
       return cleanup;

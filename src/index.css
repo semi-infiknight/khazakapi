@@ -318,24 +318,27 @@ a {
   z-index: 2;
   grid-area: 2 / 2;
   align-self: center;
-  overflow: hidden;
-  border: 1px solid hsl(var(--kz-teal) / 0.42);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--code-bg) 82%, transparent);
-  box-shadow: 0 0 44px -16px hsl(var(--kz-cyan) / 0.42);
-  transition:
-    border-color 0.45s,
-    box-shadow 0.45s;
+  overflow: visible;
+  background: transparent;
+  transition: filter 0.45s;
 }
 
 .kz-af-hub.kz-af-hot-a {
-  border-color: hsl(var(--kz-amber) / 0.55);
-  box-shadow: 0 0 44px -14px hsl(var(--kz-amber) / 0.4);
+  filter: drop-shadow(0 0 18px hsl(var(--kz-amber) / 0.28));
 }
 
 .kz-af-hub.kz-af-hot-r {
-  border-color: hsl(var(--kz-red) / 0.6);
-  box-shadow: 0 0 44px -12px hsl(var(--kz-red) / 0.45);
+  filter: drop-shadow(0 0 18px hsl(var(--kz-red) / 0.32));
+}
+
+.kz-af-hub.kz-af-routing .ks-streaks {
+  opacity: 1;
+}
+
+.kz-af-hub.kz-af-routing .ks-streak-track,
+.kz-af-hub.kz-af-routing .ks-streak-head {
+  animation-duration: 1.1s;
+  opacity: 1;
 }
 
 .kz-af-hub-art {
@@ -780,6 +783,36 @@ a {
 
 .ks-art-inline .ks-data-layer {
   pointer-events: none;
+}
+
+.ks-af-anchor {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ks-af-route {
+  opacity: 0;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 4px hsl(var(--kz-amber) / 0.65));
+  pointer-events: none;
+}
+
+.kz-af-hub.kz-af-routing .ks-af-route {
+  opacity: 1;
+  animation: ks-af-route-pulse 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes ks-af-route-pulse {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0.35;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
 }
 
 .ks-streaks {

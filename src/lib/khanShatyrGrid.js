@@ -4,6 +4,33 @@ import STROKES from "./khanShatyrStrokes.json";
 
 export const VIEWBOX = { w: 400, h: 267 };
 
+/** Arch animation anchor points in viewBox space */
+export const ARCH_ANCHORS = {
+  in: { x: 78, y: 210 },
+  spire: { x: 281, y: 7 },
+  out: { x: 312, y: 24 },
+};
+
+/** Long mesh stroke used for the one-shot routing pulse toward the spire */
+export const ARCH_ROUTE_STROKE = STROKES.find((stroke) => stroke.idx === 401) ?? STROKES[0];
+
+const ARCH_ANCHOR_MARKUP = `<g class="ks-af-anchors" aria-hidden="true">
+  <circle class="ks-af-anchor ks-af-anchor-in" cx="${ARCH_ANCHORS.in.x}" cy="${ARCH_ANCHORS.in.y}" r="1.5" />
+  <circle class="ks-af-anchor ks-af-anchor-spire" cx="${ARCH_ANCHORS.spire.x}" cy="${ARCH_ANCHORS.spire.y}" r="1.5" />
+  <circle class="ks-af-anchor ks-af-anchor-out" cx="${ARCH_ANCHORS.out.x}" cy="${ARCH_ANCHORS.out.y}" r="1.5" />
+</g>`;
+
+const ARCH_ROUTE_MARKUP = `<path
+  class="ks-af-route"
+  d="${ARCH_ROUTE_STROKE.d}"
+  pathLength="1"
+  stroke="${ARCH_ROUTE_STROKE.fill}"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  fill="none"
+/>`;
+
 const SVG_EXTRA_DEFS = `
 <filter id="ks-streak-glow" x="-100%" y="-100%" width="300%" height="300%">
   <feGaussianBlur stdDeviation="0.9" result="blur" />
@@ -59,7 +86,12 @@ export function buildInlineKhanShatyrSvg(svgRaw, reducedMotion = false, align = 
   svg = svg.replace("<defs>", `<defs>${SVG_EXTRA_DEFS}`);
 
   if (dataLayer) {
-    svg = svg.replace("</g>\n<defs>", `  ${dataLayer}\n</g>\n<defs>`);
+    svg = svg.replace(
+      "</g>\n<defs>",
+      `  ${dataLayer}\n  ${ARCH_ANCHOR_MARKUP}\n  ${ARCH_ROUTE_MARKUP}\n</g>\n<defs>`,
+    );
+  } else {
+    svg = svg.replace("</g>\n<defs>", `  ${ARCH_ANCHOR_MARKUP}\n  ${ARCH_ROUTE_MARKUP}\n</g>\n<defs>`);
   }
 
   return svg;
