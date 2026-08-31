@@ -57,9 +57,53 @@ const VENDOR_LABELS = {
   "yandex-search-ads": "Yandex Ads",
 };
 
-/** All integrated provider logos for the hero API field grid. */
-export const KZ_ARCH_TILES = Object.entries(logosManifest).map(([slug, src]) => ({
-  slug,
-  src,
-  vendor: VENDOR_LABELS[slug] || slug.replace(/-/g, " "),
-}));
+/** Prefer slugs used in hero beam targets and distinct product marks. */
+const ARCH_TILE_SLUG_PRIORITY = {
+  "yandex-maps": 0,
+  "yandex-market": 1,
+  "yandex-cloud": 2,
+  "yandex-ai": 3,
+  "kaspi-kz": 0,
+  "2gis": 0,
+  "halyk-bank": 0,
+  "halyk-epay": 1,
+  "beeline-kazakhstan": 0,
+  "beeline-cloud": 1,
+  "data-egov-kz": 0,
+  "egov-kz": 1,
+};
+
+function archTilePriority(slug) {
+  if (ARCH_TILE_SLUG_PRIORITY[slug] != null) return ARCH_TILE_SLUG_PRIORITY[slug];
+  if (slug.startsWith("yandex-")) return 10;
+  return 50;
+}
+
+/** Keep one tile per logo asset so the scrolling wall does not repeat identical marks. */
+export function uniqueArchTiles(tiles) {
+  const bySrc = new Map();
+
+  for (const tile of tiles) {
+    if (!tile.src) continue;
+    const existing = bySrc.get(tile.src);
+    if (!existing || archTilePriority(tile.slug) < archTilePriority(existing.slug)) {
+      bySrc.set(tile.src, tile);
+    }
+  }
+
+  return [...bySrc.values()];
+}
+
+const ALL_ARCH_TILES = Object.entries(logosManifest)
+  .filter(([, src]) => src)
+  .map(([slug, src]) => ({
+    slug,
+    src,
+    vendor: VENDOR_LABELS[slug] || slug.replace(/-/g, " "),
+  }));
+
+/** Integrated provider logos for the hero API field grid (deduped by image). */
+export const KZ_ARCH_TILES = uniqueArchTiles(ALL_ARCH_TILES);
+
+/** Full slug list for bloom targeting — includes aliases sharing the same PNG. */
+export const KZ_ARCH_TILES_BY_SLUG = Object.fromEntries(ALL_ARCH_TILES.map((tile) => [tile.slug, tile]));

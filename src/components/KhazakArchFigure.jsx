@@ -6,6 +6,7 @@ import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
 import {
   alignTrackToSlug,
   pauseRowTrack,
+  resolveArchWallSlug,
   resumeRowTrack,
   rowIndexForSlug,
 } from "../lib/kzArchWall.js";
@@ -177,14 +178,15 @@ export default function KhazakArchFigure({ catalogueTotal = 688 }) {
 
     const prepareTarget = (call) => {
       releasePausedRow();
-      const rowIndex = rowIndexForSlug(KZ_ARCH_TILES, call.slug);
+      const wallSlug = resolveArchWallSlug(call.slug, KZ_ARCH_TILES);
+      const rowIndex = rowIndexForSlug(KZ_ARCH_TILES, wallSlug);
       const rowEl = wallRows[rowIndex];
       const track = wallTracks[rowIndex];
       if (!rowEl || !track) return;
 
       rowEl.classList.add("kz-af-row-lit");
       const anim = pauseRowTrack(track);
-      activeTile = alignTrackToSlug(rowEl, track, call.slug, call.align ?? 0.5);
+      activeTile = alignTrackToSlug(rowEl, track, wallSlug, call.align ?? 0.5);
       pausedRow = { track, anim, index: rowIndex, call };
       measure();
     };

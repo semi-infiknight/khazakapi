@@ -33,8 +33,16 @@ const SLUG_URL_OVERRIDES = {
   "tele2-kazakhstan": ["https://icon.horse/icon/tele2.ru", "https://icon.horse/icon/altel.kz"],
   wildberries: ["https://icon.horse/icon/wildberries.ru"],
   "yandex-360": ["https://yastatic.net/s3/home/logos/share/share-logo-ru.png"],
-  "yandex-ai": ["https://icon.horse/icon/yandex.cloud"],
-  "yandex-cloud": ["https://icon.horse/icon/yandex.cloud"],
+  "yandex-ai": [
+    "https://yandex.cloud/favicon.ico",
+    "https://console.cloud.yandex.ru/favicon.ico",
+    "https://yastatic.net/s3/home/logos/share/share-logo-ru.png",
+  ],
+  "yandex-cloud": [
+    "https://yandex.cloud/favicon.ico",
+    "https://console.cloud.yandex.ru/favicon.ico",
+    "https://yastatic.net/s3/home/logos/share/share-logo-ru.png",
+  ],
   "yandex-direct": ["https://yastatic.net/s3/home/logos/share/share-logo-ru.png"],
   "yandex-go": ["https://yastatic.net/s3/home/logos/share/share-logo-ru.png"],
   "yandex-id": ["https://yastatic.net/s3/home/logos/share/share-logo-ru.png"],

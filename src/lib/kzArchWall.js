@@ -1,5 +1,7 @@
 /** Shared logo-wall row config for hero arch animation */
 
+import { KZ_ARCH_TILES_BY_SLUG } from "../data/kzArchTiles.js";
+
 export const KZ_ARCH_ROW_COUNT = 5;
 
 export const KZ_WALL_ROW_CONFIG = [
@@ -18,6 +20,10 @@ function vendorKey(slug) {
   if (slug.startsWith("halyk-")) return "halyk";
   if (slug.startsWith("beeline-")) return "beeline";
   return slug.split("-")[0];
+}
+
+function visualKey(tile) {
+  return tile.src || tile.slug;
 }
 
 /** Spread same-vendor logos so scrolling tracks do not cluster duplicates. */
@@ -48,19 +54,22 @@ export function interleaveTilesByVendor(tiles) {
   return out;
 }
 
-function breaksAdjacent(row, index, key) {
+function breaksAdjacent(row, index, key, kind = "vendor") {
   const prev = row[index - 1];
   const next = row[index + 1];
-  if (prev && vendorKey(prev.slug) === key) return true;
-  if (next && vendorKey(next.slug) === key) return true;
+  const leftOf = (tile) => (kind === "visual" ? visualKey(tile) : vendorKey(tile.slug));
+  if (prev && leftOf(prev) === key) return true;
+  if (next && leftOf(next) === key) return true;
   return false;
 }
 
-function polishRowVendorRuns(rows) {
+function polishRowAdjacentRuns(rows, kind) {
+  const readKey = (tile) => (kind === "visual" ? visualKey(tile) : vendorKey(tile.slug));
+
   for (const row of rows) {
     for (let i = 1; i < row.length; i += 1) {
-      const leftKey = vendorKey(row[i - 1].slug);
-      const rightKey = vendorKey(row[i].slug);
+      const leftKey = readKey(row[i - 1]);
+      const rightKey = readKey(row[i]);
       if (leftKey !== rightKey) continue;
 
       let swapped = false;
@@ -68,10 +77,10 @@ function polishRowVendorRuns(rows) {
         if (other === row) continue;
         for (let j = 0; j < other.length; j += 1) {
           const candidate = other[j];
-          const candidateKey = vendorKey(candidate.slug);
+          const candidateKey = readKey(candidate);
           if (candidateKey === leftKey || candidateKey === rightKey) continue;
-          if (breaksAdjacent(row, i, candidateKey)) continue;
-          if (breaksAdjacent(other, j, rightKey)) continue;
+          if (breaksAdjacent(row, i, candidateKey, kind)) continue;
+          if (breaksAdjacent(other, j, rightKey, kind)) continue;
 
           const oldRight = row[i];
           row[i] = candidate;
@@ -83,12 +92,12 @@ function polishRowVendorRuns(rows) {
       }
     }
 
-    if (row.length > 1 && vendorKey(row[0].slug) === vendorKey(row[row.length - 1].slug)) {
+    if (row.length > 1 && readKey(row[0]) === readKey(row[row.length - 1])) {
       for (let i = 1; i < row.length - 1; i += 1) {
-        const midKey = vendorKey(row[i].slug);
-        const seamKey = vendorKey(row[row.length - 1].slug);
+        const midKey = readKey(row[i]);
+        const seamKey = readKey(row[row.length - 1]);
         if (midKey === seamKey) continue;
-        if (breaksAdjacent(row, i, seamKey)) continue;
+        if (breaksAdjacent(row, i, seamKey, kind)) continue;
         const swap = row[i];
         row[i] = row[row.length - 1];
         row[row.length - 1] = swap;
@@ -96,6 +105,11 @@ function polishRowVendorRuns(rows) {
       }
     }
   }
+}
+
+function polishRowVendorRuns(rows) {
+  polishRowAdjacentRuns(rows, "vendor");
+  polishRowAdjacentRuns(rows, "visual");
 }
 
 export function buildArchWallRows(tiles, rowCount = KZ_ARCH_ROW_COUNT) {
@@ -116,9 +130,18 @@ export function buildTrackLoop(rowTiles, repeat = 2) {
   return Array.from({ length: copies }, () => rowTiles).flat();
 }
 
+export function resolveArchWallSlug(slug, tiles) {
+  if (tiles.some((tile) => tile.slug === slug)) return slug;
+  const ref = KZ_ARCH_TILES_BY_SLUG[slug];
+  if (!ref?.src) return slug;
+  const match = tiles.find((tile) => tile.src === ref.src);
+  return match?.slug ?? slug;
+}
+
 export function rowIndexForSlug(tiles, slug, rowCount = KZ_ARCH_ROW_COUNT) {
+  const resolved = resolveArchWallSlug(slug, tiles);
   const rows = buildArchWallRows(tiles, rowCount);
-  const index = rows.findIndex((row) => row.some((tile) => tile.slug === slug));
+  const index = rows.findIndex((row) => row.some((tile) => tile.slug === resolved));
   return index >= 0 ? index : 0;
 }
 
