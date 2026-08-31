@@ -157,7 +157,7 @@ export default function HomePage() {
       <section className="hero-arch mb-8" aria-label="Khazak API">
         <h1 className="hero-title hero-arch-title">every Kazakhstan API you need</h1>
         <div className="hero-arch-stack">
-          <KhazakArchFigure />
+          <KhazakArchFigure catalogueTotal={catalogueTotal} />
           <KhazakLogoWall catalogueTotal={catalogueTotal} />
         </div>
       </section>
