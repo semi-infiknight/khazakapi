@@ -1,7 +1,14 @@
 import { useEffect, useRef } from "react";
 import KhanShatyrAnimated from "./KhanShatyrAnimated.jsx";
+import KhazakArchWallRows from "./KhazakArchWallRows.jsx";
 import { KZ_ARCH_AGENTS, KZ_ARCH_ALLOWS, KZ_ARCH_DENIES } from "../data/kzArchCalls.js";
 import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
+import {
+  alignTrackToSlug,
+  pauseRowTrack,
+  resumeRowTrack,
+  rowIndexForSlug,
+} from "../lib/kzArchWall.js";
 
 const DENY_LABEL = "blocked";
 
@@ -144,14 +151,15 @@ export default function KhazakArchFigure() {
     const retPill = q(".kz-af-ret");
     const noPill = q(".kz-af-no");
     const slots = Array.from(root.querySelectorAll(".kz-af-slot"));
-    const tiles = Array.from(root.querySelectorAll(".kz-af-tile"));
-    const tileBySlug = new Map(KZ_ARCH_TILES.map((tile, index) => [tile.slug, tiles[index]]));
+    const wallRows = Array.from(root.querySelectorAll(".kz-af-wall-row"));
+    const wallTracks = Array.from(root.querySelectorAll(".kz-af-wall-track"));
 
     let visible = false;
     let cycling = false;
     let cycleIndex = 0;
     let activeSlot = slots[0];
-    let activeTile = tileBySlug.get(KZ_ARCH_ALLOWS[0].slug) ?? tiles[0];
+    let activeTile = null;
+    let pausedRow = null;
 
     const layout = {
       stacked: false,
@@ -161,6 +169,27 @@ export default function KhazakArchFigure() {
       hub: { left: 0, right: 0, top: 0, bottom: 0 },
       slots: [],
       target: { x: 0, y: 0 },
+    };
+
+    const releasePausedRow = () => {
+      if (!pausedRow) return;
+      wallRows[pausedRow.index]?.classList.remove("kz-af-row-lit");
+      resumeRowTrack(pausedRow.track, pausedRow.anim);
+      pausedRow = null;
+    };
+
+    const prepareTarget = (call) => {
+      releasePausedRow();
+      const rowIndex = call.row ?? rowIndexForSlug(KZ_ARCH_TILES, call.slug);
+      const rowEl = wallRows[rowIndex];
+      const track = wallTracks[rowIndex];
+      if (!rowEl || !track) return;
+
+      rowEl.classList.add("kz-af-row-lit");
+      const anim = pauseRowTrack(track);
+      activeTile = alignTrackToSlug(rowEl, track, call.slug, call.align ?? 0.5);
+      pausedRow = { track, anim, index: rowIndex, call };
+      measure();
     };
 
     const measure = () => {
@@ -204,7 +233,9 @@ export default function KhazakArchFigure() {
           : { x: rect.right - stageRect.left + 5, y: rect.top - stageRect.top + rect.height / 2 };
       });
 
-      layout.target = tileCenter(activeTile, stage);
+      if (activeTile) {
+        layout.target = tileCenter(activeTile, stage);
+      }
 
       fan.setAttribute(
         "d",
@@ -227,14 +258,15 @@ export default function KhazakArchFigure() {
       keyBadge.classList.remove("kz-af-show");
       chip.classList.remove("kz-af-bad");
       slots.forEach((slot) => slot.classList.remove("kz-af-calling"));
-      tiles.forEach((tile) => tile.classList.remove("kz-af-bloom"));
+      root.querySelectorAll(".kz-af-tile").forEach((tile) => tile.classList.remove("kz-af-bloom"));
+      releasePausedRow();
+      activeTile = null;
     };
 
     const runCycle = () => {
       cycling = true;
       const allow = KZ_ARCH_ALLOWS[cycleIndex % KZ_ARCH_ALLOWS.length];
       const deny = KZ_ARCH_DENIES[cycleIndex % KZ_ARCH_DENIES.length];
-      activeTile = tileBySlug.get(allow.slug) ?? activeTile;
       activeSlot = slots[cycleIndex % slots.length];
       cycleIndex += 1;
       measure();
@@ -266,6 +298,7 @@ export default function KhazakArchFigure() {
           hub.classList.remove("kz-af-routing");
         }],
         [760, () => {
+          prepareTarget(allow);
           drawBeam(beamB, layout.hubOut, layout.target, 900);
           animatePill(chip, layout.target, 900);
           hub.classList.remove("kz-af-hot-a");
@@ -273,7 +306,7 @@ export default function KhazakArchFigure() {
         }],
         [640, () => hidePill(chip)],
         [260, () => {
-          activeTile.classList.add("kz-af-bloom");
+          activeTile?.classList.add("kz-af-bloom");
           capApis.classList.add("kz-af-lit");
         }],
         [620, () => {
@@ -286,7 +319,8 @@ export default function KhazakArchFigure() {
         }],
         [520, () => hidePill(retPill)],
         [420, () => {
-          activeTile.classList.remove("kz-af-bloom");
+          activeTile?.classList.remove("kz-af-bloom");
+          releasePausedRow();
           hideBeam(beamA);
           hideBeam(beamB);
           activeSlot.classList.remove("kz-af-calling");
@@ -359,7 +393,10 @@ export default function KhazakArchFigure() {
     const onResize = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        if (alive.current) measure();
+        if (alive.current) {
+          if (pausedRow?.call) prepareTarget(pausedRow.call);
+          else measure();
+        }
       }, 160);
     };
 
@@ -367,19 +404,22 @@ export default function KhazakArchFigure() {
 
     if (reduced) {
       root.classList.add("kz-af-on");
+      const seed = KZ_ARCH_ALLOWS[0];
+      prepareTarget(seed);
       measure();
       activeSlot = slots[1] ?? slots[0];
       activeSlot.classList.add("kz-af-calling");
       const slotPoint = layout.slots[slots.indexOf(activeSlot)];
       drawBeam(beamA, slotPoint, layout.hubIn, 0, "kz-af-b-amber");
       drawBeam(beamB, layout.hubOut, layout.target, 0, "kz-af-b-green");
-      activeTile.classList.add("kz-af-bloom");
+      activeTile?.classList.add("kz-af-bloom");
       capAgents.classList.add("kz-af-lit");
       capApis.classList.add("kz-af-lit");
       keyBadge.classList.add("kz-af-show");
-      chipText.textContent = `${KZ_ARCH_ALLOWS[0].method} ${KZ_ARCH_ALLOWS[0].path}`;
+      chipText.textContent = `${seed.method} ${seed.path}`;
       snapPill(chip, spireChipPoint(layout.spire), true);
       chip.classList.add("kz-af-vis");
+      wallTracks.forEach((track) => pauseRowTrack(track));
       return cleanup;
     }
 
@@ -440,13 +480,7 @@ export default function KhazakArchFigure() {
         </div>
 
         <div className="kz-af-fieldwrap">
-          <div className="kz-af-field">
-            {KZ_ARCH_TILES.map((tile) => (
-              <span key={tile.slug} className="kz-af-tile" title={tile.vendor}>
-                <img src={tile.src} alt="" width={22} height={22} loading="lazy" decoding="async" />
-              </span>
-            ))}
-          </div>
+          <KhazakArchWallRows />
         </div>
 
         <div className="kz-af-pill kz-af-chip">

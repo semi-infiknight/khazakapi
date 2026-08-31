@@ -1,0 +1,35 @@
+import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
+import { buildArchWallRows, KZ_WALL_ROW_CONFIG } from "../lib/kzArchWall.js";
+
+export default function KhazakArchWallRows() {
+  const rows = buildArchWallRows(KZ_ARCH_TILES);
+
+  return (
+    <div className="kz-af-wall-rows">
+      {rows.map((rowTiles, index) => {
+        const cfg = KZ_WALL_ROW_CONFIG[index];
+        const loop = [...rowTiles, ...rowTiles];
+
+        return (
+          <div key={index} className="kz-af-wall-row" data-row={index}>
+            <div
+              className={`kz-af-wall-track ${cfg.reverse ? "kz-af-wall-track-rev" : ""}`.trim()}
+              style={{ animationDuration: `${cfg.duration}s` }}
+            >
+              {loop.map((tile, tileIndex) => (
+                <span
+                  key={`${tile.slug}-${tileIndex}`}
+                  className="kz-af-tile"
+                  data-slug={tile.slug}
+                  title={tile.vendor}
+                >
+                  <img src={tile.src} alt="" width={22} height={22} loading="lazy" decoding="async" />
+                </span>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}

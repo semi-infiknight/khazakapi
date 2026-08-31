@@ -1,19 +1,6 @@
 import KhazakLogRiver from "./KhazakLogRiver.jsx";
 import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
-
-const ROW_CONFIG = [
-  { duration: 70, reverse: false },
-  { duration: 84, reverse: true },
-  { duration: 98, reverse: false },
-];
-
-function buildWallRows(tiles, rowCount = 3) {
-  const rows = Array.from({ length: rowCount }, () => []);
-  tiles.forEach((tile, index) => {
-    rows[index % rowCount].push(tile);
-  });
-  return rows;
-}
+import { buildArchWallRows, KZ_WALL_ROW_CONFIG } from "../lib/kzArchWall.js";
 
 function LogoTrack({ tiles, duration, reverse }) {
   const loop = [...tiles, ...tiles];
@@ -35,7 +22,7 @@ function LogoTrack({ tiles, duration, reverse }) {
 }
 
 export default function KhazakLogoWall({ catalogueTotal = KZ_ARCH_TILES.length }) {
-  const rows = buildWallRows(KZ_ARCH_TILES, ROW_CONFIG.length);
+  const rows = buildArchWallRows(KZ_ARCH_TILES, KZ_WALL_ROW_CONFIG.length);
 
   return (
     <section className="kz-wall" aria-label="Integrated Kazakhstan API providers">
@@ -46,8 +33,8 @@ export default function KhazakLogoWall({ catalogueTotal = KZ_ARCH_TILES.length }
           <LogoTrack
             key={index}
             tiles={rowTiles}
-            duration={ROW_CONFIG[index].duration}
-            reverse={ROW_CONFIG[index].reverse}
+            duration={KZ_WALL_ROW_CONFIG[index].duration}
+            reverse={KZ_WALL_ROW_CONFIG[index].reverse}
           />
         ))}
       </div>
