@@ -1,4 +1,4 @@
-export const KZ_ARCH_AGENTS = ["/agents/grok.png", "/agents/kimi.png", "/agents/qwen.svg"];
+export const KZ_ARCH_AGENTS = ["/agents/grok.svg", "/agents/kimi.svg", "/agents/qwen.svg"];
 
 export const KZ_ARCH_ALLOWS = [
   {

@@ -10,7 +10,11 @@ function ClaudeMark() {
 }
 
 function GrokMark() {
-  return <img src="/agents/grok.png" alt="" width={14} height={14} className="mcp-platform-mark" aria-hidden="true" />;
+  return (
+    <svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+      <path d="M20.8 5.5 8.2 26.5h3.4L24.2 5.5h-3.4z" />
+    </svg>
+  );
 }
 
 function GptMark() {
