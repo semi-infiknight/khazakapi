@@ -1107,8 +1107,6 @@ a {
 .api-card-meta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
   margin-top: 0.85rem;
   font-family: var(--font-sans);
   font-size: 0.72rem;
@@ -1116,7 +1114,7 @@ a {
 }
 
 .api-card-meta span:last-child {
-  text-align: right;
+  text-align: left;
 }
 
 .api-card-metrics {

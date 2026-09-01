@@ -51,13 +51,13 @@ export default function ApiCard({ api }) {
 
       <div className="api-card-meta">
         <span>{api.companyHub ? api.companyName || api.provider : `By ${api.provider}`}</span>
-        {updated ? <span>{updated}</span> : null}
       </div>
 
       <div className="api-card-metrics">
         <MetricPill icon="◆">{categoryLabel(api.category)}</MetricPill>
         <MetricPill icon="⏱">{cardMetricAuth(api)}</MetricPill>
         <MetricPill icon="📶">{cardMetricReady(api)}</MetricPill>
+        {updated ? <MetricPill icon="↻">{updated}</MetricPill> : null}
       </div>
     </Link>
   );
