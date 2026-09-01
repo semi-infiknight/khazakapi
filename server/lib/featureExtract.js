@@ -3,9 +3,14 @@
  */
 
 import { tokenize } from "./search.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import { embedQuery } from "./queryEmbedder.js";
 import { FEATURES, PRODUCT_RECIPES, featureSearchText, getFeature } from "./features.js";
 import { NON_BUILDABLE_MATRIX_FEATURES } from "./categoryFeatureProfiles.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const MAX_FEATURES = 5;
 const KEYWORD_FLOOR = 4;
@@ -43,6 +48,16 @@ function cosine(a, b) {
 
 async function loadFeatureVectors() {
   if (cachedFeatureVectors) return cachedFeatureVectors;
+
+  const store = loadFeatureEmbeddingStore();
+  if (store) {
+    cachedFeatureVectors = EXTRACT_FEATURES.map((feature) => {
+      const vec = store.byId.get(feature.id);
+      return vec ? { feature, vec } : null;
+    }).filter(Boolean);
+    return cachedFeatureVectors;
+  }
+
   cachedFeatureVectors = await Promise.all(
     EXTRACT_FEATURES.map(async (feature) => ({
       feature,
@@ -50,6 +65,25 @@ async function loadFeatureVectors() {
     })),
   );
   return cachedFeatureVectors;
+}
+
+function loadFeatureEmbeddingStore() {
+  try {
+    const filePath = path.join(__dirname, "../data/feature-embeddings.json");
+    if (!fs.existsSync(filePath)) return null;
+    const raw = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    if (!raw?.ids?.length || !raw?.vectors?.length) return null;
+    return {
+      model: raw.model,
+      byId: new Map(raw.ids.map((id, i) => [id, Float32Array.from(raw.vectors[i])])),
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function warmFeatureVectors() {
+  loadFeatureVectors().catch(() => {});
 }
 
 function scoreFeatureKeywords(feature, hay, tokens) {

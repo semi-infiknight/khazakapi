@@ -15,6 +15,7 @@ import { suggestApis, suggestExamples } from "./lib/suggest.js";
 import { answerApiQuestion } from "./lib/apiAsk.js";
 import { warmLocalLlm } from "./lib/localLlm.js";
 import { warmQueryEmbedder } from "./lib/queryEmbedder.js";
+import { warmFeatureVectors } from "./lib/featureExtract.js";
 import { checkHealth } from "./lib/health.js";
 import { openApiToPostman } from "./lib/postman.js";
 import { validateDataEgovKey, DATA_EGOV_LINKS } from "./lib/egov.js";
@@ -321,5 +322,6 @@ app.use((_req, res) => {
 app.listen(PORT, () => {
   console.log(`Qazaq Stack server on http://localhost:${PORT} (${KZ_APIS.length} KZ APIs)`);
   warmQueryEmbedder();
+  warmFeatureVectors();
   warmLocalLlm();
 });

@@ -12,6 +12,8 @@ env.cacheDir = process.env.TRANSFORMERS_CACHE || "./.cache/transformers";
 env.allowLocalModels = true;
 
 let embedderPromise = null;
+const queryCache = new Map();
+const QUERY_CACHE_MAX = 128;
 
 async function getEmbedder() {
   if (!embedderPromise) {
@@ -34,9 +36,20 @@ export async function embedQuery(text) {
   const input = String(text || "").trim();
   if (!input) return null;
 
+  const cached = queryCache.get(input);
+  if (cached) return cached;
+
   const embedder = await getEmbedder();
   const output = await embedder(input, { pooling: "mean", normalize: true });
-  return Float32Array.from(output.data);
+  const vec = Float32Array.from(output.data);
+
+  if (queryCache.size >= QUERY_CACHE_MAX) {
+    const oldest = queryCache.keys().next().value;
+    queryCache.delete(oldest);
+  }
+  queryCache.set(input, vec);
+
+  return vec;
 }
 
 /** Warm model in background so first suggest is faster. */

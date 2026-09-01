@@ -177,16 +177,22 @@ export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
   const blocks = featureBlocksFromExtraction(extracted);
   let globalBest = 0;
 
-  for (const block of blocks) {
-    const feature = extracted.features.find((f) => f.feature.id === block.id)?.feature;
-    if (!feature) continue;
-    block.apis = await matchApisForFeature(feature, apis, index, text, hay, thresholds);
+  const matched = await Promise.all(
+    blocks.map(async (block) => {
+      const feature = extracted.features.find((f) => f.feature.id === block.id)?.feature;
+      if (!feature) return block;
+      block.apis = await matchApisForFeature(feature, apis, index, text, hay, thresholds);
+      return block;
+    }),
+  );
+
+  for (const block of matched) {
     if (block.apis.length) {
       globalBest = Math.max(globalBest, ...block.apis.map((a) => a.matchScore));
     }
   }
 
-  const featureBlocks = blocks.filter((b) => b.apis.length);
+  const featureBlocks = matched.filter((b) => b.apis.length);
   const merged = featureBlocks.flatMap((b) => b.apis).slice(0, limit);
 
   if (!featureBlocks.length || !merged.length) {
