@@ -6,6 +6,7 @@ import ApiTryPanel from "../components/ApiTryPanel.jsx";
 import ApiDocAssistant from "../components/ApiDocAssistant.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
+import CompanyEndpointNav from "../components/CompanyEndpointNav.jsx";
 import { categoryLabel } from "../lib/categoryStyle.js";
 
 function HubOverview({ hub }) {
