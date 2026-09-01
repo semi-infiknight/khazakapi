@@ -21,6 +21,7 @@ export default function HomePage() {
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [suggestion, setSuggestion] = useState(null);
   const [suggesting, setSuggesting] = useState(false);
+  const [generatingStack, setGeneratingStack] = useState(false);
   const [apis, setApis] = useState([]);
   const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,7 @@ export default function HomePage() {
     setSubmittedQuery("");
     setSuggestion(null);
     setSuggesting(false);
+    setGeneratingStack(false);
   }, []);
 
   useEffect(() => {
@@ -106,6 +108,7 @@ export default function HomePage() {
     setSubmittedQuery(q);
     setSuggesting(true);
     setSuggestion(null);
+    setGeneratingStack(false);
 
     fetchSuggest(q)
       .then((res) => {
@@ -130,11 +133,11 @@ export default function HomePage() {
       query,
       onQueryChange: setQuery,
       onIntentSubmit: submitIntent,
-      intentSubmitting: suggesting,
+      intentSubmitting: suggesting || generatingStack,
       intentActive: showingIntent,
     });
     return () => setCatalogue(null);
-  }, [query, showingIntent, suggesting, submitIntent, setCatalogue]);
+  }, [query, showingIntent, suggesting, generatingStack, submitIntent, setCatalogue]);
 
   useEffect(() => {
     if (showingIntent || loading || !hasMore) return undefined;
@@ -173,7 +176,7 @@ export default function HomePage() {
               value={query}
               onChange={setQuery}
               onSubmit={submitIntent}
-              submitting={suggesting}
+              submitting={suggesting || generatingStack}
               placeholder="Send a message…"
             />
           </section>
@@ -183,7 +186,7 @@ export default function HomePage() {
               {suggesting && !suggestion ? (
                 <p className="catalogue-loading-text font-mono text-sm text-[var(--text-soft)]">Finding APIs…</p>
               ) : (
-                <IntentResults suggestion={suggestion} />
+                <IntentResults suggestion={suggestion} onGeneratingChange={setGeneratingStack} />
               )}
             </div>
           ) : loading ? (

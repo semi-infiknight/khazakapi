@@ -1,6 +1,7 @@
 import { useMemo, useRef } from "react";
 import FeatureApiCard from "./FeatureApiCard.jsx";
 import PostmanFlowNode from "./PostmanFlowNode.jsx";
+import { IntentRevealItem, StreamingText } from "./intentReveal.jsx";
 import { useFlowEdgePaths } from "./useFlowEdgePaths.js";
 import { formatProductLabel } from "./intentShared.js";
 import { useMobileLayout } from "../../hooks/useMediaQuery.js";
@@ -66,66 +67,75 @@ export default function IntentFlowsView({ suggestion, blocks }) {
 
   return (
     <div className="intent-flows">
-      <div className="intent-flows-toolbar">
-        <span className="intent-flows-toolbar-label">Flows canvas</span>
-        <span className="intent-flows-toolbar-meta">
-          {blocks.length} features · {apiCount} APIs
-        </span>
-      </div>
+      <IntentRevealItem segment="canvas">
+        <div className="intent-flows-toolbar">
+          <span className="intent-flows-toolbar-label">Flows canvas</span>
+          <span className="intent-flows-toolbar-meta">
+            {blocks.length} features · {apiCount} APIs
+          </span>
+        </div>
+      </IntentRevealItem>
 
       <div className="intent-flows-stage" ref={stageRef}>
         <FlowSvgEdges paths={paths} />
 
         <div className={`intent-flows-spine${isMobile ? " intent-flows-spine--stacked" : ""}`}>
           <div className="intent-flows-col intent-flows-col--start">
-            <PostmanFlowNode
-              nodeRef={startRef}
-              type="start"
-              title={productLabel}
-              subtitle="Product"
-              fields={[
-                suggestion.summary ? { label: "Summary", value: suggestion.summary } : null,
-              ].filter(Boolean)}
-              showFailPort={false}
-            />
+            <IntentRevealItem segment="intro">
+              <PostmanFlowNode
+                nodeRef={startRef}
+                type="start"
+                title={productLabel}
+                subtitle="Product"
+                fields={[]}
+                showFailPort={false}
+              />
+              {suggestion.summary ? (
+                <StreamingText text={suggestion.summary} className="intent-flows-start-summary" />
+              ) : null}
+            </IntentRevealItem>
           </div>
 
           {blocks.map((block, index) => (
             <div key={block.id} className="intent-flows-col">
-              <PostmanFlowNode
-                nodeRef={(el) => {
-                  featureRefs.current[index] = el;
-                }}
-                type="feature"
-                title={block.label}
-                subtitle={block.parentLabel || "Feature layer"}
-                fields={[
-                  block.why ? { label: "Why", value: block.why } : null,
-                  block.where ? { label: "Where", value: block.where, badge: "scope" } : null,
-                  {
-                    label: "APIs",
-                    value: `${block.apis.length} matched`,
-                    badge: `${block.apis.length}`,
-                  },
-                ].filter(Boolean)}
-              />
+              <IntentRevealItem segment={`feature-${index}`}>
+                <PostmanFlowNode
+                  nodeRef={(el) => {
+                    featureRefs.current[index] = el;
+                  }}
+                  type="feature"
+                  title={block.label}
+                  subtitle={block.parentLabel || "Feature layer"}
+                  fields={[
+                    block.why ? { label: "Why", value: block.why } : null,
+                    block.where ? { label: "Where", value: block.where, badge: "scope" } : null,
+                    {
+                      label: "APIs",
+                      value: `${block.apis.length} matched`,
+                      badge: `${block.apis.length}`,
+                    },
+                  ].filter(Boolean)}
+                />
 
-              <div
-                className="intent-flows-branch"
-                ref={(el) => {
-                  branchRefs.current[index] = el;
-                }}
-              >
-                <p className="intent-flows-branch-kicker">
-                  <span className="intent-flows-branch-dot intent-flows-branch-dot--success" />
-                  Success branch · pick an API
-                </p>
-                <div className="intent-prompt-api-grid intent-flows-api-grid">
-                  {block.apis.map((api) => (
-                    <FeatureApiCard key={`${block.id}-${api.id}`} api={api} feature={block} />
-                  ))}
+                <div
+                  className="intent-flows-branch"
+                  ref={(el) => {
+                    branchRefs.current[index] = el;
+                  }}
+                >
+                  <p className="intent-flows-branch-kicker">
+                    <span className="intent-flows-branch-dot intent-flows-branch-dot--success" />
+                    Success branch · pick an API
+                  </p>
+                  <div className="intent-prompt-api-grid intent-flows-api-grid">
+                    {block.apis.map((api, apiIndex) => (
+                      <IntentRevealItem key={`${block.id}-${api.id}`} segment={`api-${index}-${apiIndex}`}>
+                        <FeatureApiCard api={api} feature={block} />
+                      </IntentRevealItem>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </IntentRevealItem>
             </div>
           ))}
         </div>

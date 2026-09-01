@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import FeatureApiCard from "./FeatureApiCard.jsx";
+import { IntentRevealItem, StreamingText } from "./intentReveal.jsx";
 import { formatProductLabel } from "./intentShared.js";
 
 function ZapierConnector() {
@@ -12,7 +13,7 @@ function ZapierConnector() {
   );
 }
 
-function ZapierStepCard({ stepNumber, title, kind, meta, active, onSelect, dark }) {
+function ZapierStepCard({ stepNumber, title, kind, meta, active, onSelect, dark, streamMeta = false }) {
   const isTrigger = kind === "trigger";
   const isPaths = kind === "paths";
 
@@ -44,18 +45,22 @@ function ZapierStepCard({ stepNumber, title, kind, meta, active, onSelect, dark 
           </strong>
           {isTrigger ? <span className="intent-zapier-step-badge">Trigger</span> : null}
         </span>
-        {meta ? <span className="intent-zapier-step-meta">{meta}</span> : null}
+        {meta && streamMeta ? (
+          <StreamingText text={meta} className="intent-zapier-step-meta" charMs={12} as="span" />
+        ) : meta ? (
+          <span className="intent-zapier-step-meta">{meta}</span>
+        ) : null}
       </span>
     </button>
   );
 }
 
-function PathColumn({ pathLabel, block, stepBase, activeStep, onSelect }) {
+function PathColumn({ pathLabel, block, stepBase, activeStep, onSelect, blockIndex }) {
   const rulesStep = stepBase;
   const actionStep = stepBase + 1;
 
   return (
-    <div className="intent-zapier-path-col">
+    <IntentRevealItem segment={`feature-${blockIndex}`} className="intent-zapier-path-col">
       <span className="intent-zapier-path-label">{pathLabel}</span>
 
       <ZapierConnector />
@@ -87,11 +92,13 @@ function PathColumn({ pathLabel, block, stepBase, activeStep, onSelect }) {
       ) : null}
 
       <div className="intent-prompt-api-grid intent-zapier-api-grid">
-        {block.apis.map((api) => (
-          <FeatureApiCard key={`${block.id}-${api.id}`} api={api} feature={block} />
+        {block.apis.map((api, apiIndex) => (
+          <IntentRevealItem key={`${block.id}-${api.id}`} segment={`api-${blockIndex}-${apiIndex}`}>
+            <FeatureApiCard api={api} feature={block} />
+          </IntentRevealItem>
         ))}
       </div>
-    </div>
+    </IntentRevealItem>
   );
 }
 
@@ -106,49 +113,56 @@ export default function IntentZapierView({ suggestion, blocks }) {
 
   return (
     <div className="intent-zapier">
-      <div className="intent-zapier-toolbar">
-        <span className="intent-zapier-toolbar-label">Visual flow</span>
-        <span className="intent-zapier-toolbar-meta">
-          {blocks.length} paths · {blocks.reduce((n, b) => n + b.apis.length, 0)} APIs
-        </span>
-      </div>
+      <IntentRevealItem segment="canvas">
+        <div className="intent-zapier-toolbar">
+          <span className="intent-zapier-toolbar-label">Visual flow</span>
+          <span className="intent-zapier-toolbar-meta">
+            {blocks.length} paths · {blocks.reduce((n, b) => n + b.apis.length, 0)} APIs
+          </span>
+        </div>
+      </IntentRevealItem>
 
       <div className="intent-zapier-chart" aria-label="Structured integration flowchart">
         <div className="intent-zapier-trunk">
-          <ZapierStepCard
-            stepNumber={1}
-            title={productLabel}
-            kind="trigger"
-            active={activeStep === 1}
-            onSelect={setActiveStep}
-          />
+          <IntentRevealItem segment="trunk-1">
+            <ZapierStepCard
+              stepNumber={1}
+              title={productLabel}
+              kind="trigger"
+              active={activeStep === 1}
+              onSelect={setActiveStep}
+            />
+          </IntentRevealItem>
 
-          <ZapierConnector />
+          <IntentRevealItem segment="trunk-2">
+            <ZapierConnector />
+            <ZapierStepCard
+              stepNumber={2}
+              title="Only continue if…"
+              kind="filter"
+              meta={suggestion.summary || "Intent matches KZ catalogue features"}
+              streamMeta={Boolean(suggestion.summary)}
+              active={activeStep === 2}
+              onSelect={setActiveStep}
+            />
+          </IntentRevealItem>
 
-          <ZapierStepCard
-            stepNumber={2}
-            title="Only continue if…"
-            kind="filter"
-            meta={suggestion.summary || "Intent matches KZ catalogue features"}
-            active={activeStep === 2}
-            onSelect={setActiveStep}
-          />
+          <IntentRevealItem segment="trunk-3">
+            <ZapierConnector />
+            <ZapierStepCard
+              stepNumber={3}
+              title="Paths"
+              kind="paths"
+              meta={`Split stack into ${blocks.length} feature paths`}
+              active={activeStep === 3}
+              onSelect={setActiveStep}
+              dark
+            />
 
-          <ZapierConnector />
-
-          <ZapierStepCard
-            stepNumber={3}
-            title="Paths"
-            kind="paths"
-            meta={`Split stack into ${blocks.length} feature paths`}
-            active={activeStep === 3}
-            onSelect={setActiveStep}
-            dark
-          />
-
-          <div className="intent-zapier-paths-rail" aria-hidden="true">
-            <span className="intent-zapier-paths-rail-line" />
-          </div>
+            <div className="intent-zapier-paths-rail" aria-hidden="true">
+              <span className="intent-zapier-paths-rail-line" />
+            </div>
+          </IntentRevealItem>
         </div>
 
         <div
@@ -163,6 +177,7 @@ export default function IntentZapierView({ suggestion, blocks }) {
               stepBase={pathStepBase + index * 2}
               activeStep={activeStep}
               onSelect={setActiveStep}
+              blockIndex={index}
             />
           ))}
         </div>
