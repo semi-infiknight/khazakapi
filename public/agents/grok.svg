@@ -1,4 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
-  <!-- xAI Grok slash — bold diagonal bar -->
-  <path d="M20.8 5.5 8.2 26.5h3.4L24.2 5.5h-3.4z" />
+  <!-- Grok — orbit ring with diagonal slash and sharp points -->
+  <path d="M22.8 8.4c1.9 2.4 2.7 5.5 2.1 8.6l-2.8-.7c.4-2.3-.2-4.6-1.7-6.4l2.4-1.5z" />
+  <path d="M9.2 23.6c-1.9-2.4-2.7-5.5-2.1-8.6l2.8.7c-.4 2.3.2 4.6 1.7 6.4l-2.4 1.5z" />
+  <path d="M27.4 5.8 7.1 26.1 5.4 24.4 25.7 4.1l1.7 1.7z" />
+  <path d="M6.6 26.2 26.9 5.9l1.7 1.7L8.3 27.9 6.6 26.2z" />
 </svg>
