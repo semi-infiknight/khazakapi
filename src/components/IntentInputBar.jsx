@@ -49,34 +49,38 @@ export default function IntentInputBar({
     onSubmit();
   };
 
+  const hasValue = Boolean(value.trim());
+
   return (
-    <form className={`ai-input ${inline ? "ai-input-inline" : ""}`} onSubmit={submit}>
-      <div className="ai-input-shell">
-        <textarea
-          ref={setFieldRef}
-          className="ai-input-field"
-          rows={1}
-          value={value}
-          placeholder={placeholder}
-          aria-label="Describe your app or features"
-          disabled={submitting}
-          onChange={(event) => onChange(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && !event.shiftKey) {
-              event.preventDefault();
-              if (value.trim() && !submitting) onSubmit();
-            }
-          }}
-        />
-        <button
-          type="submit"
-          className="ai-input-send"
-          disabled={!value.trim() || submitting}
-          aria-label={submitting ? "Finding APIs" : "Send"}
-        >
-          {submitting ? <span className="ai-input-send-busy" aria-hidden="true" /> : <SendIcon />}
-        </button>
-      </div>
+    <form
+      className={`ai-input ${inline ? "ai-input-inline" : ""} ${hasValue ? "ai-input-has-value" : ""} ${submitting ? "ai-input-submitting" : ""}`}
+      onSubmit={submit}
+    >
+      <textarea
+        ref={setFieldRef}
+        className="ai-input-field"
+        rows={1}
+        value={value}
+        placeholder={placeholder}
+        aria-label="Describe your app or features"
+        disabled={submitting}
+        onChange={(event) => onChange(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            if (value.trim() && !submitting) onSubmit();
+          }
+        }}
+      />
+      <button
+        type="submit"
+        className="ai-input-send"
+        disabled={!hasValue || submitting}
+        aria-label={submitting ? "Finding APIs" : "Send"}
+        tabIndex={hasValue ? 0 : -1}
+      >
+        {submitting ? <span className="ai-input-send-busy" aria-hidden="true" /> : <SendIcon />}
+      </button>
     </form>
   );
 }

@@ -1330,31 +1330,20 @@ a {
   gap: 0.45rem;
 }
 
-/* Minimal AI intent input */
+/* Ghost prompt — no box, no border; text + inline send icon */
 .ai-input {
-  width: 100%;
-  max-width: 40rem;
-}
-
-.ai-input-shell {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  gap: 0.35rem 0.5rem;
-  padding: 0.25rem 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-}
-
-.ai-input-shell:focus-within {
-  border-color: transparent;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.55rem;
+  width: min(100%, 34rem);
+  margin-inline: auto;
+  padding: 0.1rem 0;
 }
 
 .ai-input-field {
-  grid-column: 1 / -1;
-  width: 100%;
-  min-height: 1.4rem;
+  flex: 1;
+  min-width: 0;
+  min-height: 1.5rem;
   max-height: 7.5rem;
   margin: 0;
   padding: 0;
@@ -1362,52 +1351,69 @@ a {
   background: transparent;
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 0.95rem;
-  line-height: 1.45;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
   resize: none;
   outline: none;
+  box-shadow: none;
 }
 
 .ai-input-field::placeholder {
-  color: var(--text-mute);
+  color: hsl(var(--kz-ink-dim) / 0.55);
+}
+
+.ai-input-field:focus::placeholder {
+  color: hsl(var(--kz-ink-dim) / 0.38);
 }
 
 .ai-input-send {
-  grid-column: 2;
   display: grid;
+  flex-shrink: 0;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-bottom: 0.08rem;
+  padding: 0;
   border: 0;
-  border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--line) 45%, var(--surface));
-  color: var(--text-mute);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-soft);
+  opacity: 0;
+  pointer-events: none;
   cursor: pointer;
   transition:
-    background var(--dur-1) var(--ease-out),
+    opacity var(--dur-1) var(--ease-out),
     color var(--dur-1) var(--ease-out),
-    opacity var(--dur-1) var(--ease-out);
+    transform var(--dur-1) var(--ease-out);
 }
 
-.ai-input-send:not(:disabled) {
-  background: color-mix(in srgb, var(--text) 8%, var(--surface-alt));
-  color: var(--text-soft);
+.ai-input:focus-within .ai-input-send,
+.ai-input-has-value .ai-input-send {
+  opacity: 0.72;
+  pointer-events: auto;
 }
 
-.ai-input-send:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--text) 12%, var(--surface-alt));
+.ai-input-send:not(:disabled):hover {
+  opacity: 1;
   color: var(--text);
+  transform: translateY(-1px);
 }
 
 .ai-input-send:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ai-input-submitting .ai-input-send:disabled {
+  opacity: 0.72;
+  pointer-events: none;
 }
 
 .ai-input-send-busy {
-  width: 0.85rem;
-  height: 0.85rem;
-  border: 2px solid color-mix(in srgb, var(--text-mute) 35%, transparent);
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 1.5px solid color-mix(in srgb, var(--text-mute) 35%, transparent);
   border-top-color: var(--text-soft);
   border-radius: 50%;
   animation: ai-input-spin 0.75s linear infinite;
@@ -1415,26 +1421,16 @@ a {
 
 .ai-input-inline {
   width: 100%;
-}
-
-.ai-input-inline .ai-input-shell {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0;
-  border-radius: 0;
+  margin-inline: 0;
 }
 
 .ai-input-inline .ai-input-field {
-  flex: 1;
-  min-width: 0;
-  grid-column: auto;
-  font-size: 0.92rem;
+  text-align: left;
+  font-size: 0.94rem;
 }
 
 .ai-input-inline .ai-input-send {
-  flex-shrink: 0;
-  grid-column: auto;
+  margin-bottom: 0.05rem;
 }
 
 @keyframes ai-input-spin {
