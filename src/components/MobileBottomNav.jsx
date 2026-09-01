@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import SiteNavPanel from "./SiteNavPanel.jsx";
+import IntentInputBar from "./IntentInputBar.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 function DockIcon({ name }) {
@@ -226,34 +227,16 @@ export default function MobileBottomNav() {
               </span>
             </button>
           ) : (
-            <form
-              className="catalogue-mobile-search-field"
-              onSubmit={(e) => {
-                e.preventDefault();
-                catalogue?.onIntentSubmit?.();
-              }}
-            >
-              <span className="catalogue-mobile-search-field-icon">
-                <DockIcon name="search" />
-              </span>
-              <input
-                ref={searchInputRef}
-                className="catalogue-mobile-search-input"
-                type="search"
-                placeholder="Describe your app or features…"
+            <div className="catalogue-mobile-search-field">
+              <IntentInputBar
+                variant="inline"
+                inputRef={searchInputRef}
                 value={catalogue?.query || ""}
-                onChange={(e) => catalogue?.onQueryChange(e.target.value)}
-                aria-label="Search APIs"
-                enterKeyHint="go"
+                onChange={(next) => catalogue?.onQueryChange?.(next)}
+                onSubmit={() => catalogue?.onIntentSubmit?.()}
+                submitting={catalogue?.intentSubmitting}
+                placeholder="Describe your app or features…"
               />
-              <button
-                type="submit"
-                className="catalogue-mobile-search-go"
-                aria-label="Analyze APIs"
-                disabled={!catalogue?.query?.trim() || catalogue?.intentSubmitting}
-              >
-                {catalogue?.intentSubmitting ? "…" : "↵"}
-              </button>
               <button
                 type="button"
                 className="catalogue-mobile-search-close"
@@ -262,7 +245,7 @@ export default function MobileBottomNav() {
               >
                 <DockIcon name="close" />
               </button>
-            </form>
+            </div>
           )}
         </div>
       </nav>

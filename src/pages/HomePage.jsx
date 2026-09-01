@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchSearch, fetchSuggest } from "../lib/api.js";
 import ApiGrid from "../components/ApiGrid.jsx";
 import { IntentResults } from "../components/IntentSuggest.jsx";
+import IntentInputBar from "../components/IntentInputBar.jsx";
 import KhazakArchFigure from "../components/KhazakArchFigure.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
@@ -164,37 +165,17 @@ export default function HomePage() {
       <div className="catalogue-layout">
         <div className="catalogue-main">
           <section className="catalogue-search-desktop mb-6">
-            <form
-              className="catalogue-intent-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                submitIntent();
-              }}
-            >
-              <div className="relative">
-                <input
-                  className="search-input"
-                  type="search"
-                  placeholder="Describe your app or features — address autocomplete, Kaspi checkout, courier ETA…"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  aria-label="Search APIs"
-                />
-                <button
-                  type="submit"
-                  className="catalogue-intent-submit"
-                  disabled={!query.trim() || suggesting}
-                  aria-label="Analyze APIs"
-                >
-                  {suggesting ? "…" : "↵"}
-                </button>
-              </div>
-              <p className="catalogue-intent-hint">
-                {draftChanged
+            <IntentInputBar
+              value={query}
+              onChange={setQuery}
+              onSubmit={submitIntent}
+              submitting={suggesting}
+              hint={
+                draftChanged
                   ? "Press Enter to refresh suggestions"
-                  : "Describe your app or list features, then press Enter"}
-              </p>
-            </form>
+                  : "Describe your app or list features, then press Enter"
+              }
+            />
           </section>
 
           {showingIntent ? (
