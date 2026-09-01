@@ -48,7 +48,7 @@ export function openApiToPostman(spec, baseUrl) {
       name: spec.info?.title || "API",
       description: spec.info?.description,
       schema: "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-      _postman_id: "khazakapi-collection",
+      _postman_id: "kazakhapi-collection",
     },
     item: items,
   };

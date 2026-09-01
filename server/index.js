@@ -226,7 +226,7 @@ app.get("/postman.json", (req, res) => {
     info: { ...openApiSpec.info, version: CATALOGUE_META.version },
   };
   const collection = openApiToPostman(spec, publicBaseUrl(req));
-  res.setHeader("Content-Disposition", 'attachment; filename="khazakapi.postman_collection.json"');
+  res.setHeader("Content-Disposition", 'attachment; filename="kazakhapi.postman_collection.json"');
   res.json(collection);
 });
 

@@ -68,7 +68,7 @@ async function fetchDocText(url) {
     const res = await fetch(url, {
       signal: controller.signal,
       headers: {
-        "User-Agent": "KhazakAPI-capability-builder/1.0 (+https://khazakapi-production.up.railway.app)",
+        "User-Agent": "KazakhAPI-capability-builder/1.0 (+https://kazakhapi.xyz)",
         Accept: "text/html,application/xhtml+xml,text/plain",
       },
       redirect: "follow",

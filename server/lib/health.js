@@ -1,4 +1,4 @@
-const TIMEOUT_MS = 8000;
+import { SITE_ORIGIN } from "./site.js";
 
 export function normalizeEndpoint(url) {
   if (!url) return url;
@@ -64,7 +64,7 @@ export async function checkHealth(entry) {
       signal: controller.signal,
       headers: {
         Accept: "application/json, application/xml, text/xml, text/plain, */*",
-        "User-Agent": "KhazakAPI-HealthCheck/1.0 (+https://khazakapi-production.up.railway.app)",
+        "User-Agent": `KazakhAPI-HealthCheck/1.0 (+${SITE_ORIGIN})`,
       },
       redirect: "follow",
     });

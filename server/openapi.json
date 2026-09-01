@@ -6,7 +6,7 @@
     "description": "Public REST API for the Kazakh API — Kazakhstan API directory. Read-only, authless, and CORS-open. Browse ~688 government and commercial APIs catalogued for Kazakhstan.",
     "contact": {
       "name": "Kazakh API",
-      "url": "https://github.com/khazakapi"
+      "url": "https://kazakhapi.xyz"
     },
     "license": {
       "name": "Open data",
@@ -53,7 +53,7 @@
                 "example": {
                   "updated": "2026-07-24T00:00:00.000Z",
                   "version": "2026-07-24",
-                  "source": "khazakapi-local",
+                  "source": "kazakhapi-local",
                   "total": 688,
                   "count": 2,
                   "apis": [
