@@ -134,7 +134,7 @@ function noFitSuggestions(query, bestScore = 0, reason = "no_feature_fit") {
     summary:
       reason === "no_apis_matched"
         ? `We matched product features for “${query}” but found no strong Kazakhstan APIs for them yet.`
-        : `We don’t have a good API fit for “${query}” in this catalogue. KazakhAPI focuses on Kazakhstan payments, maps, delivery, banking, travel, weather, telecom, and government open data.`,
+        : `We don’t have a good API fit for “${query}” in this catalogue. Qazaq Stack focuses on Kazakhstan payments, maps, delivery, banking, travel, weather, telecom, and government open data.`,
     examples: EXAMPLE_PROMPTS,
     features: [],
     intents: [],

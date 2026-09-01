@@ -1,4 +1,4 @@
-/** Public site origin — correct spelling: kazakh (not khazak). */
-export const SITE_ORIGIN = (process.env.SITE_ORIGIN || "https://kazakhapi.xyz").replace(/\/$/, "");
+/** Public site origin */
+export const SITE_ORIGIN = (process.env.SITE_ORIGIN || "https://qazaq.up.railway.app").replace(/\/$/, "");
 
-export const SITE_NAME = "Kazakh API";
+export const SITE_NAME = "Qazaq Stack";

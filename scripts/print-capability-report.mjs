@@ -21,7 +21,7 @@ const s = report.summary || {};
 const stats = report.stats || s;
 
 console.log("\n═══════════════════════════════════════════════════════");
-console.log("  KhazakAPI Capability → Feature Completeness Report");
+console.log("  Qazaq Stack Capability → Feature Completeness Report");
 console.log("═══════════════════════════════════════════════════════\n");
 console.log(`Built:              ${report.builtAt || "unknown"}`);
 console.log(`APIs in catalogue:  ${s.totalApis ?? stats.totalApis}`);

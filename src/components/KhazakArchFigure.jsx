@@ -412,7 +412,7 @@ export default function KhazakArchFigure({ catalogueTotal = 688 }) {
   }, []);
 
   return (
-    <figure ref={rootRef} className="kz-af" role="img" aria-label="Agent requests flow through Kazakh API to Kazakhstan providers">
+    <figure ref={rootRef} className="kz-af" role="img" aria-label="Agent requests flow through Qazaq Stack to Kazakhstan providers">
       <div className="kz-af-stage" aria-hidden="true">
         <svg className="kz-af-wires" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path className="kz-af-fan" />

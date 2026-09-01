@@ -1,4 +1,4 @@
-/** Public site origin — correct spelling: kazakh (not khazak). */
-export const SITE_ORIGIN = "https://kazakhapi.xyz";
+/** Public site origin */
+export const SITE_ORIGIN = "https://qazaq.up.railway.app";
 
-export const SITE_NAME = "Kazakh API";
+export const SITE_NAME = "Qazaq Stack";

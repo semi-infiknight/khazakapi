@@ -1,12 +1,12 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Kazakh API",
+    "title": "Qazaq Stack",
     "version": "2026-07-24",
-    "description": "Public REST API for the Kazakh API — Kazakhstan API directory. Read-only, authless, and CORS-open. Browse ~688 government and commercial APIs catalogued for Kazakhstan.",
+    "description": "Public REST API for Qazaq Stack — the Kazakhstan integration directory. Read-only, authless, and CORS-open. Browse ~688 government and commercial APIs catalogued for Kazakhstan.",
     "contact": {
-      "name": "Kazakh API",
-      "url": "https://kazakhapi.xyz"
+      "name": "Qazaq Stack",
+      "url": "https://qazaq.up.railway.app"
     },
     "license": {
       "name": "Open data",
@@ -53,7 +53,7 @@
                 "example": {
                   "updated": "2026-07-24T00:00:00.000Z",
                   "version": "2026-07-24",
-                  "source": "kazakhapi-local",
+                  "source": "qazaqapi-local",
                   "total": 688,
                   "count": 2,
                   "apis": [

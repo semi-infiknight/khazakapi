@@ -1,5 +1,5 @@
 {
-  "name": "Kazakh API",
+  "name": "Qazaq Stack",
   "install": "npm ci",
   "start": "bash scripts/dev-reset-background.sh",
   "terminals": [

@@ -64,7 +64,7 @@ export async function checkHealth(entry) {
       signal: controller.signal,
       headers: {
         Accept: "application/json, application/xml, text/xml, text/plain, */*",
-        "User-Agent": `KazakhAPI-HealthCheck/1.0 (+${SITE_ORIGIN})`,
+        "User-Agent": `QazaqStack-HealthCheck/1.0 (+${SITE_ORIGIN})`,
       },
       redirect: "follow",
     });

@@ -313,8 +313,8 @@ const TEXT_RULES = [
   [/Southeast Asia/gi, "Central Asia"],
   [/SEA/g, "CIS"],
   [/Asean|ASEAN/gi, "EAEU"],
-  [/Pasar API/gi, "Kazakh API"],
-  [/pasarapi\.xyz/gi, "kazakhapi"],
+  [/Pasar API/gi, "Qazaq Stack"],
+  [/pasarapi\.xyz/gi, "qazaqapi"],
   [/seed=pasar/gi, "seed=khazak"],
   [/GovTech Kazakhstan \(eGov Mobile ID\)/gi, "eGov Kazakhstan"],
   [/GovTech Kazakhstan \(Singpass\)/gi, "eGov Kazakhstan"],
@@ -641,7 +641,7 @@ for (const entry of APIS) {
 export const CATALOGUE_META = {
   updated: ${jsStr(TODAY + "T00:00:00.000Z")},
   version: ${jsStr(TODAY)},
-  source: "kazakhapi-local",
+  source: "qazaqapi-local",
   total: APIS.length,
 };
 `;

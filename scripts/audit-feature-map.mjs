@@ -256,7 +256,7 @@ function auditCapabilityMap() {
 
 function printReport(audit) {
   console.log("\n═══════════════════════════════════════════════════════");
-  console.log("  KhazakAPI Feature Map Sense-Making Audit");
+  console.log("  Qazaq Stack Feature Map Sense-Making Audit");
   console.log("═══════════════════════════════════════════════════════\n");
   console.log(`Ontology features:     ${audit.ontology.featureCount}`);
   console.log(`Vocabulary atoms:      ${audit.ontology.vocabularyAtoms}`);

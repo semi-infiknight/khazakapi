@@ -159,7 +159,7 @@ export default function McpServerPage() {
         <div className="hf-panel">
           <section className="hf-col">
             <h2 className="hf-col-title">
-              Copy the <KzBadge /> <strong>Kazakh connector URL</strong>
+              Copy the <KzBadge /> <strong>Qazaq Stack connector URL</strong>
             </h2>
             <p className="hf-col-copy">You’ll paste this URL into {platform.label} in the next step</p>
             <div className="hf-col-action">
@@ -217,7 +217,7 @@ export default function McpServerPage() {
         </div>
 
         <Link to="/" className="hf-back">
-          ← Kazakh directory
+          ← Qazaq Stack directory
         </Link>
       </div>
     </div>

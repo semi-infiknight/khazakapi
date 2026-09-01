@@ -155,8 +155,8 @@ export default function HomePage() {
 
   return (
     <div className="container-main container-main--catalogue pt-6">
-      <section className="hero-arch" aria-label="Kazakh API">
-        <h1 className="hero-title hero-arch-title">every Kazakhstan API you need</h1>
+      <section className="hero-arch" aria-label="Qazaq Stack">
+        <h1 className="hero-title hero-arch-title">every integration you need for Kazakhstan</h1>
         <div className="hero-arch-stack">
           <KhazakArchFigure catalogueTotal={catalogueTotal} />
         </div>

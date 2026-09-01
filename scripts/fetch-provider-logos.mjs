@@ -182,7 +182,7 @@ function googleFaviconUrl(domain, size = 256) {
 async function fetchBuffer(url) {
   const res = await fetch(url, {
     redirect: "follow",
-    headers: { "User-Agent": "KhazakAPI/1.0 (logo fetch)" },
+    headers: { "User-Agent": "QazaqStack/1.0 (logo fetch)" },
   });
   if (!res.ok) return null;
   const buf = Buffer.from(await res.arrayBuffer());

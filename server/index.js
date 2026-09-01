@@ -226,7 +226,7 @@ app.get("/postman.json", (req, res) => {
     info: { ...openApiSpec.info, version: CATALOGUE_META.version },
   };
   const collection = openApiToPostman(spec, publicBaseUrl(req));
-  res.setHeader("Content-Disposition", 'attachment; filename="kazakhapi.postman_collection.json"');
+  res.setHeader("Content-Disposition", 'attachment; filename="qazaq-stack.postman_collection.json"');
   res.json(collection);
 });
 
@@ -237,11 +237,11 @@ app.get("/api-docs", (_req, res) => {
 function mcpManifest(req) {
   const base = publicBaseUrl(req).replace(/\/$/, "");
   return {
-    name: "khazak-api",
+    name: "qazaq-stack",
     version: "1.0.0",
-    description: "Remote MCP server for Kazakhstan APIs (Streamable HTTP).",
+    description: "Remote MCP server for Qazaq Stack — Kazakhstan integration catalogue (Streamable HTTP).",
     tools: [
-      { name: "search_kz_apis", description: "Search Kazakh API catalogue" },
+      { name: "search_kz_apis", description: "Search Qazaq Stack catalogue" },
       { name: "get_kz_api", description: "Get one API by id" },
       { name: "list_api_categories", description: "List categories with counts" },
     ],
@@ -308,7 +308,7 @@ app.use((_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Kazakh API server on http://localhost:${PORT} (${KZ_APIS.length} KZ APIs)`);
+  console.log(`Qazaq Stack server on http://localhost:${PORT} (${KZ_APIS.length} KZ APIs)`);
   warmQueryEmbedder();
   warmLocalLlm();
 });
