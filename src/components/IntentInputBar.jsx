@@ -79,7 +79,12 @@ export default function IntentInputBar({
           disabled={!hasValue || submitting}
           aria-label={submitting ? "Finding APIs" : "Send"}
         >
-          {submitting ? <span className="ai-input-send-busy" aria-hidden="true" /> : <SendIcon />}
+          <span className="ai-input-send-mark" aria-hidden="true">
+            <span className="ai-input-send-icon">
+              <SendIcon />
+            </span>
+            <span className="ai-input-send-busy" />
+          </span>
         </button>
       </div>
     </form>

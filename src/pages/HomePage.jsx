@@ -25,6 +25,7 @@ export default function HomePage() {
   const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [staggerFrom, setStaggerFrom] = useState(0);
   const loadMoreRef = useRef(null);
   const loadingMoreRef = useRef(false);
   const nextOffsetRef = useRef(null);
@@ -63,7 +64,10 @@ export default function HomePage() {
     try {
       const res = await fetchSearch({ q: "", limit: PAGE_SIZE, offset });
       nextOffsetRef.current = res.next_offset;
-      setApis((prev) => [...prev, ...res.apis]);
+      setApis((prev) => {
+        setStaggerFrom(prev.length);
+        return [...prev, ...res.apis];
+      });
       setMeta((prev) => ({
         ...prev,
         next_offset: res.next_offset,
@@ -119,6 +123,7 @@ export default function HomePage() {
   // Hero caption: KZ-filtered baseline only. Legacy servers returned unfiltered total (1407).
   const catalogueTotal = meta?.catalogueTotal ?? 688;
   const resultsTotal = meta?.total ?? catalogueTotal;
+  const contentKey = showingIntent ? "intent" : loading ? "loading" : "grid";
 
   useEffect(() => {
     setCatalogue({
@@ -174,18 +179,20 @@ export default function HomePage() {
           </section>
 
           {showingIntent ? (
-            <div id="intent-results">
+            <div id="intent-results" className="catalogue-content-enter" key={contentKey}>
               {suggesting && !suggestion ? (
-                <p className="font-mono text-sm text-[var(--text-soft)]">Finding APIs…</p>
+                <p className="catalogue-loading-text font-mono text-sm text-[var(--text-soft)]">Finding APIs…</p>
               ) : (
                 <IntentResults suggestion={suggestion} />
               )}
             </div>
           ) : loading ? (
-            <p className="font-mono text-sm text-[var(--text-soft)]">Loading catalogue…</p>
+            <div className="catalogue-loading" key={contentKey}>
+              <p className="catalogue-loading-text font-mono text-sm text-[var(--text-soft)]">Loading catalogue…</p>
+            </div>
           ) : (
-            <>
-              <ApiGrid apis={apis} />
+            <div className="catalogue-content-enter" key={contentKey}>
+              <ApiGrid apis={apis} stagger staggerFrom={staggerFrom} />
               <div className="catalogue-load-footer" ref={loadMoreRef}>
                 {loadingMore ? (
                   <p className="catalogue-load-status">Loading more APIs…</p>
@@ -204,7 +211,7 @@ export default function HomePage() {
                   </p>
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>

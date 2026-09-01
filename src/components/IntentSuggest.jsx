@@ -49,11 +49,23 @@ export function IntentResults({ suggestion }) {
         <IntentViewSwitcher value={view} onChange={setView} />
       </header>
 
-      {view === "timeline" && <IntentTimelineView suggestion={suggestion} blocks={blocks} />}
+      {view === "timeline" && (
+        <div className="intent-view-pane" key="timeline">
+          <IntentTimelineView suggestion={suggestion} blocks={blocks} />
+        </div>
+      )}
 
-      {view === "flows" && <IntentFlowsView suggestion={suggestion} blocks={blocks} />}
+      {view === "flows" && (
+        <div className="intent-view-pane" key="flows">
+          <IntentFlowsView suggestion={suggestion} blocks={blocks} />
+        </div>
+      )}
 
-      {view === "stack" && <IntentZapierView suggestion={suggestion} blocks={blocks} />}
+      {view === "stack" && (
+        <div className="intent-view-pane" key="stack">
+          <IntentZapierView suggestion={suggestion} blocks={blocks} />
+        </div>
+      )}
     </article>
   );
 }

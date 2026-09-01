@@ -4,10 +4,16 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+const rootEl = document.getElementById("root");
+
+ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
+
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => rootEl?.classList.add("is-mounted"));
+});

@@ -10,10 +10,10 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-2">
-          <Link to="/mcp" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
+          <Link to="/mcp" className="hidden font-mono text-xs text-[var(--text-soft)] transition-colors duration-200 hover:text-[var(--text)] sm:inline">
             MCP
           </Link>
-          <Link to="/keys" className="hidden font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)] sm:inline">
+          <Link to="/keys" className="hidden font-mono text-xs text-[var(--text-soft)] transition-colors duration-200 hover:text-[var(--text)] sm:inline">
             Keys
           </Link>
         </div>

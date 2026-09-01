@@ -72,7 +72,7 @@ function drawBeam(beam, from, to, ms, tone = "") {
   beam.style.strokeDashoffset = "1";
   beam.style.opacity = "1";
   beam.getBoundingClientRect();
-  beam.style.transition = `stroke-dashoffset ${ms}ms cubic-bezier(0.4,0,0.2,1), opacity 0.55s ease, stroke 0.4s ease, filter 0.4s ease`;
+  beam.style.transition = `stroke-dashoffset ${ms}ms cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease, stroke 0.4s ease, filter 0.4s ease`;
   beam.style.strokeDashoffset = "0";
 }
 

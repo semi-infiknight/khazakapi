@@ -38,7 +38,12 @@
   --fs-sm: 12px;
   --dur-0: 80ms;
   --dur-1: 140ms;
+  --dur-2: 260ms;
+  --dur-3: 420ms;
+  --dur-4: 640ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --card-bg-mesh: repeating-linear-gradient(
       105deg,
       rgba(255, 255, 255, 0.026) 0 1px,
@@ -72,10 +77,45 @@ body,
 #root {
   position: relative;
   z-index: 2;
+  opacity: 0;
+  transition: opacity var(--dur-4) var(--ease-enter);
+}
+
+#root.is-mounted {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #root {
+    opacity: 1;
+    transition: none;
+  }
+}
+
+#fluid-background {
+  opacity: 0;
+  transition: opacity 900ms var(--ease-enter);
+}
+
+#fluid-background.is-live {
+  opacity: var(--fluid-opacity, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #fluid-background.is-live {
+    transition: none;
+  }
 }
 
 html {
   overscroll-behavior-y: none;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -96,6 +136,92 @@ a {
   z-index: 10;
   min-height: 100vh;
   background: transparent;
+  animation: app-enter var(--dur-4) var(--ease-enter) both;
+  animation-delay: 80ms;
+}
+
+@keyframes app-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.42;
+  }
+  50% {
+    opacity: 0.82;
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell,
+  .catalogue-content-enter,
+  .intent-prompt,
+  .intent-view-pane,
+  .api-card-enter {
+    animation: none !important;
+  }
+}
+
+.catalogue-content-enter {
+  animation: content-enter var(--dur-3) var(--ease-enter) both;
+}
+
+.catalogue-loading {
+  animation: content-enter var(--dur-2) var(--ease-enter) both;
+}
+
+.catalogue-loading-text {
+  animation: pulse-soft 2s var(--ease-smooth) infinite;
+}
+
+.api-card-enter {
+  animation: card-enter var(--dur-3) var(--ease-enter) both;
+  animation-delay: calc(var(--stagger, 0) * 36ms);
+}
+
+.intent-view-pane {
+  animation: content-enter var(--dur-2) var(--ease-enter) both;
+}
+
+.site-header {
+  transition:
+    background var(--dur-2) var(--ease-smooth),
+    border-color var(--dur-2) var(--ease-smooth);
+}
+
+.site-header a {
+  transition: color var(--dur-2) var(--ease-smooth);
 }
 
 .container-main {
@@ -203,6 +329,10 @@ a {
   stroke-dashoffset: 1px;
   opacity: 0;
   filter: drop-shadow(0 0 5px hsl(var(--kz-cyan) / 0.55));
+  transition:
+    opacity 0.45s var(--ease-smooth),
+    stroke 0.4s var(--ease-smooth),
+    filter 0.4s var(--ease-smooth);
 }
 
 .kz-af-b-amber {
@@ -342,6 +472,7 @@ a {
 
 .kz-af-hub.kz-af-routing .ks-streaks {
   opacity: 1;
+  transition: opacity 0.45s var(--ease-smooth);
 }
 
 .kz-af-hub.kz-af-routing .ks-streak-track,
@@ -1028,9 +1159,9 @@ a {
   color: var(--text);
   text-decoration: none;
   transition:
-    border-color var(--dur-1) var(--ease-out),
-    transform var(--dur-0) var(--ease-out),
-    box-shadow var(--dur-1) var(--ease-out);
+    border-color var(--dur-2) var(--ease-smooth),
+    transform var(--dur-2) var(--ease-enter),
+    box-shadow var(--dur-2) var(--ease-smooth);
 }
 
 .api-card:hover {
@@ -1346,9 +1477,9 @@ a {
   background: color-mix(in srgb, var(--surface) 18%, transparent);
   backdrop-filter: blur(6px);
   transition:
-    border-color var(--dur-1) var(--ease-out),
-    background var(--dur-1) var(--ease-out),
-    box-shadow var(--dur-1) var(--ease-out);
+    border-color var(--dur-2) var(--ease-enter),
+    background var(--dur-2) var(--ease-enter),
+    box-shadow var(--dur-2) var(--ease-enter);
 }
 
 .ai-input-shell:focus-within {
@@ -1374,10 +1505,12 @@ a {
   resize: none;
   outline: none;
   box-shadow: none;
+  transition: height var(--dur-2) var(--ease-smooth);
 }
 
 .ai-input-field::placeholder {
   color: hsl(var(--kz-ink-dim) / 0.52);
+  transition: color var(--dur-2) var(--ease-smooth);
 }
 
 .ai-input-field:focus::placeholder {
@@ -1399,10 +1532,44 @@ a {
   color: var(--text-mute);
   cursor: pointer;
   transition:
-    background var(--dur-1) var(--ease-out),
-    color var(--dur-1) var(--ease-out),
-    opacity var(--dur-1) var(--ease-out),
-    transform var(--dur-1) var(--ease-out);
+    background var(--dur-2) var(--ease-smooth),
+    color var(--dur-2) var(--ease-smooth),
+    opacity var(--dur-2) var(--ease-smooth),
+    transform var(--dur-2) var(--ease-enter);
+}
+
+.ai-input-send-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.ai-input-send-icon,
+.ai-input-send-busy {
+  grid-area: 1 / 1;
+  transition: opacity var(--dur-2) var(--ease-smooth), transform var(--dur-2) var(--ease-smooth);
+}
+
+.ai-input-send-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.ai-input-send-busy {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.ai-input-submitting .ai-input-send-icon {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.ai-input-submitting .ai-input-send-busy {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .ai-input-has-value .ai-input-send,
@@ -1543,6 +1710,7 @@ a {
   border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--surface) 88%, #140c22), var(--surface));
+  animation: content-enter var(--dur-3) var(--ease-enter) both;
 }
 
 @media (min-width: 861px) {
@@ -1735,7 +1903,10 @@ a {
   text-transform: uppercase;
   color: var(--text-soft);
   cursor: pointer;
-  transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  transition:
+    background var(--dur-2) var(--ease-smooth),
+    color var(--dur-2) var(--ease-smooth),
+    border-color var(--dur-2) var(--ease-smooth);
 }
 
 .intent-view-switcher-btn:hover,
@@ -3394,6 +3565,7 @@ nav a:hover {
   justify-content: center;
   gap: 0.75rem;
   padding: 1.5rem 0 calc(1rem + var(--catalogue-dock-offset, 0px));
+  transition: opacity var(--dur-2) var(--ease-smooth);
 }
 
 .catalogue-load-status {
@@ -3402,6 +3574,7 @@ nav a:hover {
   font-size: var(--fs-xs);
   color: var(--text-soft);
   text-align: center;
+  transition: opacity var(--dur-2) var(--ease-smooth), color var(--dur-2) var(--ease-smooth);
 }
 
 .catalogue-load-status--done {
@@ -3417,13 +3590,18 @@ nav a:hover {
   font-size: var(--fs-xs);
   color: var(--text);
   cursor: pointer;
-  transition: border-color var(--dur-1) var(--ease-out), background var(--dur-1) var(--ease-out);
+  transition:
+    border-color var(--dur-2) var(--ease-smooth),
+    background var(--dur-2) var(--ease-smooth),
+    transform var(--dur-2) var(--ease-enter),
+    opacity var(--dur-2) var(--ease-smooth);
 }
 
 .catalogue-load-btn:hover,
 .catalogue-load-btn:focus-visible {
   border-color: color-mix(in srgb, var(--accent) 65%, var(--line));
   background: color-mix(in srgb, var(--accent) 16%, var(--surface-alt));
+  transform: translateY(-1px);
 }
 
 .catalogue-sidebar {

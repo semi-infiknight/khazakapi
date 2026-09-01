@@ -29,7 +29,7 @@ function VerifiedIcon() {
   );
 }
 
-export default function ApiCard({ api }) {
+export default function ApiCard({ api, enter = false, stagger }) {
   const verified = api.tier === "open" && api.copyable;
   const description = apiDescription(api);
   const updated = updatedLabel(api.freshness, api.trust?.lastChecked);
@@ -38,7 +38,11 @@ export default function ApiCard({ api }) {
     : `/apis/${api.slug || api.id}`);
 
   return (
-    <Link to={href} className="card api-card block">
+    <Link
+      to={href}
+      className={`card api-card block${enter ? " api-card-enter" : ""}`}
+      style={enter ? { "--stagger": stagger ?? 0 } : undefined}
+    >
       <div className="api-card-body">
         <ApiLogo api={api} />
         <div className="api-card-copy">
