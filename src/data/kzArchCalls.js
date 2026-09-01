@@ -1,4 +1,4 @@
-export const KZ_ARCH_AGENTS = ["/agents/grok.svg", "/agents/kimi.svg", "/agents/qwen.svg"];
+export const KZ_ARCH_AGENTS = ["/agents/grok.svg", "/agents/deepseek.svg", "/agents/qwen.svg"];
 
 export const KZ_ARCH_ALLOWS = [
   {
@@ -14,7 +14,7 @@ export const KZ_ARCH_ALLOWS = [
   {
     slug: "2gis",
     align: 0.34,
-    agent: "Kimi",
+    agent: "DeepSeek",
     method: "GET",
     path: "/3.0/items/search",
     status: "200",
@@ -44,7 +44,7 @@ export const KZ_ARCH_ALLOWS = [
   {
     slug: "halyk-bank",
     align: 0.38,
-    agent: "Kimi",
+    agent: "DeepSeek",
     method: "POST",
     path: "/v1/transfers",
     status: "201",
@@ -74,7 +74,7 @@ export const KZ_ARCH_ALLOWS = [
   {
     slug: "kazpost",
     align: 0.64,
-    agent: "Kimi",
+    agent: "DeepSeek",
     method: "GET",
     path: "/track",
     status: "200",

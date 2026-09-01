@@ -1,4 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
-  <!-- Kimi — Moonshot K monogram -->
-  <path d="M8.5 6h4.5l6.8 8.9V6h4.2v20h-4.2V17.1L13 26H8.5l6.5-8.6V6z" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true">
+  <!-- Deprecated: arch row uses deepseek.svg instead of Kimi. -->
 </svg>

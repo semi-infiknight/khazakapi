@@ -13,7 +13,7 @@ export const KZ_RIVER_LOGS = [
   },
   {
     time: "14:31:59Z",
-    agent: "Kimi",
+    agent: "DeepSeek",
     method: "POST",
     path: "/pay/qr/create",
     vendor: "Kaspi.kz",
@@ -43,7 +43,7 @@ export const KZ_RIVER_LOGS = [
   },
   {
     time: "14:32:05Z",
-    agent: "Kimi",
+    agent: "DeepSeek",
     method: "POST",
     path: "/v1/transfers",
     vendor: "Halyk Bank",
@@ -73,7 +73,7 @@ export const KZ_RIVER_LOGS = [
   },
   {
     time: "14:32:10Z",
-    agent: "Kimi",
+    agent: "DeepSeek",
     method: "GET",
     path: "/partner/menu",
     vendor: "Glovo",
@@ -103,7 +103,7 @@ export const KZ_RIVER_LOGS = [
   },
   {
     time: "14:32:14Z",
-    agent: "Kimi",
+    agent: "DeepSeek",
     method: "GET",
     path: "/statistic/search",
     vendor: "stat.gov.kz",
@@ -133,7 +133,7 @@ export const KZ_RIVER_LOGS = [
   },
   {
     time: "14:32:19Z",
-    agent: "Kimi",
+    agent: "DeepSeek",
     method: "GET",
     path: "/exchangerates/getRates",
     vendor: "NBK",
