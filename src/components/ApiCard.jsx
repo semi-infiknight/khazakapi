@@ -3,6 +3,7 @@ import ApiLogo from "./ApiLogo.jsx";
 import {
   apiDescription,
   cardMetricAuth,
+  cardMetricProvider,
   cardMetricReady,
   categoryLabel,
   updatedLabel,
@@ -49,12 +50,9 @@ export default function ApiCard({ api }) {
         </div>
       </div>
 
-      <div className="api-card-meta">
-        <span>{api.companyHub ? api.companyName || api.provider : `By ${api.provider}`}</span>
-      </div>
-
       <div className="api-card-metrics">
         <MetricPill icon="◆">{categoryLabel(api.category)}</MetricPill>
+        <MetricPill icon="◎">{cardMetricProvider(api)}</MetricPill>
         <MetricPill icon="⏱">{cardMetricAuth(api)}</MetricPill>
         <MetricPill icon="📶">{cardMetricReady(api)}</MetricPill>
         {updated ? <MetricPill icon="↻">{updated}</MetricPill> : null}

@@ -94,6 +94,11 @@ export function updatedLabel(freshness, lastChecked) {
   return label.replace(/^CURRENT\s·\s*/i, "Updated ");
 }
 
+export function cardMetricProvider(api) {
+  const name = api.companyHub ? api.companyName || api.provider : api.provider;
+  return name ? `By ${name}` : "By provider";
+}
+
 export function cardMetricAuth(api) {
   if (api.auth === "none") return "Keyless";
   if (api.auth === "apiKey") return "API key";
