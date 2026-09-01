@@ -154,9 +154,8 @@ export default function HomePage() {
   }, [showingIntent, loading, hasMore, loadingMore, apis.length, loadMoreIfNeeded]);
 
   return (
-    <div className="container-main container-main--catalogue pt-6">
+    <div className="container-main container-main--catalogue pt-2">
       <section className="hero-arch" aria-label="Qazaq Stack">
-        <h1 className="hero-title hero-arch-title">every integration you need for Kazakhstan</h1>
         <div className="hero-arch-stack">
           <KhazakArchFigure catalogueTotal={catalogueTotal} />
         </div>
