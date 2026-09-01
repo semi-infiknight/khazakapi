@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import KhanShatyrAnimated from "./KhanShatyrAnimated.jsx";
 import KhazakArchWallRows from "./KhazakArchWallRows.jsx";
+import { formatCatalogueCaption } from "../lib/site.js";
 import { KZ_ARCH_AGENTS, KZ_ARCH_ALLOWS } from "../data/kzArchCalls.js";
 import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
 import {
@@ -421,7 +422,7 @@ export default function KhazakArchFigure({ catalogueTotal = 688 }) {
         </svg>
 
         <span className="kz-af-cap kz-af-cap-agents">any agent</span>
-        <span className="kz-af-cap kz-af-cap-apis">{catalogueTotal} Kazakhstan APIs in the catalogue.</span>
+        <span className="kz-af-cap kz-af-cap-apis">{formatCatalogueCaption(catalogueTotal)}</span>
 
         <div className="kz-af-agents">
           {KZ_ARCH_AGENTS.map((mask) => (

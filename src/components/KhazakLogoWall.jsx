@@ -1,4 +1,5 @@
 import KhazakLogRiver from "./KhazakLogRiver.jsx";
+import { formatCatalogueCaption } from "../lib/site.js";
 import { KZ_ARCH_TILES } from "../data/kzArchTiles.js";
 import { buildArchWallRows, buildTrackLoop, KZ_ARCH_ROW_COUNT, KZ_WALL_ROW_CONFIG } from "../lib/kzArchWall.js";
 
@@ -40,7 +41,7 @@ export default function KhazakLogoWall({ catalogueTotal = KZ_ARCH_TILES.length }
       </div>
 
       <div className="kz-wall-caption">
-        <p className="kz-wall-big">{catalogueTotal} Kazakhstan APIs in the catalogue.</p>
+        <p className="kz-wall-big">{formatCatalogueCaption(catalogueTotal)}</p>
         <span className="kz-wall-small">
           Every integrated provider — payments, maps, banking, travel, weather, and gov open data.
         </span>
