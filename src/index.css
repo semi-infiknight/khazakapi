@@ -1659,6 +1659,8 @@ a {
 .catalogue-search-desktop {
   display: flex;
   justify-content: center;
+  animation: content-enter var(--dur-3) var(--ease-enter) both;
+  animation-delay: 160ms;
 }
 
 .catalogue-search-desktop .search-input {
