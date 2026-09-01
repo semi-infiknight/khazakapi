@@ -58,12 +58,23 @@
     ></div>
     <div id="root">
       <p
-        style="margin:0;padding:2rem;font-family:Inter,system-ui,sans-serif;color:#bbaeb8;text-align:center"
+        id="boot-status"
+        style="margin:0;padding:2rem;font-family:Inter,system-ui,sans-serif;color:#e8d4e0;text-align:center"
       >
         Loading Qazaq Stack…
       </p>
     </div>
     <script src="/fluid-init.js"></script>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      window.addEventListener("error", function (event) {
+        var target = event.target;
+        if (!target || target.tagName !== "SCRIPT" || target.type !== "module") return;
+        var boot = document.getElementById("boot-status");
+        if (!boot) return;
+        boot.textContent = "Qazaq Stack failed to load. Hard refresh (Cmd+Shift+R) or clear cache for qazaq.up.railway.app.";
+        boot.style.color = "#f5c2e7";
+      }, true);
+    </script>
   </body>
 </html>

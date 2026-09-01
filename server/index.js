@@ -256,7 +256,9 @@ app.get("/api/mcp", (req, res) => {
 function sendSpa(res) {
   const distHtml = path.join(__dirname, "..", "dist", "index.html");
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
   return res.sendFile(distHtml);
 }
 
@@ -294,8 +296,17 @@ if (isProd) {
       },
     }),
   );
-  app.get("*", (_req, res) => {
+  app.get("*", (req, res) => {
+    const ext = path.extname(req.path).toLowerCase();
+    // Never serve SPA HTML for missing JS/CSS/assets — that breaks module loading
+    // when a stale cached index.html still points at /src/main.jsx.
+    if (ext && ![".html", ""].includes(ext)) {
+      res.status(404).type("text/plain").send("Not found");
+      return;
+    }
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
     res.sendFile(path.join(dist, "index.html"));
   });
 }

@@ -69,6 +69,11 @@ body,
   background: var(--bg);
 }
 
+#root {
+  position: relative;
+  z-index: 2;
+}
+
 html {
   overscroll-behavior-y: none;
 }
