@@ -85,6 +85,7 @@ export function updatedLabel(freshness, lastChecked) {
 
   if (!freshness?.label) return "In catalogue";
   const label = freshness.label;
+  if (/^SEE DOCS$/i.test(label)) return null;
   if (/^CURRENT/i.test(label)) {
     const year = label.match(/\d{4}/)?.[0];
     return year ? `Updated ${year}` : "Updated recently";
@@ -103,7 +104,6 @@ export function cardMetricAuth(api) {
 
 export function cardMetricReady(api) {
   if (api.copyable) return "Copy-paste";
-  if (api.trust?.label === "See provider docs") return "See docs";
-  if (api.trust?.label) return api.trust.label;
+  if (api.trust?.label === "Copy-paste ready") return "Copy-paste";
   return "Setup";
 }
