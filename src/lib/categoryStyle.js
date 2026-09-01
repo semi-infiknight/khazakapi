@@ -93,16 +93,17 @@ export function updatedLabel(freshness, lastChecked) {
   return label.replace(/^CURRENT\s·\s*/i, "Updated ");
 }
 
-export function cardMetricScore(api) {
-  if (api.tier === "open" && api.copyable) return "9.8";
-  if (api.tier === "open") return "9.2";
-  if (api.tier === "commercial") return "8.5";
-  return "9.0";
-}
-
-export function cardMetricLatency(api) {
+export function cardMetricAuth(api) {
   if (api.auth === "none") return "Keyless";
   if (api.auth === "apiKey") return "API key";
-  if (api.frequency) return api.frequency.replace(/_/g, " ").toLowerCase();
-  return api.auth;
+  if (api.auth === "oauth") return "OAuth";
+  if (api.auth === "token") return "Token";
+  return api.trust?.authLabel || api.auth || "Auth";
+}
+
+export function cardMetricReady(api) {
+  if (api.copyable) return "Copy-paste";
+  if (api.trust?.label === "See provider docs") return "See docs";
+  if (api.trust?.label) return api.trust.label;
+  return "Setup";
 }

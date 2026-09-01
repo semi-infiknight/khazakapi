@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import ApiLogo from "./ApiLogo.jsx";
 import {
   apiDescription,
-  cardMetricLatency,
-  cardMetricScore,
+  cardMetricAuth,
+  cardMetricReady,
   categoryLabel,
   updatedLabel,
 } from "../lib/categoryStyle.js";
@@ -37,10 +37,6 @@ export default function ApiCard({ api }) {
 
   return (
     <Link to={href} className="card api-card block">
-      <div className="api-card-top">
-        <span className="api-card-category">{categoryLabel(api.category)}</span>
-      </div>
-
       <div className="api-card-body">
         <ApiLogo api={api} />
         <div className="api-card-copy">
@@ -58,9 +54,9 @@ export default function ApiCard({ api }) {
       </div>
 
       <div className="api-card-metrics">
-        <MetricPill icon="↗">{cardMetricScore(api)}</MetricPill>
-        <MetricPill icon="⏱">{cardMetricLatency(api)}</MetricPill>
-        <MetricPill icon="📶">{api.copyable ? "100%" : "Setup"}</MetricPill>
+        <MetricPill icon="◆">{categoryLabel(api.category)}</MetricPill>
+        <MetricPill icon="⏱">{cardMetricAuth(api)}</MetricPill>
+        <MetricPill icon="📶">{cardMetricReady(api)}</MetricPill>
       </div>
     </Link>
   );
