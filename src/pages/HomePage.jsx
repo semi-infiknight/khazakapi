@@ -115,7 +115,6 @@ export default function HomePage() {
   }, [query, submittedQuery, suggestion, suggesting, clearIntent]);
 
   const showingIntent = Boolean(submittedQuery.trim());
-  const draftChanged = showingIntent && query.trim() !== submittedQuery.trim();
   const hasMore = Boolean(meta?.next_offset);
   // Hero caption: KZ-filtered baseline only. Legacy servers returned unfiltered total (1407).
   const catalogueTotal = meta?.catalogueTotal ?? 688;
@@ -170,11 +169,7 @@ export default function HomePage() {
               onChange={setQuery}
               onSubmit={submitIntent}
               submitting={suggesting}
-              hint={
-                draftChanged
-                  ? "Press Enter to refresh suggestions"
-                  : "Describe your app or list features, then press Enter"
-              }
+              placeholder="Send a message…"
             />
           </section>
 
