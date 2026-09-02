@@ -14,7 +14,19 @@ function useReducedMotion() {
   return reduced;
 }
 
-export function useIntentReveal(segments, { active = true, stepMs = 340, startMs = 120 } = {}) {
+export function defaultIntentStepDelay(prevSegment, nextSegment) {
+  if (nextSegment?.startsWith("api-")) return 280;
+  if (nextSegment?.startsWith("feature-")) return 780;
+  if (nextSegment === "intro") return 520;
+  if (nextSegment === "diagram" || nextSegment === "canvas") return 480;
+  if (nextSegment?.startsWith("trunk-")) return 520;
+  return 560;
+}
+
+export function useIntentReveal(
+  segments,
+  { active = true, startMs = 220, getStepDelay = defaultIntentStepDelay } = {},
+) {
   const reducedMotion = useReducedMotion();
   const [step, setStep] = useState(-1);
 
@@ -37,13 +49,14 @@ export function useIntentReveal(segments, { active = true, stepMs = 340, startMs
       current += 1;
       setStep(current);
       if (current < segments.length - 1) {
-        timers.push(setTimeout(advance, stepMs));
+        const delay = getStepDelay(segments[current], segments[current + 1], current);
+        timers.push(setTimeout(advance, delay));
       }
     };
 
     timers.push(setTimeout(advance, startMs));
     return () => timers.forEach(clearTimeout);
-  }, [active, segments, stepMs, startMs, reducedMotion]);
+  }, [active, segments, startMs, getStepDelay, reducedMotion]);
 
   const isVisible = (segmentId) => {
     const index = segments.indexOf(segmentId);
@@ -51,12 +64,15 @@ export function useIntentReveal(segments, { active = true, stepMs = 340, startMs
     return step >= index;
   };
 
+  const isActive = (segmentId) => step === segments.indexOf(segmentId);
+
   const isGenerating = step >= 0 && step < segments.length - 1;
 
   return {
     step,
     segments,
     isVisible,
+    isActive,
     isGenerating,
     reducedMotion,
   };

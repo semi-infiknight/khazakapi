@@ -93,7 +93,7 @@ function PathColumn({ pathLabel, block, stepBase, activeStep, onSelect, blockInd
 
       <div className="intent-prompt-api-grid intent-zapier-api-grid">
         {block.apis.map((api, apiIndex) => (
-          <IntentRevealItem key={`${block.id}-${api.id}`} segment={`api-${blockIndex}-${apiIndex}`}>
+          <IntentRevealItem key={`${block.id}-${api.id}`} segment={`api-${blockIndex}-${apiIndex}`} variant="inline">
             <FeatureApiCard api={api} feature={block} />
           </IntentRevealItem>
         ))}

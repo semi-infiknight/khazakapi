@@ -129,7 +129,11 @@ export default function IntentFlowsView({ suggestion, blocks }) {
                   </p>
                   <div className="intent-prompt-api-grid intent-flows-api-grid">
                     {block.apis.map((api, apiIndex) => (
-                      <IntentRevealItem key={`${block.id}-${api.id}`} segment={`api-${index}-${apiIndex}`}>
+                      <IntentRevealItem
+                        key={`${block.id}-${api.id}`}
+                        segment={`api-${index}-${apiIndex}`}
+                        variant="inline"
+                      >
                         <FeatureApiCard api={api} feature={block} />
                       </IntentRevealItem>
                     ))}

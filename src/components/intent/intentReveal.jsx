@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { useIntentReveal } from "../../hooks/useIntentReveal.js";
+import { defaultIntentStepDelay, useIntentReveal } from "../../hooks/useIntentReveal.js";
 
 const IntentRevealContext = createContext(null);
 
@@ -21,9 +21,22 @@ export function buildIntentRevealSegments(blocks, view = "timeline") {
   return segments;
 }
 
-export function IntentRevealProvider({ blocks, view, onGeneratingChange, children }) {
+function buildStepDelay(summary) {
+  return (prevSegment, nextSegment, stepIndex) => {
+    if (prevSegment === "intro" && summary) {
+      return Math.min(4200, Math.max(1100, summary.length * 18 + 500));
+    }
+    if (prevSegment === "diagram" || prevSegment === "canvas") {
+      return 680;
+    }
+    return defaultIntentStepDelay(prevSegment, nextSegment, stepIndex);
+  };
+}
+
+export function IntentRevealProvider({ blocks, view, summary = "", onGeneratingChange, children }) {
   const segments = useMemo(() => buildIntentRevealSegments(blocks, view), [blocks, view]);
-  const reveal = useIntentReveal(segments, { active: Boolean(blocks.length) });
+  const getStepDelay = useMemo(() => buildStepDelay(summary), [summary]);
+  const reveal = useIntentReveal(segments, { active: Boolean(blocks.length), getStepDelay });
 
   useEffect(() => {
     onGeneratingChange?.(reveal.isGenerating);
@@ -36,20 +49,43 @@ export function useIntentRevealState() {
   return useContext(IntentRevealContext);
 }
 
-export function IntentRevealItem({ segment, className = "", children }) {
+export function useSegmentVisible(segment) {
   const reveal = useIntentRevealState();
-  if (!reveal?.isVisible(segment)) return null;
+  const visible = reveal?.isVisible(segment) ?? false;
+  return {
+    visible,
+    active: reveal?.isActive?.(segment) ?? false,
+    reducedMotion: reveal?.reducedMotion ?? false,
+  };
+}
+
+export function IntentRevealItem({ segment, className = "", variant = "block", children }) {
+  const { visible, active, reducedMotion } = useSegmentVisible(segment);
+  const shown = visible || reducedMotion;
 
   return (
-    <div className={`intent-reveal-item ${className}`.trim()} data-intent-segment={segment}>
-      {children}
+    <div
+      className={[
+        "intent-reveal-item",
+        `intent-reveal-item--${variant}`,
+        shown ? "is-visible" : "is-pending",
+        active ? "is-active" : "",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      aria-hidden={!shown}
+      data-intent-segment={segment}
+    >
+      <div className="intent-reveal-inner">{children}</div>
     </div>
   );
 }
 
-export function StreamingText({ text, className = "", charMs = 14, startDelayMs = 80, as: Tag = "p" }) {
+export function StreamingText({ text, className = "", charMs = 16, startDelayMs = 120, as: Tag = "p" }) {
   const reveal = useIntentRevealState();
   const reducedMotion = reveal?.reducedMotion;
+  const active = reveal?.isActive?.("intro") || reveal?.isVisible?.("intro");
   const [visible, setVisible] = useState(reducedMotion ? text.length : 0);
 
   useEffect(() => {
@@ -60,6 +96,11 @@ export function StreamingText({ text, className = "", charMs = 14, startDelayMs 
 
     if (reducedMotion) {
       setVisible(text.length);
+      return undefined;
+    }
+
+    if (!active) {
+      setVisible(0);
       return undefined;
     }
 
@@ -78,7 +119,7 @@ export function StreamingText({ text, className = "", charMs = 14, startDelayMs 
       clearTimeout(startTimer);
       clearInterval(typingTimer);
     };
-  }, [text, charMs, startDelayMs, reducedMotion]);
+  }, [text, charMs, startDelayMs, reducedMotion, active]);
 
   if (!text) return null;
 

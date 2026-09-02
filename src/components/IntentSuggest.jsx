@@ -51,6 +51,20 @@ function IntentPromptHeader({ blocks, suggestion, view, onViewChange }) {
   );
 }
 
+function IntentPromptShell({ blocks, suggestion, view, onViewChange, children }) {
+  const reveal = useIntentRevealState();
+
+  return (
+    <article
+      className={`panel intent-prompt${reveal?.isGenerating ? " is-generating" : ""}`}
+      aria-label="Suggested API stack"
+    >
+      <IntentPromptHeader blocks={blocks} suggestion={suggestion} view={view} onViewChange={onViewChange} />
+      {children}
+    </article>
+  );
+}
+
 function IntentResultsBody({ suggestion, onGeneratingChange }) {
   const [view, setView] = useState(readStoredIntentView);
   const blocks = featureBlocks(suggestion);
@@ -77,10 +91,8 @@ function IntentResultsBody({ suggestion, onGeneratingChange }) {
   }
 
   return (
-    <IntentRevealProvider blocks={blocks} view={view} onGeneratingChange={onGeneratingChange}>
-      <article className="panel intent-prompt" aria-label="Suggested API stack">
-        <IntentPromptHeader blocks={blocks} suggestion={suggestion} view={view} onViewChange={setView} />
-
+    <IntentRevealProvider blocks={blocks} view={view} summary={suggestion.summary || ""} onGeneratingChange={onGeneratingChange}>
+      <IntentPromptShell blocks={blocks} suggestion={suggestion} view={view} onViewChange={setView}>
         {view === "timeline" && (
           <div className="intent-view-pane" key="timeline">
             <IntentTimelineView suggestion={suggestion} blocks={blocks} />
@@ -98,7 +110,7 @@ function IntentResultsBody({ suggestion, onGeneratingChange }) {
             <IntentZapierView suggestion={suggestion} blocks={blocks} />
           </div>
         )}
-      </article>
+      </IntentPromptShell>
     </IntentRevealProvider>
   );
 }

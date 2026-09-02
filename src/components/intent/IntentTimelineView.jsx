@@ -50,7 +50,7 @@ export default function IntentTimelineView({ suggestion, blocks }) {
 
       <ol className="intent-timeline-list">
         <li className="intent-timeline-step">
-          <IntentRevealItem segment="intro">
+          <IntentRevealItem segment="intro" variant="timeline">
             <div className="intent-timeline-rail" aria-hidden="true">
               <span className="intent-timeline-marker intent-timeline-marker--app">0</span>
               <span className="intent-timeline-line" />
@@ -66,7 +66,7 @@ export default function IntentTimelineView({ suggestion, blocks }) {
 
         {blocks.map((block, index) => (
           <li key={block.id} className="intent-timeline-step">
-            <IntentRevealItem segment={`feature-${index}`}>
+            <IntentRevealItem segment={`feature-${index}`} variant="timeline">
               <div className="intent-timeline-rail" aria-hidden="true">
                 <span className="intent-timeline-marker">{index + 1}</span>
                 {index < blocks.length - 1 ? <span className="intent-timeline-line" /> : null}
@@ -76,7 +76,11 @@ export default function IntentTimelineView({ suggestion, blocks }) {
                 <FeatureStepMeta block={block} />
                 <div className="intent-prompt-api-grid">
                   {block.apis.map((api, apiIndex) => (
-                    <IntentRevealItem key={`${block.id}-${api.id}`} segment={`api-${index}-${apiIndex}`}>
+                    <IntentRevealItem
+                      key={`${block.id}-${api.id}`}
+                      segment={`api-${index}-${apiIndex}`}
+                      variant="inline"
+                    >
                       <FeatureApiCard api={api} feature={block} />
                     </IntentRevealItem>
                   ))}
