@@ -390,6 +390,7 @@ a {
   letter-spacing: 0;
   line-height: 1.45;
   color: var(--text);
+  white-space: nowrap;
 }
 
 .kz-af-agents {
@@ -702,9 +703,10 @@ a {
   .kz-af-cap-apis {
     grid-area: 1 / 3;
     align-self: end;
-    max-width: 22ch;
+    max-width: none;
     margin-bottom: 16px;
     text-align: left;
+    white-space: nowrap;
   }
 
   .kz-af-agents {
