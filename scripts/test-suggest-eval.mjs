@@ -78,6 +78,32 @@ const CASES = [
     expectFit: true,
     expectFeatures: ["grocery-delivery"],
   },
+  {
+    q: "loan app",
+    expectFit: true,
+    expectFeatures: ["loan-calculator", "interest-rates", "bank-accounts"],
+    expectRecipes: ["loan-app"],
+  },
+  {
+    q: "banking",
+    expectFit: true,
+    expectFeatures: ["bank-accounts", "checkout-payment"],
+  },
+  {
+    q: "yandex maps",
+    expectFit: true,
+    expectFeatures: ["map-display", "poi-search", "forward-geocode", "address-autocomplete"],
+    rejectFeatures: ["yandex-direct-campaigns", "yandex-market-seller", "yandex-cloud-compute"],
+  },
+  {
+    q: "insurance app",
+    expectFit: false,
+  },
+  {
+    q: "crypto wallet",
+    expectFit: true,
+    expectFeatures: ["crypto-trading", "crypto-wallet", "wallet-payout"],
+  },
 ];
 
 const CAP_CHECKS = [

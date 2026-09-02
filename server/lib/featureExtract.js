@@ -14,8 +14,112 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const MAX_FEATURES = 5;
 const KEYWORD_FLOOR = 4;
+/** Default semantic cosine floor (MiniLM, normalized). */
 const SEMANTIC_FLOOR = 0.38;
+/** Lower floor when query domain hints align with feature capability tags. */
+const SEMANTIC_FLOOR_DOMAIN = 0.3;
 const RECIPE_BOOST = 12;
+
+/** Map query phrases → capability tags we expect matching features to carry. */
+const QUERY_DOMAIN_HINTS = [
+  {
+    re: /\bmaps?\b|\bgeocod|\blocation|\brouting|\bnavigat|\baddress|\bpoi\b|\bplaces\b/i,
+    tags: [
+      "map-display",
+      "static-maps",
+      "geocode",
+      "forward-geocode",
+      "reverse-geocode",
+      "address-autocomplete",
+      "poi-search",
+      "routing",
+      "route-planning",
+      "places",
+    ],
+  },
+  {
+    re: /\bpay|\bcheckout|\bwallet|\bfintech|\bmerchant|\bbilling|\binvoice|\btax|\be-?invoice/i,
+    tags: [
+      "checkout-payment",
+      "wallet-payout",
+      "open-banking",
+      "tax-invoicing",
+      "fiscal-receipts",
+      "fx-rates",
+      "interest-rates",
+    ],
+  },
+  {
+    re: /\bdeliver|\bcourier|\blogistic|\bshipping|\bparcel|\bfleet|\bwarehouse/i,
+    tags: ["delivery-eta", "routing", "parcel-shipping", "courier-tracking", "distance-matrix"],
+  },
+  {
+    re: /\bfood|\bgrocery|\brestaurant|\bmeal|\bkitchen/i,
+    tags: ["grocery-delivery", "food-delivery-partner", "restaurant-menu"],
+  },
+  {
+    re: /\btravel|\bflight|\bhotel|\bbooking|\btaxi|\bride|\bhail|\btransit/i,
+    tags: ["travel-booking", "ride-hailing", "route-planning"],
+  },
+  {
+    re: /\bweather|\bforecast|\bclimate|\bair quality/i,
+    tags: ["weather-forecast", "climate-data", "air-quality"],
+  },
+  {
+    re: /\bsms|\botp|\btelecom|\bphone|\bverify/i,
+    tags: ["sms-otp", "user-auth"],
+  },
+  {
+    re: /\bchatbot|\bgpt|\bllm|\bai\b|\bvoice|\bspeech|\bassistant/i,
+    tags: ["llm", "ai-assistant", "speech-ai", "chat-completion", "voice-input", "voice-output"],
+  },
+  {
+    re: /\bbank|\bloan|\blending|\bcredit|\bmortgage|\binsurance|\binvest|\bstock|\btrading|\bcrypto/i,
+    tags: [
+      "open-banking",
+      "interest-rates",
+      "checkout-payment",
+      "bank-accounts",
+      "crypto-wallet",
+      "crypto-trading",
+    ],
+  },
+  {
+    re: /\bgov|\bopen data|\bstatistics|\bdashboard|\bcensus|\bpopulation|\bhealth stat/i,
+    tags: ["gov-open-data", "population-stats", "health-stats", "open-data-export"],
+  },
+  {
+    re: /\be-?commerce|\bmarketplace|\bshop|\bstore|\bseller|\bretail|\bcatalog/i,
+    tags: ["marketplace-sync", "checkout-payment", "merchant-dashboard", "store-locator"],
+  },
+  {
+    re: /\breal estate|\bhousing|\bproperty|\bmortgage|\bcadast/i,
+    tags: ["housing-stats", "cadastral-data", "mortgage-stats", "map-display"],
+  },
+  {
+    re: /\bhealth|\bhospital|\bmedical|\btelemed|\bpatient|\bclinic/i,
+    tags: ["health-stats", "hospital-capacity", "physician-density"],
+  },
+];
+
+const BRAND_TOKENS = [
+  "yandex",
+  "kaspi",
+  "halyk",
+  "beeline",
+  "kcell",
+  "tele2",
+  "arbuz",
+  "ozon",
+  "wildberries",
+  "freedompay",
+  "freedom",
+  "2gis",
+  "indriver",
+  "chocofamily",
+  "google",
+  "apple",
+];
 
 /** Exclude plumbing; allow extended depth when keyword/recipe hits. */
 const EXTRACT_FEATURES = FEATURES.filter((f) => !NON_BUILDABLE_MATRIX_FEATURES.has(f.id));
@@ -37,6 +141,72 @@ function keywordInHay(hay, kw) {
   }
   if (k.includes(" ")) return hay.includes(k);
   return new RegExp(`\\b${escapeRegExp(k)}\\b`, "i").test(hay);
+}
+
+function getQueryDomainTags(hay) {
+  const tags = new Set();
+  for (const hint of QUERY_DOMAIN_HINTS) {
+    if (hint.re.test(hay)) hint.tags.forEach((tag) => tags.add(tag));
+  }
+  return tags;
+}
+
+function featureTagSet(feature) {
+  const tags = new Set(feature.capabilityTags || []);
+  const parent = feature.parentId ? getFeature(feature.parentId) : null;
+  if (parent?.capabilityTags) parent.capabilityTags.forEach((tag) => tags.add(tag));
+  return tags;
+}
+
+function domainCoherent(feature, hay, domainTags) {
+  if (!domainTags.size) return true;
+  const featTags = featureTagSet(feature);
+  if ([...domainTags].some((tag) => featTags.has(tag))) return true;
+  return (feature.keywords || []).some((kw) => keywordInHay(hay, kw));
+}
+
+function brandTokensForFeature(feature) {
+  const tokens = new Set();
+  for (const provider of feature.providers || []) {
+    const head = normalize(provider).split(/\s+/)[0];
+    if (head.length >= 3) tokens.add(head);
+  }
+  for (const brand of BRAND_TOKENS) {
+    if (feature.id.startsWith(`${brand}-`) || feature.id.includes(`-${brand}-`)) tokens.add(brand);
+  }
+  return tokens;
+}
+
+/** Provider SKU rows (yandex-direct-*, kaspi-*, yandexgpt-*) — not generic capabilities like map-display. */
+function isProviderLockedFeature(feature) {
+  if (BRAND_TOKENS.some((brand) => feature.id.startsWith(`${brand}-`))) return true;
+  return BRAND_TOKENS.some(
+    (brand) => feature.id.includes(brand) && !["map-display", "device-location"].includes(feature.id),
+  );
+}
+
+function brandMentioned(feature, hay) {
+  if (!isProviderLockedFeature(feature)) return true;
+  return [...brandTokensForFeature(feature)].some((token) => token.length >= 3 && hay.includes(token));
+}
+
+function semanticThreshold(feature, hay, domainTags) {
+  if (domainTags.size && domainCoherent(feature, hay, domainTags)) return SEMANTIC_FLOOR_DOMAIN;
+  return SEMANTIC_FLOOR;
+}
+
+function allowsSemanticOnly(feature, hay, semanticScore, domainTags) {
+  const floor = semanticThreshold(feature, hay, domainTags);
+  if (semanticScore < floor) return false;
+
+  // Query names a domain (maps, payments, …) — require stronger semantic signal if feature tags don't align.
+  if (domainTags.size && !domainCoherent(feature, hay, domainTags) && semanticScore < 0.48) return false;
+
+  if (isProviderLockedFeature(feature)) {
+    if (!brandMentioned(feature, hay)) return false;
+    if (domainTags.size && !domainCoherent(feature, hay, domainTags)) return false;
+  }
+  return true;
 }
 
 function cosine(a, b) {
@@ -226,6 +396,8 @@ export async function extractFeatures(query) {
 
   const featureVectors = queryVec ? await loadFeatureVectors() : [];
 
+  const domainTags = getQueryDomainTags(hay);
+
   const scored = EXTRACT_FEATURES.map((feature) => {
     if ((feature.negativeKeywords || []).some((neg) => keywordInHay(hay, neg))) return null;
 
@@ -240,9 +412,9 @@ export async function extractFeatures(query) {
 
     const keywordHit = keywordScore >= KEYWORD_FLOOR;
     const recipeHit = recipeFeatureIds.has(feature.id);
+    const semanticHit = queryVec && allowsSemanticOnly(feature, hay, semanticScore, domainTags);
 
-    // Semantic-only hits caused Yandex/extended false positives — require keyword or recipe.
-    if (!keywordHit && !recipeHit) return null;
+    if (!keywordHit && !recipeHit && !semanticHit) return null;
 
     const combined =
       (recipeHit ? 1 : 0) * 2 +
@@ -251,7 +423,8 @@ export async function extractFeatures(query) {
 
     let source = "keyword";
     if (recipeHit) source = "recipe";
-    else if (semanticScore >= SEMANTIC_FLOOR && keywordHit) source = "hybrid";
+    else if (semanticHit && !keywordHit) source = "semantic";
+    else if (semanticScore >= SEMANTIC_FLOOR_DOMAIN && keywordHit) source = "hybrid";
 
     return { feature, keywordScore, semanticScore, combined, source };
   }).filter(Boolean);
