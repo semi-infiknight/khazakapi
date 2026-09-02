@@ -11,7 +11,7 @@ import { YANDEX_ECOSYSTEM_APIS } from "./yandex-ecosystem-apis.js";
 import { KZ_COMMERCIAL_APIS } from "./kz-commercial-apis.js";
 import { KASPI_APIS } from "./providers/kaspi-apis.js";
 import { FREEDOM_APIS } from "./providers/freedom-apis.js";
-import { FORTE_HALYK_APIS } from "./providers/kzEntry.js";
+import { FORTE_HALYK_APIS } from "./providers/forte-halyk-apis.js";
 import { buildHubCounts, categorySlug, resolveApiType, resolveCompany } from "../lib/services.js";
 import { filterKzCatalogue } from "../lib/kzFilter.js";
 

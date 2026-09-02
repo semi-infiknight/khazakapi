@@ -71,6 +71,8 @@ const kaspiPayAuth = {
   },
 };
 
+// Migrated to providers/kaspi-apis.js — kept for reference only.
+/*
 const KASPI_APIS_DEPRECATED = [
   kz({
     id: "kz-kaspi-products-import",
@@ -231,7 +233,10 @@ const KASPI_APIS_DEPRECATED = [
     ...kaspiPayAuth,
   }),
 ];
+*/
 
+// Migrated to providers/freedom-apis.js — kept for reference only.
+/*
 const FREEDOM_DOCS = "https://freedompay.kz/docs-en";
 const FREEDOM_BASE = "https://api.freedompay.kz";
 const freedomAuth = {
@@ -320,7 +325,10 @@ const FREEDOM_APIS_DEPRECATED = [
     ...freedomAuth,
   }),
 ];
+*/
 
+// Migrated to providers/forte-halyk-apis.js — kept for reference only.
+/*
 const FORTE_DOCS = "https://docs.fortebank.com/en/";
 const FORTE_BASE = "https://gateway.fortebank.com";
 const forteAuth = {
@@ -328,7 +336,7 @@ const forteAuth = {
   authDetails: { scheme: "http", type: "basic", credential: "Shop ID + Secret Key" },
 };
 
-export const FORTE_HALYK_APIS = [
+const FORTE_HALYK_APIS_DEPRECATED = [
   kz({
     id: "kz-fortebank-authorizations",
     title: "ForteBank ~ two-step authorization hold (KZ)",
@@ -560,3 +568,4 @@ export const FORTE_HALYK_APIS = [
     pricing: "freemium",
   }),
 ];
+*/
