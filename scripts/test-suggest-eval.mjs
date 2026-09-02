@@ -98,6 +98,13 @@ const CASES = [
   {
     q: "insurance app",
     expectFit: false,
+    expectReason: "no_feature_fit",
+  },
+  {
+    q: "air quality monitoring",
+    expectFit: false,
+    expectReason: "no_apis_matched",
+    expectFeatures: ["air-quality", "carbon-emissions"],
   },
   {
     q: "crypto wallet",
@@ -138,6 +145,16 @@ for (const tc of CASES) {
 
   if (Boolean(res.fit) !== tc.expectFit) {
     errors.push(`fit expected ${tc.expectFit}, got ${res.fit} (reason: ${res.reason})`);
+  }
+
+  if (tc.expectReason && res.reason !== tc.expectReason) {
+    errors.push(`reason expected ${tc.expectReason}, got ${res.reason}`);
+  }
+
+  if (tc.expectFit === false && tc.expectFeatures?.length) {
+    const ids = (res.features || []).map((f) => f.id);
+    const hit = tc.expectFeatures.some((id) => ids.includes(id));
+    if (!hit) errors.push(`expected one of features [${tc.expectFeatures.join(", ")}] (got ${ids.join(", ")})`);
   }
 
   if (tc.expectFit && tc.expectFeatures?.length) {

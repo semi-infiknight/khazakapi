@@ -65,6 +65,57 @@ function IntentPromptShell({ blocks, suggestion, view, onViewChange, children })
   );
 }
 
+function IntentNoApisMatched({ suggestion, blocks }) {
+  return (
+    <article className="panel intent-prompt intent-prompt--no-apis" aria-label="Identified features without KZ APIs">
+      <header className="intent-prompt-head">
+        <div>
+          <p className="intent-prompt-role">Features understood</p>
+          <p className="intent-prompt-meta">
+            {blocks.length} feature{blocks.length === 1 ? "" : "s"} · 0 KZ APIs
+          </p>
+        </div>
+      </header>
+      <p className="intent-prompt-body">
+        {suggestion.summary ||
+          `We identified product features for “${suggestion.query}” but no strong Kazakhstan commercial APIs exist for them yet.`}
+      </p>
+      <ul className="intent-no-apis-list">
+        {blocks.map((block) => (
+          <li key={block.id} className="intent-no-apis-card">
+            <div className="intent-no-apis-card-head">
+              <h3 className="intent-no-apis-card-title">
+                {block.parentLabel ? (
+                  <>
+                    <span className="intent-feature-parent">{block.parentLabel}</span>
+                    <span className="intent-feature-sep"> / </span>
+                  </>
+                ) : null}
+                {block.label}
+              </h3>
+              <span className="intent-no-apis-badge">No KZ API yet</span>
+            </div>
+            {block.why ? (
+              <p className="intent-feature-why">
+                <span className="intent-feature-label">Why</span> {block.why}
+              </p>
+            ) : null}
+            {block.where ? (
+              <p className="intent-feature-where">
+                <span className="intent-feature-label">Where</span> {block.where}
+              </p>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+      <p className="intent-prompt-nofit-hint">
+        Qazaq Stack covers KZ payments, maps, delivery, banking, travel, weather, telecom, and government open data.
+        These features are not in the catalogue yet.
+      </p>
+    </article>
+  );
+}
+
 function IntentResultsBody({ suggestion, onGeneratingChange }) {
   const [view, setView] = useState(readStoredIntentView);
   const blocks = featureBlocks(suggestion);
@@ -74,6 +125,10 @@ function IntentResultsBody({ suggestion, onGeneratingChange }) {
   }, [view]);
 
   if (!suggestion?.query) return null;
+
+  if (suggestion.reason === "no_apis_matched" && blocks.length) {
+    return <IntentNoApisMatched suggestion={suggestion} blocks={blocks} />;
+  }
 
   if (suggestion.fit === false || (!blocks.length && !suggestion?.apis?.length)) {
     return (

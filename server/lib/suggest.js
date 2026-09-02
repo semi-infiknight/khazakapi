@@ -125,19 +125,36 @@ async function matchApisForFeature(feature, apis, index, userQuery, hay, thresho
   );
 }
 
-function noFitSuggestions(query, bestScore = 0, reason = "no_feature_fit") {
+function formatFeatureLabels(blocks = []) {
+  const labels = blocks.map((b) => b.label).filter(Boolean);
+  if (!labels.length) return null;
+  if (labels.length === 1) return labels[0];
+  if (labels.length === 2) return `${labels[0]} and ${labels[1]}`;
+  return `${labels.slice(0, -1).join(", ")}, and ${labels[labels.length - 1]}`;
+}
+
+function noFitSuggestions(query, bestScore = 0, reason = "no_feature_fit", matchedBlocks = []) {
+  const labelPhrase = formatFeatureLabels(matchedBlocks);
+  let summary;
+  if (reason === "no_apis_matched") {
+    summary = labelPhrase
+      ? `We identified product features for “${query}” (${labelPhrase}) but no strong Kazakhstan commercial APIs exist for them yet.`
+      : `We identified product features for “${query}” but no strong Kazakhstan commercial APIs exist for them yet.`;
+  } else {
+    summary = `We don’t have a good API fit for “${query}” in this catalogue. Qazaq Stack focuses on Kazakhstan payments, maps, delivery, banking, travel, weather, telecom, and government open data.`;
+  }
+
+  const featurePayload = reason === "no_apis_matched" ? matchedBlocks : [];
+
   return {
     query,
     fit: false,
     bestScore,
     reason,
-    summary:
-      reason === "no_apis_matched"
-        ? `We matched product features for “${query}” but found no strong Kazakhstan APIs for them yet.`
-        : `We don’t have a good API fit for “${query}” in this catalogue. Qazaq Stack focuses on Kazakhstan payments, maps, delivery, banking, travel, weather, telecom, and government open data.`,
+    summary,
     examples: EXAMPLE_PROMPTS,
-    features: [],
-    intents: [],
+    features: featurePayload,
+    intents: featurePayload,
     apis: [],
     total: 0,
   };
@@ -197,7 +214,7 @@ export async function suggestApis(apis, query = "", { limit = 24 } = {}) {
 
   if (!featureBlocks.length || !merged.length) {
     return {
-      ...noFitSuggestions(text, globalBest, "no_apis_matched"),
+      ...noFitSuggestions(text, globalBest, "no_apis_matched", matched),
       mode,
       recipes: extracted.recipes,
       summarySource: "template",
