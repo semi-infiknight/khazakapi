@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-09-02T07:12:52.902Z",
+  "builtAt": "2026-09-02T07:27:47.614Z",
   "summary": {
     "totalApis": 727,
     "ontologyFeatures": 389,
@@ -17,7 +17,7 @@
   },
   "stats": {
     "totalApis": 727,
-    "withCapabilities": 719,
+    "withCapabilities": 721,
     "withFeatures": 727,
     "minBuildableFeatures": 1,
     "categoryOntologyTarget": 100,
@@ -25,16 +25,20 @@
     "govCommercialLeakage": 0,
     "govUserAuthPrimary": 0,
     "universalPlumbingFeatures": 0,
-    "avgFeaturesPerApi": 12.26,
+    "avgFeaturesPerApi": 12.27,
     "commercialTotal": 178,
     "commercialWithFeatures": 178,
     "commercialNoFeatures": 0,
     "docScavengeTargets": 178,
     "docEnrichedApis": 21,
     "docScavengedWithHits": 21,
-    "uniqueCapabilities": 98,
-    "orphanCapabilities": [],
-    "unmappedCapabilities": [],
+    "uniqueCapabilities": 99,
+    "orphanCapabilities": [
+      "panorama-streetview"
+    ],
+    "unmappedCapabilities": [
+      "panorama-streetview"
+    ],
     "featuresWithZeroApis": [
       "data-visualization",
       "batch-export",
@@ -459,12 +463,12 @@
       }
     ],
     "expansionSourceTotals": {
-      "primary": 1744,
+      "primary": 1746,
       "profile": 0,
       "capability": 0,
-      "provider": 5142,
-      "keyword": 437,
-      "doc": 575,
+      "provider": 5141,
+      "keyword": 444,
+      "doc": 569,
       "parent": 1017
     },
     "ontologyFeatures": 389
