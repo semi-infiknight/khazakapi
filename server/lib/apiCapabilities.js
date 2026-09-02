@@ -106,8 +106,19 @@ export const API_CAPABILITY_OVERRIDES = {
 
   // —— Telecom ——
   "kz-kcell-sms": ["sms-otp", "sms"],
+  "kz-kcell-sms-simple": ["sms-otp", "sms"],
+  "kz-kcell-sms-batch-sync": ["sms-otp", "sms"],
+  "kz-kcell-sms-broadcast-sync": ["sms-otp", "sms"],
+  "kz-kcell-sms-otp-templates": ["sms-otp"],
   "kz-beeline-sms": ["sms-otp", "sms"],
+  "kz-beeline-sms-bulk": ["sms-otp", "sms"],
+  "kz-beeline-sms-verification": ["sms-otp"],
+  "kz-beeline-kempay-create-payment": ["sms-otp", "checkout-payment"],
+  "kz-beeline-kempay-resend-otp": ["sms-otp"],
   "kz-tele2-sms": ["sms-otp", "sms"],
+  "kz-tele2-a2p-verification": ["sms-otp"],
+  "kz-tele2-a2p-transactional": ["sms-otp", "sms"],
+  "kz-altel-a2p-partners": ["sms-otp", "sms"],
 
   // —— Tax / cloud ——
   "kz-esf-invoicing": ["tax-invoicing", "e-invoice"],
