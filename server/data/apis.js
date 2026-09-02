@@ -9,7 +9,9 @@ import {
 import { YANDEX_APIS } from "./yandex-apis.js";
 import { YANDEX_ECOSYSTEM_APIS } from "./yandex-ecosystem-apis.js";
 import { KZ_COMMERCIAL_APIS } from "./kz-commercial-apis.js";
-import { GIANT_PROVIDER_APIS } from "./providers/kzEntry.js";
+import { KASPI_APIS } from "./providers/kaspi-apis.js";
+import { FREEDOM_APIS } from "./providers/freedom-apis.js";
+import { FORTE_HALYK_APIS } from "./providers/kzEntry.js";
 import { buildHubCounts, categorySlug, resolveApiType, resolveCompany } from "../lib/services.js";
 import { filterKzCatalogue } from "../lib/kzFilter.js";
 
@@ -38166,7 +38168,9 @@ export const APIS = [
   ...YANDEX_APIS,
   ...YANDEX_ECOSYSTEM_APIS,
   ...KZ_COMMERCIAL_APIS,
-  ...GIANT_PROVIDER_APIS,
+  ...KASPI_APIS,
+  ...FREEDOM_APIS,
+  ...FORTE_HALYK_APIS,
 ];
 
 // Attach generated snippets to copyable entries

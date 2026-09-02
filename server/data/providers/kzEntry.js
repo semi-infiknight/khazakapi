@@ -71,7 +71,7 @@ const kaspiPayAuth = {
   },
 };
 
-export const KASPI_APIS = [
+const KASPI_APIS_DEPRECATED = [
   kz({
     id: "kz-kaspi-products-import",
     title: "Kaspi Shop ~ product catalog import (KZ)",
@@ -240,7 +240,7 @@ const freedomAuth = {
   setup: keySetup(`${FREEDOM_DOCS}/merchant-api/intro`, "https://docs.freedompay.kz/"),
 };
 
-export const FREEDOM_APIS = [
+const FREEDOM_APIS_DEPRECATED = [
   kz({
     id: "kz-freedompay-payout",
     title: "Freedom Pay ~ payouts to bank cards (KZ)",
@@ -560,5 +560,3 @@ export const FORTE_HALYK_APIS = [
     pricing: "freemium",
   }),
 ];
-
-export const GIANT_PROVIDER_APIS = [...KASPI_APIS, ...FREEDOM_APIS, ...FORTE_HALYK_APIS];

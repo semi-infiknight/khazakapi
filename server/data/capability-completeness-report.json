@@ -1,35 +1,35 @@
 {
-  "builtAt": "2026-09-02T07:03:36.588Z",
+  "builtAt": "2026-09-02T07:05:57.163Z",
   "summary": {
-    "totalApis": 724,
+    "totalApis": 727,
     "ontologyFeatures": 389,
     "categoryOntologyTarget": 100,
     "minBuildableFeatures": 1,
     "minFeaturesPerApi": 1,
-    "p10FeaturesPerApi": 5,
+    "p10FeaturesPerApi": 4,
     "medianFeaturesPerApi": 12,
     "maxFeaturesPerApi": 26,
     "apisBelowBuildableMin": 0,
     "govCommercialLeakage": 0,
     "govUserAuthPrimary": 0,
     "universalPlumbingFeatures": 0,
-    "commercialCoverage": "175/175"
+    "commercialCoverage": "178/178"
   },
   "stats": {
-    "totalApis": 724,
-    "withCapabilities": 706,
-    "withFeatures": 724,
+    "totalApis": 727,
+    "withCapabilities": 707,
+    "withFeatures": 727,
     "minBuildableFeatures": 1,
     "categoryOntologyTarget": 100,
     "apisBelowMinFeatures": 0,
     "govCommercialLeakage": 0,
     "govUserAuthPrimary": 0,
     "universalPlumbingFeatures": 0,
-    "avgFeaturesPerApi": 11.85,
-    "commercialTotal": 175,
-    "commercialWithFeatures": 175,
+    "avgFeaturesPerApi": 11.83,
+    "commercialTotal": 178,
+    "commercialWithFeatures": 178,
     "commercialNoFeatures": 0,
-    "docScavengeTargets": 175,
+    "docScavengeTargets": 178,
     "docEnrichedApis": 0,
     "docScavengedWithHits": 0,
     "uniqueCapabilities": 98,
@@ -163,11 +163,11 @@
     "vocabularySize": 101,
     "featureCount": 389,
     "medianFeaturesPerApi": 12,
-    "p10FeaturesPerApi": 5,
+    "p10FeaturesPerApi": 4,
     "minFeaturesObserved": 1,
     "maxFeaturesObserved": 26,
     "featureCountHistogram": {
-      "0-9": 248,
+      "0-9": 251,
       "10-19": 411,
       "20-29": 65
     },
@@ -253,7 +253,7 @@
       "Work & income": 7,
       "Data Dictionaries": 6.4,
       "Travel & mobility": 6.2,
-      "E-commerce": 6.1,
+      "E-commerce": 6.2,
       "Financial Markets": 6,
       "Realtime": 6,
       "Banking": 6,
@@ -287,26 +287,26 @@
         "features": 1
       },
       {
-        "id": "kz-kaspi-points-of-sale",
-        "title": "Kaspi Shop ~ warehouses & points of sale (KZ)",
+        "id": "kz-kaspi-shop-order-entries",
+        "title": "Kaspi Shop ~ order line items (KZ)",
         "category": "E-commerce",
         "features": 1
       },
       {
-        "id": "kz-kaspi-merchant-reviews",
+        "id": "kz-kaspi-shop-cities",
+        "title": "Kaspi Shop ~ cities reference (KZ)",
+        "category": "E-commerce",
+        "features": 1
+      },
+      {
+        "id": "kz-kaspi-shop-merchant-reviews",
         "title": "Kaspi Shop ~ merchant reviews (KZ)",
         "category": "E-commerce",
         "features": 1
       },
       {
-        "id": "kz-freedompay-recurring",
-        "title": "Freedom Pay ~ recurring autopayments (KZ)",
-        "category": "Payments",
-        "features": 1
-      },
-      {
         "id": "kz-freedompay-refund",
-        "title": "Freedom Pay ~ refunds & revoke (KZ)",
+        "title": "Freedom Pay Refund ~ revoke payment & partial refunds (KZ)",
         "category": "Payments",
         "features": 1
       },
@@ -358,7 +358,7 @@
       {
         "id": "national-accounts",
         "label": "Economy & national accounts",
-        "apis": 143
+        "apis": 144
       },
       {
         "id": "health-stats",
@@ -393,7 +393,7 @@
       {
         "id": "checkout-payment",
         "label": "Checkout payments",
-        "apis": 86
+        "apis": 89
       },
       {
         "id": "environment-stats",
@@ -459,11 +459,11 @@
       }
     ],
     "expansionSourceTotals": {
-      "primary": 1672,
+      "primary": 1677,
       "profile": 0,
       "capability": 0,
-      "provider": 5140,
-      "keyword": 440,
+      "provider": 5146,
+      "keyword": 447,
       "doc": 341,
       "parent": 990
     },

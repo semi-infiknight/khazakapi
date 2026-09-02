@@ -74,31 +74,11 @@ function kz({
 
 /** @type {import('../../types.js').CatalogueEntry[]} */
 export const FREEDOM_APIS = [
-  // —— Core payment APIs ——
-  kz({
-    id: "kz-freedompay-merchant",
-    title: "Freedom Pay Merchant API ~ init payments & payouts (KZ)",
-    category: "Payments",
-    provider: "Freedom Pay KZ",
-    source: "Freedom Pay",
-    sourceUrl: FREEDOM_DOCS,
-    docs: "https://freedompay.kz/docs-en/merchant-api/intro",
-    baseUrl: FREEDOM_BASE,
-    endpoint: `${FREEDOM_BASE}/init_payment.php`,
-    note: "Kazakhstan payment aggregator — cards, wallets, payouts and saved cards. MD5-signed pg_sig on every request. Test server: test-api.freedompay.kz.",
-  }),
-  kz({
-    id: "kz-freedompay-gateway",
-    title: "Freedom Pay Gateway API ~ direct card processing (KZ)",
-    category: "Payments",
-    provider: "Freedom Pay KZ",
-    source: "Freedom Pay",
-    sourceUrl: "https://freedompay.kz/docs-en/gateway-api/intro",
-    docs: "https://freedompay.kz/docs-en/gateway-api/pay",
-    baseUrl: `${FREEDOM_BASE}/g2g`,
-    endpoint: `${FREEDOM_BASE}/g2g/payment`,
-    note: "Host-to-host card payments (PCI DSS required). Test server: test-api.freedompay.kz.",
-  }),
+  // kz-freedompay-merchant and kz-freedompay-gateway live in kz-commercial-apis.js
+  // kz({
+  //   id: "kz-freedompay-merchant",
+  //   ...
+  // }),
 
   // —— Payouts ——
   kz({
