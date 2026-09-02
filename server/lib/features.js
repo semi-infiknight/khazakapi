@@ -542,7 +542,7 @@ const CORE_FEATURES = [
     parentId: null,
     why: "Show policy, deposit and lending rates in finance apps",
     where: "Rate tables, loan calculators, treasury dashboards",
-    keywords: ["interest rate", "yield", "deposit rate", "lending rate", "nbk rate", "bond yield"],
+    keywords: ["interest rate", "yield", "deposit rate", "lending rate", "loan", "loans", "lending", "credit", "mortgage", "nbk rate", "bond yield"],
     capabilityTags: ["interest-rates", "fx-rates"],
     categories: ["Financial Markets", "Banking & finance", "Finance", "Prices"],
     providers: ["nbk", "nationalbank"],
@@ -789,6 +789,11 @@ export const PRODUCT_RECIPES = [
     id: "banking-integration",
     match: ["banking", "bank app", "open banking", "bank integration", "corporate banking", "internet banking"],
     features: ["bank-accounts", "checkout-payment", "fx-rates", "user-auth", "esignature"],
+  },
+  {
+    id: "loan-app",
+    match: ["loan app", "lending app", "credit app", "microloan", "mortgage app", "borrow money", "loan platform"],
+    features: ["loan-calculator", "interest-rates", "bank-accounts", "user-auth", "esignature", "credit-volume"],
   },
   {
     id: "marketplace",

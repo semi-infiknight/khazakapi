@@ -145,6 +145,16 @@ const INTENT_SHORTCUTS = [
     test: (hay) => /^(gov|government|open data)$/.test(hay.trim()),
     featureIds: ["gov-open-data", "population-stats"],
   },
+  {
+    test: (hay) =>
+      /\b(loans?|lending|mortgage|credit)\b/.test(hay) &&
+      /\b(app|apps|platform|product|service)\b/.test(hay),
+    featureIds: ["loan-calculator", "interest-rates", "bank-accounts", "user-auth", "esignature"],
+  },
+  {
+    test: (hay) => /^(loans?|lending|mortgage|credit)$/.test(hay.trim()),
+    featureIds: ["loan-calculator", "interest-rates", "bank-accounts"],
+  },
 ];
 
 function matchIntentShortcuts(hay) {

@@ -107,7 +107,7 @@ export const EXTENDED_FEATURES = [
   feat({ id: "invoice-generation", label: "Invoice generation", keywords: ["invoice generate", "billing invoice"], parentId: "tax-invoicing", categories: ["E-invoicing & tax", "Payments"] }),
   feat({ id: "vat-calculation", label: "VAT calculation", keywords: ["vat calc", "tax amount"], parentId: "tax-invoicing", categories: ["E-invoicing & tax"] }),
   feat({ id: "currency-converter", label: "Currency converter UI", keywords: ["currency converter", "convert kzt"], parentId: "fx-rates", categories: ["Finance", "Financial Markets"] }),
-  feat({ id: "loan-calculator", label: "Loan calculators", keywords: ["loan calculator", "mortgage calc"], parentId: "interest-rates", categories: ["Banking & finance", "Financial Markets"] }),
+  feat({ id: "loan-calculator", label: "Loan calculators", keywords: ["loan calculator", "mortgage calc", "loan app", "loan", "loans", "lending", "credit app"], parentId: "interest-rates", categories: ["Banking & finance", "Financial Markets"] }),
   feat({ id: "kyc-verification", label: "KYC verification", keywords: ["kyc", "know your customer", "identity verify"], parentId: "user-auth", categories: ["Banking & finance", "Auth & identity"] }),
   feat({ id: "consent-management", label: "Open banking consent", keywords: ["consent management", "account consent"], parentId: "bank-accounts", capabilityTags: ["open-banking"], categories: ["Banking & finance"] }),
 
