@@ -28,6 +28,7 @@ export const API_CAPABILITY_OVERRIDES = {
   "yandex-mapkit-sdk": ["map-display", "routing"],
   "yandex-navikit-sdk": ["routing", "route-planning"],
   "yandex-maps-js-plugins": ["map-display"],
+  "yandex-panorama": ["panorama-streetview", "map-display"],
 
   // —— Identity ——
   "yandex-id-mobile-sdk": ["user-auth", "oauth"],
