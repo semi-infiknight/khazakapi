@@ -158,7 +158,7 @@ const CORE_FEATURES = [
     parentId: null,
     why: "Read balances and transactions after user consent",
     where: "Open banking onboarding, account aggregation, PFM apps",
-    keywords: ["open banking", "account balance", "transactions", "bank account", "npck", "consent"],
+    keywords: ["open banking", "account balance", "transactions", "bank account", "banking", "bank", "banks", "npck", "consent"],
     capabilityTags: ["bank-accounts", "open-banking"],
     categories: ["Banking & finance", "Payments"],
     providers: ["npck", "halyk", "forte"],
@@ -784,6 +784,11 @@ export const PRODUCT_RECIPES = [
     id: "fintech-wallet",
     match: ["fintech", "wallet app", "digital wallet", "pfm", "personal finance"],
     features: ["checkout-payment", "fx-rates", "bank-accounts", "user-auth"],
+  },
+  {
+    id: "banking-integration",
+    match: ["banking", "bank app", "open banking", "bank integration", "corporate banking", "internet banking"],
+    features: ["bank-accounts", "checkout-payment", "fx-rates", "user-auth", "esignature"],
   },
   {
     id: "marketplace",

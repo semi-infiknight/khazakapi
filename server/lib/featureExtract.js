@@ -111,6 +111,58 @@ function matchRecipes(hay) {
   return hits;
 }
 
+/** Single-word or short category intents that keyword scoring misses. */
+const INTENT_SHORTCUTS = [
+  {
+    test: (hay) => /^(banking|banks?|fintech|finance)$/.test(hay.trim()),
+    featureIds: ["bank-accounts", "checkout-payment", "fx-rates", "user-auth"],
+  },
+  {
+    test: (hay) => /^(payments?|checkout|pay)$/.test(hay.trim()),
+    featureIds: ["checkout-payment", "wallet-payout"],
+  },
+  {
+    test: (hay) => /^(maps?|geocod(?:e|ing)?|location)$/.test(hay.trim()),
+    featureIds: ["address-autocomplete", "forward-geocode", "poi-search"],
+  },
+  {
+    test: (hay) => /^(delivery|logistics|shipping)$/.test(hay.trim()),
+    featureIds: ["delivery-eta", "route-planning", "parcel-shipping"],
+  },
+  {
+    test: (hay) => /^(weather|forecast)$/.test(hay.trim()),
+    featureIds: ["weather-forecast"],
+  },
+  {
+    test: (hay) => /^(travel|flights?|taxi)$/.test(hay.trim()),
+    featureIds: ["travel-booking", "ride-hailing", "route-planning"],
+  },
+  {
+    test: (hay) => /^(sms|otp|telecom)$/.test(hay.trim()),
+    featureIds: ["sms-otp", "user-auth"],
+  },
+  {
+    test: (hay) => /^(gov|government|open data)$/.test(hay.trim()),
+    featureIds: ["gov-open-data", "population-stats"],
+  },
+];
+
+function matchIntentShortcuts(hay) {
+  const hit = INTENT_SHORTCUTS.find((row) => row.test(hay));
+  if (!hit) return [];
+
+  return hit.featureIds
+    .map((id) => getFeature(id))
+    .filter(Boolean)
+    .map((feature) => ({
+      feature,
+      keywordScore: 16,
+      semanticScore: 0,
+      combined: 2.2,
+      source: "shortcut",
+    }));
+}
+
 function dedupeFeatures(scored) {
   const byId = new Map();
   for (const row of scored) {
@@ -195,6 +247,13 @@ export async function extractFeatures(query) {
   }).filter(Boolean);
 
   const features = dedupeFeatures(scored);
+
+  if (!features.length) {
+    const shortcutFeatures = dedupeFeatures(matchIntentShortcuts(hay));
+    if (shortcutFeatures.length) {
+      return { features: shortcutFeatures, recipes: [] };
+    }
+  }
 
   return {
     features,
