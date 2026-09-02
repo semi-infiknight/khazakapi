@@ -1,7 +1,7 @@
 {
-  "builtAt": "2026-09-02T07:27:47.614Z",
+  "builtAt": "2026-09-02T07:29:10.507Z",
   "summary": {
-    "totalApis": 727,
+    "totalApis": 730,
     "ontologyFeatures": 389,
     "categoryOntologyTarget": 100,
     "minBuildableFeatures": 1,
@@ -13,23 +13,23 @@
     "govCommercialLeakage": 0,
     "govUserAuthPrimary": 0,
     "universalPlumbingFeatures": 0,
-    "commercialCoverage": "178/178"
+    "commercialCoverage": "181/181"
   },
   "stats": {
-    "totalApis": 727,
-    "withCapabilities": 721,
-    "withFeatures": 727,
+    "totalApis": 730,
+    "withCapabilities": 725,
+    "withFeatures": 730,
     "minBuildableFeatures": 1,
     "categoryOntologyTarget": 100,
     "apisBelowMinFeatures": 0,
     "govCommercialLeakage": 0,
     "govUserAuthPrimary": 0,
     "universalPlumbingFeatures": 0,
-    "avgFeaturesPerApi": 12.27,
-    "commercialTotal": 178,
-    "commercialWithFeatures": 178,
+    "avgFeaturesPerApi": 12.25,
+    "commercialTotal": 181,
+    "commercialWithFeatures": 181,
     "commercialNoFeatures": 0,
-    "docScavengeTargets": 178,
+    "docScavengeTargets": 181,
     "docEnrichedApis": 21,
     "docScavengedWithHits": 21,
     "uniqueCapabilities": 99,
@@ -91,7 +91,6 @@
       "delivery-slot-booking",
       "qr-checkout",
       "split-payments",
-      "transaction-history",
       "merchant-dashboard",
       "invoice-generation",
       "currency-converter",
@@ -171,7 +170,7 @@
     "minFeaturesObserved": 1,
     "maxFeaturesObserved": 26,
     "featureCountHistogram": {
-      "0-9": 233,
+      "0-9": 236,
       "10-19": 417,
       "20-29": 77
     },
@@ -230,12 +229,12 @@
       "Health": 19.1,
       "Demography": 18.4,
       "National Accounts": 15.8,
-      "Banking & finance": 15.1,
       "Maps & location": 14.8,
       "Healthcare": 14.2,
       "Commodities & metals": 14,
       "Prices": 13.8,
       "Data & enrichment": 13.2,
+      "Banking & finance": 13.2,
       "Housing & property": 13.1,
       "Environment & climate": 13.1,
       "Metadata": 12.9,
@@ -245,7 +244,7 @@
       "Auth & identity": 12,
       "Public Administration": 11.7,
       "Transport": 11.7,
-      "Payments": 11.5,
+      "Payments": 11.6,
       "Transportation": 10.5,
       "Households": 10.2,
       "Food & delivery": 9.6,
@@ -397,7 +396,7 @@
       {
         "id": "checkout-payment",
         "label": "Checkout payments",
-        "apis": 90
+        "apis": 93
       },
       {
         "id": "environment-stats",
@@ -457,17 +456,17 @@
         "apis": 1
       },
       {
-        "id": "inventory-sync",
-        "label": "Inventory sync",
+        "id": "transaction-history",
+        "label": "Transaction history",
         "apis": 1
       }
     ],
     "expansionSourceTotals": {
-      "primary": 1746,
+      "primary": 1759,
       "profile": 0,
       "capability": 0,
-      "provider": 5141,
-      "keyword": 444,
+      "provider": 5149,
+      "keyword": 448,
       "doc": 569,
       "parent": 1017
     },

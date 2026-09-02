@@ -1,5 +1,56 @@
 import { commercialTrust, keySetup } from "../helpers.js";
-import { kz } from "./kzEntry.js";
+
+function kz({
+  id,
+  title,
+  category,
+  provider,
+  source,
+  sourceUrl,
+  docs,
+  baseUrl = null,
+  endpoint = null,
+  note,
+  auth = "apiKey",
+  authDetails = {
+    scheme: "apiKey",
+    type: "header",
+    header: "Authorization",
+    credential: "API key or token",
+  },
+  setup = null,
+  trust = null,
+  pricing = "paid",
+  coverage = "KZ",
+}) {
+  return {
+    id,
+    slug: id,
+    title,
+    category,
+    group: "Build",
+    country: ["KZ"],
+    provider,
+    source,
+    sourceUrl,
+    tier: "commercial",
+    kind: "commercial",
+    auth,
+    authDetails,
+    copyable: false,
+    pricing,
+    docs,
+    baseUrl,
+    frequency: null,
+    coverage,
+    freshness: { label: "SEE DOCS", tone: "none" },
+    likes: 0,
+    note,
+    trust: trust ?? commercialTrust(provider, sourceUrl, auth === "oauth" ? "oauth" : auth === "token" ? "token" : "apiKey"),
+    setup: setup ?? keySetup(docs, sourceUrl),
+    endpoint,
+  };
+}
 
 const KCELL_BULK_DOCS = "https://b2b.kcell.kz/inform_plus/";
 const KCELL_JSONV2_DOCS =
