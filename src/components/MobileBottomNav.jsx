@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
-import SiteNavPanel from "./SiteNavPanel.jsx";
 import IntentInputBar from "./IntentInputBar.jsx";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
@@ -17,14 +16,6 @@ function DockIcon({ name }) {
     strokeLinejoin: "round",
     "aria-hidden": true,
   };
-
-  if (name === "menu") {
-    return (
-      <svg {...common}>
-        <path d="M5 7h14M5 12h14M5 17h14" />
-      </svg>
-    );
-  }
 
   if (name === "search") {
     return (
@@ -51,10 +42,7 @@ export default function MobileBottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const searchInputRef = useRef(null);
-  const [openPanel, setOpenPanel] = useState(null);
   const [searchExpanded, setSearchExpanded] = useState(false);
-  const [renderedPanel, setRenderedPanel] = useState(null);
-  const [sheetVisible, setSheetVisible] = useState(false);
 
   useEffect(() => {
     document.body.classList.add("catalogue-mobile-nav-active");
@@ -108,38 +96,9 @@ export default function MobileBottomNav() {
     if (!requested || location.pathname !== "/") return;
     if (requested === "search") {
       setSearchExpanded(true);
-    } else if (requested === "menu") {
-      setOpenPanel("menu");
     }
     navigate(location.pathname, { replace: true, state: null });
   }, [location.pathname, location.state, navigate]);
-
-  useEffect(() => {
-    if (openPanel) {
-      setRenderedPanel(openPanel);
-      const frame = requestAnimationFrame(() => {
-        requestAnimationFrame(() => setSheetVisible(true));
-      });
-      return () => cancelAnimationFrame(frame);
-    }
-
-    setSheetVisible(false);
-    const timer = window.setTimeout(() => setRenderedPanel(null), 320);
-    return () => window.clearTimeout(timer);
-  }, [openPanel]);
-
-  useEffect(() => {
-    if (!renderedPanel) return undefined;
-    const onKey = (e) => {
-      if (e.key === "Escape") setOpenPanel(null);
-    };
-    document.addEventListener("keydown", onKey);
-    document.body.classList.add("catalogue-mobile-sheet-open");
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.classList.remove("catalogue-mobile-sheet-open");
-    };
-  }, [renderedPanel]);
 
   useEffect(() => {
     if (!searchExpanded) return undefined;
@@ -156,10 +115,7 @@ export default function MobileBottomNav() {
     };
   }, [searchExpanded]);
 
-  const closePanel = () => setOpenPanel(null);
-
   const openSearch = () => {
-    setOpenPanel(null);
     if (catalogue) {
       setSearchExpanded(true);
       return;
@@ -169,51 +125,12 @@ export default function MobileBottomNav() {
 
   const closeSearch = () => setSearchExpanded(false);
 
-  const openMenu = () => {
-    setSearchExpanded(false);
-    setOpenPanel(openPanel === "menu" ? null : "menu");
-  };
-
   const nav = (
     <div className="catalogue-mobile-nav" aria-hidden={false}>
-      {renderedPanel && (
-        <div
-          className={`catalogue-mobile-sheet ${sheetVisible ? "catalogue-mobile-sheet-visible" : "catalogue-mobile-sheet-closing"}`}
-          role="presentation"
-        >
-          <button type="button" className="catalogue-mobile-backdrop" aria-label="Close panel" onClick={closePanel} />
-          <div className="catalogue-mobile-panel panel" role="dialog" aria-modal="true" aria-label="Site navigation">
-            <div className="catalogue-mobile-panel-head">
-              <h2 className="catalogue-mobile-panel-title">Menu</h2>
-              <button type="button" className="catalogue-mobile-close" onClick={closePanel}>
-                Done
-              </button>
-            </div>
-
-            <div className="catalogue-mobile-panel-body">
-              <SiteNavPanel onNavigate={closePanel} />
-            </div>
-          </div>
-        </div>
-      )}
-
       <nav
-        className={`catalogue-mobile-bar catalogue-mobile-bar--two-up ${searchExpanded ? "catalogue-mobile-bar--search-open" : ""}`}
-        aria-label="Mobile navigation"
+        className={`catalogue-mobile-bar ${searchExpanded ? "catalogue-mobile-bar--search-open" : ""}`}
+        aria-label="Mobile search"
       >
-        <button
-          type="button"
-          className={`catalogue-mobile-bar-btn catalogue-mobile-bar-btn-side ${openPanel === "menu" ? "catalogue-mobile-bar-btn-active" : ""}`}
-          aria-expanded={openPanel === "menu"}
-          aria-label="Open site menu"
-          onClick={openMenu}
-          tabIndex={searchExpanded ? -1 : 0}
-        >
-          <span className="catalogue-mobile-bar-icon">
-            <DockIcon name="menu" />
-          </span>
-        </button>
-
         <div className={`catalogue-mobile-search-slot ${searchExpanded ? "catalogue-mobile-search-slot--open" : ""}`}>
           {!searchExpanded ? (
             <button
