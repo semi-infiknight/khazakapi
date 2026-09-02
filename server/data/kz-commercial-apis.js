@@ -505,10 +505,11 @@ export const KZ_COMMERCIAL_APIS = [
     sourceUrl: "https://kaspi.kz/merchantapi",
     docs: "https://kaspi.kz/merchantapi",
     baseUrl: "https://pay.kaspi.kz",
-    endpoint: "https://pay.kaspi.kz/api/v2/qr",
-    note: "Generate interbank QR for in-store checkout — TradePointId + ApiKey from Kaspi merchant portal.",
+    endpoint: "https://pay.kaspi.kz/api/v2/qr/create",
+    note:
+      "Generate in-store or checkout QR — POST amount + tradePointId with HMAC-SHA256 signature (Bearer ApiKey); returns qrToken/deep_link (~5 min TTL). TradePointId + ApiKey from Kaspi merchant portal.",
     auth: "token",
-    authDetails: { scheme: "oauth2", type: "bearer", credential: "Bearer ApiKey" },
+    authDetails: { scheme: "oauth2", type: "bearer", credential: "Bearer ApiKey + HMAC-SHA256 request signature" },
     setup: keySetup("https://kaspi.kz/merchantapi", "https://kaspi.kz/merchantapi"),
   }),
   kz({
@@ -518,12 +519,14 @@ export const KZ_COMMERCIAL_APIS = [
     provider: "Kaspi.kz",
     source: "Kaspi Pay",
     sourceUrl: "https://kaspi.kz/merchantapi",
-    docs: "https://paybot.kz/docs/api-reference",
+    docs: "https://kaspi.kz/merchantapi",
     baseUrl: "https://pay.kaspi.kz",
     endpoint: "https://pay.kaspi.kz/api/v2/invoices",
-    note: "Send payment request directly to customer's Kaspi app by phone number — ~24h expiry.",
+    note:
+      "Send a payment request to the customer's Kaspi app by phone number — POST creates an invoice (~24h expiry). Signed with HMAC-SHA256 (Bearer ApiKey).",
     auth: "token",
-    authDetails: { scheme: "oauth2", type: "bearer", credential: "Bearer ApiKey" },
+    authDetails: { scheme: "oauth2", type: "bearer", credential: "Bearer ApiKey + HMAC-SHA256 request signature" },
+    setup: keySetup("https://kaspi.kz/merchantapi", "https://kaspi.kz/merchantapi"),
   }),
   kz({
     id: "kz-paybot-kaspi",

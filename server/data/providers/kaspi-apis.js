@@ -209,6 +209,8 @@ export const KASPI_APIS = [
   }),
 
   // —— Kaspi Pay ~ Merchant API v2 ——
+  // Duplicate of kz-kaspi-pay-qr in kz-commercial-apis.js — notes merged there.
+  /*
   kz({
     id: "kz-kaspi-pay-v2-qr",
     title: "Kaspi Pay v2 ~ QR code payments (KZ)",
@@ -243,6 +245,7 @@ export const KASPI_APIS = [
     setup: kaspiPaySetup,
     trust: commercialTrust("Kaspi.kz", KASPI_PAY_PORTAL, "token"),
   }),
+  */
   kz({
     id: "kz-kaspi-pay-v2-status",
     title: "Kaspi Pay v2 ~ payment status polling (KZ)",
