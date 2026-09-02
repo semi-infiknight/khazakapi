@@ -1,12 +1,12 @@
 {
-  "builtAt": "2026-09-02T07:05:57.163Z",
+  "builtAt": "2026-09-02T07:12:52.902Z",
   "summary": {
     "totalApis": 727,
     "ontologyFeatures": 389,
     "categoryOntologyTarget": 100,
     "minBuildableFeatures": 1,
     "minFeaturesPerApi": 1,
-    "p10FeaturesPerApi": 4,
+    "p10FeaturesPerApi": 5,
     "medianFeaturesPerApi": 12,
     "maxFeaturesPerApi": 26,
     "apisBelowBuildableMin": 0,
@@ -17,7 +17,7 @@
   },
   "stats": {
     "totalApis": 727,
-    "withCapabilities": 707,
+    "withCapabilities": 719,
     "withFeatures": 727,
     "minBuildableFeatures": 1,
     "categoryOntologyTarget": 100,
@@ -25,13 +25,13 @@
     "govCommercialLeakage": 0,
     "govUserAuthPrimary": 0,
     "universalPlumbingFeatures": 0,
-    "avgFeaturesPerApi": 11.83,
+    "avgFeaturesPerApi": 12.26,
     "commercialTotal": 178,
     "commercialWithFeatures": 178,
     "commercialNoFeatures": 0,
     "docScavengeTargets": 178,
-    "docEnrichedApis": 0,
-    "docScavengedWithHits": 0,
+    "docEnrichedApis": 21,
+    "docScavengedWithHits": 21,
     "uniqueCapabilities": 98,
     "orphanCapabilities": [],
     "unmappedCapabilities": [],
@@ -163,20 +163,20 @@
     "vocabularySize": 101,
     "featureCount": 389,
     "medianFeaturesPerApi": 12,
-    "p10FeaturesPerApi": 4,
+    "p10FeaturesPerApi": 5,
     "minFeaturesObserved": 1,
     "maxFeaturesObserved": 26,
     "featureCountHistogram": {
-      "0-9": 251,
-      "10-19": 411,
-      "20-29": 65
+      "0-9": 233,
+      "10-19": 417,
+      "20-29": 77
     },
     "categoryMinFeatures": {
       "Travel & mobility": 1,
-      "Payments": 1,
       "E-commerce": 1,
-      "Cloud & infrastructure": 1,
       "Communications": 2,
+      "Payments": 2,
+      "Cloud & infrastructure": 2,
       "Logistics & delivery": 3,
       "E-invoicing & tax": 3,
       "Environment": 4,
@@ -241,6 +241,7 @@
       "Auth & identity": 12,
       "Public Administration": 11.7,
       "Transport": 11.7,
+      "Payments": 11.5,
       "Transportation": 10.5,
       "Households": 10.2,
       "Food & delivery": 9.6,
@@ -248,24 +249,23 @@
       "Other portals": 8.5,
       "Statistical Indicators": 7.5,
       "Public Safety": 7.5,
+      "E-commerce": 7.5,
       "AI": 7.5,
       "Government data": 7.4,
       "Work & income": 7,
       "Data Dictionaries": 6.4,
       "Travel & mobility": 6.2,
-      "E-commerce": 6.2,
       "Financial Markets": 6,
       "Realtime": 6,
       "Banking": 6,
       "Property": 6,
-      "Payments": 6,
       "Crypto": 5.5,
       "Logistics & delivery": 5.5,
       "Finance": 5.3,
       "Public Welfare": 5,
       "E-invoicing & tax": 4.5,
       "Environment": 4.2,
-      "Cloud & infrastructure": 1.5
+      "Cloud & infrastructure": 3
     },
     "worstApis": [
       {
@@ -281,59 +281,59 @@
         "features": 1
       },
       {
-        "id": "kz-ps-cloud",
-        "title": "PS Cloud ~ Kazakhstan data residency cloud (KZ)",
-        "category": "Cloud & infrastructure",
-        "features": 1
-      },
-      {
-        "id": "kz-kaspi-shop-order-entries",
-        "title": "Kaspi Shop ~ order line items (KZ)",
-        "category": "E-commerce",
-        "features": 1
-      },
-      {
         "id": "kz-kaspi-shop-cities",
         "title": "Kaspi Shop ~ cities reference (KZ)",
         "category": "E-commerce",
         "features": 1
       },
       {
-        "id": "kz-kaspi-shop-merchant-reviews",
-        "title": "Kaspi Shop ~ merchant reviews (KZ)",
+        "id": "yandex-lavka-partner",
+        "title": "Yandex Lavka ~ dark-store grocery API",
         "category": "E-commerce",
-        "features": 1
+        "features": 2
       },
       {
-        "id": "kz-freedompay-refund",
-        "title": "Freedom Pay Refund ~ revoke payment & partial refunds (KZ)",
-        "category": "Payments",
-        "features": 1
+        "id": "kz-wildberries-seller",
+        "title": "Wildberries Seller API ~ products & orders (KZ)",
+        "category": "E-commerce",
+        "features": 2
       },
       {
-        "id": "kz-fortebank-authorizations",
-        "title": "ForteBank ~ two-step authorization hold (KZ)",
-        "category": "Payments",
-        "features": 1
+        "id": "kz-ozon-seller",
+        "title": "Ozon Seller API ~ marketplace integration (KZ)",
+        "category": "E-commerce",
+        "features": 2
       },
       {
-        "id": "kz-fortebank-captures",
-        "title": "ForteBank ~ capture authorized payment (KZ)",
-        "category": "Payments",
-        "features": 1
+        "id": "kz-aviata-partner",
+        "title": "Aviata.kz ~ OTA partner API via TTN (KZ)",
+        "category": "Travel & mobility",
+        "features": 2
       },
       {
-        "id": "kz-fortebank-voids",
-        "title": "ForteBank ~ void authorization (KZ)",
+        "id": "kz-tele2-sms",
+        "title": "Tele2/Altel ~ A2P SMS for business (KZ)",
+        "category": "Communications",
+        "features": 2
+      },
+      {
+        "id": "kz-eurasian-acquiring",
+        "title": "Eurasian Bank ~ POS & internet acquiring (KZ)",
         "category": "Payments",
-        "features": 1
+        "features": 2
+      },
+      {
+        "id": "kz-rbk-acquiring",
+        "title": "Bank RBK ~ payment gateway & acquiring (KZ)",
+        "category": "Payments",
+        "features": 2
       }
     ],
     "topFeatures": [
       {
         "id": "gov-open-data",
         "label": "Government open data",
-        "apis": 583
+        "apis": 590
       },
       {
         "id": "gov-digital-services",
@@ -343,7 +343,7 @@
       {
         "id": "regional-analytics",
         "label": "Regional breakdowns",
-        "apis": 273
+        "apis": 279
       },
       {
         "id": "population-stats",
@@ -366,6 +366,11 @@
         "apis": 128
       },
       {
+        "id": "metadata-catalog",
+        "label": "Dataset metadata & catalog",
+        "apis": 110
+      },
+      {
         "id": "education-stats",
         "label": "Education statistics",
         "apis": 109
@@ -386,23 +391,18 @@
         "apis": 100
       },
       {
-        "id": "metadata-catalog",
-        "label": "Dataset metadata & catalog",
-        "apis": 97
-      },
-      {
         "id": "checkout-payment",
         "label": "Checkout payments",
-        "apis": 89
+        "apis": 90
       },
       {
         "id": "environment-stats",
         "label": "Environment & ecology data",
-        "apis": 82
+        "apis": 87
       },
       {
-        "id": "migration-stats",
-        "label": "Migration statistics",
+        "id": "workplace-productivity",
+        "label": "Workplace & collaboration",
         "apis": 77
       }
     ],
@@ -453,19 +453,19 @@
         "apis": 1
       },
       {
-        "id": "kyc-verification",
-        "label": "KYC verification",
+        "id": "inventory-sync",
+        "label": "Inventory sync",
         "apis": 1
       }
     ],
     "expansionSourceTotals": {
-      "primary": 1677,
+      "primary": 1744,
       "profile": 0,
       "capability": 0,
-      "provider": 5146,
-      "keyword": 447,
-      "doc": 341,
-      "parent": 990
+      "provider": 5142,
+      "keyword": 437,
+      "doc": 575,
+      "parent": 1017
     },
     "ontologyFeatures": 389
   }
