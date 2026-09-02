@@ -13,6 +13,7 @@ import { KASPI_APIS } from "./providers/kaspi-apis.js";
 import { NPCK_APIS } from "./providers/npck-apis.js";
 import { FREEDOM_APIS } from "./providers/freedom-apis.js";
 import { FORTE_HALYK_APIS } from "./providers/forte-halyk-apis.js";
+import { TELECOM_KZ_APIS } from "./providers/telecom-kz-apis.js";
 import { buildHubCounts, categorySlug, resolveApiType, resolveCompany } from "../lib/services.js";
 import { filterKzCatalogue } from "../lib/kzFilter.js";
 
@@ -38173,6 +38174,7 @@ export const APIS = [
   ...KASPI_APIS,
   ...FREEDOM_APIS,
   ...FORTE_HALYK_APIS,
+  ...TELECOM_KZ_APIS,
 ];
 
 // Attach generated snippets to copyable entries
