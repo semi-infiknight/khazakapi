@@ -855,6 +855,10 @@ a {
 /* Jentic-style full-page audit scroll — sits above fluid bg, under app chrome */
 .kz-river--page {
   position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
   z-index: 1;
   opacity: 0.16;
   mask-image:
@@ -872,7 +876,14 @@ a {
 }
 
 .kz-river-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
   animation: kz-river-flow 52s linear infinite;
+}
+
+.kz-river-segment {
+  flex: none;
 }
 
 @keyframes kz-river-flow {
@@ -880,7 +891,7 @@ a {
     transform: translateY(0);
   }
   to {
-    transform: translateY(-50%);
+    transform: translateY(calc(-1 * var(--kz-river-shift, 50%)));
   }
 }
 
