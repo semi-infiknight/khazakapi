@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "distinctive-frontend-design": {
+      "source": "refly-ai/skill-to-workflow",
+      "sourceType": "github",
+      "skillPath": "skills-source/zijiebijiben/distinctive-frontend-design/SKILL.md",
+      "computedHash": "0f97be02bdb573726818f0630fea0d86484f41bc6e711a9942bb2fe92b44f08f"
+    }
+  }
+}
