@@ -4,6 +4,7 @@ import ApiGrid from "../components/ApiGrid.jsx";
 import { IntentResults } from "../components/IntentSuggest.jsx";
 import IntentInputBar from "../components/IntentInputBar.jsx";
 import KhazakArchFigure from "../components/KhazakArchFigure.jsx";
+import { INTENT_PROMPT_HINTS } from "../data/intentPromptHints.js";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
 const PAGE_SIZE = 24;
@@ -173,11 +174,12 @@ export default function HomePage() {
         <div className="catalogue-main">
           <section className="catalogue-search-desktop mb-6">
             <IntentInputBar
+              variant="hero"
               value={query}
               onChange={setQuery}
               onSubmit={submitIntent}
               submitting={suggesting || generatingStack}
-              placeholder="Send a message…"
+              hintLines={INTENT_PROMPT_HINTS}
             />
           </section>
 

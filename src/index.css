@@ -25,6 +25,7 @@
   --code-text: #eaf0ff;
   --logo-shadow: rgba(0, 0, 0, 0.45);
   --logo-ink: #f4eee9;
+  --kz-ink-dim: 210 12% 72%;
   --fluid-opacity: 0.45;
   --shadow-accent: 0 4px 14px color-mix(in srgb, var(--accent) 18%, transparent);
   --radius-sm: 4px;
@@ -1557,6 +1558,11 @@ a {
   margin-inline: auto;
 }
 
+.ai-input-hero {
+  width: 100%;
+  max-width: none;
+}
+
 .ai-input-shell {
   position: relative;
   display: block;
@@ -1570,6 +1576,62 @@ a {
     border-color var(--dur-2) var(--ease-enter),
     background var(--dur-2) var(--ease-enter),
     box-shadow var(--dur-2) var(--ease-enter);
+}
+
+.ai-input-ghost {
+  position: absolute;
+  inset: 0.95rem 3.25rem auto 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1px;
+  pointer-events: none;
+  color: hsl(var(--kz-ink-dim) / 0.44);
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity var(--dur-2) var(--ease-smooth);
+}
+
+.ai-input-ghost-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-input-ghost-caret {
+  flex-shrink: 0;
+  width: 1px;
+  height: 1.05em;
+  margin-top: 0.18em;
+  background: hsl(var(--kz-ink-dim) / 0.55);
+  animation: ai-input-ghost-blink 1s step-end infinite;
+}
+
+.ai-input-ghosting:focus-within .ai-input-ghost {
+  opacity: 0.72;
+}
+
+.ai-input-has-value .ai-input-ghost {
+  opacity: 0;
+}
+
+@keyframes ai-input-ghost-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-input-ghost-caret {
+    animation: none;
+    opacity: 0.55;
+  }
 }
 
 .ai-input-shell:focus-within {

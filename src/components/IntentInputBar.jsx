@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useTypewriterCycle } from "../hooks/useTypewriterCycle.js";
 
 function SendIcon() {
   return (
@@ -26,11 +27,16 @@ export default function IntentInputBar({
   onSubmit,
   submitting = false,
   placeholder = "Send a message…",
+  hintLines = null,
   variant = "default",
   inputRef,
 }) {
   const fieldRef = useRef(null);
   const inline = variant === "inline";
+  const hero = variant === "hero";
+  const hasValue = Boolean(value.trim());
+  const showGhost = Boolean(hintLines?.length) && !hasValue && !submitting;
+  const { text: ghostText } = useTypewriterCycle(hintLines, { active: showGhost });
 
   useEffect(() => {
     resizeField(fieldRef.current);
@@ -49,20 +55,33 @@ export default function IntentInputBar({
     onSubmit();
   };
 
-  const hasValue = Boolean(value.trim());
-
   return (
     <form
-      className={`ai-input ${inline ? "ai-input-inline" : ""} ${hasValue ? "ai-input-has-value" : ""} ${submitting ? "ai-input-submitting" : ""}`}
+      className={[
+        "ai-input",
+        inline && "ai-input-inline",
+        hero && "ai-input-hero",
+        hasValue && "ai-input-has-value",
+        submitting && "ai-input-submitting",
+        showGhost && "ai-input-ghosting",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       onSubmit={submit}
     >
       <div className="ai-input-shell">
+        {showGhost ? (
+          <span className="ai-input-ghost" aria-hidden="true">
+            <span className="ai-input-ghost-text">{ghostText}</span>
+            <span className="ai-input-ghost-caret" />
+          </span>
+        ) : null}
         <textarea
           ref={setFieldRef}
           className="ai-input-field"
           rows={1}
           value={value}
-          placeholder={placeholder}
+          placeholder={showGhost ? "" : placeholder}
           aria-label="Describe your app or features"
           disabled={submitting}
           onChange={(event) => onChange(event.target.value)}
