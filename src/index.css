@@ -270,6 +270,12 @@ a {
   color: var(--text);
 }
 
+.brand-lockup:hover .brand-kz-map,
+.brand-lockup:focus-visible .brand-kz-map {
+  fill: color-mix(in srgb, hsl(var(--kz-cyan)) 12%, transparent);
+  stroke: hsl(var(--kz-cyan) / 0.9);
+}
+
 .container-main {
   width: min(72rem, calc(100vw - 2rem));
   margin-inline: auto;
@@ -1177,6 +1183,28 @@ a {
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
   line-height: 1;
+}
+
+.brand-kz-logo {
+  display: block;
+  height: clamp(42px, 6vw, 56px);
+  width: auto;
+  overflow: visible;
+}
+
+.brand-kz-map {
+  fill: color-mix(in srgb, hsl(var(--kz-cyan)) 8%, transparent);
+  stroke: hsl(var(--kz-cyan) / 0.68);
+  stroke-width: 1.35px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition:
+    fill var(--dur-2) var(--ease-smooth),
+    stroke var(--dur-2) var(--ease-smooth);
+}
+
+.brand-kz-wordmark {
+  fill: var(--logo-ink);
 }
 
 .khazak-logo-svg {
