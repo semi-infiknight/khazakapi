@@ -1,0 +1,16 @@
+---
+description: Avoid computer-use subagents for small visual verifications
+alwaysApply: true
+---
+
+# No computer-use verification for small checks
+
+Do NOT launch `computerUse` subagents to verify small visual changes (logo rendering, spacing, footer text, placeholder copy, skeleton flash, etc.).
+
+These subagents consume a large number of tokens for very little verification value.
+
+Instead:
+1. Trust the code change and CSS — if the logic is sound, ship it.
+2. Use `curl` or a quick shell check to verify assets serve (HTTP 200, file exists).
+3. Only use a computer-use subagent for verification when the user explicitly asks for a screenshot or visual proof, or when a change is complex enough that visual confirmation is genuinely needed (e.g. intricate animation timing, multi-element layout collision).
+4. Never spawn more than one computer-use subagent per turn for verification.
