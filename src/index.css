@@ -25,6 +25,7 @@
   --code-text: #eaf0ff;
   --logo-shadow: rgba(0, 0, 0, 0.45);
   --logo-ink: #f4eee9;
+  --kz-cyan: 174 72% 52%;
   --kz-ink-dim: 210 12% 72%;
   --fluid-opacity: 0.45;
   --shadow-accent: 0 4px 14px color-mix(in srgb, var(--accent) 18%, transparent);
@@ -271,10 +272,10 @@ a {
   color: var(--text);
 }
 
-.brand-lockup:hover .brand-kz-map,
-.brand-lockup:focus-visible .brand-kz-map {
-  fill: color-mix(in srgb, hsl(var(--kz-cyan)) 12%, transparent);
-  stroke: hsl(var(--kz-cyan) / 0.9);
+.brand-lockup:hover .brand-logo,
+.brand-lockup:focus-visible .brand-logo {
+  filter: drop-shadow(0 0 10px hsl(var(--kz-cyan) / 0.35));
+  opacity: 1;
 }
 
 .container-main {
@@ -1186,6 +1187,17 @@ a {
   line-height: 1;
 }
 
+.brand-logo {
+  display: block;
+  height: clamp(42px, 6vw, 56px);
+  width: auto;
+  opacity: 0.96;
+  transition:
+    opacity var(--dur-2) var(--ease-smooth),
+    filter var(--dur-2) var(--ease-smooth);
+}
+
+/* Legacy KZ silhouette logo — replaced by public/qazaq-stack-logo.svg
 .brand-kz-logo {
   display: block;
   height: clamp(42px, 6vw, 56px);
@@ -1207,6 +1219,7 @@ a {
 .brand-kz-wordmark {
   fill: var(--logo-ink);
 }
+*/
 
 .khazak-logo-svg {
   display: block;
