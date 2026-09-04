@@ -1589,7 +1589,7 @@ a {
 .ai-input-shell {
   position: relative;
   display: block;
-  min-height: 5.75rem;
+  min-height: 6.75rem;
   padding: 0.95rem 3.25rem 0.95rem 1rem;
   border: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
   border-radius: var(--radius-sm);
@@ -1607,20 +1607,23 @@ a {
   display: flex;
   align-items: flex-start;
   gap: 1px;
+  max-width: calc(100% - 4.25rem);
   pointer-events: none;
-  color: hsl(var(--kz-ink-dim) / 0.44);
+  color: hsl(var(--kz-ink-dim) / 0.5);
   font-family: var(--font-sans);
   font-size: 0.98rem;
   line-height: 1.5;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
-  text-overflow: ellipsis;
   transition: opacity var(--dur-2) var(--ease-smooth);
 }
 
 .ai-input-ghost-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   overflow: hidden;
-  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .ai-input-ghost-caret {

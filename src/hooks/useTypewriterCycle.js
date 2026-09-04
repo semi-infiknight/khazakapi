@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
 const DEFAULT_TIMING = {
-  typeMs: 34,
-  deleteMs: 18,
-  pauseMs: 2200,
-  gapMs: 420,
+  typeMs: 28,
+  deleteMs: 12,
+  pauseMs: 3200,
+  gapMs: 480,
 };
 
 /**

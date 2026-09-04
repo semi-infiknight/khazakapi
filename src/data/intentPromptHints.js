@@ -1,9 +1,9 @@
-/** Cycling ghost lines for the homepage intent prompt — one line types, pauses, backspaces, next. */
+/** Cycling ghost lines for the homepage intent prompt — detailed app briefs that fill ~70% of the box. */
 export const INTENT_PROMPT_HINTS = [
-  "Describe the Kazakhstan app or product you want to build…",
-  "e.g. fintech with Kaspi Pay invoices and NBK exchange rates",
-  "e.g. logistics app with 2GIS geocoding and route ETA",
-  "e.g. onboarding flow with eGov IIN verification",
-  "688 native KZ endpoints — we map your intent to APIs",
-  "Type what you're building — we'll suggest the stack",
+  "Describe the Kazakhstan product you want to build — payments, maps, identity, banking, logistics, or open data — and we’ll map it to native KZ APIs…",
+  "Fintech wallet for Almaty: Kaspi Pay push invoices, FreedomPay checkout, NBK daily FX rates, and SMS OTP for onboarding…",
+  "Last-mile logistics app with 2GIS geocoding, courier route ETAs, delivery zone polygons, and Kaspi QR settlement at drop-off…",
+  "Marketplace onboarding: eGov IIN verification, EDS e-signature for contracts, Halyk ePay payouts, and Kazakh/Russian locale…",
+  "City dashboard for Astana: data.egov.kz population stats, Kazhydromet weather, 2GIS places search, and Yandex Maps static tiles…",
+  "Food delivery for Shymkent: Arbuz grocery partner APIs, Kaspi Red installments at checkout, courier tracking, and address autocomplete…",
 ];
