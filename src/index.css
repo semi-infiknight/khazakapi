@@ -28,7 +28,7 @@
   --kz-cyan: 174 72% 52%;
   --kz-ink-dim: 210 12% 72%;
   --site-chrome-inset-top: max(0.75rem, env(safe-area-inset-top, 0px));
-  --site-chrome-logo-height: clamp(42px, 6vw, 56px);
+  --site-chrome-logo-height: clamp(55px, 7.8vw, 73px);
   --site-chrome-breathe: clamp(1.1rem, 2.8vw, 1.75rem);
   --site-chrome-offset: calc(
     var(--site-chrome-inset-top) + var(--site-chrome-logo-height) + var(--site-chrome-breathe)
@@ -1196,7 +1196,7 @@ a {
 
 .brand-logo {
   display: block;
-  height: clamp(42px, 6vw, 56px);
+  height: var(--site-chrome-logo-height);
   width: auto;
   opacity: 0.96;
   transition:
