@@ -7,6 +7,7 @@ import ApiDocAssistant from "../components/ApiDocAssistant.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
 import CompanyEndpointNav from "../components/CompanyEndpointNav.jsx";
+import { PageSkeleton } from "../components/PageSkeleton.jsx";
 import { categoryLabel } from "../lib/categoryStyle.js";
 
 function HubOverview({ hub }) {
@@ -136,7 +137,7 @@ export default function CompanyHubPage() {
   }
 
   if (!hub) {
-    return <div className="container-main py-10 font-mono text-sm text-[var(--text-soft)]">Loading company hub…</div>;
+    return <PageSkeleton variant="hub" />;
   }
 
   return (
@@ -144,7 +145,20 @@ export default function CompanyHubPage() {
       <CompanyEndpointNav hub={hub} />
       <main className="service-main panel">
         {!apiId && <HubOverview hub={hub} />}
-        {apiId && !api && <p className="p-6 font-mono text-sm text-[var(--text-soft)]">Loading endpoint…</p>}
+        {apiId && !api && (
+          <div className="service-main-content">
+            <div className="skel-breadcrumb" />
+            <div className="skel-badges">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="skel-chip" />
+              ))}
+            </div>
+            <div className="skel-line skel-line-h1" />
+            <div className="skel-line skel-line-desc" />
+            <div className="skel-block" />
+            <span className="sr-only">Loading endpoint…</span>
+          </div>
+        )}
         {api && <EndpointDetail api={api} hub={hub} />}
       </main>
     </div>

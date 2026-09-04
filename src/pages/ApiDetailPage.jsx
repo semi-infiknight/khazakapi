@@ -6,6 +6,7 @@ import ApiTryPanel from "../components/ApiTryPanel.jsx";
 import ApiDocAssistant from "../components/ApiDocAssistant.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
+import { PageSkeleton } from "../components/PageSkeleton.jsx";
 
 export default function ApiDetailPage() {
   const { id } = useParams();
@@ -30,7 +31,7 @@ export default function ApiDetailPage() {
   }
 
   if (!api) {
-    return <div className="container-main py-10 font-mono text-sm text-[var(--text-soft)]">Loading…</div>;
+    return <PageSkeleton variant="detail" />;
   }
 
   if (api.hubPath) {

@@ -5,6 +5,7 @@ import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTryPanel from "../components/ApiTryPanel.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
+import { PageSkeleton } from "../components/PageSkeleton.jsx";
 
 function ServiceOverview({ service }) {
   const navigate = useNavigate();
@@ -121,7 +122,7 @@ export default function ServiceHubPage() {
   }
 
   if (!service) {
-    return <div className="container-main py-10 font-mono text-sm text-[var(--text-soft)]">Loading service…</div>;
+    return <PageSkeleton variant="hub" />;
   }
 
   return (
@@ -129,7 +130,20 @@ export default function ServiceHubPage() {
       <ServiceEndpointNav service={service} />
       <main className="service-main panel">
         {!apiId && <ServiceOverview service={service} />}
-        {apiId && !api && <p className="p-6 font-mono text-sm text-[var(--text-soft)]">Loading endpoint…</p>}
+        {apiId && !api && (
+          <div className="service-main-content">
+            <div className="skel-breadcrumb" />
+            <div className="skel-badges">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="skel-chip" />
+              ))}
+            </div>
+            <div className="skel-line skel-line-h1" />
+            <div className="skel-line skel-line-desc" />
+            <div className="skel-block" />
+            <span className="sr-only">Loading endpoint…</span>
+          </div>
+        )}
         {api && <EndpointDetail api={api} service={service} />}
       </main>
     </div>

@@ -425,6 +425,128 @@ body.catalogue-loading-more .catalogue-load-footer {
   min-height: 0;
 }
 
+/* ── Page skeletons — reserve full page height so footer doesn't jump ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0,0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skel-line,
+.skel-chip,
+.skel-block,
+.skel-breadcrumb {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--text) 6%, var(--surface-alt));
+}
+
+.skel-line::after,
+.skel-chip::after,
+.skel-block::after,
+.skel-breadcrumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--text) 8%, transparent),
+    transparent
+  );
+  animation: skeleton-shimmer 1.4s var(--ease-smooth) infinite;
+}
+
+.skel-breadcrumb {
+  width: 60%;
+  height: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.skel-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.skel-chip {
+  width: 4rem;
+  height: 1.4rem;
+  border-radius: var(--radius-pill);
+}
+
+.skel-line-h1 {
+  width: 70%;
+  height: 2rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.75rem;
+}
+
+.skel-line-desc {
+  width: 100%;
+  height: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.skel-line-short {
+  width: 65%;
+}
+
+.skel-line-title {
+  width: 50%;
+  height: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.skel-line-item {
+  width: 80%;
+  height: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.skel-line-back {
+  width: 7rem;
+  height: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.skel-block {
+  width: 100%;
+  height: 6rem;
+  border-radius: var(--radius-md);
+  margin-top: 1.5rem;
+}
+
+.skel-block-tall {
+  height: 10rem;
+}
+
+.service-nav-skeleton {
+  padding: 1.25rem 1rem;
+}
+
+.service-main-skeleton {
+  padding: 1.25rem 1.35rem 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skel-line::after,
+  .skel-chip::after,
+  .skel-block::after,
+  .skel-breadcrumb::after {
+    animation: none;
+  }
+}
+
 .catalogue-loading-text {
   animation: pulse-soft 2s var(--ease-smooth) infinite;
 }
