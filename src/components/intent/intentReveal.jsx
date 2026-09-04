@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { defaultIntentStepDelay, useIntentReveal } from "../../hooks/useIntentReveal.js";
 
 const IntentRevealContext = createContext(null);
@@ -36,7 +36,10 @@ function buildStepDelay(summary) {
 export function IntentRevealProvider({ blocks, view, summary = "", onGeneratingChange, children }) {
   const segments = useMemo(() => buildIntentRevealSegments(blocks, view), [blocks, view]);
   const getStepDelay = useMemo(() => buildStepDelay(summary), [summary]);
-  const reveal = useIntentReveal(segments, { active: Boolean(blocks.length), getStepDelay });
+  // Only re-trigger the generation animation when the blocks change (new query),
+  // not when the view/tab changes.
+  const generationKey = useMemo(() => blocks.map((b) => b.id).join(","), [blocks]);
+  const reveal = useIntentReveal(segments, { active: Boolean(blocks.length), getStepDelay, generationKey });
 
   useEffect(() => {
     onGeneratingChange?.(reveal.isGenerating);

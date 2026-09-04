@@ -25,10 +25,12 @@ export function defaultIntentStepDelay(prevSegment, nextSegment) {
 
 export function useIntentReveal(
   segments,
-  { active = true, startMs = 220, getStepDelay = defaultIntentStepDelay } = {},
+  { active = true, startMs = 220, getStepDelay = defaultIntentStepDelay, generationKey } = {},
 ) {
   const reducedMotion = useReducedMotion();
   const [step, setStep] = useState(-1);
+  const lastKeyRef = useRef(undefined);
+  const completedRef = useRef(false);
 
   useEffect(() => {
     if (!active || !segments.length) {
@@ -41,6 +43,15 @@ export function useIntentReveal(
       return undefined;
     }
 
+    // If the generation key hasn't changed (e.g. just a tab switch),
+    // skip re-animation and show everything immediately.
+    if (generationKey !== undefined && lastKeyRef.current === generationKey && completedRef.current) {
+      setStep(segments.length - 1);
+      return undefined;
+    }
+
+    lastKeyRef.current = generationKey;
+    completedRef.current = false;
     setStep(-1);
     const timers = [];
     let current = -1;
@@ -51,12 +62,14 @@ export function useIntentReveal(
       if (current < segments.length - 1) {
         const delay = getStepDelay(segments[current], segments[current + 1], current);
         timers.push(setTimeout(advance, delay));
+      } else {
+        completedRef.current = true;
       }
     };
 
     timers.push(setTimeout(advance, startMs));
     return () => timers.forEach(clearTimeout);
-  }, [active, segments, startMs, getStepDelay, reducedMotion]);
+  }, [active, segments, startMs, getStepDelay, reducedMotion, generationKey]);
 
   const isVisible = (segmentId) => {
     const index = segments.indexOf(segmentId);
