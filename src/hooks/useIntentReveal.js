@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -32,6 +32,11 @@ export function useIntentReveal(
   const lastKeyRef = useRef(undefined);
   const completedRef = useRef(false);
 
+  const alreadyDone =
+    completedRef.current &&
+    generationKey !== undefined &&
+    lastKeyRef.current === generationKey;
+
   useEffect(() => {
     if (!active || !segments.length) {
       setStep(-1);
@@ -43,9 +48,7 @@ export function useIntentReveal(
       return undefined;
     }
 
-    // If the generation key hasn't changed (e.g. just a tab switch),
-    // skip re-animation and show everything immediately.
-    if (generationKey !== undefined && lastKeyRef.current === generationKey && completedRef.current) {
+    if (alreadyDone) {
       setStep(segments.length - 1);
       return undefined;
     }
@@ -69,20 +72,22 @@ export function useIntentReveal(
 
     timers.push(setTimeout(advance, startMs));
     return () => timers.forEach(clearTimeout);
-  }, [active, segments, startMs, getStepDelay, reducedMotion, generationKey]);
+  }, [active, segments, startMs, getStepDelay, reducedMotion, generationKey, alreadyDone]);
+
+  const effectiveStep = alreadyDone ? segments.length - 1 : step;
 
   const isVisible = (segmentId) => {
     const index = segments.indexOf(segmentId);
     if (index === -1) return true;
-    return step >= index;
+    return effectiveStep >= index;
   };
 
-  const isActive = (segmentId) => step === segments.indexOf(segmentId);
+  const isActive = (segmentId) => effectiveStep === segments.indexOf(segmentId);
 
-  const isGenerating = step >= 0 && step < segments.length - 1;
+  const isGenerating = effectiveStep >= 0 && effectiveStep < segments.length - 1;
 
   return {
-    step,
+    step: effectiveStep,
     segments,
     isVisible,
     isActive,
