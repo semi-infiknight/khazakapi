@@ -152,7 +152,7 @@ export default function MobileBottomNav() {
                 onChange={(next) => catalogue?.onQueryChange?.(next)}
                 onSubmit={() => catalogue?.onIntentSubmit?.()}
                 submitting={catalogue?.intentSubmitting}
-                placeholder="Send a message…"
+                placeholder="Describe the Kazakhstan app you want to build…"
               />
               <button
                 type="button"
