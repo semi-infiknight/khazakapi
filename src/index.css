@@ -148,6 +148,10 @@ a {
   animation-delay: 80ms;
 }
 
+.app-shell > main {
+  padding-top: var(--site-chrome-offset);
+}
+
 @keyframes app-enter {
   from {
     opacity: 0;
@@ -309,7 +313,6 @@ a {
   display: grid;
   gap: 0;
   margin-bottom: 0.5rem;
-  padding-top: var(--site-chrome-offset);
 }
 
 .hero-arch-stack {
@@ -3971,7 +3974,7 @@ nav a:hover {
 
 .catalogue-sidebar {
   position: sticky;
-  top: 4.5rem;
+  top: calc(var(--site-chrome-offset) + 0.5rem);
   padding: 0.85rem 0.65rem;
 }
 
@@ -4631,8 +4634,8 @@ body.catalogue-mobile-sheet-open {
 
 .service-nav {
   position: sticky;
-  top: 4.5rem;
-  max-height: calc(100vh - 5.5rem);
+  top: calc(var(--site-chrome-offset) + 0.5rem);
+  max-height: calc(100vh - var(--site-chrome-offset) - 1.25rem);
   display: flex;
   flex-direction: column;
   overflow: hidden;
