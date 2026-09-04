@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchSearch, fetchSuggest } from "../lib/api.js";
-import ApiGrid from "../components/ApiGrid.jsx";
+import ApiGrid, { SKELETON_COUNT } from "../components/ApiGrid.jsx";
+import DotMatrixLoader from "../components/DotMatrixLoader.jsx";
 import { IntentResults } from "../components/IntentSuggest.jsx";
 import IntentInputBar from "../components/IntentInputBar.jsx";
 import KhazakArchFigure from "../components/KhazakArchFigure.jsx";
@@ -64,6 +65,8 @@ export default function HomePage() {
 
     loadingMoreRef.current = true;
     setLoadingMore(true);
+    // Pause scroll-driven loads until the new page settles.
+    document.body.classList.add("catalogue-loading-more");
     try {
       const res = await fetchSearch({ q: "", limit: PAGE_SIZE, offset });
       nextOffsetRef.current = res.next_offset;
@@ -78,6 +81,8 @@ export default function HomePage() {
         count: res.count,
         total: res.total,
       }));
+      // Let the staggered card-enter animation breathe before unblocking.
+      await new Promise((r) => setTimeout(r, 520));
       return res.next_offset;
     } catch (err) {
       console.error(err);
@@ -85,6 +90,7 @@ export default function HomePage() {
     } finally {
       loadingMoreRef.current = false;
       setLoadingMore(false);
+      document.body.classList.remove("catalogue-loading-more");
     }
   }, []);
 
@@ -186,22 +192,27 @@ export default function HomePage() {
           {showingIntent ? (
             <div id="intent-results" className="catalogue-content-enter" key={contentKey}>
               {suggesting && !suggestion ? (
-                <p className="catalogue-loading-text font-mono text-sm text-[var(--text-soft)]">Finding APIs…</p>
+                <div className="catalogue-loader-wrap">
+                  <DotMatrixLoader size={120} dotSize={9} label="Finding APIs…" />
+                </div>
               ) : (
                 <IntentResults suggestion={suggestion} onGeneratingChange={setGeneratingStack} />
               )}
             </div>
           ) : loading ? (
-            <div className="catalogue-loading" key={contentKey}>
-              <p className="catalogue-loading-text font-mono text-sm text-[var(--text-soft)]">Loading catalogue…</p>
+            <div className="catalogue-loader-wrap" key={contentKey}>
+              <DotMatrixLoader size={132} dotSize={10} label="Loading catalogue…" />
             </div>
           ) : (
             <div className="catalogue-content-enter" key={contentKey}>
               <ApiGrid apis={apis} stagger staggerFrom={staggerFrom} />
+              {loadingMore ? (
+                <div className="catalogue-load-footer">
+                  <ApiGrid skeleton={SKELETON_COUNT} />
+                </div>
+              ) : null}
               <div className="catalogue-load-footer" ref={loadMoreRef}>
-                {loadingMore ? (
-                  <p className="catalogue-load-status">Loading more APIs…</p>
-                ) : hasMore ? (
+                {loadingMore ? null : hasMore ? (
                   <>
                     <p className="catalogue-load-status">
                       Showing {apis.length} of {resultsTotal} — keep scrolling or load more
