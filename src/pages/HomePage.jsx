@@ -162,7 +162,7 @@ export default function HomePage() {
   }, [showingIntent, loading, hasMore, loadingMore, apis.length, loadMoreIfNeeded]);
 
   return (
-    <div className="container-main container-main--catalogue pt-2">
+    <div className="container-main container-main--catalogue">
       <section className="hero-arch" aria-label="Qazaq Stack">
         <div className="hero-arch-stack">
           <KhazakArchFigure catalogueTotal={catalogueTotal} />
