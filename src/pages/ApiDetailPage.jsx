@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { fetchApi } from "../lib/api.js";
 import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTryPanel from "../components/ApiTryPanel.jsx";
-import ApiDocAssistant from "../components/ApiDocAssistant.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
 import { PageSkeleton } from "../components/PageSkeleton.jsx";
@@ -100,8 +99,6 @@ export default function ApiDetailPage() {
       </div>
 
       <ApiKeyBanner api={api} />
-
-      <ApiDocAssistant api={api} />
 
       <ApiTryPanel api={api} />
 
