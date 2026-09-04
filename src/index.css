@@ -3227,6 +3227,10 @@ nav a:hover {
 }
 
 .site-footer-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
   margin: 0;
   font-family: var(--font-sans);
   font-size: clamp(3.5rem, 14vw, 9.5rem);
@@ -3238,6 +3242,14 @@ nav a:hover {
   transform: translateY(18%);
   user-select: none;
   pointer-events: none;
+}
+
+.site-footer-flag {
+  display: block;
+  height: 0.72em;
+  width: auto;
+  flex-shrink: 0;
+  opacity: 0.92;
 }
 
 @media (max-width: 860px) {
