@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchApi, fetchCompanyHub } from "../lib/api.js";
 import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
-import ApiTryPanel from "../components/ApiTryPanel.jsx";
+import ApiTestSuite from "../components/ApiTestSuite.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
 import CompanyEndpointNav from "../components/CompanyEndpointNav.jsx";
@@ -88,7 +88,7 @@ function EndpointDetail({ api, hub }) {
 
       <ApiKeyBanner api={api} />
 
-      <ApiTryPanel api={api} />
+      <ApiTestSuite api={api} />
 
       {api.docs && (
         <a href={api.docs} target="_blank" rel="noopener noreferrer" className="btn-metal mt-6 inline-flex">
