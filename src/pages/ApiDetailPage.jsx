@@ -5,6 +5,7 @@ import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTestSuite from "../components/ApiTestSuite.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
+import SubpageKeysLink from "../components/SubpageKeysLink.jsx";
 import { PageSkeleton } from "../components/PageSkeleton.jsx";
 
 export default function ApiDetailPage() {
@@ -43,9 +44,12 @@ export default function ApiDetailPage() {
 
   return (
     <div className="container-main max-w-5xl py-8 pb-16">
-      <Link to="/" className="font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)]">
-        ← back to directory
-      </Link>
+      <div className="service-main-top-row">
+        <Link to="/" className="font-mono text-xs text-[var(--text-soft)] hover:text-[var(--text)]">
+          ← back to directory
+        </Link>
+        <SubpageKeysLink />
+      </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <FreshnessBadge freshness={api.freshness} />

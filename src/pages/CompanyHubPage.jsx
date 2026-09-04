@@ -6,6 +6,7 @@ import ApiTestSuite from "../components/ApiTestSuite.jsx";
 import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
 import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
 import CompanyEndpointNav from "../components/CompanyEndpointNav.jsx";
+import SubpageKeysLink from "../components/SubpageKeysLink.jsx";
 import { PageSkeleton } from "../components/PageSkeleton.jsx";
 import { categoryLabel } from "../lib/categoryStyle.js";
 
@@ -31,7 +32,8 @@ function EndpointDetail({ api, hub }) {
 
   return (
     <div className="service-main-content">
-      <nav className="service-breadcrumb" aria-label="Breadcrumb">
+      <div className="service-main-top-row">
+        <nav className="service-breadcrumb" aria-label="Breadcrumb">
         <Link to="/" className="service-breadcrumb-link">
           Catalogue
         </Link>
@@ -52,9 +54,9 @@ function EndpointDetail({ api, hub }) {
           <span className="service-nav-method">{method}</span>
           {api.title}
         </span>
-      </nav>
-
-      <div className="mt-3 flex flex-wrap items-center gap-3">
+        </nav>
+        <SubpageKeysLink />
+      </div>
         <FreshnessBadge freshness={api.freshness} />
         <TrustDot copyable={api.copyable} auth={api.auth} />
         <span className="chip">{api.tier}</span>
