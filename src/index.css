@@ -3791,6 +3791,121 @@ nav a:hover {
   color: var(--text-mute);
 }
 
+/* MCP strip — slim bar above the prompt box */
+.mcp-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: none;
+  margin-bottom: 0.6rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--surface) 14%, transparent);
+  backdrop-filter: blur(4px);
+  animation: content-enter var(--dur-3) var(--ease-enter) both;
+  animation-delay: 120ms;
+}
+
+.mcp-strip-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.mcp-strip-select {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--surface-alt) 60%, transparent);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  padding: 0.35rem 0.5rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--dur-1) var(--ease-out);
+}
+
+.mcp-strip-select:focus {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.mcp-strip-copy {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+}
+
+.mcp-strip-copy:hover {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+}
+
+.mcp-strip-connect {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-alt));
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+}
+
+.mcp-strip-connect:hover {
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface-alt));
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+}
+
+.mcp-strip-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent);
+}
+
+.mcp-strip-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+@media (max-width: 860px) {
+  .mcp-strip {
+    flex-wrap: wrap;
+  }
+
+  .mcp-strip-select {
+    flex: 1 1 100%;
+    order: 2;
+  }
+
+  .mcp-strip-connect {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
 /* Legacy http-tester — kept for reference
 .http-tester {
   overflow: hidden;

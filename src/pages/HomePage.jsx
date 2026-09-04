@@ -5,6 +5,7 @@ import DotMatrixLoader from "../components/DotMatrixLoader.jsx";
 import { IntentResults } from "../components/IntentSuggest.jsx";
 import IntentInputBar from "../components/IntentInputBar.jsx";
 import KhazakArchFigure from "../components/KhazakArchFigure.jsx";
+import McpStrip from "../components/McpStrip.jsx";
 import { INTENT_PROMPT_HINTS } from "../data/intentPromptHints.js";
 import { useCatalogueNav } from "../context/CatalogueNavContext.jsx";
 
@@ -179,6 +180,7 @@ export default function HomePage() {
       <div className="catalogue-layout">
         <div className="catalogue-main">
           <section className="catalogue-search-desktop mb-6">
+            <McpStrip />
             <IntentInputBar
               variant="hero"
               value={query}

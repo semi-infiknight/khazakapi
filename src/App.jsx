@@ -16,7 +16,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/keys" element={<KeysPage />} />
         <Route path="/setup/data-egov-key" element={<EgovKeyPage />} />
-        <Route path="/mcp" element={<McpServerPage />} />
+        <Route path="/mcp" element={<Navigate to="/" replace />} />
         <Route path="/setup/mcp" element={<Navigate to="/mcp" replace />} />
         <Route path="/browse/:categorySlug" element={<CategoryBrowsePage />} />
         <Route path="/browse/:categorySlug/:companySlug" element={<CompanyHubPage />} />
