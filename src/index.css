@@ -3205,7 +3205,7 @@ nav a:hover {
   box-shadow: var(--shadow-accent);
 }
 
-.foot-link {
+/* .foot-link {
   color: var(--text-soft);
   font-family: var(--font-mono);
   font-size: var(--fs-sm);
@@ -3214,6 +3214,42 @@ nav a:hover {
 .foot-link:hover {
   color: var(--text);
   text-decoration: underline;
+} */
+
+.site-footer {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 2.5rem;
+  padding: 2.5rem 1rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  text-align: center;
+}
+
+.site-footer-mark {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(3.5rem, 14vw, 9.5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.82;
+  color: color-mix(in srgb, var(--text) 88%, transparent);
+  white-space: nowrap;
+  transform: translateY(18%);
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .site-footer {
+    margin-top: 1.5rem;
+    padding-top: 1.75rem;
+    padding-bottom: calc(0.5rem + var(--catalogue-dock-offset, 0px));
+  }
+
+  .site-footer-mark {
+    font-size: clamp(2.75rem, 16vw, 5.5rem);
+  }
 }
 
 @media (max-width: 640px) {
@@ -4601,8 +4637,8 @@ body.catalogue-mobile-sheet-open {
     padding-bottom: 0;
   }
 
-  body.catalogue-mobile-nav-active footer.container-main {
-    padding-bottom: 0;
+  body.catalogue-mobile-nav-active footer.site-footer {
+    padding-bottom: calc(0.5rem + var(--catalogue-dock-offset, 0px));
   }
 
   body.catalogue-mobile-nav-active main {
