@@ -221,11 +221,7 @@ export default function HomePage() {
                       Load more APIs
                     </button>
                   </>
-                ) : (
-                  <p className="catalogue-load-status catalogue-load-status--done">
-                    All {resultsTotal} APIs loaded
-                  </p>
-                )}
+                ) : null}
               </div>
             </div>
           )}
