@@ -27,6 +27,12 @@
   --logo-ink: #f4eee9;
   --kz-cyan: 174 72% 52%;
   --kz-ink-dim: 210 12% 72%;
+  --site-chrome-inset-top: max(0.75rem, env(safe-area-inset-top, 0px));
+  --site-chrome-logo-height: clamp(42px, 6vw, 56px);
+  --site-chrome-breathe: clamp(1.1rem, 2.8vw, 1.75rem);
+  --site-chrome-offset: calc(
+    var(--site-chrome-inset-top) + var(--site-chrome-logo-height) + var(--site-chrome-breathe)
+  );
   --fluid-opacity: 0.45;
   --shadow-accent: 0 4px 14px color-mix(in srgb, var(--accent) 18%, transparent);
   --radius-sm: 4px;
@@ -303,6 +309,7 @@ a {
   display: grid;
   gap: 0;
   margin-bottom: 0.5rem;
+  padding-top: var(--site-chrome-offset);
 }
 
 .hero-arch-stack {
