@@ -57,6 +57,8 @@ function EndpointDetail({ api, hub }) {
         </nav>
         <SubpageKeysLink />
       </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-3">
         <FreshnessBadge freshness={api.freshness} />
         <TrustDot copyable={api.copyable} auth={api.auth} />
         <span className="chip">{api.tier}</span>
