@@ -1,3 +1,4 @@
+/*
 import { useEffect, useMemo, useState } from "react";
 import { tryApi } from "../lib/api.js";
 import { getProviderIdForApi, getProviderKey } from "../lib/providerKeys.js";
@@ -288,3 +289,4 @@ export default function ApiTryPanel({ api }) {
     </div>
   );
 }
+*/

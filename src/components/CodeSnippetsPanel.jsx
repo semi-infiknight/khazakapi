@@ -1,10 +1,10 @@
+/*
 import { useEffect, useMemo, useState } from "react";
 
 const LANGUAGES = [
   { id: "curl", label: "cURL" },
   { id: "js", label: "JavaScript" },
   { id: "python", label: "Python" },
-  { id: "prompt", label: "AI prompt" },
 ];
 
 export default function CodeSnippetsPanel({ api }) {
@@ -13,7 +13,6 @@ export default function CodeSnippetsPanel({ api }) {
     if (api.curl) map.curl = api.curl;
     if (api.js) map.js = api.js;
     if (api.python) map.python = api.python;
-    if (api.prompt) map.prompt = api.prompt;
     return map;
   }, [api]);
 
@@ -72,3 +71,4 @@ export default function CodeSnippetsPanel({ api }) {
     </div>
   );
 }
+*/
