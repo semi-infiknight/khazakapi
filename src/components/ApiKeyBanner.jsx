@@ -1,3 +1,4 @@
+/*
 import { Link } from "react-router-dom";
 import { getProviderIdForApi, getProviderKey, providerInfo } from "../lib/providerKeys.js";
 
@@ -27,3 +28,4 @@ export default function ApiKeyBanner({ api }) {
     </div>
   );
 }
+*/

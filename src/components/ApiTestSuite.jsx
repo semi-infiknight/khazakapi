@@ -7,7 +7,6 @@ const LANGUAGES = [
   { id: "curl", label: "cURL" },
   { id: "js", label: "JavaScript" },
   { id: "python", label: "Python" },
-  { id: "prompt", label: "AI prompt" },
 ];
 
 function buildPreviewUrl(spec, params, apiKey) {
@@ -118,7 +117,6 @@ function CodeSnippet({ api, url, method, params, headers, apiKey }) {
     if (api.curl) map.curl = api.curl;
     if (api.js) map.js = api.js;
     if (api.python) map.python = api.python;
-    if (api.prompt) map.prompt = api.prompt;
     return map;
   }, [api]);
 
@@ -238,6 +236,19 @@ export default function ApiTestSuite({ api }) {
 
   return (
     <div className="api-suite panel">
+      {/* Suite header */}
+      <div className="api-suite-header">
+        <div className="api-suite-header-meta">
+          <span className="api-suite-section-label">Endpoint</span>
+          <span className="api-suite-header-path">{spec.path || api.endpoint || "—"}</span>
+        </div>
+        {api.docs && (
+          <a href={api.docs} target="_blank" rel="noopener noreferrer" className="http-btn-ghost">
+            Provider docs ↗
+          </a>
+        )}
+      </div>
+
       {/* Request bar */}
       <div className="api-suite-request-bar">
         <span className={`http-method http-method-${spec.method.toLowerCase()}`}>{spec.method}</span>

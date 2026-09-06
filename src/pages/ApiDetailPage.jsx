@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { fetchApi } from "../lib/api.js";
 import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTestSuite from "../components/ApiTestSuite.jsx";
-import CodeSnippetsPanel from "../components/CodeSnippetsPanel.jsx";
-import ApiKeyBanner from "../components/ApiKeyBanner.jsx";
 import SubpageKeysLink from "../components/SubpageKeysLink.jsx";
 import { PageSkeleton } from "../components/PageSkeleton.jsx";
 
@@ -66,8 +64,6 @@ export default function ApiDetailPage() {
 
       {api.note && <p className="mt-4 text-sm text-[var(--amber)]">{api.note}</p>}
 
-      <CodeSnippetsPanel api={api} />
-
       <div className="panel mt-6 p-5">
         <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]">Trust</h2>
         <p className="mt-2 text-sm text-[var(--text-soft)]">{api.trust?.label}</p>
@@ -102,15 +98,7 @@ export default function ApiDetailPage() {
         )}
       </div>
 
-      <ApiKeyBanner api={api} />
-
       <ApiTestSuite api={api} />
-
-      {api.docs && (
-        <a href={api.docs} target="_blank" rel="noopener noreferrer" className="btn-metal mt-6 inline-flex">
-          Provider docs ↗
-        </a>
-      )}
     </div>
   );
 }
