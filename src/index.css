@@ -3629,17 +3629,74 @@ nav a:hover {
 .api-suite-request-panel {
   padding: 1rem;
   min-height: 8rem;
+  overflow-y: auto;
 }
 
-.api-suite-response {
+.api-suite-panes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 420px;
   border-top: 1px solid var(--line);
-  padding: 0;
 }
 
-.api-suite-response-head {
-  padding: 0.65rem 1rem;
-  border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface-alt) 30%, transparent);
+.api-suite-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.api-suite-pane--request {
+  border-right: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+.api-suite-pane--request .http-tabs {
+  flex-shrink: 0;
+}
+
+.api-suite-pane--response {
+  background: color-mix(in srgb, var(--code-bg) 55%, var(--surface));
+}
+
+.api-suite-pane--response .http-response {
+  margin-top: 0;
+  border-top: 0;
+  border-radius: 0;
+  background: transparent;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.api-suite-pane--response .http-response-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+}
+
+.api-suite-pane--response .http-body-view {
+  max-height: 380px;
+}
+
+@media (max-width: 860px) {
+  .api-suite-panes {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .api-suite-pane--request {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .api-suite-pane--response .http-body-view {
+    max-height: 260px;
+  }
 }
 
 .api-suite-section-label {

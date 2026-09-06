@@ -259,125 +259,106 @@ export default function ApiTestSuite({ api }) {
         <button type="button" className="http-btn-ghost" onClick={reset} disabled={loading}>Reset</button>
       </div>
 
-      {/* Request tabs */}
-      <div className="http-tabs">
-        {requestTabs.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            className={`http-tab ${reqTab === tab.id ? "http-tab-active" : ""}`}
-            onClick={() => setReqTab(tab.id)}
-          >
-            {tab.label}
-            {tab.count != null && tab.count > 0 && <span className="http-tab-count">{tab.count}</span>}
-          </button>
-        ))}
-      </div>
-
-      {/* Request panel */}
-      <div className="api-suite-request-panel">
-        {reqTab === "params" && (
-          spec.parameters?.length ? (
-            <div className="http-table-wrap">
-              <table className="http-table">
-                <thead>
-                  <tr>
-                    <th className="http-col-check">✓</th>
-                    <th>Key</th>
-                    <th>Value</th>
-                    <th>Description</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {spec.parameters.map((param) => (
-                    <ParamRow
-                      key={param.name}
-                      param={param}
-                      value={params[param.name]}
-                      onChange={(name, value) => setParams((prev) => ({ ...prev, [name]: value }))}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : <p className="http-empty-note">No query parameters for this endpoint.</p>
-        )}
-
-        {reqTab === "auth" && (
-          <div className="http-auth-panel">
-            <div className="http-auth-type-row">
-              <span className="http-auth-badge">{spec.auth.scheme || api.auth}</span>
-              <span className="http-auth-label">{spec.auth.label}</span>
-              {spec.auth.placement && <span className="http-auth-placement">{spec.auth.placement}</span>}
-            </div>
-            {providerId && !apiKey && (
-              <p className="http-auth-hint">
-                No saved key —{" "}
-                <a href={`/keys?provider=${encodeURIComponent(providerId)}`} className="text-[var(--accent)] underline">add it in Keys</a>{" "}
-                to auto-fill live testing.
-              </p>
-            )}
-            <label className="http-field">
-              <span className="http-field-label">{spec.auth.type === "bearer" ? "Bearer token" : "API key"}</span>
-              <input
-                type="password"
-                autoComplete="off"
-                placeholder={api.endpoint?.includes("YOUR_KEY") ? "Replaces YOUR_KEY in query params" : "Required to call this API"}
-                className="http-input http-input-wide"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-              />
-            </label>
-            {spec.auth.docs && (
-              <a href={spec.auth.docs} target="_blank" rel="noopener noreferrer" className="http-link">Provider auth docs ↗</a>
-            )}
-          </div>
-        )}
-
-        {reqTab === "headers" && (
-          <HeaderEditor headers={headers} onChange={setHeaders} />
-        )}
-
-        {reqTab === "body" && (
-          <BodyEditor body={body} onChange={setBody} />
-        )}
-
-        {reqTab === "code" && (
-          <CodeSnippet api={api} url={previewUrl} method={spec.method} params={params} headers={headers} apiKey={apiKey} />
-        )}
-      </div>
-
-      {/* Notes */}
+      {/* Notes + error */}
       {spec.notes?.length > 0 && (
         <ul className="http-notes">
           {spec.notes.map((note) => <li key={note}>{note}</li>)}
         </ul>
       )}
-
-      {/* Error */}
       {error && <p className="http-error">{error}</p>}
 
-      {/* Response */}
-      <div className="api-suite-response">
-        <div className="api-suite-response-head">
-          <span className="api-suite-section-label">Response</span>
-        </div>
-        {result && (
-          <div className="http-console">
-            <div className="http-console-line">
-              <span className="http-console-tag">REQUEST</span>
-              <span>{result.request?.method} {result.request?.url}</span>
-            </div>
-            <div className="http-console-line">
-              <span className="http-console-tag">RESPONSE</span>
-              <span>
-                {result.response?.status ? `${result.response.status} ${result.response.statusText || ""}`.trim() : result.response?.statusText}{" "}
-                · {result.response?.ms}ms
-              </span>
-            </div>
+      {/* Side-by-side request / response panes */}
+      <div className="api-suite-panes">
+        <div className="api-suite-pane api-suite-pane--request">
+          <div className="http-tabs">
+            {requestTabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                className={`http-tab ${reqTab === tab.id ? "http-tab-active" : ""}`}
+                onClick={() => setReqTab(tab.id)}
+              >
+                {tab.label}
+                {tab.count != null && tab.count > 0 && <span className="http-tab-count">{tab.count}</span>}
+              </button>
+            ))}
           </div>
-        )}
-        <ResponseViewer response={result?.response} request={result?.request} loading={loading && !result} />
+          <div className="api-suite-request-panel">
+            {reqTab === "params" && (
+              spec.parameters?.length ? (
+                <div className="http-table-wrap">
+                  <table className="http-table">
+                    <thead>
+                      <tr>
+                        <th className="http-col-check">✓</th>
+                        <th>Key</th>
+                        <th>Value</th>
+                        <th>Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {spec.parameters.map((param) => (
+                        <ParamRow
+                          key={param.name}
+                          param={param}
+                          value={params[param.name]}
+                          onChange={(name, value) => setParams((prev) => ({ ...prev, [name]: value }))}
+                        />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : <p className="http-empty-note">No query parameters for this endpoint.</p>
+            )}
+
+            {reqTab === "auth" && (
+              <div className="http-auth-panel">
+                <div className="http-auth-type-row">
+                  <span className="http-auth-badge">{spec.auth.scheme || api.auth}</span>
+                  <span className="http-auth-label">{spec.auth.label}</span>
+                  {spec.auth.placement && <span className="http-auth-placement">{spec.auth.placement}</span>}
+                </div>
+                {providerId && !apiKey && (
+                  <p className="http-auth-hint">
+                    No saved key —{" "}
+                    <a href={`/keys?provider=${encodeURIComponent(providerId)}`} className="text-[var(--accent)] underline">add it in Keys</a>{" "}
+                    to auto-fill live testing.
+                  </p>
+                )}
+                <label className="http-field">
+                  <span className="http-field-label">{spec.auth.type === "bearer" ? "Bearer token" : "API key"}</span>
+                  <input
+                    type="password"
+                    autoComplete="off"
+                    placeholder={api.endpoint?.includes("YOUR_KEY") ? "Replaces YOUR_KEY in query params" : "Required to call this API"}
+                    className="http-input http-input-wide"
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                  />
+                </label>
+                {spec.auth.docs && (
+                  <a href={spec.auth.docs} target="_blank" rel="noopener noreferrer" className="http-link">Provider auth docs ↗</a>
+                )}
+              </div>
+            )}
+
+            {reqTab === "headers" && (
+              <HeaderEditor headers={headers} onChange={setHeaders} />
+            )}
+
+            {reqTab === "body" && (
+              <BodyEditor body={body} onChange={setBody} />
+            )}
+
+            {reqTab === "code" && (
+              <CodeSnippet api={api} url={previewUrl} method={spec.method} params={params} headers={headers} apiKey={apiKey} />
+            )}
+          </div>
+        </div>
+
+        <div className="api-suite-pane api-suite-pane--response">
+          <ResponseViewer response={result?.response} request={result?.request} loading={loading && !result} />
+        </div>
       </div>
     </div>
   );
