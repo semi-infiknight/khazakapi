@@ -425,6 +425,10 @@ body.catalogue-loading-more .catalogue-load-footer {
   min-height: 0;
 }
 
+body.catalogue-loading-more .site-footer {
+  display: none;
+}
+
 /* ── Page skeletons — reserve full page height so footer doesn't jump ── */
 .sr-only {
   position: absolute;
