@@ -3609,12 +3609,17 @@ nav a:hover {
 
 /* Postman/Insomnia-style API test suite */
 .api-suite {
+  --http-accent: #c76a3a;
+  --http-green: #5ccda0;
+  --http-amber: #e0b86b;
+  --http-red: #d97a7a;
+
   overflow: hidden;
   padding: 0;
   margin-top: 1.5rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--surface) 60%, #0a0510);
+  background: color-mix(in srgb, var(--surface) 85%, #1a1025);
 }
 
 .api-suite-request-bar {
@@ -3656,7 +3661,7 @@ nav a:hover {
 }
 
 .api-suite-pane--response {
-  background: color-mix(in srgb, var(--code-bg) 55%, var(--surface));
+  background: color-mix(in srgb, var(--code-bg) 35%, var(--surface));
 }
 
 .api-suite-pane--response .http-response {
@@ -4024,9 +4029,9 @@ nav a:hover {
 }
 
 .http-method-get {
-  background: color-mix(in srgb, var(--green) 18%, var(--surface-alt));
-  color: var(--green);
-  border: 1px solid color-mix(in srgb, var(--green) 35%, var(--line));
+  background: color-mix(in srgb, var(--http-green) 18%, var(--surface-alt));
+  color: var(--http-green);
+  border: 1px solid color-mix(in srgb, var(--http-green) 35%, var(--line));
 }
 
 .http-url-input {
@@ -4045,7 +4050,7 @@ nav a:hover {
 .http-send-btn {
   border: 0;
   border-radius: var(--radius-md);
-  background: #ff6c37;
+  background: var(--http-accent);
   color: #fff;
   font-family: var(--font-mono);
   font-size: var(--fs-sm);
@@ -4111,7 +4116,7 @@ nav a:hover {
 
 .http-tab-active {
   color: var(--text);
-  border-bottom-color: #ff6c37;
+  border-bottom-color: var(--http-accent);
 }
 
 .http-tab-count {
@@ -4166,7 +4171,7 @@ nav a:hover {
 
 .http-required {
   margin-left: 0.2rem;
-  color: var(--red);
+  color: var(--http-red);
 }
 
 .http-param-desc {
@@ -4223,7 +4228,7 @@ nav a:hover {
 }
 
 .http-auth-hint {
-  color: var(--amber);
+  color: var(--http-amber);
 }
 
 .http-link {
@@ -4241,7 +4246,7 @@ nav a:hover {
 
 .http-error {
   margin: 0 1.25rem 1rem;
-  color: var(--red);
+  color: var(--http-red);
   font-size: var(--fs-sm);
 }
 
@@ -4309,18 +4314,18 @@ nav a:hover {
 }
 
 .http-status-ok {
-  background: color-mix(in srgb, var(--green) 18%, transparent);
-  color: var(--green);
+  background: color-mix(in srgb, var(--http-green) 18%, transparent);
+  color: var(--http-green);
 }
 
 .http-status-client {
-  background: color-mix(in srgb, var(--amber) 18%, transparent);
-  color: var(--amber);
+  background: color-mix(in srgb, var(--http-amber) 18%, transparent);
+  color: var(--http-amber);
 }
 
 .http-status-error {
-  background: color-mix(in srgb, var(--red) 18%, transparent);
-  color: var(--red);
+  background: color-mix(in srgb, var(--http-red) 18%, transparent);
+  color: var(--http-red);
 }
 
 .http-status-info,
@@ -4347,7 +4352,7 @@ nav a:hover {
 .http-meta-warn {
   font-family: var(--font-mono);
   font-size: var(--fs-2xs);
-  color: var(--amber);
+  color: var(--http-amber);
 }
 
 .http-response-placeholder {
