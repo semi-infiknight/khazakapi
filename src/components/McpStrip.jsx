@@ -1,3 +1,4 @@
+/*
 import { useMemo, useState } from "react";
 import { PLATFORMS, mcpConnectorUrl } from "../data/mcpSetup.jsx";
 
@@ -53,3 +54,4 @@ export default function McpStrip() {
     </div>
   );
 }
+*/

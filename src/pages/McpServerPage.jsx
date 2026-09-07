@@ -1,3 +1,4 @@
+/*
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { PLATFORMS, mcpConnectorUrl } from "../data/mcpSetup.jsx";
@@ -122,104 +123,73 @@ export default function McpServerPage() {
                 key={p.id}
                 type="button"
                 role="tab"
+                className={`hf-mcp-tab ${platformId === p.id ? "hf-mcp-tab-active" : ""}`}
                 aria-selected={platformId === p.id}
-                className={`hf-tab ${platformId === p.id ? "hf-tab-on" : ""}`}
                 onClick={() => setPlatformId(p.id)}
               >
-                <span className="hf-tab-icon" aria-hidden="true">
-                  {p.icon}
-                </span>
+                <span className="hf-mcp-tab-icon">{p.icon}</span>
                 {p.label}
               </button>
             ))}
           </div>
+        </div>
 
-          <div className="hf-mode" role="tablist" aria-label="Setup mode">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={mode === "mcp"}
-              className={`hf-mode-btn ${mode === "mcp" ? "hf-mode-on" : ""}`}
-              onClick={() => setMode("mcp")}
-            >
-              <IconClip /> MCP
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={mode === "cli"}
-              className={`hf-mode-btn ${mode === "cli" ? "hf-mode-on" : ""}`}
-              onClick={() => setMode("cli")}
-            >
-              <IconCode /> CLI
-            </button>
+        <div className="hf-mcp-body">
+          <div className="hf-mcp-hero">
+            <h1 className="hf-mcp-title">
+              <span className="hf-mcp-title-icon">{platform.icon}</span>
+              Add Qazaq Stack to {platform.label}
+              <KzBadge />
+            </h1>
+            <p className="hf-mcp-desc">
+              Connect this Kazakhstan API directory as an {mode.toUpperCase()} server in {platform.label} so you can ask natural-language questions about Kazakh providers, endpoints, and integrations.
+            </p>
+          </div>
+
+          <div className="hf-mcp-section">
+            <div className="hf-mcp-section-head">
+              <span className="hf-mcp-section-num">1</span>
+              <h2 className="hf-mcp-section-title">Copy the connector URL</h2>
+            </div>
+            <CopyField value={connectorUrl} />
+            <p className="hf-mcp-section-tip">
+              This URL exposes the API catalogue as a read-only {mode.toUpperCase()} server. No local code is required.
+            </p>
+          </div>
+
+          <div className="hf-mcp-section">
+            <div className="hf-mcp-section-head">
+              <span className="hf-mcp-section-num">2</span>
+              <h2 className="hf-mcp-section-title">Paste it into {platform.label}</h2>
+            </div>
+            <ol className="hf-mcp-steps">
+              {config.steps.map((step, i) => (
+                <li key={i} className="hf-mcp-step">
+                  <span className="hf-mcp-step-icon">{step.icon === "clip" ? <IconClip /> : step.icon === "code" ? <IconCode /> : step.icon === "link" ? <IconLink /> : step.icon === "github" ? <IconGithub /> : null}</span>
+                  <span className="hf-mcp-step-text">{step.text}</span>
+                </li>
+              ))}
+            </ol>
+            {config.step2Href && (
+              <a href={config.step2Href} target="_blank" rel="noopener noreferrer" className="hf-mcp-cta">
+                Open {platform.label} settings
+                <IconLink />
+              </a>
+            )}
+          </div>
+
+          <div className="hf-mcp-section hf-mcp-section--note">
+            <p className="hf-mcp-note">
+              <strong>Security note:</strong> this is a stateless remote server. No API keys are stored on the server; any provider credentials you use in chats are handled by your local agent.
+            </p>
           </div>
         </div>
-
-        <div className="hf-panel">
-          <section className="hf-col">
-            <h2 className="hf-col-title">
-              Copy the <KzBadge /> <strong>Qazaq Stack connector URL</strong>
-            </h2>
-            <p className="hf-col-copy">You’ll paste this URL into {platform.label} in the next step</p>
-            <div className="hf-col-action">
-              <CopyField value={mode === "cli" && config.command ? config.command(connectorUrl) : connectorUrl} />
-            </div>
-          </section>
-
-          <section className="hf-col">
-            <h2 className="hf-col-title">
-              <strong>{config.step2Title}</strong>
-            </h2>
-            <p className="hf-col-copy">{config.step2Body}</p>
-            <div className="hf-col-action">
-              {config.step2Href && (
-                <a href={config.step2Href} target="_blank" rel="noopener noreferrer" className="hf-ghost">
-                  <IconLink /> {config.step2Cta}
-                </a>
-              )}
-            </div>
-          </section>
-
-          <section className="hf-col">
-            <h2 className="hf-col-title">
-              <strong>{config.step3Title}</strong>
-            </h2>
-            <p className="hf-col-copy">{config.step3Body}</p>
-            <div className="hf-col-action">
-              {config.startHref && (
-                <a href={config.startHref} target="_blank" rel="noopener noreferrer" className="hf-start">
-                  <span className="hf-start-icon" aria-hidden="true">
-                    {platform.icon}
-                  </span>
-                  {config.startCta}
-                </a>
-              )}
-            </div>
-          </section>
-        </div>
-
-        <div className="hf-foot">
-          <p>
-            If you are using Claude Code or Codex, it’s better to use the{" "}
-            <button type="button" className="hf-foot-cli" onClick={() => setMode("cli")}>
-              CLI <IconLink />
-            </button>
-          </p>
-          <a
-            href="https://github.com/semi-infiknight/khazakapi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hf-git"
-          >
-            <IconGithub /> GitHub
-          </a>
-        </div>
-
-        <Link to="/" className="hf-back">
-          ← Qazaq Stack directory
-        </Link>
       </div>
+
+      <p className="hf-mcp-footer">
+        <Link to="/" className="hf-mcp-back">← Back to Qazaq Stack</Link>
+      </p>
     </div>
   );
 }
+*/
