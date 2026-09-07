@@ -6,7 +6,6 @@ import CompanyHubPage from "./pages/CompanyHubPage.jsx";
 import ServiceRedirectPage from "./pages/ServiceRedirectPage.jsx";
 import EgovKeyPage from "./pages/EgovKeyPage.jsx";
 import KeysPage from "./pages/KeysPage.jsx";
-import McpServerPage from "./pages/McpServerPage.jsx";
 import Layout from "./components/Layout.jsx";
 
 export default function App() {
@@ -17,7 +16,7 @@ export default function App() {
         <Route path="/keys" element={<KeysPage />} />
         <Route path="/setup/data-egov-key" element={<EgovKeyPage />} />
         <Route path="/mcp" element={<Navigate to="/" replace />} />
-        <Route path="/setup/mcp" element={<Navigate to="/mcp" replace />} />
+        <Route path="/setup/mcp" element={<Navigate to="/" replace />} />
         <Route path="/browse/:categorySlug" element={<CategoryBrowsePage />} />
         <Route path="/browse/:categorySlug/:companySlug" element={<CompanyHubPage />} />
         <Route path="/browse/:categorySlug/:companySlug/:apiId" element={<CompanyHubPage />} />

@@ -3881,7 +3881,7 @@ nav a:hover {
   color: var(--text-mute);
 }
 
-/* MCP strip — slim bar above the prompt box */
+/* MCP strip — slim bar above the prompt box (commented out)
 .mcp-strip {
   display: flex;
   align-items: center;
@@ -3995,6 +3995,7 @@ nav a:hover {
     justify-content: center;
   }
 }
+*/
 
 /* Legacy http-tester — kept for reference
 .http-tester {
