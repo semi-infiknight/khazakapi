@@ -2165,6 +2165,67 @@ body.catalogue-loading-more .site-footer {
   animation-delay: 160ms;
 }
 
+.catalogue-search-stack {
+  width: 100%;
+  max-width: 42rem;
+}
+
+.intent-hints {
+  margin-top: 0.875rem;
+  animation: content-enter var(--dur-3) var(--ease-enter) both;
+  animation-delay: 240ms;
+}
+
+.intent-hints-label {
+  margin: 0 0 0.5rem 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.intent-hints-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.6rem;
+}
+
+.intent-hint-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  color: var(--text-soft);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--dur-1) var(--ease-out),
+    background var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
+}
+
+.intent-hint-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  background: var(--surface-alt);
+  transform: translateY(-1px);
+}
+
+.intent-hint-title {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.intent-hint-desc {
+  font-size: var(--fs-2xs);
+  color: var(--text-mute);
+  line-height: 1.35;
+}
+
 .catalogue-search-desktop .search-input {
   padding-right: 2.75rem;
 }
