@@ -1,7 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchApi, fetchService } from "../lib/api.js";
-import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTestSuite from "../components/ApiTestSuite.jsx";
 import { PageSkeleton } from "../components/PageSkeleton.jsx";
 
@@ -40,6 +39,7 @@ function EndpointDetail({ api, service }) {
         </span>
       </nav>
 
+      {/* Badge row, title, and country removed — breadcrumb already shows the endpoint.
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <FreshnessBadge freshness={api.freshness} />
         <TrustDot copyable={api.copyable} auth={api.auth} />
@@ -50,8 +50,9 @@ function EndpointDetail({ api, service }) {
 
       <h2 className="mt-4 text-2xl font-bold leading-tight">{api.title}</h2>
       <p className="mt-2 font-mono text-sm text-[var(--text-soft)]">{(api.country || []).join(", ")}</p>
+      */}
 
-      {api.note && <p className="mt-4 text-sm text-[var(--amber)]">{api.note}</p>}
+      {api.note && <p className="mt-3 text-sm text-[var(--amber)]">{api.note}</p>}
 
       {/* Trust panel removed — now shown in the ApiTestSuite Overview tab.
       <div className="panel mt-6 p-5">

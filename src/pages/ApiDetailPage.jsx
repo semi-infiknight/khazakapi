@@ -1,7 +1,6 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchApi } from "../lib/api.js";
-import { FreshnessBadge, TrustDot } from "../components/Badges.jsx";
 import ApiTestSuite from "../components/ApiTestSuite.jsx";
 import SubpageKeysLink from "../components/SubpageKeysLink.jsx";
 import { PageSkeleton } from "../components/PageSkeleton.jsx";
@@ -49,6 +48,7 @@ export default function ApiDetailPage() {
         <SubpageKeysLink />
       </div>
 
+      {/* Badge row removed — tier/pricing/auth/trust live in the Overview tab.
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <FreshnessBadge freshness={api.freshness} />
         <TrustDot copyable={api.copyable} auth={api.auth} />
@@ -56,6 +56,7 @@ export default function ApiDetailPage() {
         <span className="chip">{api.pricing}</span>
         <span className="chip">{api.auth}</span>
       </div>
+      */}
 
       <h1 className="mt-4 text-3xl font-bold leading-tight">{api.title}</h1>
       <p className="mt-2 font-mono text-sm text-[var(--text-soft)]">
