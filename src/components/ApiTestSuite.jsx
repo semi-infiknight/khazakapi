@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { tryApi } from "../lib/api.js";
 import { getProviderIdForApi, getProviderKey } from "../lib/providerKeys.js";
 import ResponseViewer from "./ResponseViewer.jsx";
+import { OverviewPanel, ScriptsPanel, SettingsPanel, CookiesPanel } from "./ApiSuitePanels.jsx";
 
 const LANGUAGES = [
   { id: "curl", label: "cURL" },
@@ -164,7 +165,16 @@ export default function ApiTestSuite({ api }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [result, setResult] = useState(null);
-  const [reqTab, setReqTab] = useState("params");
+  const [reqTab, setReqTab] = useState("overview");
+  const [preRequestScript, setPreRequestScript] = useState("");
+  const [postResponseScript, setPostResponseScript] = useState("");
+  const [settings, setSettings] = useState({
+    followRedirects: true,
+    sslVerification: true,
+    encodeUrl: true,
+    disableCookieJar: false,
+    timeout: 15000,
+  });
 
   const providerId = useMemo(() => getProviderIdForApi(api), [api]);
 
@@ -175,7 +185,16 @@ export default function ApiTestSuite({ api }) {
     setApiKey(providerId ? getProviderKey(providerId) : "");
     setResult(null);
     setError(null);
-    setReqTab("params");
+    setReqTab("overview");
+    setPreRequestScript("");
+    setPostResponseScript("");
+    setSettings({
+      followRedirects: true,
+      sslVerification: true,
+      encodeUrl: true,
+      disableCookieJar: false,
+      timeout: 15000,
+    });
   }, [api.id, spec, api, providerId]);
 
   useEffect(() => {
@@ -208,7 +227,13 @@ export default function ApiTestSuite({ api }) {
     setError(null);
     setResult(null);
     try {
-      const data = await tryApi(api.id, { params, headers, apiKey: apiKey || undefined, body: isPostBody ? body : undefined });
+      const data = await tryApi(api.id, {
+        params,
+        headers,
+        apiKey: apiKey || undefined,
+        body: isPostBody ? body : undefined,
+        settings,
+      });
       setResult(data);
     } catch (e) {
       setError(e.message);
@@ -224,13 +249,27 @@ export default function ApiTestSuite({ api }) {
     setApiKey(providerId ? getProviderKey(providerId) : "");
     setResult(null);
     setError(null);
+    setPreRequestScript("");
+    setPostResponseScript("");
+    setSettings({
+      followRedirects: true,
+      sslVerification: true,
+      encodeUrl: true,
+      disableCookieJar: false,
+      timeout: 15000,
+    });
   };
 
+  const headerCount = Object.keys(headers).length;
   const requestTabs = [
+    { id: "overview", label: "Overview" },
     { id: "params", label: "Params", count: spec.parameters?.length || 0 },
-    ...(showKeyField ? [{ id: "auth", label: "Auth" }] : []),
-    { id: "headers", label: "Headers" },
+    ...(showKeyField ? [{ id: "auth", label: "Authorization" }] : []),
+    { id: "headers", label: "Headers", count: headerCount || undefined },
     ...(isPostBody ? [{ id: "body", label: "Body" }] : []),
+    { id: "scripts", label: "Scripts" },
+    { id: "settings", label: "Settings" },
+    { id: "cookies", label: "Cookies" },
     { id: "code", label: "Code" },
   ];
 
@@ -284,6 +323,10 @@ export default function ApiTestSuite({ api }) {
             ))}
           </div>
           <div className="api-suite-request-panel">
+            {reqTab === "overview" && (
+              <OverviewPanel api={api} spec={spec} />
+            )}
+
             {reqTab === "params" && (
               spec.parameters?.length ? (
                 <div className="http-table-wrap">
@@ -352,6 +395,25 @@ export default function ApiTestSuite({ api }) {
 
             {reqTab === "code" && (
               <CodeSnippet api={api} url={previewUrl} method={spec.method} params={params} headers={headers} apiKey={apiKey} />
+            )}
+
+            {reqTab === "scripts" && (
+              <ScriptsPanel
+                preRequest={preRequestScript}
+                postResponse={postResponseScript}
+                onChange={(key, value) => {
+                  if (key === "preRequest") setPreRequestScript(value);
+                  if (key === "postResponse") setPostResponseScript(value);
+                }}
+              />
+            )}
+
+            {reqTab === "settings" && (
+              <SettingsPanel settings={settings} onChange={setSettings} />
+            )}
+
+            {reqTab === "cookies" && (
+              <CookiesPanel requestUrl={previewUrl} />
             )}
           </div>
         </div>

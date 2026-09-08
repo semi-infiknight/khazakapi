@@ -184,13 +184,14 @@ app.post("/api/apis/:id/try", async (req, res) => {
   const resolved = resolveTryRequest(entry, req.body || {});
   if (resolved.error) return res.status(400).json({ error: resolved.error });
 
-  const response = await proxyRequest(resolved.method, resolved.url, resolved.headers);
+  const response = await proxyRequest(resolved.method, resolved.url, resolved.headers, resolved.settings);
   res.json({
     request: {
       method: resolved.method,
       url: resolved.url,
       headers: resolved.headers,
       curl: resolved.curl,
+      settings: resolved.settings,
     },
     response,
   });

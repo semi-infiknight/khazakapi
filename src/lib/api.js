@@ -35,11 +35,11 @@ export async function fetchApi(id) {
   return res.json();
 }
 
-export async function tryApi(id, { url, params, headers, apiKey } = {}) {
+export async function tryApi(id, { url, params, headers, apiKey, body, settings } = {}) {
   const res = await fetch(`/api/apis/${id}/try`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url, params, headers, apiKey }),
+    body: JSON.stringify({ url, params, headers, apiKey, body, settings }),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || "Request failed");

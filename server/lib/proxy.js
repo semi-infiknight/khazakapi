@@ -14,7 +14,7 @@ const ALLOWED_REQUEST_HEADERS = new Set([
 ]);
 
 export function resolveTryRequest(entry, options = {}) {
-  const { url: requestedUrl, params, headers, apiKey } = options;
+  const { url: requestedUrl, params, headers, apiKey, settings } = options;
 
   if (requestedUrl) {
     return resolveTryUrl(entry, requestedUrl, apiKey, headers);
@@ -28,6 +28,7 @@ export function resolveTryRequest(entry, options = {}) {
     url: built.url,
     headers: sanitizeHeaders(headers),
     curl: buildCurlPreview("GET", built.url, sanitizeHeaders(headers)),
+    settings: normalizeSettings(settings),
   };
 }
 
@@ -68,6 +69,7 @@ function resolveTryUrl(entry, requestedUrl, apiKey, headers) {
     url: finalUrl,
     headers: cleanHeaders,
     curl: buildCurlPreview("GET", finalUrl, cleanHeaders),
+    settings: normalizeSettings(settings),
   };
 }
 
@@ -82,17 +84,28 @@ function sanitizeHeaders(headers = {}) {
   return out;
 }
 
-export async function proxyRequest(method, url, headers = {}) {
+function normalizeSettings(settings = {}) {
+  return {
+    followRedirects: settings.followRedirects !== false,
+    sslVerification: settings.sslVerification !== false,
+    encodeUrl: settings.encodeUrl !== false,
+    disableCookieJar: settings.disableCookieJar === true,
+    timeout: Math.max(1000, Math.min(60000, Number(settings.timeout) || TIMEOUT_MS)),
+  };
+}
+
+export async function proxyRequest(method, url, headers = {}, settings = {}) {
   const start = Date.now();
+  const normalized = normalizeSettings(settings);
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), normalized.timeout);
 
   try {
     const response = await fetch(url, {
       method: method || "GET",
       signal: controller.signal,
       headers,
-      redirect: "follow",
+      redirect: normalized.followRedirects ? "follow" : "manual",
     });
 
     const responseHeaders = {};

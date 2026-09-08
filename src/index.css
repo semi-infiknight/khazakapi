@@ -4265,6 +4265,11 @@ nav a:hover {
   display: block;
 }
 
+.http-field-full textarea,
+.http-field-full .http-body-textarea {
+  width: 100%;
+}
+
 .http-field-label {
   display: block;
   margin-bottom: 0.35rem;
@@ -4310,6 +4315,186 @@ nav a:hover {
   margin: 0 1.25rem 1rem;
   color: var(--http-red);
   font-size: var(--fs-sm);
+}
+
+/* Overview, scripts, settings, cookies panels */
+.http-overview-panel,
+.http-scripts-panel,
+.http-settings-panel,
+.http-cookies-panel {
+  padding: 1rem;
+}
+
+.http-overview-section + .http-overview-section {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.http-overview-title {
+  margin: 0 0 0.35rem;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.http-overview-desc {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+.http-overview-subtitle {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.http-overview-url {
+  display: block;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--code-bg);
+  color: var(--text-soft);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  word-break: break-word;
+}
+
+.http-overview-trust {
+  margin: 0 0 0.25rem;
+  font-size: var(--fs-xs);
+  color: var(--text-soft);
+}
+
+.http-overview-trust-meta {
+  margin: 0 0 0.35rem;
+  font-size: var(--fs-2xs);
+  color: var(--text-mute);
+}
+
+.http-overview-caveat {
+  margin: 0.5rem 0 0;
+  font-size: var(--fs-xs);
+  color: var(--http-amber);
+}
+
+.http-notes-compact {
+  margin: 0.5rem 0 0;
+}
+
+.http-scripts-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.http-script-textarea {
+  min-height: 160px;
+}
+
+.http-script-note {
+  margin: 0;
+  font-size: var(--fs-2xs);
+  color: var(--text-mute);
+  line-height: 1.4;
+}
+
+.http-settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.http-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+}
+
+.http-setting-row-inline {
+  justify-content: flex-start;
+  gap: 1.25rem;
+}
+
+.http-setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.http-setting-label {
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.http-setting-desc {
+  font-size: var(--fs-2xs);
+  color: var(--text-mute);
+  line-height: 1.4;
+}
+
+.http-toggle {
+  position: relative;
+  width: 2.4rem;
+  height: 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-alt);
+  cursor: pointer;
+  transition: background var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.http-toggle:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.http-toggle-on {
+  background: var(--http-accent);
+  border-color: var(--http-accent);
+}
+
+.http-toggle-knob {
+  position: absolute;
+  top: 0.15rem;
+  left: 0.15rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 999px;
+  background: var(--text);
+  transition: transform var(--dur-1) var(--ease-out);
+}
+
+.http-toggle-on .http-toggle-knob {
+  transform: translateX(1.05rem);
+}
+
+.http-input-timeout {
+  width: 6rem;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.http-cookies-domain {
+  margin-top: 0.75rem;
+  font-size: var(--fs-xs);
+  color: var(--text-soft);
+}
+
+.http-cookies-domain code {
+  color: var(--text);
 }
 
 .http-console {
