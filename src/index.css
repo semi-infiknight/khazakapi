@@ -3698,12 +3698,14 @@ nav a:hover {
   padding: 1rem;
   min-height: 8rem;
   overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .api-suite-panes {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  min-height: 420px;
+  grid-template-rows: minmax(220px, 1fr) minmax(280px, 1.2fr);
+  min-height: 560px;
   border-top: 1px solid var(--line);
 }
 
@@ -3715,7 +3717,7 @@ nav a:hover {
 }
 
 .api-suite-pane--request {
-  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
 
@@ -3725,6 +3727,26 @@ nav a:hover {
 
 .api-suite-pane--response {
   background: color-mix(in srgb, var(--code-bg) 35%, var(--surface));
+}
+
+.api-suite-response-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface-alt) 60%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  flex-shrink: 0;
+}
+
+.api-suite-response-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-mute);
 }
 
 .api-suite-pane--response .http-response {
@@ -3748,22 +3770,23 @@ nav a:hover {
 }
 
 .api-suite-pane--response .http-body-view {
-  max-height: 380px;
+  max-height: none;
+  flex: 1 1 auto;
 }
 
 @media (max-width: 860px) {
   .api-suite-panes {
-    grid-template-columns: 1fr;
+    grid-template-rows: minmax(240px, auto) minmax(260px, auto);
     min-height: auto;
   }
 
   .api-suite-pane--request {
-    border-right: 0;
     border-bottom: 1px solid var(--line);
+  border-right: 0;
   }
 
   .api-suite-pane--response .http-body-view {
-    max-height: 260px;
+    max-height: 320px;
   }
 }
 

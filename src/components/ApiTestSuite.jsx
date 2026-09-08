@@ -306,7 +306,7 @@ export default function ApiTestSuite({ api }) {
       )}
       {error && <p className="http-error">{error}</p>}
 
-      {/* Side-by-side request / response panes */}
+      {/* Stacked request / response panes (Postman-style: request on top, response below) */}
       <div className="api-suite-panes">
         <div className="api-suite-pane api-suite-pane--request">
           <div className="http-tabs">
@@ -419,6 +419,9 @@ export default function ApiTestSuite({ api }) {
         </div>
 
         <div className="api-suite-pane api-suite-pane--response">
+          <div className="api-suite-response-header">
+            <span className="api-suite-response-label">Response</span>
+          </div>
           <ResponseViewer response={result?.response} request={result?.request} loading={loading && !result} />
         </div>
       </div>
