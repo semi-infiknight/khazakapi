@@ -285,12 +285,13 @@ export default function ApiTestSuite({ api }) {
         <button type="button" className="http-btn-ghost" onClick={reset} disabled={loading}>Reset</button>
       </div>
 
-      {/* Notes + error */}
+      {/* Coverage notes removed — redundant with page metadata and Overview tab.
       {spec.notes?.length > 0 && (
         <ul className="http-notes">
           {spec.notes.map((note) => <li key={note}>{note}</li>)}
         </ul>
       )}
+      */}
       {error && <p className="http-error">{error}</p>}
 
       {/* Stacked request / response panes (Postman-style: request on top, response below) */}
