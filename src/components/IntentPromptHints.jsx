@@ -1,3 +1,7 @@
+// Unused: example prompt cards removed from homepage; the typewriter ghost text
+// in the prompt box is enough to signal what the product is for.
+// Kept for reference if we want to restore the grid later.
+/*
 export default function IntentPromptHints({ hints, onSelect }) {
   return (
     <div className="intent-hints">
@@ -17,4 +21,8 @@ export default function IntentPromptHints({ hints, onSelect }) {
       </div>
     </div>
   );
+}
+*/
+export default function IntentPromptHints() {
+  return null;
 }

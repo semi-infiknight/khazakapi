@@ -2170,6 +2170,7 @@ body.catalogue-loading-more .site-footer {
   max-width: 42rem;
 }
 
+/*
 .intent-hints {
   margin-top: 0.875rem;
   animation: content-enter var(--dur-3) var(--ease-enter) both;
@@ -2225,6 +2226,7 @@ body.catalogue-loading-more .site-footer {
   color: var(--text-mute);
   line-height: 1.35;
 }
+*/
 
 .catalogue-search-desktop .search-input {
   padding-right: 2.75rem;
