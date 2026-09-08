@@ -29,6 +29,27 @@ export function OverviewPanel({ api, spec }) {
         </div>
       )}
 
+      {api.health && !api.health.skipped && (
+        <div className="http-overview-section">
+          <h4 className="http-overview-subtitle">Health</h4>
+          <p className="http-overview-trust">
+            <span
+              className={
+                api.health.tone === "live"
+                  ? "text-[var(--green)]"
+                  : api.health.tone === "reachable"
+                    ? "text-[var(--amber)]"
+                    : "text-[var(--red)]"
+              }
+            >
+              {api.health.label || (api.health.ok ? "OK" : "FAIL")}
+            </span>
+            <span className="http-overview-trust-meta"> · HTTP {api.health.status} · {api.health.ms}ms</span>
+          </p>
+          {api.health.reason && <p className="http-overview-trust-meta">{api.health.reason}</p>}
+        </div>
+      )}
+
       {api.docs && (
         <div className="http-overview-section">
           <h4 className="http-overview-subtitle">Documentation</h4>

@@ -64,6 +64,7 @@ export default function ApiDetailPage() {
 
       {api.note && <p className="mt-4 text-sm text-[var(--amber)]">{api.note}</p>}
 
+      {/* Trust panel removed — now shown in the ApiTestSuite Overview tab.
       <div className="panel mt-6 p-5">
         <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]">Trust</h2>
         <p className="mt-2 text-sm text-[var(--text-soft)]">{api.trust?.label}</p>
@@ -97,6 +98,7 @@ export default function ApiDetailPage() {
           </p>
         )}
       </div>
+      */}
 
       <ApiTestSuite api={api} />
     </div>
