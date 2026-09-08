@@ -312,7 +312,13 @@ export default function ApiTestSuite({ api }) {
           </div>
           <div className="api-suite-request-panel">
             {reqTab === "overview" && (
-              <OverviewPanel api={api} spec={spec} />
+              <OverviewPanel
+                api={api}
+                spec={spec}
+                previewUrl={previewUrl}
+                headers={headers}
+                apiKey={apiKey}
+              />
             )}
 
             {reqTab === "params" && (

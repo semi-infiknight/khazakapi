@@ -1,15 +1,214 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { buildPostmanCollection, downloadJson, postmanImportUrl } from "../lib/externalApiTools.js";
 
-export function OverviewPanel({ api, spec }) {
+const LANGUAGES = [
+  { id: "curl", label: "cURL" },
+  { id: "js", label: "JavaScript" },
+  { id: "python", label: "Python" },
+];
+
+function CopyButton({ text, label = "Copy" }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    if (!text) return;
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+  return (
+    <button type="button" className="http-btn-ghost" onClick={copy}>
+      {copied ? "Copied" : label}
+    </button>
+  );
+}
+
+export function OverviewPanel({ api, spec, previewUrl, headers, apiKey }) {
+  const description = api.note || api.description || "";
+  const snippets = useMemo(() => {
+    const map = {};
+    if (api.curl) map.curl = api.curl;
+    if (api.js) map.js = api.js;
+    if (api.python) map.python = api.python;
+    return map;
+  }, [api]);
+
+  const langOptions = LANGUAGES.filter((l) => snippets[l.id]);
+  const [lang, setLang] = useState(langOptions[0]?.id || "curl");
+  const activeLang = langOptions.find((o) => o.id === lang) || langOptions[0];
+  const code = activeLang ? snippets[activeLang.id] : "";
+
+  useEffect(() => {
+    const first = LANGUAGES.find((l) => snippets[l.id]);
+    setLang(first?.id || "curl");
+  }, [api.id, snippets]);
+
+  const exportPostman = () => {
+    const collection = buildPostmanCollection(api, spec, previewUrl, headers);
+    downloadJson(`${api.slug || api.id}.postman_collection.json`, collection);
+  };
+
+  const importFullCollection = postmanImportUrl(
+    `${window.location.origin}/postman.json`
+  );
+
   return (
     <div className="http-overview-panel">
-      {api.description && (
+      {/* Title + docs link — Postman style */}
+      <div className="http-overview-hero">
+        <div className="http-overview-hero-text">
+          <h3 className="http-overview-title">{api.title}</h3>
+          {api.docs && (
+            <a href={api.docs} target="_blank" rel="noopener noreferrer" className="http-overview-docs-link">
+              View complete documentation ↗
+            </a>
+          )}
+        </div>
+        <div className="http-overview-tools">
+          <button type="button" className="http-btn-ghost" onClick={exportPostman}>
+            Export to Postman
+          </button>
+          <a
+            href={importFullCollection}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="http-btn-ghost http-btn-link"
+          >
+            Import full catalogue
+          </a>
+        </div>
+      </div>
+
+      {/* URL */}
+      <div className="http-overview-section">
+        <code className="http-overview-url">
+          {spec.method} {previewUrl || `${spec.baseUrl || ""}${spec.path || ""}`}
+        </code>
+      </div>
+
+      {/* Description */}
+      {description && (
         <div className="http-overview-section">
-          <h4 className="http-overview-subtitle">Description</h4>
-          <p className="http-overview-desc">{api.description}</p>
+          <p className="http-overview-desc">{description}</p>
         </div>
       )}
 
+      {/* Metadata chips */}
+      <div className="http-overview-meta-row">
+        {api.tier && <span className="http-overview-chip">{api.tier}</span>}
+        {api.pricing && <span className="http-overview-chip">{api.pricing}</span>}
+        {api.auth && <span className="http-overview-chip">{api.auth}</span>}
+        {(api.country || []).map((c) => (
+          <span key={c} className="http-overview-chip">{c}</span>
+        ))}
+        {api.frequency && <span className="http-overview-chip">{api.frequency}</span>}
+      </div>
+
+      {/* Authorization — Postman style */}
+      {spec.auth && (
+        <div className="http-overview-section">
+          <h4 className="http-overview-subtitle">Authorization</h4>
+          <div className="http-overview-auth-grid">
+            <div>
+              <p className="http-overview-auth-type">{spec.auth.scheme || spec.auth.type || api.auth}</p>
+              <p className="http-overview-trust-meta">{spec.auth.label}</p>
+              {spec.auth.placement && (
+                <p className="http-overview-trust-meta">Placement: {spec.auth.placement}</p>
+              )}
+            </div>
+            <div>
+              {api.authDetails?.credential && (
+                <p className="http-overview-desc">{api.authDetails.credential}</p>
+              )}
+              {apiKey ? (
+                <p className="http-overview-trust-meta">Key configured for live testing</p>
+              ) : spec.auth.required ? (
+                <p className="http-overview-caveat">API key required — add in Keys or Authorization tab</p>
+              ) : null}
+              {spec.auth.docs && (
+                <a href={spec.auth.docs} target="_blank" rel="noopener noreferrer" className="http-link">
+                  Auth docs ↗
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Code snippet — Postman shows this in Overview */}
+      {langOptions.length > 0 && (
+        <div className="http-overview-section">
+          <div className="http-overview-section-head">
+            <h4 className="http-overview-subtitle">Code snippet</h4>
+            <div className="http-code-toolbar">
+              <select
+                className="snippet-select"
+                value={activeLang?.id || lang}
+                onChange={(e) => setLang(e.target.value)}
+              >
+                {langOptions.map((o) => (
+                  <option key={o.id} value={o.id}>{o.label}</option>
+                ))}
+              </select>
+              <CopyButton text={code} />
+            </div>
+          </div>
+          <pre className="snippet-code http-overview-code"><code>{code}</code></pre>
+        </div>
+      )}
+
+      {/* Headers summary */}
+      {spec.headers?.length > 0 && (
+        <div className="http-overview-section">
+          <h4 className="http-overview-subtitle">Default headers</h4>
+          <div className="http-table-wrap">
+            <table className="http-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {spec.headers.map((h) => (
+                  <tr key={h.name}>
+                    <td>{h.name}</td>
+                    <td>{h.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Parameters summary */}
+      {spec.parameters?.length > 0 && (
+        <div className="http-overview-section">
+          <h4 className="http-overview-subtitle">Query parameters</h4>
+          <div className="http-table-wrap">
+            <table className="http-table">
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Description</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                {spec.parameters.map((p) => (
+                  <tr key={p.name}>
+                    <td>{p.name}{p.sensitive && " 🔒"}</td>
+                    <td>{p.description}</td>
+                    <td>{p.required ? "Yes" : "No"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Trust + health */}
       {api.trust && (
         <div className="http-overview-section">
           <h4 className="http-overview-subtitle">Trust</h4>
@@ -45,14 +244,21 @@ export function OverviewPanel({ api, spec }) {
         </div>
       )}
 
-      {api.docs && (
-        <div className="http-overview-section">
-          <h4 className="http-overview-subtitle">Documentation</h4>
-          <a href={api.docs} target="_blank" rel="noopener noreferrer" className="http-link">
-            Provider docs ↗
-          </a>
+      {/* External tools note */}
+      <div className="http-overview-section http-overview-external">
+        <h4 className="http-overview-subtitle">Use in external clients</h4>
+        <p className="http-overview-trust-meta">
+          Postman and Insomnia cannot be embedded here — they block iframe embedding.
+          Export this request as a Postman collection (works in Insomnia and Bruno too),
+          or import the full Qazaq Stack catalogue from <a href="/postman.json" className="http-link">/postman.json</a>.
+        </p>
+        <div className="http-overview-tools http-overview-tools-inline">
+          <button type="button" className="http-btn-ghost" onClick={exportPostman}>
+            Download .postman_collection.json
+          </button>
+          <CopyButton text={code || api.curl || previewUrl} label="Copy cURL" />
         </div>
-      )}
+      </div>
     </div>
   );
 }
