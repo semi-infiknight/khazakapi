@@ -275,19 +275,6 @@ export default function ApiTestSuite({ api }) {
 
   return (
     <div className="api-suite panel">
-      {/* Suite header */}
-      <div className="api-suite-header">
-        <div className="api-suite-header-meta">
-          <span className="api-suite-section-label">Endpoint</span>
-          <span className="api-suite-header-path">{spec.path || api.endpoint || "—"}</span>
-        </div>
-        {api.docs && (
-          <a href={api.docs} target="_blank" rel="noopener noreferrer" className="http-btn-ghost">
-            Provider docs ↗
-          </a>
-        )}
-      </div>
-
       {/* Request bar */}
       <div className="api-suite-request-bar">
         <span className={`http-method http-method-${spec.method.toLowerCase()}`}>{spec.method}</span>

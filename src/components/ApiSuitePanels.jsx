@@ -3,17 +3,12 @@ import { useState } from "react";
 export function OverviewPanel({ api, spec }) {
   return (
     <div className="http-overview-panel">
-      <div className="http-overview-section">
-        <h3 className="http-overview-title">{api.title}</h3>
-        <p className="http-overview-desc">{api.description}</p>
-      </div>
-
-      <div className="http-overview-section">
-        <h4 className="http-overview-subtitle">URL</h4>
-        <code className="http-overview-url">
-          {spec.method} {spec.baseUrl || ""}{spec.path || api.endpoint || ""}
-        </code>
-      </div>
+      {api.description && (
+        <div className="http-overview-section">
+          <h4 className="http-overview-subtitle">Description</h4>
+          <p className="http-overview-desc">{api.description}</p>
+        </div>
+      )}
 
       {api.trust && (
         <div className="http-overview-section">
@@ -56,15 +51,6 @@ export function OverviewPanel({ api, spec }) {
           <a href={api.docs} target="_blank" rel="noopener noreferrer" className="http-link">
             Provider docs ↗
           </a>
-        </div>
-      )}
-
-      {spec.notes?.length > 0 && (
-        <div className="http-overview-section">
-          <h4 className="http-overview-subtitle">Notes</h4>
-          <ul className="http-notes http-notes-compact">
-            {spec.notes.map((note) => <li key={note}>{note}</li>)}
-          </ul>
         </div>
       )}
     </div>
